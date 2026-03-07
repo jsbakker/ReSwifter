@@ -10,6 +10,9 @@ import SwiftData
 
 @main
 struct ReSwifterApp: App {
+    /// The XPC listener that accepts connections from the Xcode extension.
+    private let xpcDelegate = XPCServiceDelegate()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -22,6 +25,10 @@ struct ReSwifterApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+
+    init() {
+        xpcDelegate.startListening()
+    }
 
     var body: some Scene {
         WindowGroup {

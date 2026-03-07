@@ -6,6 +6,20 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94862F52A2ED00730E7F /* Cocoa.framework */; };
+		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		009C66AB2F5B805D000FB801 /* ReSwifterService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 009C66A02F5B805D000FB801 /* ReSwifterService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		009C66BE2F5B80EB000FB801 /* ReSwifterInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; };
+		009C66BF2F5B80EB000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		009C66C42F5B82C1000FB801 /* ReSwifterInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; };
+		009C66C52F5B82C1000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		009C66C82F5B82CA000FB801 /* ReSwifterInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; };
+		009C66C92F5B82CA000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
+		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		007A94642F52A18200730E7F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,13 +35,129 @@
 			remoteGlobalIDString = 007A94532F52A18000730E7F;
 			remoteInfo = ReSwifter;
 		};
+		007A94902F52A2ED00730E7F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 007A94832F52A2ED00730E7F;
+			remoteInfo = ReSwifterXCode;
+		};
+		009C66A92F5B805D000FB801 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 009C669F2F5B805D000FB801;
+			remoteInfo = ReSwifterService;
+		};
+		009C66BC2F5B80EB000FB801 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 009C66B52F5B80EB000FB801;
+			remoteInfo = ReSwifterInterface;
+		};
+		009C66C62F5B82C1000FB801 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 009C66B52F5B80EB000FB801;
+			remoteInfo = ReSwifterInterface;
+		};
+		009C66CA2F5B82CA000FB801 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 009C66B52F5B80EB000FB801;
+			remoteInfo = ReSwifterInterface;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		007A94972F52A2ED00730E7F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C66B02F5B805D000FB801 /* Embed XPC Services */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+				009C66AB2F5B805D000FB801 /* ReSwifterService.xpc in Embed XPC Services */,
+			);
+			name = "Embed XPC Services";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C66C32F5B80EB000FB801 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				009C66BF2F5B80EB000FB801 /* ReSwifterInterface.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C66CC2F5B82CA000FB801 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				009C66C92F5B82CA000FB801 /* ReSwifterInterface.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00B419512F52C4AC008129F9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				009C66C52F5B82C1000FB801 /* ReSwifterInterface.framework in Embed Frameworks */,
+				00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		007A94542F52A18000730E7F /* ReSwifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReSwifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A94632F52A18200730E7F /* ReSwifterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReSwifterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A946D2F52A18200730E7F /* ReSwifterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReSwifterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ReSwifterXCode.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		007A94862F52A2ED00730E7F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		007A94882F52A2ED00730E7F /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
+		009C66A02F5B805D000FB801 /* ReSwifterService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = ReSwifterService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReSwifterInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		007A94932F52A2ED00730E7F /* Exceptions for "ReSwifterXCode" folder in "ReSwifterXCode" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 007A94832F52A2ED00730E7F /* ReSwifterXCode */;
+		};
+		009C66AC2F5B805D000FB801 /* Exceptions for "ReSwifterService" folder in "ReSwifterService" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 009C669F2F5B805D000FB801 /* ReSwifterService */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		007A94562F52A18000730E7F /* ReSwifter */ = {
@@ -45,6 +175,27 @@
 			path = ReSwifterUITests;
 			sourceTree = "<group>";
 		};
+		007A948A2F52A2ED00730E7F /* ReSwifterXCode */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				007A94932F52A2ED00730E7F /* Exceptions for "ReSwifterXCode" folder in "ReSwifterXCode" target */,
+			);
+			path = ReSwifterXCode;
+			sourceTree = "<group>";
+		};
+		009C66A12F5B805D000FB801 /* ReSwifterService */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				009C66AC2F5B805D000FB801 /* Exceptions for "ReSwifterService" folder in "ReSwifterService" target */,
+			);
+			path = ReSwifterService;
+			sourceTree = "<group>";
+		};
+		009C66B72F5B80EB000FB801 /* ReSwifterInterface */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ReSwifterInterface;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				009C66BE2F5B80EB000FB801 /* ReSwifterInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +221,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		007A94812F52A2ED00730E7F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */,
+				00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */,
+				009C66C42F5B82C1000FB801 /* ReSwifterInterface.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C669D2F5B805D000FB801 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009C66C82F5B82CA000FB801 /* ReSwifterInterface.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C66B32F5B80EB000FB801 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -78,6 +255,10 @@
 				007A94562F52A18000730E7F /* ReSwifter */,
 				007A94662F52A18200730E7F /* ReSwifterTests */,
 				007A94702F52A18200730E7F /* ReSwifterUITests */,
+				007A948A2F52A2ED00730E7F /* ReSwifterXCode */,
+				009C66A12F5B805D000FB801 /* ReSwifterService */,
+				009C66B72F5B80EB000FB801 /* ReSwifterInterface */,
+				007A94852F52A2ED00730E7F /* Frameworks */,
 				007A94552F52A18000730E7F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,11 +269,33 @@
 				007A94542F52A18000730E7F /* ReSwifter.app */,
 				007A94632F52A18200730E7F /* ReSwifterTests.xctest */,
 				007A946D2F52A18200730E7F /* ReSwifterUITests.xctest */,
+				007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */,
+				009C66A02F5B805D000FB801 /* ReSwifterService.xpc */,
+				009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
+		007A94852F52A2ED00730E7F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				007A94862F52A2ED00730E7F /* Cocoa.framework */,
+				007A94882F52A2ED00730E7F /* XcodeKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		009C66B12F5B80EB000FB801 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		007A94532F52A18000730E7F /* ReSwifter */ = {
@@ -102,10 +305,16 @@
 				007A94502F52A18000730E7F /* Sources */,
 				007A94512F52A18000730E7F /* Frameworks */,
 				007A94522F52A18000730E7F /* Resources */,
+				007A94972F52A2ED00730E7F /* Embed Foundation Extensions */,
+				009C66B02F5B805D000FB801 /* Embed XPC Services */,
+				009C66C32F5B80EB000FB801 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				007A94912F52A2ED00730E7F /* PBXTargetDependency */,
+				009C66AA2F5B805D000FB801 /* PBXTargetDependency */,
+				009C66BD2F5B80EB000FB801 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				007A94562F52A18000730E7F /* ReSwifter */,
@@ -163,6 +372,77 @@
 			productReference = 007A946D2F52A18200730E7F /* ReSwifterUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		007A94832F52A2ED00730E7F /* ReSwifterXCode */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 007A94942F52A2ED00730E7F /* Build configuration list for PBXNativeTarget "ReSwifterXCode" */;
+			buildPhases = (
+				007A94802F52A2ED00730E7F /* Sources */,
+				007A94812F52A2ED00730E7F /* Frameworks */,
+				007A94822F52A2ED00730E7F /* Resources */,
+				00B419512F52C4AC008129F9 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				009C66C72F5B82C1000FB801 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				007A948A2F52A2ED00730E7F /* ReSwifterXCode */,
+			);
+			name = ReSwifterXCode;
+			packageProductDependencies = (
+			);
+			productName = ReSwifterXCode;
+			productReference = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */;
+			productType = "com.apple.product-type.xcode-extension";
+		};
+		009C669F2F5B805D000FB801 /* ReSwifterService */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 009C66AD2F5B805D000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterService" */;
+			buildPhases = (
+				009C669C2F5B805D000FB801 /* Sources */,
+				009C669D2F5B805D000FB801 /* Frameworks */,
+				009C669E2F5B805D000FB801 /* Resources */,
+				009C66CC2F5B82CA000FB801 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				009C66CB2F5B82CA000FB801 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				009C66A12F5B805D000FB801 /* ReSwifterService */,
+			);
+			name = ReSwifterService;
+			packageProductDependencies = (
+			);
+			productName = ReSwifterService;
+			productReference = 009C66A02F5B805D000FB801 /* ReSwifterService.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
+		009C66B52F5B80EB000FB801 /* ReSwifterInterface */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 009C66C02F5B80EB000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterInterface" */;
+			buildPhases = (
+				009C66B12F5B80EB000FB801 /* Headers */,
+				009C66B22F5B80EB000FB801 /* Sources */,
+				009C66B32F5B80EB000FB801 /* Frameworks */,
+				009C66B42F5B80EB000FB801 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				009C66B72F5B80EB000FB801 /* ReSwifterInterface */,
+			);
+			name = ReSwifterInterface;
+			packageProductDependencies = (
+			);
+			productName = ReSwifterInterface;
+			productReference = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -184,6 +464,15 @@
 						CreatedOnToolsVersion = 26.3;
 						TestTargetID = 007A94532F52A18000730E7F;
 					};
+					007A94832F52A2ED00730E7F = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					009C669F2F5B805D000FB801 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					009C66B52F5B80EB000FB801 = {
+						CreatedOnToolsVersion = 26.3;
+					};
 				};
 			};
 			buildConfigurationList = 007A944F2F52A18000730E7F /* Build configuration list for PBXProject "ReSwifter" */;
@@ -203,6 +492,9 @@
 				007A94532F52A18000730E7F /* ReSwifter */,
 				007A94622F52A18200730E7F /* ReSwifterTests */,
 				007A946C2F52A18200730E7F /* ReSwifterUITests */,
+				007A94832F52A2ED00730E7F /* ReSwifterXCode */,
+				009C669F2F5B805D000FB801 /* ReSwifterService */,
+				009C66B52F5B80EB000FB801 /* ReSwifterInterface */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +515,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		007A946B2F52A18200730E7F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		007A94822F52A2ED00730E7F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C669E2F5B805D000FB801 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C66B42F5B80EB000FB801 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +566,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		007A94802F52A2ED00730E7F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C669C2F5B805D000FB801 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009C66B22F5B80EB000FB801 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +599,31 @@
 			isa = PBXTargetDependency;
 			target = 007A94532F52A18000730E7F /* ReSwifter */;
 			targetProxy = 007A946E2F52A18200730E7F /* PBXContainerItemProxy */;
+		};
+		007A94912F52A2ED00730E7F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 007A94832F52A2ED00730E7F /* ReSwifterXCode */;
+			targetProxy = 007A94902F52A2ED00730E7F /* PBXContainerItemProxy */;
+		};
+		009C66AA2F5B805D000FB801 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 009C669F2F5B805D000FB801 /* ReSwifterService */;
+			targetProxy = 009C66A92F5B805D000FB801 /* PBXContainerItemProxy */;
+		};
+		009C66BD2F5B80EB000FB801 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 009C66B52F5B80EB000FB801 /* ReSwifterInterface */;
+			targetProxy = 009C66BC2F5B80EB000FB801 /* PBXContainerItemProxy */;
+		};
+		009C66C72F5B82C1000FB801 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 009C66B52F5B80EB000FB801 /* ReSwifterInterface */;
+			targetProxy = 009C66C62F5B82C1000FB801 /* PBXContainerItemProxy */;
+		};
+		009C66CB2F5B82CA000FB801 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 009C66B52F5B80EB000FB801 /* ReSwifterInterface */;
+			targetProxy = 009C66CA2F5B82CA000FB801 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -394,13 +753,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = ReSwifter/ReSwifter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -412,6 +784,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -426,13 +804,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = ReSwifter/ReSwifter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -444,6 +835,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -533,6 +930,232 @@
 			};
 			name = Release;
 		};
+		007A94952F52A2ED00730E7F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = ReSwifterXCode/ReSwifterXCode.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XKLFA63LP;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReSwifterXCode/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterXCode;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		007A94962F52A2ED00730E7F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = ReSwifterXCode/ReSwifterXCode.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XKLFA63LP;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReSwifterXCode/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterXCode;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		009C66AE2F5B805D000FB801 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XKLFA63LP;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReSwifterService/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterService;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		009C66AF2F5B805D000FB801 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XKLFA63LP;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReSwifterService/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterService;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		009C66C12F5B80EB000FB801 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XKLFA63LP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterInterface;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		009C66C22F5B80EB000FB801 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XKLFA63LP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterInterface;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -568,6 +1191,33 @@
 			buildConfigurations = (
 				007A947E2F52A18200730E7F /* Debug */,
 				007A947F2F52A18200730E7F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		007A94942F52A2ED00730E7F /* Build configuration list for PBXNativeTarget "ReSwifterXCode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				007A94952F52A2ED00730E7F /* Debug */,
+				007A94962F52A2ED00730E7F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		009C66AD2F5B805D000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterService" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				009C66AE2F5B805D000FB801 /* Debug */,
+				009C66AF2F5B805D000FB801 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		009C66C02F5B80EB000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterInterface" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				009C66C12F5B80EB000FB801 /* Debug */,
+				009C66C22F5B80EB000FB801 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
