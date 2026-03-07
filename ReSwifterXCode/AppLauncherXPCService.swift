@@ -4,29 +4,37 @@
 //
 //  Created by Jeffrey Bakker on 2026-03-05.
 //
-//  Communicates with the host app (ReSwifter.app) via
-//  NSDistributedNotificationCenter + shared UserDefaults (App Group).
+//  Extension-side client that communicates with the host app
+//  (ReSwifter.app) via DistributedNotificationCenter + shared
+//  UserDefaults (App Group).
 //
-//  IPC flow:
-//  1. Write the request text + a unique request ID to shared UserDefaults.
-//  2. Post a distributed notification to signal the host app.
-//  3. Observe the response notification from the host app.
-//  4. Read the result from shared UserDefaults and call the reply handler.
-//
-//  Requirements:
-//  - Both targets must belong to the same App Group
-//    (group.com.JeffreyBakker.ReSwifter).
+//  Flow:
+//  1. Launch the host app (so it starts listening).
+//  2. Write request text + unique ID to shared UserDefaults.
+//  3. Post a distributed notification to signal the host app.
+//  4. Listen for the response notification.
+//  5. Read the result from shared UserDefaults.
 //
 
 import Foundation
 import AppKit
 import os.log
 
-import ReSwifterInterface
+/// Mutable state shared between the response observer and timeout closures.
+private class ResponseState {
+    var observer: NSObjectProtocol?
+    var didReceive = false
+
+    func removeObserver() {
+        if let observer = observer {
+            DistributedNotificationCenter.default().removeObserver(observer)
+            self.observer = nil
+        }
+    }
+}
 
 class AppLauncherXPCService {
 
-    /// Must match XPCServiceDelegate values in the host app.
     private let appGroupID = "group.com.JeffreyBakker.ReSwifter"
     private let requestNotificationName = Notification.Name("com.JeffreyBakker.ReSwifter.processRequest")
     private let responseNotificationName = Notification.Name("com.JeffreyBakker.ReSwifter.processResponse")
@@ -41,14 +49,13 @@ class AppLauncherXPCService {
 
     private let log = OSLog(subsystem: "com.JeffreyBakker.ReSwifterXCode", category: "IPCService")
 
-    /// Timeout in seconds for waiting for a response from the host app.
-    private let responseTimeout: TimeInterval = 10.0
-
-    var rsConnection: NSXPCConnection?
+    /// Timeout for waiting for a response from the host app.
+    /// Set high to allow time for user interaction in the host app UI.
+    private let responseTimeout: TimeInterval = 120.0
 
     // MARK: - Launch Host App
 
-    /// Launches the host app (ReSwifter.app) if it is not already running.
+    /// Launches the host app if it is not already running.
     func launchHostApp(completion: @escaping (Bool, Error?) -> Void) {
         let running = NSRunningApplication.runningApplications(
             withBundleIdentifier: hostAppBundleID
@@ -86,31 +93,24 @@ class AppLauncherXPCService {
         }
     }
 
-    func connectToReSwifterService() {
-        rsConnection = NSXPCConnection(serviceName: "com.JeffreyBakker.ReSwifter.Service")
-        rsConnection?.remoteObjectInterface = NSXPCInterface(with: ReSwifterServiceProtocol.self)
-        rsConnection?.resume()
-    }
+    // MARK: - Process Text
 
-    func sendStringToReSwifter(_ string: String) {
-        (rsConnection?.remoteObjectProxy as? ReSwifterServiceProtocol)?.extensionPostString(string)
-    }
-
-    // MARK: - Send Request
-
-    /// Sends text to the host app for processing via distributed notification + shared UserDefaults.
-    /// Automatically launches the host app if needed.
+    /// Launches the host app, then sends text for processing.
+    /// The reply is called when the host app delivers its result
+    /// (or on timeout).
     func launchAndProcess(_ text: String, reply: @escaping (String?, Error?) -> Void) {
+        let wasAlreadyRunning = !NSRunningApplication.runningApplications(
+            withBundleIdentifier: hostAppBundleID
+        ).isEmpty
+
         launchHostApp { [weak self] success, error in
             guard let self = self, success else {
                 reply(nil, error)
                 return
             }
 
-            // Give the host app a moment to start its listener if just launched
-            let delay: TimeInterval = NSRunningApplication.runningApplications(
-                withBundleIdentifier: self.hostAppBundleID
-            ).isEmpty ? 1.5 : 0.0
+            // If the app was just launched, give it time to start its listener
+            let delay: TimeInterval = wasAlreadyRunning ? 0.0 : 2.0
 
             DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + delay) {
                 self.sendRequest(text, reply: reply)
@@ -118,7 +118,8 @@ class AppLauncherXPCService {
         }
     }
 
-    /// Writes the request to shared UserDefaults and posts the notification.
+    // MARK: - Private
+
     private func sendRequest(_ text: String, reply: @escaping (String?, Error?) -> Void) {
         guard let defaults = UserDefaults(suiteName: appGroupID) else {
             let error = NSError(
@@ -133,37 +134,33 @@ class AppLauncherXPCService {
 
         let requestID = UUID().uuidString
 
-        // Write request data to shared UserDefaults
+        // Write request data
         defaults.set(text, forKey: requestTextKey)
         defaults.set(requestID, forKey: requestIDKey)
         defaults.synchronize()
 
         os_log("Sending request %{public}@ (%{public}d chars)", log: log, type: .info, requestID, text.count)
 
-        // Set up response listener before posting the request
-        var responseObserver: NSObjectProtocol?
-        var didReceiveResponse = false
+        // Mutable state shared between closures
+        let state = ResponseState()
 
-        responseObserver = DistributedNotificationCenter.default().addObserver(
+        state.observer = DistributedNotificationCenter.default().addObserver(
             forName: responseNotificationName,
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            guard let self = self, !didReceiveResponse else { return }
+            guard let self = self, !state.didReceive else { return }
 
-            // Read the response from shared UserDefaults
+            // Re-read from disk
             defaults.synchronize()
+
             guard let responseID = defaults.string(forKey: self.responseIDKey),
                   responseID == requestID else {
-                // Not our response, ignore
-                return
+                return // Not our response
             }
 
-            didReceiveResponse = true
-
-            if let observer = responseObserver {
-                DistributedNotificationCenter.default().removeObserver(observer)
-            }
+            state.didReceive = true
+            state.removeObserver()
 
             if let errorMessage = defaults.string(forKey: self.responseErrorKey) {
                 let error = NSError(
@@ -171,7 +168,7 @@ class AppLauncherXPCService {
                     code: 3,
                     userInfo: [NSLocalizedDescriptionKey: errorMessage]
                 )
-                os_log("Received error response: %{public}@", log: self.log, type: .error, errorMessage)
+                os_log("Received error: %{public}@", log: self.log, type: .error, errorMessage)
                 reply(nil, error)
             } else {
                 let result = defaults.string(forKey: self.responseTextKey)
@@ -188,14 +185,11 @@ class AppLauncherXPCService {
             deliverImmediately: true
         )
 
-        // Set up a timeout
+        // Timeout
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + responseTimeout) {
-            guard !didReceiveResponse else { return }
-            didReceiveResponse = true
-
-            if let observer = responseObserver {
-                DistributedNotificationCenter.default().removeObserver(observer)
-            }
+            guard !state.didReceive else { return }
+            state.didReceive = true
+            state.removeObserver()
 
             let error = NSError(
                 domain: "ReSwifterIPCService",

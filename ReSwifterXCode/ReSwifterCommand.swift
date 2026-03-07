@@ -70,29 +70,19 @@ class ReSwifterCommand: NSObject, XCSourceEditorCommand {
                 // working
 //                lines.replaceObjects(at: IndexSet(integersIn: range), with: reversedSelection)
 
-                launcher.launchHostApp(completion: { success, error in
-                    if let error {
-                        print("Error launching host app: \(error)")
-                    } else {
-                        print("Host app launched!")
+                launcher.launchAndProcess(text) { reply, err in
+                    if let err {
+                        print("Error: \(err)")
+                        completionHandler(err)
+                        return
                     }
-                })
-                launcher.connectToReSwifterService()
 
-//                launcher.launchAndProcess(text) { reply, err in
-//                    if let err {
-//                        print("Error: \(err)")
-//                        completionHandler(err)
-//                        return
-//                    }
-//
-//                    if let reply {
-//                        print("Replied: \(reply)")
-//                    }
-//
-//                    completionHandler(nil)
-//                }
-                completionHandler(nil)
+                    if let reply {
+                        print("Replied: \(reply)")
+                    }
+
+                    completionHandler(nil)
+                }
                 return
 //                lines.remove(atOffsets: Range(lStart..<selectionLastLine, in: lines.indicesOfObjects(byEvaluatingObjectSpecifier: "self"))!)
 //                lines.removeAllObjects()

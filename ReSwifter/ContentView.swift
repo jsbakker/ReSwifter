@@ -7,53 +7,62 @@
 
 import SwiftUI
 import SwiftData
+import CodeEditor
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @EnvironmentObject private var extensionService: ExtensionXPCService
+
+    @State private var source: String = "" // = extensionService.receivedText ?? ""
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-            .toolbar {
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
+        VStack(spacing: 16) {
+            if extensionService.hasPendingRequest {
+                Text("Text received from Xcode extension:")
+                    .font(.headline)
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
+                
+//                ScrollView {
+                CodeEditor(source: extensionService.receivedText ?? "", language: .swift, theme: .ocean)
+//                    CodeEditor(source: $source, language: .swift)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+//                    Text(extensionService.receivedText ?? "")
+//                        .font(.system(.body, design: .monospaced))
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding()
+//                }
+//                .frame(maxHeight: .infinity)
+//                .background(Color(nsColor: .textBackgroundColor))
+//                .cornerRadius(8)
+
+                HStack {
+                    Button("Cancel") {
+                        extensionService.cancelResponse()
+                    }
+
+                    Spacer()
+
+                    Button("Send Back") {
+                        if let text = extensionService.receivedText {
+                            extensionService.sendResponse(text)
+                        }
+                    }
+                    .keyboardShortcut(.return, modifiers: .command)
+                }
+            } else {
+                Spacer()
+                Text("Waiting for text from Xcode extension...")
+                    .foregroundStyle(.secondary)
+                Spacer()
             }
         }
+        .padding()
+        .frame(minWidth: 400, minHeight: 300)
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .environmentObject(ExtensionXPCService())
 }

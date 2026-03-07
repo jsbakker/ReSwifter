@@ -16,6 +16,10 @@
 		009C66C52F5B82C1000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		009C66C82F5B82CA000FB801 /* ReSwifterInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; };
 		009C66C92F5B82CA000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67432F5BFD53000FB801 /* HighlightedTextEditor */; };
+		009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67462F5BFF21000FB801 /* CodeEditor */; };
+		009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
+		009C677A2F5C1098000FB801 /* Conduit in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67792F5C1098000FB801 /* Conduit */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -140,6 +144,7 @@
 		007A94882F52A2ED00730E7F /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
 		009C66A02F5B805D000FB801 /* ReSwifterService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = ReSwifterService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReSwifterInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		009C675A2F5C05F7000FB801 /* FoundationModels.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoundationModels.framework; path = System/Library/Frameworks/FoundationModels.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -203,6 +208,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */,
+				009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */,
 				009C66BE2F5B80EB000FB801 /* ReSwifterInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,6 +233,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */,
+				009C677A2F5C1098000FB801 /* Conduit in Frameworks */,
+				009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */,
 				00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */,
 				009C66C42F5B82C1000FB801 /* ReSwifterInterface.framework in Frameworks */,
 			);
@@ -279,6 +288,7 @@
 		007A94852F52A2ED00730E7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				009C675A2F5C05F7000FB801 /* FoundationModels.framework */,
 				007A94862F52A2ED00730E7F /* Cocoa.framework */,
 				007A94882F52A2ED00730E7F /* XcodeKit.framework */,
 			);
@@ -321,6 +331,8 @@
 			);
 			name = ReSwifter;
 			packageProductDependencies = (
+				009C67432F5BFD53000FB801 /* HighlightedTextEditor */,
+				009C67462F5BFF21000FB801 /* CodeEditor */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -391,6 +403,7 @@
 			);
 			name = ReSwifterXCode;
 			packageProductDependencies = (
+				009C67792F5C1098000FB801 /* Conduit */,
 			);
 			productName = ReSwifterXCode;
 			productReference = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */;
@@ -484,6 +497,11 @@
 			);
 			mainGroup = 007A944B2F52A18000730E7F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */,
+				009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */,
+				009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 007A94552F52A18000730E7F /* Products */;
 			projectDirPath = "";
@@ -1223,6 +1241,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kyle-n/HighlightedTextEditor";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
+		009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ZeeZide/CodeEditor.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.6;
+			};
+		};
+		009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/christopherkarani/Conduit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		009C67432F5BFD53000FB801 /* HighlightedTextEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */;
+			productName = HighlightedTextEditor;
+		};
+		009C67462F5BFF21000FB801 /* CodeEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */;
+			productName = CodeEditor;
+		};
+		009C67792F5C1098000FB801 /* Conduit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */;
+			productName = Conduit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 007A944C2F52A18000730E7F /* Project object */;
 }
