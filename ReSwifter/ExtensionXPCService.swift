@@ -116,6 +116,9 @@ class ExtensionXPCService: ObservableObject {
         pendingRequestID = requestID
         receivedText = text
         hasPendingRequest = true
+
+        // Disable for now
+//        cancelResponse()
     }
 
     // MARK: - User Actions

@@ -10,78 +10,31 @@ import SwiftUI
 import SwiftData
 import CodeEditor
 
-@Observable class SnippetItem : Identifiable {
-    let id = UUID()
-    let date: Date = Date()
-    var description: String = "Generating description..."
-    var fullText: String
-    var hasDescription: Bool = false
-
-    init(fullText: String) {
-        self.fullText = fullText
-    }
-}
-
-struct HUDNotification: View {
-    let text: String
-    let icon: String
-
-    var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 30))
-            Text(text)
-                .fontWeight(.medium)
-        }
-        .padding(20)
-        .background(.ultraThinMaterial)
-        .cornerRadius(12)
-        .shadow(radius: 10)
-        .transition(.opacity.combined(with: .scale)) // Smooth entrance
-    }
-}
-
 struct ContentView: View {
     @EnvironmentObject private var extensionService: ExtensionXPCService
 
     @State private var source: String = "" // = extensionService.receivedText ?? ""
-
     @State private var selectedSnipetId: UUID?
+    @State private var items: [SnippetItem] = []
+    @State private var showOnlyFavorites = false
+    @State private var showHud = false
+
+    let dateFormatter = DateFormatter()
+    let pasteBoard = NSPasteboard.general
+    let snippetUtility = SnippetUtility()
 
     var selectedSnippet: SnippetItem? {
         items.first { $0.id == selectedSnipetId }
     }
 
-    let pasteBoard = NSPasteboard.general
-
-    @State private var showHud = false
-
-    @State private var items: [SnippetItem] = []
-//    @State private var items = [
-//        SnippetItem(fullText: "Foo bar baz"),
-//        SnippetItem(fullText: "Bar baz qux"),
-//        SnippetItem(fullText: "Baz qux quux"),
-//        SnippetItem(fullText: "Corge grault garply"),
-//        SnippetItem(fullText: "Garply biz burp"),
-//        SnippetItem(fullText: "Grault blimity plugh"),
-//        SnippetItem(fullText: "Quux plugh thud"),
-//        SnippetItem(fullText: "Quux thud waldo"),
-//        SnippetItem(fullText: "Waldo quux thud"),
-//        SnippetItem(fullText: "Plugh thud waldo"),
-//        SnippetItem(fullText: "Baz qux quux waldo"),
-//        SnippetItem(fullText: "Foo bar baz quux"),
-//        SnippetItem(fullText: "Foo bar baz quux quux"),
-//        SnippetItem(fullText: "Foo bar baz quux quux waldo"),
-//        SnippetItem(fullText: "Foo bar baz quux quux quux")
-//    ]
-
-    var sortedItems: [SnippetItem] {
-        items.sorted { lhs, rhs in
-            lhs.date > rhs.date
-        }
+    // todo apply filter
+    var displayedItems: [SnippetItem] {
+        items
+            .filter { !showOnlyFavorites || $0.favorite }
+            .sorted { lhs, rhs in
+                lhs.date > rhs.date
+            }
     }
-
-    let dateFormatter = DateFormatter()
 
     let sampleMultilineText = """
         func registerAppWait(reply: @escaping (String) -> Void) {
@@ -97,6 +50,7 @@ struct ContentView: View {
             }
         }
         """
+
     init() {
         dateFormatter.dateFormat = "yyyy/MM/dd - HH:mm:ss"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -109,26 +63,66 @@ struct ContentView: View {
         }
     }
 
+    func addNewSnippet(fullText: String) {
+
+        var newItem = SnippetItem(fullText: fullText)
+        items.append(newItem)
+        selectedSnipetId = newItem.id
+
+        Task {
+//                        newItem.description = await SnippetUtility.analyzeDescription(newItem.fullText)
+            newItem.description = await snippetUtility.summarize(newItem.fullText)
+            newItem.hasDescription = true
+        }
+    }
+
     var body: some View {
         HStack(spacing: 16) {
 
+//            if extensionService.hasPendingRequest {
+//                var insertedItem = SnippetItem(fullText: extensionService.receivedText!)
+//                items.append(insertedItem)
+//
+//                Task {
+//                    insertedItem.description = await SnippetUtility.analyzeDescription(insertedItem.fullText)
+//                    insertedItem.hasDescription = true
+//                }
+//            }
+
             VStack {
                 Button("Add Snippet") {
-                    var newItem = SnippetItem(fullText: sampleMultilineText)
-                    items.append(newItem)
-
-                    Task {
-                        newItem.description = await SnippetUtility.analyzeDescription(newItem.fullText)
-                        newItem.hasDescription = true
-                    }
+                    addNewSnippet(fullText: sampleMultilineText)
+//                    var newItem = SnippetItem(fullText: sampleMultilineText)
+//                    items.append(newItem)
+//                    selectedSnipetId = newItem.id
+//
+//                    Task {
+////                        newItem.description = await SnippetUtility.analyzeDescription(newItem.fullText)
+//                        newItem.description = await snippetUtility.summarize(newItem.fullText)
+//                        newItem.hasDescription = true
+//                    }
                 }
                 .buttonStyle(.borderedProminent)
 
+                Button("Add From Clipboard") {
+                    let pasted = pasteBoard.string(forType: .string)
+                    guard let pasted else { return }
+
+                    addNewSnippet(fullText: pasted)
+                }
+
+                Button("Filter", systemImage: showOnlyFavorites ? "heart.fill" : "heart") {
+                    showOnlyFavorites.toggle()
+                }
+//                .buttonStyle(.borderless)
+
                 ZStack {
-                    List(sortedItems, selection: $selectedSnipetId) { item in
+                    List(displayedItems, selection: $selectedSnipetId) { item in
 
                         HStack {
                             Image(systemName: "text.magnifyingglass")
+                                .buttonStyle(.borderless)
+
                             if !item.hasDescription {
                                 Image(systemName: "sparkles")
                                     .font(.largeTitle)
@@ -156,10 +150,30 @@ struct ContentView: View {
 
                             Spacer()
 //                            Image(systemName: "text.magnifyingglass")
+//                            Button("Copy", systemImage: "doc.on.doc") {
+//                                pasteBoard.clearContents()
+//                                pasteBoard.setString(item.fullText, forType: .string)
+//                                triggerHUD()
+//                            }
+//                            .buttonStyle(.borderless)
+
+                            Button {
+                                item.favorite.toggle()
+                            } label: {
+                                Image(systemName: item.favorite ? "heart.fill" : "heart")
+                                    .foregroundStyle(item.favorite ? .red : .gray)
+                            }
+                            .buttonStyle(.borderless)
+
                             Button("Copy", systemImage: "doc.on.doc") {
                                 pasteBoard.clearContents()
                                 pasteBoard.setString(item.fullText, forType: .string)
                                 triggerHUD()
+                            }
+                            .buttonStyle(.borderless)
+
+                            Button("Delete", systemImage: "trash") {
+                                items.removeAll { $0.id == item.id }
                             }
                             .buttonStyle(.borderless)
 
@@ -170,15 +184,28 @@ struct ContentView: View {
 //                            .buttonStyle(.borderless)
                         }  // HStack
                     }
-                    .onChange(of: selectedSnipetId) {
-                        if let snippet = selectedSnippet {
-                            extensionService.receivedText = snippet.fullText
-                            extensionService.hasPendingRequest = true
-                        }
-                    }  // end List
+                    .animation(.default, value: items)
+                    .onChange(of: extensionService.receivedText ?? "") {
+                        addNewSnippet(fullText: extensionService.receivedText!)
+//                        var insertedItem = SnippetItem(fullText: extensionService.receivedText!)
+//                        items.append(insertedItem)
+//                        selectedSnipetId = insertedItem.id
+////                        extensionService.cancelResponse()
+//
+//                        Task {
+//                            insertedItem.description = await snippetUtility.summarize(insertedItem.fullText)
+//                            insertedItem.hasDescription = true
+//                        }
+                    }
+//                    .onChange(of: selectedSnipetId) {
+//                        if let snippet = selectedSnippet {
+//                            extensionService.receivedText = snippet.fullText
+//                            extensionService.hasPendingRequest = true
+//                        }
+//                    }  // end List
 
                     if showHud {
-                        HUDNotification(text: "Copied to clipboard", icon: "doc.on.doc")
+                        HudNotification(text: "Copied to clipboard", icon: "doc.on.doc")
                             .zIndex(1)
                     }
                 }
@@ -186,37 +213,44 @@ struct ContentView: View {
                 // End ZStack
             } // End VStack
 
+
             VStack {
-                if extensionService.hasPendingRequest {
-                    Text("Text received from Xcode extension:")
-                        .font(.headline)
+                CodeEditor(source: selectedSnippet?.fullText ?? "", language: .swift, theme: .ocean)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }  // End VStack
 
-                    CodeEditor(source: extensionService.receivedText ?? "", language: .swift, theme: .ocean)
-                    //                    CodeEditor(source: $source, language: .swift)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-
-                    HStack {
-                        Button("Cancel") {
-                            extensionService.cancelResponse()
-                        }
-
-                        Spacer()
-
-                        Button("Send Back") {
-                            if let text = extensionService.receivedText {
-                                extensionService.sendResponse(text)
-                            }
-                        }
-                        .keyboardShortcut(.return, modifiers: .command)
-                    }
-                } else {
-                    Spacer()
-                    Text("Waiting for text from Xcode extension...")
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                }
-            }  // VStack
+//            VStack {
+//                if extensionService.hasPendingRequest {
+//                    Text("Text received from Xcode extension:")
+//                        .font(.headline)
+//
+//                    CodeEditor(source: extensionService.receivedText ?? "", language: .swift, theme: .ocean)
+//                    //                    CodeEditor(source: $source, language: .swift)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding()
+//
+//                    HStack {
+//                        Button("Cancel") {
+//                            extensionService.cancelResponse()
+//                        }
+//
+//                        Spacer()
+//
+//                        Button("Send Back") {
+//                            if let text = extensionService.receivedText {
+//                                extensionService.sendResponse(text)
+//                            }
+//                        }
+//                        .keyboardShortcut(.return, modifiers: .command)
+//                    }
+//                } else {
+//                    Spacer()
+//                    Text("Waiting for text from Xcode extension...")
+//                        .foregroundStyle(.secondary)
+//                    Spacer()
+//                }
+//            }  // VStack
         }
         .padding()
         .frame(minWidth: 400, minHeight: 300)
