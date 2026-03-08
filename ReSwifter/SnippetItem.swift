@@ -6,21 +6,18 @@
 //
 
 import Foundation
-import Combine
+import SwiftData
 
-@Observable class SnippetItem : Identifiable, Equatable {
+@Model class SnippetItem: Identifiable {
 
-    static func == (lhs: SnippetItem, rhs: SnippetItem) -> Bool {
-        return lhs.id == rhs.id
-    }
-
-    let id = UUID()
-    let date: Date = Date()
+    var id: UUID = UUID()
+    var date: Date = Date()
     var summary: String = "Generating summary..."
-    var fullText: String
-    var pendingUpdate: Bool = false
+    var fullText: String = ""
     var favorite: Bool = false
     var path: String = ""
+
+    @Transient var pendingUpdate: Bool = false
 
     init(fullText: String) {
         self.fullText = fullText

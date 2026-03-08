@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct ReSwifterApp: App {
@@ -18,5 +19,6 @@ struct ReSwifterApp: App {
             ContentView()
                 .environmentObject(extensionService)
         }
+        .modelContainer(for: SnippetItem.self)
     }
 }

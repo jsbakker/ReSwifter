@@ -13,9 +13,11 @@ import CodeEditor
 struct ContentView: View {
     @EnvironmentObject private var extensionService: ExtensionXPCService
 
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \SnippetItem.date, order: .reverse) private var items: [SnippetItem]
+
     @State private var source: String = ""
     @State private var selectedSnipetId: UUID?
-    @State private var items: [SnippetItem] = []
     @State private var showOnlyFavorites = false
     @State private var showHud = false
 
@@ -28,11 +30,7 @@ struct ContentView: View {
     }
 
     var displayedItems: [SnippetItem] {
-        items
-            .filter { !showOnlyFavorites || $0.favorite }
-            .sorted { lhs, rhs in
-                lhs.date > rhs.date
-            }
+        items.filter { !showOnlyFavorites || $0.favorite }
     }
 
     init() {
@@ -51,7 +49,7 @@ struct ContentView: View {
 
         let newItem = SnippetItem(fullText: fullText)
         newItem.pendingUpdate = true
-        items.append(newItem)
+        modelContext.insert(newItem)
         selectedSnipetId = newItem.id
 
         Task {
@@ -63,7 +61,7 @@ struct ContentView: View {
     func addUpdatedSnippet(summary: String, fullText: String) {
 
         let newItem = SnippetItem(summary: summary, fullText: fullText)
-        items.append(newItem)
+        modelContext.insert(newItem)
         selectedSnipetId = newItem.id
     }
 
@@ -145,7 +143,7 @@ struct ContentView: View {
 //                            .disabled(item.pendingUpdate)
 
                             Button("Delete", systemImage: "trash", role: .destructive) {
-                                items.removeAll { $0.id == item.id }
+                                modelContext.delete(item)
                             }
 //                            .buttonStyle(.borderless)
                             .disabled(item.pendingUpdate)
@@ -206,7 +204,7 @@ struct ContentView: View {
 
                         }  // HStack
                     }
-                    .animation(.default, value: items)
+                    .animation(.default, value: displayedItems.map(\.id))
                     .onChange(of: extensionService.receivedText ?? "") {
                         addNewSnippet(fullText: extensionService.receivedText!)
                     }
@@ -273,4 +271,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(ExtensionXPCService())
+        .modelContainer(for: SnippetItem.self, inMemory: true)
 }
