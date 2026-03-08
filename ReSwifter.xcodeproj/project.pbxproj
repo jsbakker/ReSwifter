@@ -20,6 +20,8 @@
 		009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67462F5BFF21000FB801 /* CodeEditor */; };
 		009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		009C677A2F5C1098000FB801 /* Conduit in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67792F5C1098000FB801 /* Conduit */; };
+		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
+		009C677D2F5CF3AC000FB801 /* Conduit in Frameworks */ = {isa = PBXBuildFile; productRef = 009C677C2F5CF3AC000FB801 /* Conduit */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -209,6 +211,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */,
+				009C677D2F5CF3AC000FB801 /* Conduit in Frameworks */,
+				009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */,
 				009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */,
 				009C66BE2F5B80EB000FB801 /* ReSwifterInterface.framework in Frameworks */,
 			);
@@ -333,6 +337,7 @@
 			packageProductDependencies = (
 				009C67432F5BFD53000FB801 /* HighlightedTextEditor */,
 				009C67462F5BFF21000FB801 /* CodeEditor */,
+				009C677C2F5CF3AC000FB801 /* Conduit */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -1281,6 +1286,11 @@
 			productName = CodeEditor;
 		};
 		009C67792F5C1098000FB801 /* Conduit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */;
+			productName = Conduit;
+		};
+		009C677C2F5CF3AC000FB801 /* Conduit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */;
 			productName = Conduit;
