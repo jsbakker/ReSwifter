@@ -41,6 +41,42 @@ struct SnippetUtility {
         return "Summary Busy"
     }
 
+    func cleanup(_ snippet: String) async -> String {
+
+        guard let session else { return "Cleanup Unavailable" }
+
+        if !session.isResponding {
+            let query = "Cleanup this code:\n\(snippet)"
+            do {
+                let response = try await session.respond(to: query)
+                print("Cleaned up code:\n\(response.content)")
+                return response.content
+            } catch {
+                print("Cleanup Error:\n\(error)")
+                return "Cleanup Error"
+            }
+        }
+        return "Cleanup Busy"
+    }
+
+    func refactor(_ snippet: String) async -> String {
+
+        guard let session else { return "Refactor Unavailable" }
+
+        if !session.isResponding {
+            let query = "Refactor this code to use best practices:\n\(snippet)"
+            do {
+                let response = try await session.respond(to: query)
+                print("Refactored code:\n\(response.content)")
+                return response.content
+            } catch {
+                print("Refactor Error:\n\(error)")
+                return "Refactor Error"
+            }
+        }
+        return "Refactor Busy"
+    }
+
     static func analyzeDescription(_ fullText: String) async -> String {
 
         let question = "Describe in one sentence what the following code does, or what it is for?\n\(fullText)"

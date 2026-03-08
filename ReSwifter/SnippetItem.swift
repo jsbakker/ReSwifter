@@ -18,14 +18,34 @@ import Combine
     let date: Date = Date()
     var description: String = "Generating description..."
     var fullText: String
-    var hasDescription: Bool = false
+    var pendingUpdate: Bool = false
     var favorite: Bool = false
     var path: String = ""
 
     init(fullText: String) {
         self.fullText = fullText
     }
+
+    init(description: String, fullText: String) {
+        self.description = description
+        self.fullText = fullText
+    }
 }
+
+let sampleMultilineText = """
+    func registerAppWait(reply: @escaping (String) -> Void) {
+        queue.async {
+            if let text = self.pendingText {
+                // Work is already queued — deliver immediately
+                self.pendingText = nil
+                reply(text)
+            } else {
+                // No work yet — hold the reply until extension submits
+                self.appWaitReply = reply
+            }
+        }
+    }
+    """
 
 //@State private var items = [
 //    SnippetItem(fullText: "Foo bar baz"),

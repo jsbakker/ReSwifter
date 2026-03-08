@@ -36,21 +36,6 @@ struct ContentView: View {
             }
     }
 
-    let sampleMultilineText = """
-        func registerAppWait(reply: @escaping (String) -> Void) {
-            queue.async {
-                if let text = self.pendingText {
-                    // Work is already queued — deliver immediately
-                    self.pendingText = nil
-                    reply(text)
-                } else {
-                    // No work yet — hold the reply until extension submits
-                    self.appWaitReply = reply
-                }
-            }
-        }
-        """
-
     init() {
         dateFormatter.dateFormat = "yyyy/MM/dd - HH:mm:ss"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -66,13 +51,21 @@ struct ContentView: View {
     func addNewSnippet(fullText: String) {
 
         let newItem = SnippetItem(fullText: fullText)
+        newItem.pendingUpdate = true
         items.append(newItem)
         selectedSnipetId = newItem.id
 
         Task {
             newItem.description = await snippetUtility.summarize(newItem.fullText)
-            newItem.hasDescription = true
+            newItem.pendingUpdate = false
         }
+    }
+
+    func addUpdatedSnippet(description: String, fullText: String) {
+
+        let newItem = SnippetItem(description: description, fullText: fullText)
+        items.append(newItem)
+        selectedSnipetId = newItem.id
     }
 
     var body: some View {
@@ -111,7 +104,7 @@ struct ContentView: View {
                             Image(systemName: "text.magnifyingglass")
                                 .buttonStyle(.borderless)
 
-                            if !item.hasDescription {
+                            if item.pendingUpdate {
                                 Image(systemName: "sparkles")
                                     .font(.largeTitle)
                                     .foregroundStyle(
@@ -122,14 +115,15 @@ struct ContentView: View {
                                         )
                                     )
                             }
-                            if !item.hasDescription {
-                                ProgressView()
-                                    .controlSize(.small)
-                            }
 
                             VStack(alignment: .leading) {
                                 Text(item.description).font(.subheadline).bold()
                                 Text(dateFormatter.string(from: item.date)).font(.caption)
+                            }
+
+                            if item.pendingUpdate {
+                                ProgressView()
+                                    .controlSize(.small)
                             }
 
                             Spacer()
@@ -141,18 +135,44 @@ struct ContentView: View {
                                     .foregroundStyle(item.favorite ? .red : .gray)
                             }
                             .buttonStyle(.borderless)
+                            .disabled(item.pendingUpdate)
+
+                            Button("Cleanup", systemImage: "wand.and.stars") {
+                                item.pendingUpdate = true
+                                Task {
+                                    let newDesc = "Cleaned up: \(item.description)"
+                                    let newText = await snippetUtility.cleanup(item.fullText)
+                                    item.pendingUpdate = false
+                                    addUpdatedSnippet(description: newDesc, fullText: newText)
+                                }
+                            }
+//                            .buttonStyle(.borderless)
+                            .disabled(item.pendingUpdate)
+
+                            Button("Refactor", systemImage: "brain") {
+                                item.pendingUpdate = true
+                                Task {
+                                    let newDesc = "Refactored: \(item.description)"
+                                    let newText = await snippetUtility.refactor(item.fullText)
+                                    item.pendingUpdate = false
+                                    addUpdatedSnippet(description: newDesc, fullText: newText)
+                                }
+                            }
+                            .disabled(item.pendingUpdate)
 
                             Button("Copy", systemImage: "doc.on.doc") {
                                 pasteBoard.clearContents()
                                 pasteBoard.setString(item.fullText, forType: .string)
                                 triggerHUD()
                             }
-                            .buttonStyle(.borderless)
+//                            .buttonStyle(.borderless)
+                            .disabled(item.pendingUpdate)
 
                             Button("Delete", systemImage: "trash") {
                                 items.removeAll { $0.id == item.id }
                             }
-                            .buttonStyle(.borderless)
+//                            .buttonStyle(.borderless)
+                            .disabled(item.pendingUpdate)
                         }  // HStack
                     }
                     .animation(.default, value: items)
@@ -213,10 +233,10 @@ struct ContentView: View {
 //                    Spacer()
 //                }
 //            }  // VStack
-        }
+        }  // HStack
         .padding()
         .frame(minWidth: 400, minHeight: 300)
-    }
+    }  // View
 }
 
 #Preview {
