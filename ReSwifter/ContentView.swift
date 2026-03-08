@@ -13,7 +13,7 @@ import CodeEditor
 struct ContentView: View {
     @EnvironmentObject private var extensionService: ExtensionXPCService
 
-    @State private var source: String = "" // = extensionService.receivedText ?? ""
+    @State private var source: String = ""
     @State private var selectedSnipetId: UUID?
     @State private var items: [SnippetItem] = []
     @State private var showOnlyFavorites = false
@@ -65,12 +65,11 @@ struct ContentView: View {
 
     func addNewSnippet(fullText: String) {
 
-        var newItem = SnippetItem(fullText: fullText)
+        let newItem = SnippetItem(fullText: fullText)
         items.append(newItem)
         selectedSnipetId = newItem.id
 
         Task {
-//                        newItem.description = await SnippetUtility.analyzeDescription(newItem.fullText)
             newItem.description = await snippetUtility.summarize(newItem.fullText)
             newItem.hasDescription = true
         }
@@ -80,41 +79,30 @@ struct ContentView: View {
         HStack(spacing: 16) {
 
 //            if extensionService.hasPendingRequest {
-//                var insertedItem = SnippetItem(fullText: extensionService.receivedText!)
-//                items.append(insertedItem)
-//
-//                Task {
-//                    insertedItem.description = await SnippetUtility.analyzeDescription(insertedItem.fullText)
-//                    insertedItem.hasDescription = true
-//                }
+//                addNewSnippet(extensionService.receivedText!)
 //            }
 
             VStack {
-                Button("Add Snippet") {
-                    addNewSnippet(fullText: sampleMultilineText)
-//                    var newItem = SnippetItem(fullText: sampleMultilineText)
-//                    items.append(newItem)
-//                    selectedSnipetId = newItem.id
-//
-//                    Task {
-////                        newItem.description = await SnippetUtility.analyzeDescription(newItem.fullText)
-//                        newItem.description = await snippetUtility.summarize(newItem.fullText)
-//                        newItem.hasDescription = true
-//                    }
-                }
-                .buttonStyle(.borderedProminent)
 
-                Button("Add From Clipboard") {
-                    let pasted = pasteBoard.string(forType: .string)
-                    guard let pasted else { return }
+                HStack {
+                    Button("Add Snippet") {
+                        addNewSnippet(fullText: sampleMultilineText)
+                    }
+                    .buttonStyle(.borderedProminent)
 
-                    addNewSnippet(fullText: pasted)
-                }
+                    Button("Add From Clipboard") {
+                        let pasted = pasteBoard.string(forType: .string)
+                        guard let pasted else { return }
 
-                Button("Filter", systemImage: showOnlyFavorites ? "heart.fill" : "heart") {
-                    showOnlyFavorites.toggle()
+                        addNewSnippet(fullText: pasted)
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button("Filter", systemImage: showOnlyFavorites ? "heart.fill" : "heart") {
+                        showOnlyFavorites.toggle()
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-//                .buttonStyle(.borderless)
 
                 ZStack {
                     List(displayedItems, selection: $selectedSnipetId) { item in
@@ -139,23 +127,12 @@ struct ContentView: View {
                                     .controlSize(.small)
                             }
 
-                            VStack {
-                                Text(item.description).font(.headline)
-                                Text(dateFormatter.string(from: item.date)).font(.subheadline)
+                            VStack(alignment: .leading) {
+                                Text(item.description).font(.subheadline).bold()
+                                Text(dateFormatter.string(from: item.date)).font(.caption)
                             }
-//                            if !item.hasDescription {
-//                                ProgressView()
-//                                    .controlSize(.small)
-//                            }
 
                             Spacer()
-//                            Image(systemName: "text.magnifyingglass")
-//                            Button("Copy", systemImage: "doc.on.doc") {
-//                                pasteBoard.clearContents()
-//                                pasteBoard.setString(item.fullText, forType: .string)
-//                                triggerHUD()
-//                            }
-//                            .buttonStyle(.borderless)
 
                             Button {
                                 item.favorite.toggle()
@@ -176,26 +153,11 @@ struct ContentView: View {
                                 items.removeAll { $0.id == item.id }
                             }
                             .buttonStyle(.borderless)
-
-//                            Button("View", systemImage: "text.magnifyingglass") {
-//                                extensionService.receivedText = item.fullText
-//                                extensionService.hasPendingRequest = true
-//                            }
-//                            .buttonStyle(.borderless)
                         }  // HStack
                     }
                     .animation(.default, value: items)
                     .onChange(of: extensionService.receivedText ?? "") {
                         addNewSnippet(fullText: extensionService.receivedText!)
-//                        var insertedItem = SnippetItem(fullText: extensionService.receivedText!)
-//                        items.append(insertedItem)
-//                        selectedSnipetId = insertedItem.id
-////                        extensionService.cancelResponse()
-//
-//                        Task {
-//                            insertedItem.description = await snippetUtility.summarize(insertedItem.fullText)
-//                            insertedItem.hasDescription = true
-//                        }
                     }
 //                    .onChange(of: selectedSnipetId) {
 //                        if let snippet = selectedSnippet {

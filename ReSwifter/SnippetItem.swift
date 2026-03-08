@@ -20,6 +20,7 @@ import Combine
     var fullText: String
     var hasDescription: Bool = false
     var favorite: Bool = false
+    var path: String = ""
 
     init(fullText: String) {
         self.fullText = fullText

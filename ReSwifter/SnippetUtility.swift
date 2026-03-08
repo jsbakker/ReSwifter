@@ -27,9 +27,6 @@ struct SnippetUtility {
 
         guard let session else { return "Summary Unavailable" }
 
-//        if session.isResponding {
-//        }
-
         if !session.isResponding {
             let query = "Summarize this in one sentence:\n\(snippet)"
             do {
@@ -42,22 +39,6 @@ struct SnippetUtility {
             }
         }
         return "Summary Busy"
-
-//        let model = SystemLanguageModel.default
-//        if model.availability == .available {
-//
-//            let query = "Summarize this in one sentence:\n\(snippet)"
-//            let session = LanguageModelSession()
-//            do {
-//                let response = try await session.respond(to: query)
-//                print("Summary:\n\(response.content)")
-//                return response.content
-//            } catch {
-//                print("I don't have an answer for that.")
-//                return "Unknown"
-//            }
-//        }
-//        return "Unknown"
     }
 
     static func analyzeDescription(_ fullText: String) async -> String {
