@@ -46,7 +46,7 @@ struct SnippetUtility {
         guard let session else { return "Cleanup Unavailable" }
 
         if !session.isResponding {
-            let query = "Cleanup this code:\n\(snippet)"
+            let query = "Cleanup this code and use standard conventions:\n\(snippet)"
             do {
                 let response = try await session.respond(to: query)
                 print("Cleaned up code:\n\(response.content)")
@@ -75,6 +75,42 @@ struct SnippetUtility {
             }
         }
         return "Refactor Busy"
+    }
+
+    func convert(_ snippet: String) async -> String {
+
+        guard let session else { return "Convert Unavailable" }
+
+        if !session.isResponding {
+            let query = "Convert this code to Swift and use Swift conventions:\n\(snippet)"
+            do {
+                let response = try await session.respond(to: query)
+                print("Converted code:\n\(response.content)")
+                return response.content
+            } catch {
+                print("Convert Error:\n\(error)")
+                return "Convert Error"
+            }
+        }
+        return "Convert Busy"
+    }
+
+    func document(_ snippet: String) async -> String {
+
+        guard let session else { return "Document Code Unavailable" }
+
+        if !session.isResponding {
+            let query = "Add doc comments into this code for Swift DocC:\n\(snippet)"
+            do {
+                let response = try await session.respond(to: query)
+                print("Documented code:\n\(response.content)")
+                return response.content
+            } catch {
+                print("Document code Error:\n\(error)")
+                return "Document code Error"
+            }
+        }
+        return "Document code Busy"
     }
 
     static func analyzeDescription(_ fullText: String) async -> String {

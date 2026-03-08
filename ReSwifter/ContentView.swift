@@ -135,30 +135,7 @@ struct ContentView: View {
                                     .foregroundStyle(item.favorite ? .red : .gray)
                             }
                             .buttonStyle(.borderless)
-                            .disabled(item.pendingUpdate)
-
-                            Button("Cleanup", systemImage: "wand.and.stars") {
-                                item.pendingUpdate = true
-                                Task {
-                                    let newDesc = "Cleaned up: \(item.description)"
-                                    let newText = await snippetUtility.cleanup(item.fullText)
-                                    item.pendingUpdate = false
-                                    addUpdatedSnippet(description: newDesc, fullText: newText)
-                                }
-                            }
-//                            .buttonStyle(.borderless)
-                            .disabled(item.pendingUpdate)
-
-                            Button("Refactor", systemImage: "brain") {
-                                item.pendingUpdate = true
-                                Task {
-                                    let newDesc = "Refactored: \(item.description)"
-                                    let newText = await snippetUtility.refactor(item.fullText)
-                                    item.pendingUpdate = false
-                                    addUpdatedSnippet(description: newDesc, fullText: newText)
-                                }
-                            }
-                            .disabled(item.pendingUpdate)
+//                            .disabled(item.pendingUpdate)
 
                             Button("Copy", systemImage: "doc.on.doc") {
                                 pasteBoard.clearContents()
@@ -166,13 +143,68 @@ struct ContentView: View {
                                 triggerHUD()
                             }
 //                            .buttonStyle(.borderless)
-                            .disabled(item.pendingUpdate)
+//                            .disabled(item.pendingUpdate)
 
-                            Button("Delete", systemImage: "trash") {
+                            Button("Delete", systemImage: "trash", role: .destructive) {
                                 items.removeAll { $0.id == item.id }
                             }
 //                            .buttonStyle(.borderless)
                             .disabled(item.pendingUpdate)
+
+                            Divider()
+
+                            Menu {
+                                Button("Cleanup", systemImage: "wand.and.stars") {
+                                    item.pendingUpdate = true
+                                    Task {
+                                        let newDesc = "Cleaned up: \(item.description)"
+                                        let newText = await snippetUtility.cleanup(item.fullText)
+                                        item.pendingUpdate = false
+                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                    }
+                                }
+                                .disabled(item.pendingUpdate)
+
+                                Button("Refactor", systemImage: "lightbulb") {
+                                    item.pendingUpdate = true
+                                    Task {
+                                        let newDesc = "Refactored: \(item.description)"
+                                        let newText = await snippetUtility.refactor(item.fullText)
+                                        item.pendingUpdate = false
+                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                    }
+                                }
+                                .disabled(item.pendingUpdate)
+
+                                Button("Convert", systemImage: "brain") {
+                                    item.pendingUpdate = true
+                                    Task {
+                                        let newDesc = "Converted: \(item.description)"
+                                        let newText = await snippetUtility.convert(item.fullText)
+                                        item.pendingUpdate = false
+                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                    }
+                                }
+                                .disabled(item.pendingUpdate)
+
+                                Button("Document", systemImage: "document") {
+                                    item.pendingUpdate = true
+                                    Task {
+                                        let newDesc = "Documented: \(item.description)"
+                                        let newText = await snippetUtility.document(item.fullText)
+                                        item.pendingUpdate = false
+                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                    }
+                                }
+                                .disabled(item.pendingUpdate)
+                            } label: {
+                                Image(systemName: "sparkles")
+                                    .foregroundStyle(item.favorite ? .red : .gray)
+                                Text("More")
+                            }
+//                            .menuStyle(.borderlessButton)
+//                            .menuIndicator(.hidden)
+
                         }  // HStack
                     }
                     .animation(.default, value: items)
