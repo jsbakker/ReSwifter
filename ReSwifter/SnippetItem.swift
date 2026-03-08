@@ -16,7 +16,7 @@ import Combine
 
     let id = UUID()
     let date: Date = Date()
-    var description: String = "Generating description..."
+    var summary: String = "Generating summary..."
     var fullText: String
     var pendingUpdate: Bool = false
     var favorite: Bool = false
@@ -26,8 +26,8 @@ import Combine
         self.fullText = fullText
     }
 
-    init(description: String, fullText: String) {
-        self.description = description
+    init(summary: String, fullText: String) {
+        self.summary = summary
         self.fullText = fullText
     }
 }
@@ -46,21 +46,3 @@ let sampleMultilineText = """
         }
     }
     """
-
-//@State private var items = [
-//    SnippetItem(fullText: "Foo bar baz"),
-//    SnippetItem(fullText: "Bar baz qux"),
-//    SnippetItem(fullText: "Baz qux quux"),
-//    SnippetItem(fullText: "Corge grault garply"),
-//    SnippetItem(fullText: "Garply biz burp"),
-//    SnippetItem(fullText: "Grault blimity plugh"),
-//    SnippetItem(fullText: "Quux plugh thud"),
-//    SnippetItem(fullText: "Quux thud waldo"),
-//    SnippetItem(fullText: "Waldo quux thud"),
-//    SnippetItem(fullText: "Plugh thud waldo"),
-//    SnippetItem(fullText: "Baz qux quux waldo"),
-//    SnippetItem(fullText: "Foo bar baz quux"),
-//    SnippetItem(fullText: "Foo bar baz quux quux"),
-//    SnippetItem(fullText: "Foo bar baz quux quux waldo"),
-//    SnippetItem(fullText: "Foo bar baz quux quux quux")
-//]

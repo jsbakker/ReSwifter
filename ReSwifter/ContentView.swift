@@ -27,7 +27,6 @@ struct ContentView: View {
         items.first { $0.id == selectedSnipetId }
     }
 
-    // todo apply filter
     var displayedItems: [SnippetItem] {
         items
             .filter { !showOnlyFavorites || $0.favorite }
@@ -56,14 +55,14 @@ struct ContentView: View {
         selectedSnipetId = newItem.id
 
         Task {
-            newItem.description = await snippetUtility.summarize(newItem.fullText)
+            newItem.summary = await snippetUtility.summarize(newItem.fullText)
             newItem.pendingUpdate = false
         }
     }
 
-    func addUpdatedSnippet(description: String, fullText: String) {
+    func addUpdatedSnippet(summary: String, fullText: String) {
 
-        let newItem = SnippetItem(description: description, fullText: fullText)
+        let newItem = SnippetItem(summary: summary, fullText: fullText)
         items.append(newItem)
         selectedSnipetId = newItem.id
     }
@@ -117,7 +116,7 @@ struct ContentView: View {
                             }
 
                             VStack(alignment: .leading) {
-                                Text(item.description).font(.subheadline).bold()
+                                Text(item.summary).font(.subheadline).bold()
                                 Text(dateFormatter.string(from: item.date)).font(.caption)
                             }
 
@@ -157,10 +156,10 @@ struct ContentView: View {
                                 Button("Cleanup", systemImage: "wand.and.stars") {
                                     item.pendingUpdate = true
                                     Task {
-                                        let newDesc = "Cleaned up: \(item.description)"
+                                        let newDesc = "Cleaned up: \(item.summary)"
                                         let newText = await snippetUtility.cleanup(item.fullText)
                                         item.pendingUpdate = false
-                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                        addUpdatedSnippet(summary: newDesc, fullText: newText)
                                     }
                                 }
                                 .disabled(item.pendingUpdate)
@@ -168,10 +167,10 @@ struct ContentView: View {
                                 Button("Refactor", systemImage: "lightbulb") {
                                     item.pendingUpdate = true
                                     Task {
-                                        let newDesc = "Refactored: \(item.description)"
+                                        let newDesc = "Refactored: \(item.summary)"
                                         let newText = await snippetUtility.refactor(item.fullText)
                                         item.pendingUpdate = false
-                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                        addUpdatedSnippet(summary: newDesc, fullText: newText)
                                     }
                                 }
                                 .disabled(item.pendingUpdate)
@@ -179,10 +178,10 @@ struct ContentView: View {
                                 Button("Convert", systemImage: "brain") {
                                     item.pendingUpdate = true
                                     Task {
-                                        let newDesc = "Converted: \(item.description)"
+                                        let newDesc = "Converted: \(item.summary)"
                                         let newText = await snippetUtility.convert(item.fullText)
                                         item.pendingUpdate = false
-                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                        addUpdatedSnippet(summary: newDesc, fullText: newText)
                                     }
                                 }
                                 .disabled(item.pendingUpdate)
@@ -190,10 +189,10 @@ struct ContentView: View {
                                 Button("Document", systemImage: "document") {
                                     item.pendingUpdate = true
                                     Task {
-                                        let newDesc = "Documented: \(item.description)"
+                                        let newDesc = "Documented: \(item.summary)"
                                         let newText = await snippetUtility.document(item.fullText)
                                         item.pendingUpdate = false
-                                        addUpdatedSnippet(description: newDesc, fullText: newText)
+                                        addUpdatedSnippet(summary: newDesc, fullText: newText)
                                     }
                                 }
                                 .disabled(item.pendingUpdate)
