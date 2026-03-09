@@ -206,7 +206,9 @@ struct ContentView: View {
                     }
                     .animation(.default, value: displayedItems.map(\.id))
                     .onChange(of: extensionService.receivedText ?? "") {
-                        addNewSnippet(fullText: extensionService.receivedText!)
+                        if let text = extensionService.receivedText, !text.isEmpty {
+                            addNewSnippet(fullText: text)
+                        }
                     }
 //                    .onChange(of: selectedSnipetId) {
 //                        if let snippet = selectedSnippet {
@@ -226,6 +228,28 @@ struct ContentView: View {
 
 
             VStack {
+                if extensionService.hasPendingRequest {
+                    HStack {
+                        Button("Cancel XCode Text Replacement") {
+                            extensionService.cancelResponse()
+                        }
+                        .buttonStyle(.borderedProminent)
+
+                        Spacer()
+
+                        Button("Send Back to XCode") {
+//                            if let text = extensionService.receivedText {
+//                                extensionService.sendResponse(text)
+//                            }
+                            let fullText = selectedSnippet?.fullText ?? ""
+                            extensionService.sendResponse(fullText)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .keyboardShortcut(.return, modifiers: .command)
+                    }
+                    .keyboardShortcut(.return, modifiers: .command)
+                }
+
                 CodeEditor(source: selectedSnippet?.fullText ?? "", language: .swift, theme: .ocean)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()

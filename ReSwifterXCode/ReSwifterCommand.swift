@@ -63,11 +63,12 @@ class ReSwifterCommand: NSObject, XCSourceEditorCommand {
 
                 print("Selection:\n\(selectedLines)")
 
-                let reversedSelection = Array(selectedLines.reversed())
+                // works, but just playing around
+//                let reversedSelection = Array(selectedLines.reversed())
 
-                let range: Range = lStart..<selectionLastLine
+//                let range: Range = lStart..<selectionLastLine
 
-                // working
+                // working but just playing around
 //                lines.replaceObjects(at: IndexSet(integersIn: range), with: reversedSelection)
 
                 launcher.launchAndProcess(text) { reply, err in
