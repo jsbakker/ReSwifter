@@ -58,6 +58,19 @@ struct ContentView: View {
         }
     }
 
+    /// Extracts code from inside triple-backtick fenced code blocks if present.
+    /// If no fenced block is found, returns the original text unchanged.
+    func extractCode(from text: String) -> String {
+        // Match ```<optional language/version>\n...\n```
+        let pattern = "```[^\\n]*\\n([\\s\\S]*?)```"
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)),
+              let codeRange = Range(match.range(at: 1), in: text) else {
+            return text
+        }
+        return String(text[codeRange])
+    }
+
     func addUpdatedSnippet(summary: String, fullText: String) {
 
         let newItem = SnippetItem(summary: summary, fullText: fullText)
@@ -136,7 +149,7 @@ struct ContentView: View {
 
                             Button("Copy", systemImage: "doc.on.doc") {
                                 pasteBoard.clearContents()
-                                pasteBoard.setString(item.fullText, forType: .string)
+                                pasteBoard.setString(extractCode(from: item.fullText), forType: .string)
                                 triggerHUD()
                             }
 //                            .buttonStyle(.borderless)
@@ -238,11 +251,8 @@ struct ContentView: View {
                         Spacer()
 
                         Button("Send Back to XCode") {
-//                            if let text = extensionService.receivedText {
-//                                extensionService.sendResponse(text)
-//                            }
                             let fullText = selectedSnippet?.fullText ?? ""
-                            extensionService.sendResponse(fullText)
+                            extensionService.sendResponse(extractCode(from: fullText))
                         }
                         .buttonStyle(.borderedProminent)
                         .keyboardShortcut(.return, modifiers: .command)
