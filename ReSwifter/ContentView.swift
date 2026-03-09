@@ -95,6 +95,19 @@ struct ContentView: View {
 //                    }
 //                    .buttonStyle(.borderedProminent)
 
+                    Menu {  // TODO: Folders Menu
+                        Button("Default", systemImage: "folder") {
+                        }
+
+                        Divider()
+
+                        Button("New Folder...", systemImage: "folder.badge.plus") {
+                        }
+                    } label: {
+                        Image(systemName: "folder")
+                        Text("Folder")
+                    }
+
                     Button("Add From Clipboard") {
                         let pasted = pasteBoard.string(forType: .string)
                         guard let pasted else { return }
