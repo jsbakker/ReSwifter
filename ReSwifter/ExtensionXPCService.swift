@@ -19,9 +19,9 @@
 //  5. Extension reads the result from shared UserDefaults.
 //
 
+import AppKit
 import Combine
 import Foundation
-import os.log
 import os.log
 
 @MainActor
@@ -117,6 +117,9 @@ class ExtensionXPCService: ObservableObject {
         pendingRequestID = requestID
         receivedText = text
         hasPendingRequest = true
+
+        // Bring the app to the foreground
+        NSRunningApplication.current.activate(options: .activateAllWindows)
 
         // Disable for now
 //        cancelResponse()

@@ -56,12 +56,14 @@ class AppLauncherXPCService {
     // MARK: - Launch Host App
 
     /// Launches the host app if it is not already running.
+    /// Always brings the host app to the foreground.
     func launchHostApp(completion: @escaping (Bool, Error?) -> Void) {
         let running = NSRunningApplication.runningApplications(
             withBundleIdentifier: hostAppBundleID
         )
-        if !running.isEmpty {
-            os_log("Host app already running", log: log, type: .debug)
+        if let app = running.first {
+            os_log("Host app already running, activating", log: log, type: .debug)
+            app.activate(options: .activateAllWindows)
             completion(true, nil)
             return
         }
@@ -80,7 +82,7 @@ class AppLauncherXPCService {
         }
 
         let config = NSWorkspace.OpenConfiguration()
-        config.activates = false
+        config.activates = true
 
         NSWorkspace.shared.openApplication(at: appURL, configuration: config) { app, error in
             if let error = error {
@@ -140,6 +142,9 @@ class AppLauncherXPCService {
         defaults.synchronize()
 
         os_log("Sending request %{public}@ (%{public}d chars)", log: log, type: .info, requestID, text.count)
+
+        // Yield activation so the host app can come to the foreground
+        NSApplication.shared.yieldActivation(toApplicationWithBundleIdentifier: hostAppBundleID)
 
         // Mutable state shared between closures
         let state = ResponseState()
