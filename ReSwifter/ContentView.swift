@@ -20,6 +20,8 @@ struct ContentView: View {
     @State private var selectedSnipetId: UUID?
     @State private var showOnlyFavorites = false
     @State private var showHud = false
+    @State private var editSummaryItemId: UUID?
+    @State private var editSummaryText = ""
 
     let dateFormatter = DateFormatter()
     let pasteBoard = NSPasteboard.general
@@ -209,6 +211,13 @@ struct ContentView: View {
                                     }
                                 }
                                 .disabled(item.pendingUpdate)
+
+                                Divider()
+
+                                Button("Edit Summary...", systemImage: "square.and.pencil") {
+                                    editSummaryText = item.summary
+                                    editSummaryItemId = item.id
+                                }
                             } label: {
                                 Image(systemName: "sparkles")
                                     .foregroundStyle(item.favorite ? .red : .gray)
@@ -306,6 +315,40 @@ struct ContentView: View {
         }  // HStack
         .padding()
         .frame(minWidth: 400, minHeight: 300)
+        .sheet(isPresented: Binding(
+            get: { editSummaryItemId != nil },
+            set: { if !$0 { editSummaryItemId = nil } }
+        )) {
+            VStack(spacing: 12) {
+                Text("Edit Summary")
+                    .font(.headline)
+
+                TextEditor(text: $editSummaryText)
+                    .font(.body)
+                    .frame(minHeight: 80)
+                    .border(Color.secondary.opacity(0.3))
+
+                HStack {
+                    Button("Cancel") {
+                        editSummaryItemId = nil
+                    }
+                    .keyboardShortcut(.escape, modifiers: [])
+
+                    Spacer()
+
+                    Button("Save") {
+                        if let id = editSummaryItemId,
+                           let item = items.first(where: { $0.id == id }) {
+                            item.summary = editSummaryText
+                        }
+                        editSummaryItemId = nil
+                    }
+                    .keyboardShortcut(.return, modifiers: .command)
+                }
+            }
+            .padding()
+            .frame(minWidth: 400, minHeight: 180)
+        }
     }  // View
 }
 
