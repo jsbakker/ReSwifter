@@ -15,7 +15,7 @@ import SwiftData
     var summary: String = "Generating summary..."
     var fullText: String = ""
     var favorite: Bool = false
-    var path: String = ""
+    var folder: FolderItem?
 
     @Transient var pendingUpdate: Bool = false
 

@@ -19,6 +19,6 @@ struct ReSwifterApp: App {
             ContentView()
                 .environmentObject(extensionService)
         }
-        .modelContainer(for: SnippetItem.self)
+        .modelContainer(for: [SnippetItem.self, FolderItem.self])
     }
 }

@@ -24,18 +24,13 @@ struct ContentView: View {
     @State private var editSummaryText = ""
     @State private var showNewFolderPrompt = false
     @State private var newFolderName = ""
+    @State private var selectedFolderId: UUID?
 
-    @AppStorage("folders") private var foldersData: String = "[]"
-    @AppStorage("selectedFolder") private var selectedFolder: String = ""
+    @Query(sort: \FolderItem.name) private var folders: [FolderItem]
 
-    var folders: [String] {
-        (try? JSONDecoder().decode([String].self, from: Data(foldersData.utf8))) ?? []
-    }
-
-    func saveFolders(_ folders: [String]) {
-        if let data = try? JSONEncoder().encode(folders) {
-            foldersData = String(data: data, encoding: .utf8) ?? "[]"
-        }
+    var selectedFolderItem: FolderItem? {
+        guard let id = selectedFolderId else { return nil }
+        return folders.first { $0.id == id }
     }
 
     let dateFormatter = DateFormatter()
@@ -49,7 +44,7 @@ struct ContentView: View {
     var displayedItems: [SnippetItem] {
         items.filter {
             (!showOnlyFavorites || $0.favorite) &&
-            (selectedFolder.isEmpty || $0.path == selectedFolder)
+            (selectedFolderId == nil || $0.folder?.id == selectedFolderId)
         }
     }
 
@@ -68,7 +63,7 @@ struct ContentView: View {
     func addNewSnippet(fullText: String) {
 
         let newItem = SnippetItem(fullText: fullText)
-        newItem.path = selectedFolder
+        newItem.folder = selectedFolderItem
         newItem.pendingUpdate = true
         modelContext.insert(newItem)
         selectedSnipetId = newItem.id
@@ -95,7 +90,7 @@ struct ContentView: View {
     func addUpdatedSnippet(summary: String, fullText: String) {
 
         let newItem = SnippetItem(summary: summary, fullText: fullText)
-        newItem.path = selectedFolder
+        newItem.folder = selectedFolderItem
         modelContext.insert(newItem)
         selectedSnipetId = newItem.id
     }
@@ -117,9 +112,9 @@ struct ContentView: View {
 
                     Menu {
                         Button {
-                            selectedFolder = ""
+                            selectedFolderId = nil
                         } label: {
-                            if selectedFolder.isEmpty {
+                            if selectedFolderId == nil {
                                 Label("All", systemImage: "checkmark")
                             } else {
                                 Text("All")
@@ -128,14 +123,14 @@ struct ContentView: View {
 
                         Divider()
 
-                        ForEach(folders, id: \.self) { folder in
+                        ForEach(folders) { folder in
                             Button {
-                                selectedFolder = folder
+                                selectedFolderId = folder.id
                             } label: {
-                                if selectedFolder == folder {
-                                    Label(folder, systemImage: "checkmark")
+                                if selectedFolderId == folder.id {
+                                    Label(folder.name, systemImage: "checkmark")
                                 } else {
-                                    Text(folder)
+                                    Text(folder.name)
                                 }
                             }
                         }
@@ -148,7 +143,7 @@ struct ContentView: View {
                         }
                     } label: {
                         Image(systemName: "folder")
-                        Text(selectedFolder.isEmpty ? "All" : selectedFolder)
+                        Text(selectedFolderItem?.name ?? "All")
                     }
 
                     Button("Add From Clipboard") {
@@ -409,11 +404,10 @@ struct ContentView: View {
             TextField("Folder name", text: $newFolderName)
             Button("Create") {
                 let name = newFolderName.trimmingCharacters(in: .whitespaces)
-                if !name.isEmpty && !folders.contains(name) {
-                    var updated = folders
-                    updated.append(name)
-                    saveFolders(updated)
-                    selectedFolder = name
+                if !name.isEmpty && !folders.contains(where: { $0.name == name }) {
+                    let folder = FolderItem(name: name)
+                    modelContext.insert(folder)
+                    selectedFolderId = folder.id
                 }
             }
             Button("Cancel", role: .cancel) {}
@@ -424,5 +418,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(ExtensionXPCService())
-        .modelContainer(for: SnippetItem.self, inMemory: true)
+        .modelContainer(for: [SnippetItem.self, FolderItem.self], inMemory: true)
 }
