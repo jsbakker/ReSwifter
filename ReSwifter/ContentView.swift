@@ -25,6 +25,7 @@ struct ContentView: View {
     @State private var showNewFolderPrompt = false
     @State private var newFolderName = ""
     @State private var selectedFolderId: UUID?
+    @State private var searchText = ""
 
     @Query(sort: \FolderItem.name) private var folders: [FolderItem]
 
@@ -44,7 +45,8 @@ struct ContentView: View {
     var displayedItems: [SnippetItem] {
         items.filter {
             (!showOnlyFavorites || $0.favorite) &&
-            (selectedFolderId == nil || $0.folder?.id == selectedFolderId)
+            (selectedFolderId == nil || $0.folder?.id == selectedFolderId) &&
+            (searchText.isEmpty || $0.summary.localizedCaseInsensitiveContains(searchText))
         }
     }
 
@@ -96,20 +98,13 @@ struct ContentView: View {
     }
 
     var body: some View {
+        NavigationStack {
         HStack(spacing: 16) {
 
-//            if extensionService.hasPendingRequest {
-//                addNewSnippet(extensionService.receivedText!)
-//            }
-
+            // Left Side
             VStack {
 
                 HStack {
-//                    Button("Add Snippet") {
-//                        addNewSnippet(fullText: sampleMultilineText)
-//                    }
-//                    .buttonStyle(.borderedProminent)
-
                     Menu {
                         Button {
                             selectedFolderId = nil
@@ -200,20 +195,16 @@ struct ContentView: View {
                                     .foregroundStyle(item.favorite ? .red : .gray)
                             }
                             .buttonStyle(.borderless)
-//                            .disabled(item.pendingUpdate)
 
                             Button("Copy", systemImage: "doc.on.doc") {
                                 pasteBoard.clearContents()
                                 pasteBoard.setString(extractCode(from: item.fullText), forType: .string)
                                 triggerHUD()
                             }
-//                            .buttonStyle(.borderless)
-//                            .disabled(item.pendingUpdate)
 
                             Button("Delete", systemImage: "trash", role: .destructive) {
                                 modelContext.delete(item)
                             }
-//                            .buttonStyle(.borderless)
                             .disabled(item.pendingUpdate)
 
                             Divider()
@@ -284,13 +275,7 @@ struct ContentView: View {
                         if let text = extensionService.receivedText, !text.isEmpty {
                             addNewSnippet(fullText: text)
                         }
-                    }
-//                    .onChange(of: selectedSnipetId) {
-//                        if let snippet = selectedSnippet {
-//                            extensionService.receivedText = snippet.fullText
-//                            extensionService.hasPendingRequest = true
-//                        }
-//                    }  // end List
+                    }  // End List
 
                     if showHud {
                         HudNotification(text: "Copied to clipboard", icon: "doc.on.doc")
@@ -301,7 +286,7 @@ struct ContentView: View {
                 // End ZStack
             } // End VStack
 
-
+            // Right side
             VStack {
                 if extensionService.hasPendingRequest {
                     HStack {
@@ -331,41 +316,11 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
 //                    .padding()
             }  // End VStack
-
-//            VStack {
-//                if extensionService.hasPendingRequest {
-//                    Text("Text received from Xcode extension:")
-//                        .font(.headline)
-//
-//                    CodeEditor(source: extensionService.receivedText ?? "", language: .swift, theme: .ocean)
-//                    //                    CodeEditor(source: $source, language: .swift)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .padding()
-//
-//                    HStack {
-//                        Button("Cancel") {
-//                            extensionService.cancelResponse()
-//                        }
-//
-//                        Spacer()
-//
-//                        Button("Send Back") {
-//                            if let text = extensionService.receivedText {
-//                                extensionService.sendResponse(text)
-//                            }
-//                        }
-//                        .keyboardShortcut(.return, modifiers: .command)
-//                    }
-//                } else {
-//                    Spacer()
-//                    Text("Waiting for text from Xcode extension...")
-//                        .foregroundStyle(.secondary)
-//                    Spacer()
-//                }
-//            }  // VStack
-        }  // HStack
+        }  // End HStack
         .padding()
         .frame(minWidth: 400, minHeight: 300)
+        .searchable(text: $searchText, prompt: "Search snippets")
+        }  // NavigationStack
         .sheet(isPresented: Binding(
             get: { editSummaryItemId != nil },
             set: { if !$0 { editSummaryItemId = nil } }
