@@ -22,6 +22,21 @@ struct ContentView: View {
     @State private var showHud = false
     @State private var editSummaryItemId: UUID?
     @State private var editSummaryText = ""
+    @State private var showNewFolderPrompt = false
+    @State private var newFolderName = ""
+
+    @AppStorage("folders") private var foldersData: String = "[]"
+    @AppStorage("selectedFolder") private var selectedFolder: String = ""
+
+    var folders: [String] {
+        (try? JSONDecoder().decode([String].self, from: Data(foldersData.utf8))) ?? []
+    }
+
+    func saveFolders(_ folders: [String]) {
+        if let data = try? JSONEncoder().encode(folders) {
+            foldersData = String(data: data, encoding: .utf8) ?? "[]"
+        }
+    }
 
     let dateFormatter = DateFormatter()
     let pasteBoard = NSPasteboard.general
@@ -32,7 +47,10 @@ struct ContentView: View {
     }
 
     var displayedItems: [SnippetItem] {
-        items.filter { !showOnlyFavorites || $0.favorite }
+        items.filter {
+            (!showOnlyFavorites || $0.favorite) &&
+            (selectedFolder.isEmpty || $0.path == selectedFolder)
+        }
     }
 
     init() {
@@ -50,6 +68,7 @@ struct ContentView: View {
     func addNewSnippet(fullText: String) {
 
         let newItem = SnippetItem(fullText: fullText)
+        newItem.path = selectedFolder
         newItem.pendingUpdate = true
         modelContext.insert(newItem)
         selectedSnipetId = newItem.id
@@ -76,6 +95,7 @@ struct ContentView: View {
     func addUpdatedSnippet(summary: String, fullText: String) {
 
         let newItem = SnippetItem(summary: summary, fullText: fullText)
+        newItem.path = selectedFolder
         modelContext.insert(newItem)
         selectedSnipetId = newItem.id
     }
@@ -95,17 +115,40 @@ struct ContentView: View {
 //                    }
 //                    .buttonStyle(.borderedProminent)
 
-                    Menu {  // TODO: Folders Menu
-                        Button("Default", systemImage: "folder") {
+                    Menu {
+                        Button {
+                            selectedFolder = ""
+                        } label: {
+                            if selectedFolder.isEmpty {
+                                Label("All", systemImage: "checkmark")
+                            } else {
+                                Text("All")
+                            }
+                        }
+
+                        Divider()
+
+                        ForEach(folders, id: \.self) { folder in
+                            Button {
+                                selectedFolder = folder
+                            } label: {
+                                if selectedFolder == folder {
+                                    Label(folder, systemImage: "checkmark")
+                                } else {
+                                    Text(folder)
+                                }
+                            }
                         }
 
                         Divider()
 
                         Button("New Folder...", systemImage: "folder.badge.plus") {
+                            newFolderName = ""
+                            showNewFolderPrompt = true
                         }
                     } label: {
                         Image(systemName: "folder")
-                        Text("Folder")
+                        Text(selectedFolder.isEmpty ? "All" : selectedFolder)
                     }
 
                     Button("Add From Clipboard") {
@@ -361,6 +404,19 @@ struct ContentView: View {
             }
             .padding()
             .frame(minWidth: 400, minHeight: 180)
+        }
+        .alert("New Folder", isPresented: $showNewFolderPrompt) {
+            TextField("Folder name", text: $newFolderName)
+            Button("Create") {
+                let name = newFolderName.trimmingCharacters(in: .whitespaces)
+                if !name.isEmpty && !folders.contains(name) {
+                    var updated = folders
+                    updated.append(name)
+                    saveFolders(updated)
+                    selectedFolder = name
+                }
+            }
+            Button("Cancel", role: .cancel) {}
         }
     }  // View
 }
