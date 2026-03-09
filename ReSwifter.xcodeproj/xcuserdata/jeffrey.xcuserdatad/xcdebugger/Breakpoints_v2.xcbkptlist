@@ -15,7 +15,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "121"
-            endingLineNumber = "121">
+            endingLineNumber = "121"
+            landmarkName = "replaceSelection(in:selection:with:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -29,7 +31,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "122"
-            endingLineNumber = "122">
+            endingLineNumber = "122"
+            landmarkName = "replaceSelection(in:selection:with:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -124,8 +128,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "102"
             endingLineNumber = "102"
-            landmarkName = "launchAndProcess(_:reply:)"
-            landmarkType = "7">
+            landmarkName = "AppLauncherXPCService"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

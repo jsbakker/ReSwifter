@@ -88,10 +88,10 @@ struct ContentView: View {
             VStack {
 
                 HStack {
-                    Button("Add Snippet") {
-                        addNewSnippet(fullText: sampleMultilineText)
-                    }
-                    .buttonStyle(.borderedProminent)
+//                    Button("Add Snippet") {
+//                        addNewSnippet(fullText: sampleMultilineText)
+//                    }
+//                    .buttonStyle(.borderedProminent)
 
                     Button("Add From Clipboard") {
                         let pasted = pasteBoard.string(forType: .string)
@@ -100,6 +100,8 @@ struct ContentView: View {
                         addNewSnippet(fullText: pasted)
                     }
                     .buttonStyle(.borderedProminent)
+
+                    Spacer()
 
                     Button("Filter", systemImage: showOnlyFavorites ? "heart.fill" : "heart") {
                         showOnlyFavorites.toggle()
@@ -243,14 +245,19 @@ struct ContentView: View {
             VStack {
                 if extensionService.hasPendingRequest {
                     HStack {
-                        Button("Cancel XCode Text Replacement") {
+                        Image(systemName: "exclamationmark.triangle")
+                        Text("""
+                            The XCode extension is requesting to modify its current file or selection.
+                            """)
+
+                        Spacer()
+
+                        Button("Cancel Text Replacement") {
                             extensionService.cancelResponse()
                         }
                         .buttonStyle(.borderedProminent)
 
-                        Spacer()
-
-                        Button("Send Back to XCode") {
+                        Button("Send Selected Snippet to XCode") {
                             let fullText = selectedSnippet?.fullText ?? ""
                             extensionService.sendResponse(extractCode(from: fullText))
                         }
@@ -262,7 +269,7 @@ struct ContentView: View {
 
                 CodeEditor(source: selectedSnippet?.fullText ?? "", language: .swift, theme: .ocean)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+//                    .padding()
             }  // End VStack
 
 //            VStack {

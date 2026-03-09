@@ -51,7 +51,7 @@ class AppLauncherXPCService {
 
     /// Timeout for waiting for a response from the host app.
     /// Set high to allow time for user interaction in the host app UI.
-    private let responseTimeout: TimeInterval = 120.0
+    private let responseTimeout: TimeInterval = 900
 
     // MARK: - Launch Host App
 
