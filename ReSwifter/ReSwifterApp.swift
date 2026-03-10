@@ -15,10 +15,24 @@ struct ReSwifterApp: App {
     @StateObject private var extensionService = ExtensionXPCService()
 
     var body: some Scene {
-        WindowGroup {
+        Window("ReSwifter", id: "main") {
             ContentView()
                 .environmentObject(extensionService)
         }
+        .windowResizability(.contentSize)
         .modelContainer(for: [SnippetItem.self, FolderItem.self])
+        .commands {
+            CommandMenu("Snippets") {
+                Button("Add Snippet From Clipboard") {
+                }
+                .keyboardShortcut("V", modifiers: [.command])
+
+                Divider()
+
+                Button("Show Only Favorites") {
+                }
+                .keyboardShortcut("H", modifiers: [.command])
+            }
+        }
     }
 }
