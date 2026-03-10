@@ -10,28 +10,25 @@ import SwiftData
 
 @main
 struct ReSwifterApp: App {
-    /// Listens for text-processing requests from the Xcode
-    /// Source Editor Extension via DistributedNotifications.
     @StateObject private var extensionService = ExtensionXPCService()
+    @StateObject private var viewModel = SnippetViewModel()
+
+    let modelContainer: ModelContainer = {
+        try! ModelContainer(for: SnippetItem.self, FolderItem.self)
+    }()
 
     var body: some Scene {
         Window("ReSwifter", id: "main") {
             ContentView()
                 .environmentObject(extensionService)
+                .environmentObject(viewModel)
         }
         .windowResizability(.contentSize)
-        .modelContainer(for: [SnippetItem.self, FolderItem.self])
+        .modelContainer(modelContainer)
         .commands {
-            CommandMenu("Snippets") {
-                Button("Add Snippet From Clipboard") {
-                }
-                .keyboardShortcut("V", modifiers: [.command])
-
-                Divider()
-
-                Button("Show Only Favorites") {
-                }
-                .keyboardShortcut("H", modifiers: [.command])
+            CommandMenu("Folders") {
+                FolderCommandMenu(viewModel: viewModel)
+                    .modelContainer(modelContainer)
             }
         }
     }
