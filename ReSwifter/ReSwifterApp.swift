@@ -23,7 +23,7 @@ struct ReSwifterApp: App {
                 .environmentObject(extensionService)
                 .environmentObject(viewModel)
         }
-        .windowResizability(.contentSize)
+        .windowResizability(.contentMinSize)
         .modelContainer(modelContainer)
         .commands {
             CommandMenu("Folders") {

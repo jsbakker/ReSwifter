@@ -9,108 +9,91 @@ import Conduit
 import Foundation
 import FoundationModels
 
-struct SnippetUtility {
+/// Serializes all LanguageModelSession calls through a single processing loop
+/// so that only one session.respond is in flight at a time.
+/// Each request uses a fresh session to avoid context window exhaustion.
+final class SnippetUtility: Sendable {
 
-    let model: SystemLanguageModel = SystemLanguageModel.default
-    let session: LanguageModelSession?
+    private let isAvailable: Bool
+    private let model: SystemLanguageModel
+    private let stream: AsyncStream<WorkItem>
+    private let continuation: AsyncStream<WorkItem>.Continuation
+
+    private struct WorkItem: Sendable {
+        let query: String
+        let reply: @Sendable (String) -> Void
+    }
 
     init() {
-        if self.model.availability == .available {
-            self.session = LanguageModelSession(model: self.model)
-            self.session?.prewarm()
-        } else {
-            self.session = nil
+        let model = SystemLanguageModel.default
+        self.model = model
+        self.isAvailable = model.availability == .available
+
+        let (stream, continuation) = AsyncStream.makeStream(of: WorkItem.self)
+        self.stream = stream
+        self.continuation = continuation
+
+        if self.isAvailable {
+            // Prewarm once at startup
+            LanguageModelSession(model: model).prewarm()
+
+            // Single processing loop — pulls one item at a time, ensuring
+            // only one respond call is in flight at any time.
+            // Each item gets a fresh session to avoid context window buildup.
+            let capturedModel = model
+            Task {
+                for await item in stream {
+                    let session = LanguageModelSession(model: capturedModel)
+                    do {
+                        let response = try await session.respond(to: item.query)
+                        item.reply(response.content)
+                    } catch {
+                        print("Session error: \(error)")
+                        item.reply("Error")
+                    }
+                }
+            }
+        }
+    }
+
+    /// Submits a query to the serial queue and waits for the result.
+    private func submit(query: String) async -> String {
+        guard isAvailable else { return "Unavailable" }
+        return await withCheckedContinuation { cont in
+            continuation.yield(WorkItem(query: query, reply: { result in
+                cont.resume(returning: result)
+            }))
         }
     }
 
     func summarize(_ snippet: String) async -> String {
-
-        guard let session else { return "Summary Unavailable" }
-
-        if !session.isResponding {
-            let query = "Summarize this in one sentence:\n\(snippet)"
-            do {
-                let response = try await session.respond(to: query)
-                print("Summary:\n\(response.content)")
-                return response.content
-            } catch {
-                print("Summary Error:\n\(error)")
-                return "Summary Error"
-            }
-        }
-        return "Summary Busy"
+        let result = await submit(query: "Summarize this in one sentence:\n\(snippet)")
+        print("Summary:\n\(result)")
+        return result == "Error" ? "Summary Error" : result
     }
 
     func cleanup(_ snippet: String) async -> String {
-
-        guard let session else { return "Cleanup Unavailable" }
-
-        if !session.isResponding {
-            let query = "Cleanup this code and use standard conventions:\n\(snippet)"
-            do {
-                let response = try await session.respond(to: query)
-                print("Cleaned up code:\n\(response.content)")
-                return response.content
-            } catch {
-                print("Cleanup Error:\n\(error)")
-                return "Cleanup Error"
-            }
-        }
-        return "Cleanup Busy"
+        let result = await submit(query: "Cleanup this code and use standard conventions:\n\(snippet)")
+        print("Cleaned up code:\n\(result)")
+        return result == "Error" ? "Cleanup Error" : result
     }
 
     func refactor(_ snippet: String) async -> String {
-
-        guard let session else { return "Refactor Unavailable" }
-
-        if !session.isResponding {
-            let query = "Refactor this code to use best practices:\n\(snippet)"
-            do {
-                let response = try await session.respond(to: query)
-                print("Refactored code:\n\(response.content)")
-                return response.content
-            } catch {
-                print("Refactor Error:\n\(error)")
-                return "Refactor Error"
-            }
-        }
-        return "Refactor Busy"
+        let result = await submit(query: "Refactor this code to use best practices:\n\(snippet)")
+        print("Refactored code:\n\(result)")
+        return result == "Error" ? "Refactor Error" : result
     }
 
     func convert(_ snippet: String) async -> String {
-
-        guard let session else { return "Convert Unavailable" }
-
-        if !session.isResponding {
-            let query = "Convert this code to Swift and use Swift conventions:\n\(snippet)"
-            do {
-                let response = try await session.respond(to: query)
-                print("Converted code:\n\(response.content)")
-                return response.content
-            } catch {
-                print("Convert Error:\n\(error)")
-                return "Convert Error"
-            }
-        }
-        return "Convert Busy"
+        let result = await submit(query: "Convert this code to Swift and use Swift conventions:\n\(snippet)")
+        print("Converted code:\n\(result)")
+        return result == "Error" ? "Convert Error" : result
     }
 
     func document(_ snippet: String) async -> String {
-
-        guard let session else { return "Document Code Unavailable" }
-
-        if !session.isResponding {
-            let query = "Add doc comments into this code for Swift DocC:\n\(snippet)"
-            do {
-                let response = try await session.respond(to: query)
-                print("Documented code:\n\(response.content)")
-                return response.content
-            } catch {
-                print("Document code Error:\n\(error)")
-                return "Document code Error"
-            }
-        }
-        return "Document code Busy"
+        let result = await submit(query: "Add doc comments into this code for Swift DocC:\n\(snippet)")
+        print("Documented code:\n\(result)")
+        return result == "Error" ? "Document code Error" : result
     }
 
     static func analyzeDescription(_ fullText: String) async -> String {

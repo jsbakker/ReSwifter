@@ -42,6 +42,7 @@ struct SnippetDetailView: View {
 
             CodeEditor(source: selectedSnippet?.fullText ?? "", language: .swift, theme: .ocean)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .cornerRadius(8)
         }
     }
 }

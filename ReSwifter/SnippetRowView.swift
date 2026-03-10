@@ -118,6 +118,7 @@ struct SnippetRowView: View {
                 Button("Edit Summary...", systemImage: "square.and.pencil") {
                     viewModel.beginEditSummary(for: item)
                 }
+                .disabled(isPending)
             } label: {
                 Image(systemName: "sparkles")
                     .foregroundStyle(item.favorite ? .red : .gray)
