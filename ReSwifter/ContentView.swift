@@ -103,60 +103,6 @@ struct ContentView: View {
 
             // Left Side
             VStack {
-
-                HStack {
-                    Menu {
-                        Button {
-                            selectedFolderId = nil
-                        } label: {
-                            if selectedFolderId == nil {
-                                Label("All", systemImage: "checkmark")
-                            } else {
-                                Text("All")
-                            }
-                        }
-
-                        Divider()
-
-                        ForEach(folders) { folder in
-                            Button {
-                                selectedFolderId = folder.id
-                            } label: {
-                                if selectedFolderId == folder.id {
-                                    Label(folder.name, systemImage: "checkmark")
-                                } else {
-                                    Text(folder.name)
-                                }
-                            }
-                        }
-
-                        Divider()
-
-                        Button("New Folder...", systemImage: "folder.badge.plus") {
-                            newFolderName = ""
-                            showNewFolderPrompt = true
-                        }
-                    } label: {
-                        Image(systemName: "folder")
-                        Text(selectedFolderItem?.name ?? "All")
-                    }
-
-                    Button("Add From Clipboard") {
-                        let pasted = pasteBoard.string(forType: .string)
-                        guard let pasted else { return }
-
-                        addNewSnippet(fullText: pasted)
-                    }
-                    .buttonStyle(.borderedProminent)
-
-                    Spacer()
-
-                    Button("Filter", systemImage: showOnlyFavorites ? "heart.fill" : "heart") {
-                        showOnlyFavorites.toggle()
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-
                 ZStack {
                     List(displayedItems, selection: $selectedSnipetId) { item in
 
@@ -320,6 +266,65 @@ struct ContentView: View {
         .padding()
         .frame(minWidth: 400, minHeight: 300)
         .searchable(text: $searchText, prompt: "Search snippets")
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Menu {
+                    Button {
+                        selectedFolderId = nil
+                    } label: {
+                        if selectedFolderId == nil {
+                            Label("All", systemImage: "checkmark")
+                        } else {
+                            Text("All")
+                        }
+                    }
+
+                    Divider()
+
+                    ForEach(folders) { folder in
+                        Button {
+                            selectedFolderId = folder.id
+                        } label: {
+                            if selectedFolderId == folder.id {
+                                Label(folder.name, systemImage: "checkmark")
+                            } else {
+                                Text(folder.name)
+                            }
+                        }
+                    }
+
+                    Divider()
+
+                    Button("New Folder...", systemImage: "folder.badge.plus") {
+                        newFolderName = ""
+                        showNewFolderPrompt = true
+                    }
+                } label: {
+                    Label(selectedFolderItem?.name ?? "All", systemImage: "folder")
+                }
+                .help("Snippets In Folder...")
+            }
+
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    let pasted = pasteBoard.string(forType: .string)
+                    guard let pasted else { return }
+                    addNewSnippet(fullText: pasted)
+                } label: {
+                    Label("Add From Clipboard", systemImage: "doc.on.clipboard")
+                }
+                .help("Add From Clipboard")
+            }
+
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showOnlyFavorites.toggle()
+                } label: {
+                    Label("Show Favorites Only", systemImage: showOnlyFavorites ? "heart.fill" : "heart")
+                }
+                .help("Show Favorites Only")
+            }
+        }
         }  // NavigationStack
         .sheet(isPresented: Binding(
             get: { editSummaryItemId != nil },
