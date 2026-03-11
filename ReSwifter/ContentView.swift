@@ -44,12 +44,6 @@ struct ContentView: View {
                         .onChange(of: viewModel.selectedSnippetId) {
                             selection = viewModel.selectedSnippetId
                         }
-                        .onChange(of: extensionService.receivedText ?? "") {
-                            if let text = extensionService.receivedText, !text.isEmpty {
-                                viewModel.addNewSnippet(fullText: text, modelContext: modelContext, folders: folders)
-                            }
-                        }
-
                         if viewModel.showHud {
                             HudNotification(text: "Copied to clipboard", icon: "doc.on.doc")
                                 .zIndex(1)
@@ -59,15 +53,20 @@ struct ContentView: View {
                 }
 
                 // Right side — code editor + extension bar
-//                if !items.isEmpty {
+                if !items.isEmpty {
                     SnippetDetailView(
                         viewModel: viewModel,
                         selectedSnippet: viewModel.selectedSnippet(from: items)
                     )
-//                }
+                }
             }
             .padding()
             .frame(minWidth: 400, minHeight: 300)
+            .onChange(of: extensionService.receivedText ?? "") {
+                if let text = extensionService.receivedText, !text.isEmpty {
+                    viewModel.addNewSnippet(fullText: text, modelContext: modelContext, folders: folders)
+                }
+            }
             .searchable(text: $viewModel.searchText, prompt: "Search snippets")
             .toolbar {
                 SnippetToolbar(viewModel: viewModel)
