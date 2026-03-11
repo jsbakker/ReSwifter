@@ -26,7 +26,7 @@ struct ReSwifterApp: App {
         .windowResizability(.contentMinSize)
         .modelContainer(modelContainer)
         .commands {
-            CommandMenu("Folders") {
+            CommandGroup(replacing: .newItem) {
                 FolderCommandMenu(viewModel: viewModel)
                     .modelContainer(modelContainer)
             }

@@ -41,7 +41,7 @@ struct FolderMenuContent: View {
 
         Divider()
 
-        Button("New Folder...", systemImage: "folder.badge.plus") {
+        Button("New Snippets Folder...", systemImage: "folder.badge.plus") {
             onNewFolder()
         }
     }
