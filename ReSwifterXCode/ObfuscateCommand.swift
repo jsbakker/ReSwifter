@@ -5,7 +5,6 @@
 //  Created by Jeffrey Bakker on 2026-02-27.
 //
 
-import Conduit
 import Foundation
 import FoundationModels
 import XcodeKit
@@ -23,7 +22,7 @@ class ObfuscateCommand: NSObject, XCSourceEditorCommand {
         let lines = invocation.buffer.lines
 //        let selections = invocation.buffer.selections
 
-        let model = SystemLanguageModel(guardrails: .permissiveContentTransformations)
+        let model = SystemLanguageModel()//guardrails: .permissiveContentTransformations)
         if model.availability == .available {
             let instructions = """
                 Obfuscation Rules:
@@ -41,57 +40,58 @@ class ObfuscateCommand: NSObject, XCSourceEditorCommand {
 //                ```
 //                """
 
-            let question = """
-                Obfuscation Rules:
-                1. For all public functions, move their bodies into a private version of said function. Except for public init() when members are declared with let or non-optional vars. Initialization of optional member vars may be moved to a private initializer.
-                2. For all private and fileprivate member variables, obfuscate their names
-                3. For all private and fileprivate functions, obfuscate their names, bodies including local variables, and update matching call sites.
-                4. Do not forget to obfuscate the bodies, locals and arguments of closures
-                5. Do not forget to obfuscate references to interpolated variables inside strings
-                6. Do not obfuscate the public function signatures, public structs or public class names; we need to keep it API-compatible with the old version.
-                7. When obfuscating all variables, parameters and functions eligible for obuscating should be assigned cryptic names
-                8. When responding to this request, reply with the code only; no explanation
-                Obfuscate the following source code using the aforementioned obfuscation rules:
-                ```
-                \(text)
-                ```
-                """
+//            let question = """
+//                Obfuscation Rules:
+//                1. For all public functions, move their bodies into a private version of said function. Except for public init() when members are declared with let or non-optional vars. Initialization of optional member vars may be moved to a private initializer.
+//                2. For all private and fileprivate member variables, obfuscate their names
+//                3. For all private and fileprivate functions, obfuscate their names, bodies including local variables, and update matching call sites.
+//                4. Do not forget to obfuscate the bodies, locals and arguments of closures
+//                5. Do not forget to obfuscate references to interpolated variables inside strings
+//                6. Do not obfuscate the public function signatures, public structs or public class names; we need to keep it API-compatible with the old version.
+//                7. When obfuscating all variables, parameters and functions eligible for obuscating should be assigned cryptic names
+//                8. When responding to this request, reply with the code only; no explanation
+//                Obfuscate the following source code using the aforementioned obfuscation rules:
+//                ```
+//                \(text)
+//                ```
+//                """
+            let question = "Based on public or internal functions, create a Swift Protocol from this class/struct and inherit the Protocol. Answer only in code; no comments or explanation.\n\nSource Code:\n\(text)"
             Task {
-////                let session = LanguageModelSession(instructions: instructions)
-//                  let session = LanguageModelSession()
-//                do {
-//                    let response = try await session.respond(to: question)
-//                    print("Obfuscation response: \(response.content)")
-//                    invocation.buffer.completeBuffer = response.content
-//                    completionHandler(nil)
-//                } catch {
-//                    completionHandler(error)
-//                }
-
-                let config = OpenAIConfiguration(
-                    endpoint: .ollama(),
-                    authentication: .none,
-                    ollamaConfig: OllamaConfiguration(
-                        keepAlive: "30m",     // Keep model in memory
-                        pullOnMissing: true,   // Auto-download models
-                        numGPU: 35            // GPU layers to use
-                    )
-                )
-                let provider = OpenAIProvider(configuration: config)
-
+//                let session = LanguageModelSession(instructions: instructions)
+                let session = LanguageModelSession(model: model)
                 do {
-                    let response = try await provider.generate(
-                        question,
-                        model: .ollama("gemma3:4b")
-//                        model: .ollama("llama3.2")
-                    )
-                    print("Obfuscation response:\n\(response)")
-                    invocation.buffer.completeBuffer = response
+                    let response = try await session.respond(to: question)
+                    print("Obfuscation response: \(response.content)")
+                    invocation.buffer.completeBuffer = response.content
                     completionHandler(nil)
                 } catch {
-                    print("I don't have a local answer for that.")
                     completionHandler(error)
                 }
+
+//                let config = OpenAIConfiguration(
+//                    endpoint: .ollama(),
+//                    authentication: .none,
+//                    ollamaConfig: OllamaConfiguration(
+//                        keepAlive: "30m",     // Keep model in memory
+//                        pullOnMissing: true,   // Auto-download models
+//                        numGPU: 35            // GPU layers to use
+//                    )
+//                )
+//                let provider = OpenAIProvider(configuration: config)
+//
+//                do {
+//                    let response = try await provider.generate(
+//                        question,
+//                        model: .ollama("gemma3:4b")
+////                        model: .ollama("llama3.2")
+//                    )
+//                    print("Obfuscation response:\n\(response)")
+//                    invocation.buffer.completeBuffer = response
+//                    completionHandler(nil)
+//                } catch {
+//                    print("I don't have a local answer for that.")
+//                    completionHandler(error)
+//                }
             }
         }
 

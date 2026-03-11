@@ -9,19 +9,10 @@
 /* Begin PBXBuildFile section */
 		007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94862F52A2ED00730E7F /* Cocoa.framework */; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		009C66AB2F5B805D000FB801 /* ReSwifterService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 009C66A02F5B805D000FB801 /* ReSwifterService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		009C66BE2F5B80EB000FB801 /* ReSwifterInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; };
-		009C66BF2F5B80EB000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		009C66C42F5B82C1000FB801 /* ReSwifterInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; };
-		009C66C52F5B82C1000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		009C66C82F5B82CA000FB801 /* ReSwifterInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; };
-		009C66C92F5B82CA000FB801 /* ReSwifterInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67432F5BFD53000FB801 /* HighlightedTextEditor */; };
 		009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67462F5BFF21000FB801 /* CodeEditor */; };
 		009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
-		009C677A2F5C1098000FB801 /* Conduit in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67792F5C1098000FB801 /* Conduit */; };
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
-		009C677D2F5CF3AC000FB801 /* Conduit in Frameworks */ = {isa = PBXBuildFile; productRef = 009C677C2F5CF3AC000FB801 /* Conduit */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -48,34 +39,6 @@
 			remoteGlobalIDString = 007A94832F52A2ED00730E7F;
 			remoteInfo = ReSwifterXCode;
 		};
-		009C66A92F5B805D000FB801 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 009C669F2F5B805D000FB801;
-			remoteInfo = ReSwifterService;
-		};
-		009C66BC2F5B80EB000FB801 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 009C66B52F5B80EB000FB801;
-			remoteInfo = ReSwifterInterface;
-		};
-		009C66C62F5B82C1000FB801 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 009C66B52F5B80EB000FB801;
-			remoteInfo = ReSwifterInterface;
-		};
-		009C66CA2F5B82CA000FB801 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 009C66B52F5B80EB000FB801;
-			remoteInfo = ReSwifterInterface;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -90,46 +53,12 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		009C66B02F5B805D000FB801 /* Embed XPC Services */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
-			dstSubfolderSpec = 16;
-			files = (
-				009C66AB2F5B805D000FB801 /* ReSwifterService.xpc in Embed XPC Services */,
-			);
-			name = "Embed XPC Services";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		009C66C32F5B80EB000FB801 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				009C66BF2F5B80EB000FB801 /* ReSwifterInterface.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		009C66CC2F5B82CA000FB801 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				009C66C92F5B82CA000FB801 /* ReSwifterInterface.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		00B419512F52C4AC008129F9 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				009C66C52F5B82C1000FB801 /* ReSwifterInterface.framework in Embed Frameworks */,
 				00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -144,8 +73,6 @@
 		007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ReSwifterXCode.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A94862F52A2ED00730E7F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		007A94882F52A2ED00730E7F /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
-		009C66A02F5B805D000FB801 /* ReSwifterService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = ReSwifterService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
-		009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReSwifterInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		009C675A2F5C05F7000FB801 /* FoundationModels.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoundationModels.framework; path = System/Library/Frameworks/FoundationModels.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -156,13 +83,6 @@
 				Info.plist,
 			);
 			target = 007A94832F52A2ED00730E7F /* ReSwifterXCode */;
-		};
-		009C66AC2F5B805D000FB801 /* Exceptions for "ReSwifterService" folder in "ReSwifterService" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 009C669F2F5B805D000FB801 /* ReSwifterService */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -190,19 +110,6 @@
 			path = ReSwifterXCode;
 			sourceTree = "<group>";
 		};
-		009C66A12F5B805D000FB801 /* ReSwifterService */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				009C66AC2F5B805D000FB801 /* Exceptions for "ReSwifterService" folder in "ReSwifterService" target */,
-			);
-			path = ReSwifterService;
-			sourceTree = "<group>";
-		};
-		009C66B72F5B80EB000FB801 /* ReSwifterInterface */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ReSwifterInterface;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,10 +118,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */,
-				009C677D2F5CF3AC000FB801 /* Conduit in Frameworks */,
 				009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */,
 				009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */,
-				009C66BE2F5B80EB000FB801 /* ReSwifterInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,25 +142,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */,
-				009C677A2F5C1098000FB801 /* Conduit in Frameworks */,
 				009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */,
 				00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */,
-				009C66C42F5B82C1000FB801 /* ReSwifterInterface.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		009C669D2F5B805D000FB801 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				009C66C82F5B82CA000FB801 /* ReSwifterInterface.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		009C66B32F5B80EB000FB801 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,8 +157,6 @@
 				007A94662F52A18200730E7F /* ReSwifterTests */,
 				007A94702F52A18200730E7F /* ReSwifterUITests */,
 				007A948A2F52A2ED00730E7F /* ReSwifterXCode */,
-				009C66A12F5B805D000FB801 /* ReSwifterService */,
-				009C66B72F5B80EB000FB801 /* ReSwifterInterface */,
 				007A94852F52A2ED00730E7F /* Frameworks */,
 				007A94552F52A18000730E7F /* Products */,
 			);
@@ -283,8 +169,6 @@
 				007A94632F52A18200730E7F /* ReSwifterTests.xctest */,
 				007A946D2F52A18200730E7F /* ReSwifterUITests.xctest */,
 				007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */,
-				009C66A02F5B805D000FB801 /* ReSwifterService.xpc */,
-				009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -301,16 +185,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		009C66B12F5B80EB000FB801 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		007A94532F52A18000730E7F /* ReSwifter */ = {
 			isa = PBXNativeTarget;
@@ -320,15 +194,11 @@
 				007A94512F52A18000730E7F /* Frameworks */,
 				007A94522F52A18000730E7F /* Resources */,
 				007A94972F52A2ED00730E7F /* Embed Foundation Extensions */,
-				009C66B02F5B805D000FB801 /* Embed XPC Services */,
-				009C66C32F5B80EB000FB801 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				007A94912F52A2ED00730E7F /* PBXTargetDependency */,
-				009C66AA2F5B805D000FB801 /* PBXTargetDependency */,
-				009C66BD2F5B80EB000FB801 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				007A94562F52A18000730E7F /* ReSwifter */,
@@ -337,7 +207,6 @@
 			packageProductDependencies = (
 				009C67432F5BFD53000FB801 /* HighlightedTextEditor */,
 				009C67462F5BFF21000FB801 /* CodeEditor */,
-				009C677C2F5CF3AC000FB801 /* Conduit */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -401,65 +270,16 @@
 			buildRules = (
 			);
 			dependencies = (
-				009C66C72F5B82C1000FB801 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				007A948A2F52A2ED00730E7F /* ReSwifterXCode */,
 			);
 			name = ReSwifterXCode;
 			packageProductDependencies = (
-				009C67792F5C1098000FB801 /* Conduit */,
 			);
 			productName = ReSwifterXCode;
 			productReference = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */;
 			productType = "com.apple.product-type.xcode-extension";
-		};
-		009C669F2F5B805D000FB801 /* ReSwifterService */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 009C66AD2F5B805D000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterService" */;
-			buildPhases = (
-				009C669C2F5B805D000FB801 /* Sources */,
-				009C669D2F5B805D000FB801 /* Frameworks */,
-				009C669E2F5B805D000FB801 /* Resources */,
-				009C66CC2F5B82CA000FB801 /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				009C66CB2F5B82CA000FB801 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				009C66A12F5B805D000FB801 /* ReSwifterService */,
-			);
-			name = ReSwifterService;
-			packageProductDependencies = (
-			);
-			productName = ReSwifterService;
-			productReference = 009C66A02F5B805D000FB801 /* ReSwifterService.xpc */;
-			productType = "com.apple.product-type.xpc-service";
-		};
-		009C66B52F5B80EB000FB801 /* ReSwifterInterface */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 009C66C02F5B80EB000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterInterface" */;
-			buildPhases = (
-				009C66B12F5B80EB000FB801 /* Headers */,
-				009C66B22F5B80EB000FB801 /* Sources */,
-				009C66B32F5B80EB000FB801 /* Frameworks */,
-				009C66B42F5B80EB000FB801 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				009C66B72F5B80EB000FB801 /* ReSwifterInterface */,
-			);
-			name = ReSwifterInterface;
-			packageProductDependencies = (
-			);
-			productName = ReSwifterInterface;
-			productReference = 009C66B62F5B80EB000FB801 /* ReSwifterInterface.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -485,12 +305,6 @@
 					007A94832F52A2ED00730E7F = {
 						CreatedOnToolsVersion = 26.3;
 					};
-					009C669F2F5B805D000FB801 = {
-						CreatedOnToolsVersion = 26.3;
-					};
-					009C66B52F5B80EB000FB801 = {
-						CreatedOnToolsVersion = 26.3;
-					};
 				};
 			};
 			buildConfigurationList = 007A944F2F52A18000730E7F /* Build configuration list for PBXProject "ReSwifter" */;
@@ -505,7 +319,6 @@
 			packageReferences = (
 				009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */,
 				009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */,
-				009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 007A94552F52A18000730E7F /* Products */;
@@ -516,8 +329,6 @@
 				007A94622F52A18200730E7F /* ReSwifterTests */,
 				007A946C2F52A18200730E7F /* ReSwifterUITests */,
 				007A94832F52A2ED00730E7F /* ReSwifterXCode */,
-				009C669F2F5B805D000FB801 /* ReSwifterService */,
-				009C66B52F5B80EB000FB801 /* ReSwifterInterface */,
 			);
 		};
 /* End PBXProject section */
@@ -545,20 +356,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		007A94822F52A2ED00730E7F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		009C669E2F5B805D000FB801 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		009C66B42F5B80EB000FB801 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -596,20 +393,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		009C669C2F5B805D000FB801 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		009C66B22F5B80EB000FB801 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -627,26 +410,6 @@
 			isa = PBXTargetDependency;
 			target = 007A94832F52A2ED00730E7F /* ReSwifterXCode */;
 			targetProxy = 007A94902F52A2ED00730E7F /* PBXContainerItemProxy */;
-		};
-		009C66AA2F5B805D000FB801 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 009C669F2F5B805D000FB801 /* ReSwifterService */;
-			targetProxy = 009C66A92F5B805D000FB801 /* PBXContainerItemProxy */;
-		};
-		009C66BD2F5B80EB000FB801 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 009C66B52F5B80EB000FB801 /* ReSwifterInterface */;
-			targetProxy = 009C66BC2F5B80EB000FB801 /* PBXContainerItemProxy */;
-		};
-		009C66C72F5B82C1000FB801 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 009C66B52F5B80EB000FB801 /* ReSwifterInterface */;
-			targetProxy = 009C66C62F5B82C1000FB801 /* PBXContainerItemProxy */;
-		};
-		009C66CB2F5B82CA000FB801 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 009C66B52F5B80EB000FB801 /* ReSwifterInterface */;
-			targetProxy = 009C66CA2F5B82CA000FB801 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -814,7 +577,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 26.03;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -868,7 +631,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 26.03;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1065,134 +828,6 @@
 			};
 			name = Release;
 		};
-		009C66AE2F5B805D000FB801 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6XKLFA63LP;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ReSwifterService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterService;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterService;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		009C66AF2F5B805D000FB801 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6XKLFA63LP;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ReSwifterService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterService;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterService;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		009C66C12F5B80EB000FB801 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6XKLFA63LP;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterInterface;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_MODULE = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		009C66C22F5B80EB000FB801 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6XKLFA63LP;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterInterface;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_MODULE = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1241,24 +876,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		009C66AD2F5B805D000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterService" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				009C66AE2F5B805D000FB801 /* Debug */,
-				009C66AF2F5B805D000FB801 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		009C66C02F5B80EB000FB801 /* Build configuration list for PBXNativeTarget "ReSwifterInterface" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				009C66C12F5B80EB000FB801 /* Debug */,
-				009C66C22F5B80EB000FB801 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -1278,14 +895,6 @@
 				minimumVersion = 1.2.6;
 			};
 		};
-		009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/christopherkarani/Conduit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1298,16 +907,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */;
 			productName = CodeEditor;
-		};
-		009C67792F5C1098000FB801 /* Conduit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */;
-			productName = Conduit;
-		};
-		009C677C2F5CF3AC000FB801 /* Conduit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 009C67782F5C1098000FB801 /* XCRemoteSwiftPackageReference "Conduit" */;
-			productName = Conduit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

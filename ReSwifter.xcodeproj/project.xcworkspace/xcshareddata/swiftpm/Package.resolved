@@ -1,5 +1,5 @@
 {
-  "originHash" : "1722da214f50219da3f243da61a6c4ddac30c7bcf406abf3185e3e93c07534ec",
+  "originHash" : "786f2d6e1f2c403981253018c88f3d6dcf299b4d787324bd11ee602ac1745248",
   "pins" : [
     {
       "identity" : "codeeditor",
@@ -8,15 +8,6 @@
       "state" : {
         "revision" : "f5c076b94f4ceb05abff88ba91d75a8d57143f0c",
         "version" : "1.2.6"
-      }
-    },
-    {
-      "identity" : "conduit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/christopherkarani/Conduit",
-      "state" : {
-        "revision" : "f2ac21e963ed7520c6310083f1df5339adf4fe96",
-        "version" : "1.0.1"
       }
     },
     {
@@ -35,33 +26,6 @@
       "state" : {
         "revision" : "bd0358056ff1f12ea83833a9fc1b3b5a396a9da0",
         "version" : "3.0.2"
-      }
-    },
-    {
-      "identity" : "swift-collections",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-collections.git",
-      "state" : {
-        "revision" : "8d9834a6189db730f6264db7556a7ffb751e99ee",
-        "version" : "1.4.0"
-      }
-    },
-    {
-      "identity" : "swift-log",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-log.git",
-      "state" : {
-        "revision" : "bbd81b6725ae874c69e9b8c8804d462356b55523",
-        "version" : "1.10.1"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-syntax.git",
-      "state" : {
-        "revision" : "0687f71944021d616d34d922343dcef086855920",
-        "version" : "600.0.1"
       }
     }
   ],

@@ -23,10 +23,10 @@ class SourceEditorExtension: NSObject, XCSourceEditorExtension {
         let obfuscate = ObfuscateCommand.className()
         return [[.identifierKey: "\(namespace)\(resiwfter)",
                  .classNameKey: resiwfter,
-                 .nameKey: NSLocalizedString("ReSwifter", comment: "ReSwifter menu item")],
-                [.identifierKey: "\(namespace)\(obfuscate)",
-                 .classNameKey: obfuscate,
-                 .nameKey: NSLocalizedString("Obfuscate", comment: "Obfuscate menu item")]
+                 .nameKey: NSLocalizedString("ReSwifter", comment: "ReSwifter menu item")]
+//                [.identifierKey: "\(namespace)\(obfuscate)",
+//                 .classNameKey: obfuscate,
+//                 .nameKey: NSLocalizedString("Obfuscate", comment: "Obfuscate menu item")]
         ]
     }
 }
