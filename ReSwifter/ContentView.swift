@@ -29,6 +29,15 @@ struct ContentView: View {
                         Text("Press Command + Shift + V to add a\nnew snippet from the clipboard.")
                             .font(.title)
                             .multilineTextAlignment(.center)
+                        Text("or")
+                            .font(.largeTitle)
+                            .multilineTextAlignment(.center)
+                        Text("Send selections through the\nReSwifter Editor Extension for XCode.")
+                            .font(.title)
+                            .multilineTextAlignment(.center)
+                        Text("(XCode Menu ⮕ Editor ⮕ ReSwifter)")
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
