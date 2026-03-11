@@ -86,6 +86,44 @@ class SnippetViewModel: ObservableObject {
         addNewSnippet(fullText: pasted, modelContext: modelContext, folders: folders)
     }
 
+    // MARK: - AI Actions
+
+    func performAIAction(
+        on item: SnippetItem,
+        summaryPrefix: String,
+        transform: @escaping (SnippetUtility, String) async -> String,
+        modelContext: ModelContext,
+        folders: [FolderItem]
+    ) {
+        pendingItemIds.insert(item.id)
+        Task {
+            let newDesc = "\(summaryPrefix): \(item.summary)"
+            let newText = await transform(snippetUtility, item.fullText)
+            pendingItemIds.remove(item.id)
+            addUpdatedSnippet(summary: newDesc, fullText: newText, modelContext: modelContext, folders: folders)
+        }
+    }
+
+    func cleanup(_ item: SnippetItem, modelContext: ModelContext, folders: [FolderItem]) {
+        performAIAction(on: item, summaryPrefix: "Cleaned up", transform: { await $0.cleanup($1) }, modelContext: modelContext, folders: folders)
+    }
+
+    func refactor(_ item: SnippetItem, modelContext: ModelContext, folders: [FolderItem]) {
+        performAIAction(on: item, summaryPrefix: "Refactored", transform: { await $0.refactor($1) }, modelContext: modelContext, folders: folders)
+    }
+
+    func convert(_ item: SnippetItem, modelContext: ModelContext, folders: [FolderItem]) {
+        performAIAction(on: item, summaryPrefix: "Converted", transform: { await $0.convert($1) }, modelContext: modelContext, folders: folders)
+    }
+
+    func document(_ item: SnippetItem, modelContext: ModelContext, folders: [FolderItem]) {
+        performAIAction(on: item, summaryPrefix: "Documented", transform: { await $0.document($1) }, modelContext: modelContext, folders: folders)
+    }
+
+    func review(_ item: SnippetItem, modelContext: ModelContext, folders: [FolderItem]) {
+        performAIAction(on: item, summaryPrefix: "Reviewed", transform: { await $0.review($1) }, modelContext: modelContext, folders: folders)
+    }
+
     func triggerHUD() {
         showHud = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in

@@ -70,57 +70,27 @@ struct SnippetRowView: View {
 
             Menu {
                 Button("Cleanup", systemImage: "wand.and.stars") {
-                    viewModel.pendingItemIds.insert(item.id)
-                    Task {
-                        let newDesc = "Cleaned up: \(item.summary)"
-                        let newText = await viewModel.snippetUtility.cleanup(item.fullText)
-                        viewModel.pendingItemIds.remove(item.id)
-                        viewModel.addUpdatedSnippet(summary: newDesc, fullText: newText, modelContext: modelContext, folders: folders)
-                    }
+                    viewModel.cleanup(item, modelContext: modelContext, folders: folders)
                 }
                 .disabled(isPending)
 
                 Button("Refactor", systemImage: "lightbulb") {
-                    viewModel.pendingItemIds.insert(item.id)
-                    Task {
-                        let newDesc = "Refactored: \(item.summary)"
-                        let newText = await viewModel.snippetUtility.refactor(item.fullText)
-                        viewModel.pendingItemIds.remove(item.id)
-                        viewModel.addUpdatedSnippet(summary: newDesc, fullText: newText, modelContext: modelContext, folders: folders)
-                    }
+                    viewModel.refactor(item, modelContext: modelContext, folders: folders)
                 }
                 .disabled(isPending)
 
-                Button("Convert", systemImage: "brain") {
-                    viewModel.pendingItemIds.insert(item.id)
-                    Task {
-                        let newDesc = "Converted: \(item.summary)"
-                        let newText = await viewModel.snippetUtility.convert(item.fullText)
-                        viewModel.pendingItemIds.remove(item.id)
-                        viewModel.addUpdatedSnippet(summary: newDesc, fullText: newText, modelContext: modelContext, folders: folders)
-                    }
+                Button("Convert to Swift", systemImage: "brain") {
+                    viewModel.convert(item, modelContext: modelContext, folders: folders)
                 }
                 .disabled(isPending)
 
                 Button("Document", systemImage: "document") {
-                    viewModel.pendingItemIds.insert(item.id)
-                    Task {
-                        let newDesc = "Documented: \(item.summary)"
-                        let newText = await viewModel.snippetUtility.document(item.fullText)
-                        viewModel.pendingItemIds.remove(item.id)
-                        viewModel.addUpdatedSnippet(summary: newDesc, fullText: newText, modelContext: modelContext, folders: folders)
-                    }
+                    viewModel.document(item, modelContext: modelContext, folders: folders)
                 }
                 .disabled(isPending)
 
                 Button("Review", systemImage: "quote.bubble") {
-                    viewModel.pendingItemIds.insert(item.id)
-                    Task {
-                        let newDesc = "Reviwed: \(item.summary)"
-                        let newText = await viewModel.snippetUtility.review(item.fullText)
-                        viewModel.pendingItemIds.remove(item.id)
-                        viewModel.addUpdatedSnippet(summary: newDesc, fullText: newText, modelContext: modelContext, folders: folders)
-                    }
+                    viewModel.review(item, modelContext: modelContext, folders: folders)
                 }
                 .disabled(isPending)
 
