@@ -70,7 +70,7 @@ struct SnippetCommandMenu: View {
             viewModel.convert(item, modelContext: modelContext, folders: folders)
         }
         .disabled(!hasSelection)
-        .keyboardShortcut("S", modifiers: [.command])
+        .keyboardShortcut("S", modifiers: [.command, .shift])
 
         Button("Document", systemImage: "document") {
             guard let item = selectedSnippet else { return }
@@ -85,5 +85,14 @@ struct SnippetCommandMenu: View {
         }
         .disabled(!hasSelection)
         .keyboardShortcut("R", modifiers: [.command, .shift])
+
+        Divider()
+
+        Button("Edit Summary...", systemImage: "square.and.pencil") {
+            guard let item = selectedSnippet else { return }
+            viewModel.beginEditSummary(for: item)
+        }
+        .disabled(!hasSelection)
+        .keyboardShortcut("S", modifiers: [.command])
     }
 }
