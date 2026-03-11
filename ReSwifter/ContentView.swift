@@ -22,35 +22,49 @@ struct ContentView: View {
         NavigationStack {
             HStack(spacing: 16) {
                 // Left side — snippet list
-                ZStack {
-                    List(viewModel.displayedItems(from: items), selection: $selection) { item in
-                        SnippetRowView(viewModel: viewModel, item: item)
+                if items.isEmpty {
+                    VStack(alignment: .center, spacing: 8) {
+                        Image(systemName: "doc.on.clipboard")
+                            .font(.largeTitle)
+                        Text("Press Command + Shift + V to add a\nnew snippet from the clipboard.")
+                            .font(.title)
+                            .multilineTextAlignment(.center)
                     }
-                    .animation(.default, value: viewModel.displayedItems(from: items).map(\.id))
-                    .onChange(of: selection) {
-                        viewModel.selectedSnippetId = selection
-                    }
-                    .onChange(of: viewModel.selectedSnippetId) {
-                        selection = viewModel.selectedSnippetId
-                    }
-                    .onChange(of: extensionService.receivedText ?? "") {
-                        if let text = extensionService.receivedText, !text.isEmpty {
-                            viewModel.addNewSnippet(fullText: text, modelContext: modelContext, folders: folders)
-                        }
-                    }
-
-                    if viewModel.showHud {
-                        HudNotification(text: "Copied to clipboard", icon: "doc.on.doc")
-                            .zIndex(1)
-                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .animation(.spring(), value: viewModel.showHud)
+                else {
+                    ZStack {
+                        List(viewModel.displayedItems(from: items), selection: $selection) { item in
+                            SnippetRowView(viewModel: viewModel, item: item)
+                        }
+                        .animation(.default, value: viewModel.displayedItems(from: items).map(\.id))
+                        .onChange(of: selection) {
+                            viewModel.selectedSnippetId = selection
+                        }
+                        .onChange(of: viewModel.selectedSnippetId) {
+                            selection = viewModel.selectedSnippetId
+                        }
+                        .onChange(of: extensionService.receivedText ?? "") {
+                            if let text = extensionService.receivedText, !text.isEmpty {
+                                viewModel.addNewSnippet(fullText: text, modelContext: modelContext, folders: folders)
+                            }
+                        }
+
+                        if viewModel.showHud {
+                            HudNotification(text: "Copied to clipboard", icon: "doc.on.doc")
+                                .zIndex(1)
+                        }
+                    }  // End ZStack
+                    .animation(.spring(), value: viewModel.showHud)
+                }
 
                 // Right side — code editor + extension bar
-                SnippetDetailView(
-                    viewModel: viewModel,
-                    selectedSnippet: viewModel.selectedSnippet(from: items)
-                )
+//                if !items.isEmpty {
+                    SnippetDetailView(
+                        viewModel: viewModel,
+                        selectedSnippet: viewModel.selectedSnippet(from: items)
+                    )
+//                }
             }
             .padding()
             .frame(minWidth: 400, minHeight: 300)
