@@ -30,6 +30,10 @@ struct ReSwifterApp: App {
                 FolderCommandMenu(viewModel: viewModel)
                     .modelContainer(modelContainer)
             }
+            CommandMenu("Snippets") {
+                SnippetCommandMenu(viewModel: viewModel)
+                    .modelContainer(modelContainer)
+            }
         }
     }
 }
