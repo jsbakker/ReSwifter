@@ -25,6 +25,7 @@ class SnippetViewModel: ObservableObject {
     @Published var selectedFolderId: UUID?
     @Published var searchText = ""
     @Published var pendingItemIds: Set<UUID> = []
+    @Published var aiAvailable: Bool
 
     // MARK: - Dependencies
 
@@ -38,6 +39,7 @@ class SnippetViewModel: ObservableObject {
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd - HH:mm:ss"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        aiAvailable = snippetUtility.isAvailable
     }
 
     // MARK: - Computed
@@ -60,6 +62,13 @@ class SnippetViewModel: ObservableObject {
     }
 
     // MARK: - Actions
+
+    func openAppleIntelligenceSettings() {
+        let urlString = "x-apple.systempreferences:com.apple.Siri"
+        if let url = URL(string: urlString) {
+            NSWorkspace.shared.open(url)
+        }
+    }
 
     func addNewSnippet(fullText: String, modelContext: ModelContext, folders: [FolderItem]) {
         let newItem = SnippetItem(fullText: fullText)

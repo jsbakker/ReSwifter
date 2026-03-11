@@ -13,7 +13,7 @@ import FoundationModels
 /// Each request uses a fresh session to avoid context window exhaustion.
 final class SnippetUtility: Sendable {
 
-    private let isAvailable: Bool
+    public let isAvailable: Bool
     private let model: SystemLanguageModel
     private let stream: AsyncStream<WorkItem>
     private let continuation: AsyncStream<WorkItem>.Continuation
