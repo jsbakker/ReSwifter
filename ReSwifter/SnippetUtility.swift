@@ -96,6 +96,12 @@ final class SnippetUtility: Sendable {
         return result == "Error" ? "Document code Error" : result
     }
 
+    func review(_ snippet: String) async -> String {
+        let result = await submit(query: "Review this code to catch code smells, potential bugs or opportunuties for improvement:\n\(snippet)")
+        print("Reviewed code:\n\(result)")
+        return result == "Error" ? "Review Error" : result
+    }
+
     static func analyzeDescription(_ fullText: String) async -> String {
 
         let question = "Describe in one sentence what the following code does, or what it is for?\n\(fullText)"

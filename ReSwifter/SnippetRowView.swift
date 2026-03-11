@@ -113,6 +113,17 @@ struct SnippetRowView: View {
                 }
                 .disabled(isPending)
 
+                Button("Review", systemImage: "quote.bubble") {
+                    viewModel.pendingItemIds.insert(item.id)
+                    Task {
+                        let newDesc = "Reviwed: \(item.summary)"
+                        let newText = await viewModel.snippetUtility.review(item.fullText)
+                        viewModel.pendingItemIds.remove(item.id)
+                        viewModel.addUpdatedSnippet(summary: newDesc, fullText: newText, modelContext: modelContext, folders: folders)
+                    }
+                }
+                .disabled(isPending)
+
                 Divider()
 
                 Button("Edit Summary...", systemImage: "square.and.pencil") {
