@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1024"
+   height="1024"
+   viewBox="0 0 270.93333 270.93333"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   sodipodi:docname="AppIcon.svg"
+   inkscape:export-filename="AppIcon-1024.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.57848045"
+     inkscape:cx="511.6854"
+     inkscape:cy="560.9524"
+     inkscape:window-width="1392"
+     inkscape:window-height="940"
+     inkscape:window-x="0"
+     inkscape:window-y="31"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient12"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ea7a12;stop-opacity:0.03928572;"
+         offset="0"
+         id="stop12" />
+      <stop
+         style="stop-color:#eba864;stop-opacity:0.6964286;"
+         offset="1"
+         id="stop13" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient10"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#f8d6bd;stop-opacity:0.5607143;"
+         offset="0"
+         id="stop9" />
+      <stop
+         style="stop-color:#ff7b09;stop-opacity:0.6964286;"
+         offset="1"
+         id="stop10" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#f8d6bd;stop-opacity:0.17142858;"
+         offset="0"
+         id="stop5" />
+      <stop
+         style="stop-color:#ff7b09;stop-opacity:0.6964286;"
+         offset="1"
+         id="stop6" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3"
+       id="linearGradient4"
+       x1="96.755349"
+       y1="159.14496"
+       x2="183.23628"
+       y2="159.14496"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5"
+       id="linearGradient6"
+       x1="96.755349"
+       y1="159.14496"
+       x2="183.23628"
+       y2="159.14496"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5"
+       id="linearGradient7"
+       gradientUnits="userSpaceOnUse"
+       x1="96.755349"
+       y1="159.14496"
+       x2="183.23628"
+       y2="159.14496"
+       gradientTransform="matrix(1.230211,0,0,1.230211,-71.228065,0)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient10"
+       id="linearGradient9"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.66250981,0,0,0.66250981,-52.703696,847.08282)"
+       x1="96.755349"
+       y1="159.14496"
+       x2="183.23628"
+       y2="159.14496" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient12"
+       id="linearGradient13"
+       x1="35.198857"
+       y1="131.58858"
+       x2="214.43821"
+       y2="131.58858"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0484835,0,0,1,-1.706564,0)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5"
+       id="linearGradient15"
+       x1="14.823407"
+       y1="216.51334"
+       x2="132.07266"
+       y2="216.51334"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#e3e3e3;fill-opacity:1;stroke-width:4.99999;stroke-opacity:0.774892"
+       id="rect2"
+       width="270.76685"
+       height="270.76685"
+       x="0"
+       y="0"
+       rx="51.858334"
+       ry="51.858334" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:255.106px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI';fill:url(#linearGradient6);fill-opacity:1;stroke-width:6.02611;stroke-opacity:0.774892;stroke:none"
+       x="89.612381"
+       y="251.36578"
+       id="text3"
+       transform="scale(1.2052233,0.82972174)"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:255.106px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI Ultra-Bold';fill:url(#linearGradient6);fill-opacity:1;stroke-width:6.02612;stroke:none"
+         x="89.612381"
+         y="251.36578">}</tspan></text>
+    <path
+       style="-inkscape-font-specification:'.Apple SD Gothic NeoI Ultra-Bold';fill:url(#linearGradient15);stroke-width:8.17011;stroke-opacity:0.774892"
+       d="m 14.823407,364.02604 c 67.098394,-1.03761 83.354191,-35.65581 83.354191,-59.83517 v -42.1959 c 0,-20.06034 8.992572,-26.9777 33.895062,-28.70704 v -34.5868 C 107.17017,197.31766 98.177598,190.4003 98.177598,169.99408 v -42.88763 c 0,-28.719155 -16.255797,-57.068222 -83.354191,-58.105826 v 11.41856 C 40.41764,93.358961 52.523021,110.15892 52.523021,132.29447 v 40.81243 c 0,20.06034 6.91736,36.662 37.353745,42.54176 v 1.0376 c -30.436385,5.53389 -37.353745,22.82729 -37.353745,43.23351 v 40.12069 c 0,22.13555 -11.265655,37.38515 -37.699614,51.81965 z"
+       id="text7"
+       transform="scale(1.6340204,0.61198746)"
+       aria-label="}"
+       sodipodi:nodetypes="cssccssccssccsscc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:313.834px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI';fill:url(#linearGradient7);fill-opacity:1;stroke:none;stroke-width:7.41339;stroke-opacity:0.774892"
+       x="39.014061"
+       y="309.23294"
+       id="text6"
+       transform="scale(1.4826789,0.67445485)"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:313.834px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI Ultra-Bold';fill:url(#linearGradient7);fill-opacity:1;stroke:none;stroke-width:7.4134"
+         x="39.014061"
+         y="309.23294">}</tspan></text>
+    <path
+       style="-inkscape-font-specification:'.Apple SD Gothic NeoI Ultra-Bold';fill:url(#linearGradient13);fill-opacity:1;stroke-width:4.08801;stroke-opacity:0.774892"
+       d="m 35.198857,154.63032 c 107.546683,-0.16206 129.211673,-6.26594 133.601793,-9.34636 l 10.69707,-7.50582 c 2.59823,-1.82311 3.71642,-3.29921 43.63064,-3.56934 v -5.40252 c -39.91422,-0.2161 -40.16747,-2.98866 -43.54194,-4.94147 l -10.78577,-6.24174 c -4.56454,-2.6415 -26.05511,-8.91416 -133.601793,-9.07623 v 1.28613 c 37.6661,5.75864 49.726014,12.29623 53.23244,13.17424 l 7.193275,1.80121 c 3.17769,0.7957 11.087288,5.72667 59.871338,6.6451 v 0.16207 c -48.78405,0.86441 -52.32555,4.48405 -56.994028,6.75315 l -10.070585,4.89479 c 0,0 -11.250375,3.86464 -52.273337,9.62328 z"
+       id="text10"
+       aria-label="}"
+       sodipodi:nodetypes="cssccssccssccsccc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:211.667px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI';fill:#cdcdcd;fill-opacity:1;stroke-width:4.99999;stroke-opacity:0.774892"
+       x="161.4539"
+       y="208.10628"
+       id="text2"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:211.667px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI Ultra-Bold';fill:#ffffff;fill-opacity:1;stroke-width:5"
+         x="161.4539"
+         y="208.10628">}</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:169.011px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI';fill:url(#linearGradient9);fill-opacity:1;stroke:none;stroke-width:3.99236;stroke-opacity:0.774892"
+       x="6.6653795"
+       y="1013.6151"
+       id="text8"
+       transform="scale(3.1283743,0.31965484)"><tspan
+         sodipodi:role="line"
+         id="tspan8"
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:169.011px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI Ultra-Bold';fill:url(#linearGradient9);fill-opacity:1;stroke:none;stroke-width:3.99237"
+         x="6.6653795"
+         y="1013.6151">}</tspan></text>
+  </g>
+</svg>
