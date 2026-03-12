@@ -94,5 +94,32 @@ struct SnippetCommandMenu: View {
         }
         .disabled(!hasSelection)
         .keyboardShortcut("S", modifiers: [.command])
+
+        Divider()
+
+        Menu("Move to", systemImage: "folder") {
+            Button {
+                selectedSnippet?.folder = nil
+            } label: {
+                if selectedSnippet?.folder == nil {
+                    Label("All", systemImage: "checkmark")
+                } else {
+                    Text("All")
+                }
+            }
+
+            ForEach(folders) { folder in
+                Button {
+                    selectedSnippet?.folder = folder
+                } label: {
+                    if selectedSnippet?.folder?.id == folder.id {
+                        Label(folder.name, systemImage: "checkmark")
+                    } else {
+                        Text(folder.name)
+                    }
+                }
+            }
+        }
+        .disabled(!hasSelection)
     }
 }

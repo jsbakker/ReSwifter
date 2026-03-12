@@ -69,6 +69,13 @@ struct SnippetRowView: View {
             Divider()
 
             Menu {
+                Button("Edit Summary...", systemImage: "square.and.pencil") {
+                    viewModel.beginEditSummary(for: item)
+                }
+                .disabled(isPending)
+
+                Divider()
+
                 Button("Cleanup", systemImage: "wand.and.stars") {
                     viewModel.cleanup(item, modelContext: modelContext, folders: folders)
                 }
@@ -96,10 +103,29 @@ struct SnippetRowView: View {
 
                 Divider()
 
-                Button("Edit Summary...", systemImage: "square.and.pencil") {
-                    viewModel.beginEditSummary(for: item)
+                Menu("Move to", systemImage: "folder") {
+                    Button {
+                        item.folder = nil
+                    } label: {
+                        if item.folder == nil {
+                            Label("All", systemImage: "checkmark")
+                        } else {
+                            Text("All")
+                        }
+                    }
+
+                    ForEach(folders) { folder in
+                        Button {
+                            item.folder = folder
+                        } label: {
+                            if item.folder?.id == folder.id {
+                                Label(folder.name, systemImage: "checkmark")
+                            } else {
+                                Text(folder.name)
+                            }
+                        }
+                    }
                 }
-                .disabled(isPending)
             } label: {
                 Image(systemName: "sparkles")
                     .foregroundStyle(item.favorite ? .red : .gray)
