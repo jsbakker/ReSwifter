@@ -34,6 +34,9 @@ class SnippetViewModel: ObservableObject {
     let pasteBoard = NSPasteboard.general
     let dateFormatter: DateFormatter
 
+    private static let selectedFolderKey = "selectedFolderId"
+    private var cancellables = Set<AnyCancellable>()
+
     // MARK: - Init
 
     init() {
@@ -41,6 +44,19 @@ class SnippetViewModel: ObservableObject {
         dateFormatter.dateFormat = "yyyy/MM/dd - HH:mm:ss"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         aiAvailable = snippetUtility.isAvailable
+
+        // Restore persisted folder selection
+        if let stored = UserDefaults.standard.string(forKey: Self.selectedFolderKey),
+           let uuid = UUID(uuidString: stored) {
+            selectedFolderId = uuid
+        }
+
+        // Persist folder selection on change
+        $selectedFolderId
+            .sink { newValue in
+                UserDefaults.standard.set(newValue?.uuidString, forKey: Self.selectedFolderKey)
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Computed
