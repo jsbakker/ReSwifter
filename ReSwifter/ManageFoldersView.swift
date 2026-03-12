@@ -17,6 +17,7 @@ struct ManageFoldersView: View {
 
     @State private var renamingFolder: FolderItem?
     @State private var renameText = ""
+    @State private var isCreatingFolder = false
     @State private var deletingFolder: FolderItem?
 
     var body: some View {
@@ -70,6 +71,16 @@ struct ManageFoldersView: View {
             Divider()
 
             HStack {
+                Button {
+                    let newFolder = FolderItem(name: "New Snippet Folder")
+                    modelContext.insert(newFolder)
+                    isCreatingFolder = true
+                    renamingFolder = newFolder
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .help("New Folder")
+
                 Spacer()
                 Button("Done") { dismiss() }
                     .keyboardShortcut(.return, modifiers: .command)
@@ -78,20 +89,27 @@ struct ManageFoldersView: View {
             .padding()
         }
         .frame(minWidth: 400, minHeight: 250)
-        .alert("Rename Folder", isPresented: Binding(
+        .alert(isCreatingFolder ? "New Folder" : "Rename Folder", isPresented: Binding(
             get: { renamingFolder != nil },
             set: { if !$0 { renamingFolder = nil } }
         ), presenting: renamingFolder) { folder in
             TextField("Folder name", text: $renameText)
-            Button("Rename") {
+            Button(isCreatingFolder ? "Create" : "Rename") {
                 viewModel.renameFolder(folder, to: renameText, allFolders: folders)
+                isCreatingFolder = false
                 renamingFolder = nil
             }
             Button("Cancel", role: .cancel) {
+                if isCreatingFolder {
+                    modelContext.delete(folder)
+                }
+                isCreatingFolder = false
                 renamingFolder = nil
             }
-        } message: { folder in
-            Text("Enter a new name for \"\(folder.name)\"")
+        } message: { _ in
+            Text(isCreatingFolder
+                 ? "Enter a name for the new folder."
+                 : "Enter a new name for the folder.")
         }
         .onChange(of: renamingFolder) {
             renameText = renamingFolder?.name ?? ""
