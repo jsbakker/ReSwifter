@@ -23,6 +23,9 @@ struct SnippetToolbar: ToolbarContent {
                     onNewFolder: {
                         viewModel.newFolderName = ""
                         viewModel.showNewFolderPrompt = true
+                    },
+                    onManageFolders: {
+                        viewModel.showManageFolders = true
                     }
                 )
             } label: {

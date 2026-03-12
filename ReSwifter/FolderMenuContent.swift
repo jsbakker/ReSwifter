@@ -13,6 +13,7 @@ struct FolderMenuContent: View {
     let folders: [FolderItem]
     @Binding var selectedFolderId: UUID?
     var onNewFolder: () -> Void
+    var onManageFolders: () -> Void
 
     var body: some View {
         Button {
@@ -43,6 +44,10 @@ struct FolderMenuContent: View {
 
         Button("New Snippets Folder...", systemImage: "folder.badge.plus") {
             onNewFolder()
+        }
+
+        Button("Manage Snippets Folders...", systemImage: "folder.badge.gearshape") {
+            onManageFolders()
         }
     }
 }

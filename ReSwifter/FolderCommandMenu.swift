@@ -22,6 +22,9 @@ struct FolderCommandMenu: View {
             onNewFolder: {
                 viewModel.newFolderName = ""
                 viewModel.showNewFolderPrompt = true
+            },
+            onManageFolders: {
+                viewModel.showManageFolders = true
             }
         )
     }

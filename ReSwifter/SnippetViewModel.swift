@@ -23,6 +23,7 @@ class SnippetViewModel: ObservableObject {
     @Published var showNewFolderPrompt = false
     @Published var newFolderName = ""
     @Published var selectedFolderId: UUID?
+    @Published var showManageFolders = false
     @Published var searchText = ""
     @Published var pendingItemIds: Set<UUID> = []
     @Published var aiAvailable: Bool
@@ -153,6 +154,30 @@ class SnippetViewModel: ObservableObject {
             modelContext.insert(folder)
             selectedFolderId = folder.id
         }
+    }
+
+    func renameFolder(_ folder: FolderItem, to newName: String, allFolders: [FolderItem]) {
+        let trimmed = newName.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty,
+              !allFolders.contains(where: { $0.id != folder.id && $0.name == trimmed })
+        else { return }
+        folder.name = trimmed
+    }
+
+    func deleteFolder(_ folder: FolderItem, deleteSnippets: Bool, modelContext: ModelContext) {
+        if deleteSnippets {
+            for snippet in folder.snippets {
+                modelContext.delete(snippet)
+            }
+        } else {
+            for snippet in folder.snippets {
+                snippet.folder = nil
+            }
+        }
+        if selectedFolderId == folder.id {
+            selectedFolderId = nil
+        }
+        modelContext.delete(folder)
     }
 
     func beginEditSummary(for item: SnippetItem) {

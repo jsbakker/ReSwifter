@@ -134,6 +134,9 @@ struct ContentView: View {
             }
             Button("Cancel", role: .cancel) {}
         }
+        .sheet(isPresented: $viewModel.showManageFolders) {
+            ManageFoldersView(viewModel: viewModel)
+        }
     }
 }
 
