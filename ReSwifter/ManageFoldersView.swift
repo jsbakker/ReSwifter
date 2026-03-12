@@ -52,7 +52,11 @@ struct ManageFoldersView: View {
                             .help("Rename")
 
                             Button(role: .destructive) {
-                                deletingFolder = folder
+                                if folder.snippets.isEmpty {
+                                    viewModel.deleteFolder(folder, deleteSnippets: false, modelContext: modelContext)
+                                } else {
+                                    deletingFolder = folder
+                                }
                             } label: {
                                 Image(systemName: "trash")
                             }
