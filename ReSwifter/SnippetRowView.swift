@@ -14,6 +14,8 @@ struct SnippetRowView: View {
 
     @Query(sort: \FolderItem.name) private var folders: [FolderItem]
 
+    @State private var showingDeleteAlert: Bool = false
+
     let item: SnippetItem
 
     private var isPending: Bool {
@@ -25,6 +27,11 @@ struct SnippetRowView: View {
             Image(systemName: "text.magnifyingglass")
                 .buttonStyle(.borderless)
 
+            VStack(alignment: .leading) {
+                Text(item.summary).font(.subheadline).bold()
+                Text(viewModel.dateFormatter.string(from: item.date)).font(.caption)
+            }
+
             if isPending {
                 Image(systemName: "sparkles")
                     .font(.largeTitle)
@@ -35,14 +42,7 @@ struct SnippetRowView: View {
                             endPoint: .bottomTrailing
                         )
                     )
-            }
 
-            VStack(alignment: .leading) {
-                Text(item.summary).font(.subheadline).bold()
-                Text(viewModel.dateFormatter.string(from: item.date)).font(.caption)
-            }
-
-            if isPending {
                 ProgressView()
                     .controlSize(.small)
             }
@@ -55,16 +55,32 @@ struct SnippetRowView: View {
                 Image(systemName: item.favorite ? "heart.fill" : "heart")
                     .foregroundStyle(item.favorite ? .red : .gray)
             }
-            .buttonStyle(.borderless)
+            .buttonStyle(.plain)
+            .help("Add to Favorites")
 
-            Button("Copy", systemImage: "doc.on.doc") {
+            Button("", systemImage: "doc.on.doc") {
                 viewModel.copySnippet(item)
             }
+            .buttonStyle(.plain)
+            .help("Copy to Clipboard")
 
-            Button("Delete", systemImage: "trash", role: .destructive) {
-                modelContext.delete(item)
+            Button("", systemImage: "trash", role: .destructive) {
+                showingDeleteAlert = true
             }
+            .buttonStyle(.plain)
+            .help("Delete Snippet")
             .disabled(isPending)
+            .confirmationDialog(
+                "Delete Snippet",
+                isPresented: $showingDeleteAlert,
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) {
+                    withAnimation {
+                        modelContext.delete(item)
+                    }
+                }
+            }
 
             Divider()
 
