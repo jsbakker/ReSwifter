@@ -13,7 +13,7 @@ struct SnippetDetailView: View {
     @ObservedObject var viewModel: SnippetViewModel
 
     @State private var language = CodeEditor.Language.swift
-    @State private var theme = CodeEditor.ThemeName.ocean
+    @AppStorage("editorTheme") private var theme = CodeEditor.ThemeName.ocean
 
     let selectedSnippet: SnippetItem?
 
