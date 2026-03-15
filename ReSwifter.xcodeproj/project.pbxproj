@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00312DD02F653E7C0099824D /* PRIVACY_POLICY.md in Resources */ = {isa = PBXBuildFile; fileRef = 00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */; };
 		007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94862F52A2ED00730E7F /* Cocoa.framework */; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67432F5BFD53000FB801 /* HighlightedTextEditor */; };
@@ -67,6 +68,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PRIVACY_POLICY.md; sourceTree = "<group>"; };
 		007A94542F52A18000730E7F /* ReSwifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReSwifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A94632F52A18200730E7F /* ReSwifterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReSwifterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A946D2F52A18200730E7F /* ReSwifterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReSwifterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,6 +161,7 @@
 				007A948A2F52A2ED00730E7F /* ReSwifterXCode */,
 				007A94852F52A2ED00730E7F /* Frameworks */,
 				007A94552F52A18000730E7F /* Products */,
+				00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -338,6 +341,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00312DD02F653E7C0099824D /* PRIVACY_POLICY.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
