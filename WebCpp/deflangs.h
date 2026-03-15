@@ -51,6 +51,7 @@
 #define TCL_FILE 0x72
 #define TXT_FILE 0x74
 #define UNR_FILE 0x54
+#define SWF_FILE 0x53
 #define VHD_FILE 0x76
 
 #include "langada.h"
@@ -81,6 +82,7 @@
 #include "langruby.h"
 #include "langshell.h"
 #include "langsql.h"
+#include "langswift.h"
 #include "langtcl.h"
 #include "langtext.h"
 #include "languscript.h"

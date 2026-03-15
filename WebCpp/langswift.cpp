@@ -1,0 +1,136 @@
+// The Swift Language definition file for Web C Plus Plus
+
+#include "langswift.h"
+
+LangSwift::LangSwift() {
+
+	fill();
+	init_switches();
+
+	doSymbols   = Yes;
+	doBigComnt  = Yes;
+	doCinComnt  = Yes;
+}
+
+void LangSwift::fill() {
+
+	// Swift keywords
+	string K[] = {
+		"actor",
+		"as",
+		"associatedtype",
+		"associativity",
+		"async",
+		"await",
+		"break",
+		"case",
+		"catch",
+		"class",
+		"consume",
+		"consuming",
+		"continue",
+		"convenience",
+		"default",
+		"defer",
+		"deinit",
+		"didSet",
+		"do",
+		"dynamic",
+		"else",
+		"enum",
+		"extension",
+		"fallthrough",
+		"false",
+		"fileprivate",
+		"final",
+		"for",
+		"func",
+		"get",
+		"guard",
+		"if",
+		"import",
+		"in",
+		"indirect",
+		"infix",
+		"init",
+		"inout",
+		"internal",
+		"is",
+		"isolated",
+		"lazy",
+		"left",
+		"let",
+		"macro",
+		"mutating",
+		"nil",
+		"nonisolated",
+		"nonmutating",
+		"open",
+		"operator",
+		"optional",
+		"override",
+		"postfix",
+		"precedence",
+		"precedencegroup",
+		"prefix",
+		"private",
+		"protocol",
+		"public",
+		"repeat",
+		"required",
+		"rethrows",
+		"return",
+		"right",
+		"self",
+		"set",
+		"some",
+		"static",
+		"struct",
+		"subscript",
+		"super",
+		"switch",
+		"throw",
+		"throws",
+		"true",
+		"try",
+		"typealias",
+		"unowned",
+		"var",
+		"weak",
+		"where",
+		"while",
+		"willSet",
+	};
+	for(int k=0;k < 86;k++) {keys.push_back(K[k]);}
+
+	// Swift built-in types
+	string T[] = {
+		"Any",
+		"AnyObject",
+		"Array",
+		"Bool",
+		"Character",
+		"Dictionary",
+		"Double",
+		"Error",
+		"Float",
+		"Int",
+		"Int8",
+		"Int16",
+		"Int32",
+		"Int64",
+		"Never",
+		"Optional",
+		"Result",
+		"Self",
+		"Set",
+		"String",
+		"UInt",
+		"UInt8",
+		"UInt16",
+		"UInt32",
+		"UInt64",
+		"Void",
+	};
+	for(int t=0;t < 26;t++) {types.push_back(T[t]);}
+}

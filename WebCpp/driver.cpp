@@ -156,6 +156,7 @@ Python\t\t*.py,*.pyw\n\
 RenderMan\t*.rib,*.sl\n\
 Ruby\t\t*.rb\n\
 SQL\t\t*.sql\n\
+Swift\t\t*.swift\n\
 Tcl\t\t*.tcl,*.tk\n\
 Unix shell\t*.sh\n\
 UnrealScript\t*.uc\n\
@@ -250,6 +251,7 @@ char Driver::getExt(string filename)
 	else if(extension ==   "rb") {ext = RUB_FILE;}
 	else if(extension ==  "sql") {ext = SQL_FILE;}
 	else if(extension ==   "sh") {ext = UNX_FILE;}
+	else if(extension == "swift") {ext = SWF_FILE;}
 	else if(extension ==  "tcl") {ext = TCL_FILE;}
 	else if(extension ==   "tk") {ext = TCL_FILE;}
 	else if(extension ==   "uc") {ext = UNR_FILE;}
@@ -295,6 +297,7 @@ string Driver::checkExt(string filename) {
 		case (RUB_FILE) : LANG(LangRuby,"Ruby script");
 		case (RND_FILE) : LANG(LangRenderMan,"RenderMan file");
 		case (SQL_FILE) : LANG(LangSQL,"SQL script");
+		case (SWF_FILE) : LANG(LangSwift,"Swift file");
 		case (UNX_FILE) : LANG(LangShell,"UNIX shell script");
 		case (TCL_FILE) : LANG(LangTcl,"Tcl script");
 		case (UNR_FILE) : LANG(LangUScript,"UnrealScript");
