@@ -234,30 +234,28 @@ bool Engine::isInsideIt(int index, string start, string end) {
 	// count the number of starts and ends
 	// and return true for an odd number
 	
-	if(buffer.find(start,0) == -1) {return false;}
+	if(buffer.find(start,0) == string::npos) {return false;}
 
 	int l = 0;
 	int r = 0;
 	int idx;
 
 	idx = buffer.find(end,index);
-	while(idx < buffer.size()) { // idx < string::npos && idx != -1
-		if(idx != -1 && buffer[idx-1] != '\\'){r++;}
+	while(idx != (int)string::npos && idx < (int)buffer.size()) {
+		if(idx > 0 && buffer[idx-1] != '\\'){r++;}
+		else if(idx == 0){r++;}
 		idx = buffer.find(end,idx+1);
 	}
 
 	idx = buffer.rfind(start,index);
-	while(idx > 0) {
-		if(idx != -1 && buffer[idx-1] != '\\'){l++;}
+	while(idx >= 0 && idx < (int)buffer.size()) {
+		if(idx > 0 && buffer[idx-1] != '\\'){l++;}
+		else if(idx == 0){l++;}
+		if(idx == 0) break;
 		idx = buffer.rfind(start,idx-1);
 	}
 
 	if(r % 2 == 1 && l % 2 == 1) {return true;}
-
-	return false;
-}
-// for HTML highlighting ------------------------------------------------------
-bool Engine::isInsideTag(int index) {
 
 	return false;
 }
@@ -718,9 +716,51 @@ bool Engine::isKey(int before, int after) const {
 	}
 	return true;
 }
+// check if index is inside an HTML tag (<...>) ------------------------------
+bool Engine::isInsideTag(int index) {
+
+	// search backward for '<' or '>' from the index
+	for(int i = index - 1; i >= 0; i--) {
+		if(buffer[i] == '>') {return false;}
+		if(buffer[i] == '<') {return true;}
+	}
+	return false;
+}
+// check if index is inside existing <font ...>...</font> content -----------
+static bool isInsideFontTag(const string &buffer, int index) {
+
+	// search backward for </font> or <font — if we find <font...> first,
+	// we are inside its content and should not wrap again
+	int i = index - 1;
+	while(i >= 0) {
+		if(buffer[i] == '>') {
+			// found a closing '>'; check if this is a <font tag
+			int tagStart = buffer.rfind('<', i);
+			if(tagStart != (int)string::npos && tagStart >= 0) {
+				string tag = buffer.substr(tagStart, i - tagStart + 1);
+				if(tag.find("<font ") == 0 || tag.find("<font>") == 0) {
+					return true;  // we are inside font content
+				}
+				if(tag.find("</font>") == 0) {
+					return false; // we are past a closed font tag
+				}
+			}
+			i = tagStart - 1;
+		} else {
+			i--;
+		}
+	}
+	return false;
+}
 // colourize the keywords -----------------------------------------------------
 void Engine::colourKeys(int index, string key, string cssclass) {
 
+	if(isInsideTag(index)) {
+		return;
+	}
+	if(isInsideFontTag(buffer, index)) {
+		return;
+	}
 	if(abortColour(index)) {
 		return;
 	}
