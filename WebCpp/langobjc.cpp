@@ -12,21 +12,92 @@ LangObjectiveC ::LangObjectiveC() {
 	doSymbols  = Yes;
 	doLabels   = Yes;
 	doPreProc  = Yes;
-	doArrays   = Yes;
 	doBigComnt = Yes;
 	doCinComnt = Yes;
 }
 
 void LangObjectiveC ::fill() {
 
+	// Objective-C keywords (modern, through Xcode 16 / Clang 18)
+	// Note: C keywords are inherited from LangC
 	string K[] = {
-		"Class","IMP","Nil","SEL","STR","bycopy","byref","id",
-		"nil","self","super"
+		"@autoreleasepool",
+		"@available",
+		"@catch",
+		"@class",
+		"@compatibility_alias",
+		"@defs",
+		"@dynamic",
+		"@encode",
+		"@end",
+		"@finally",
+		"@implementation",
+		"@import",
+		"@interface",
+		"@optional",
+		"@package",
+		"@private",
+		"@property",
+		"@protected",
+		"@protocol",
+		"@public",
+		"@required",
+		"@selector",
+		"@synchronized",
+		"@synthesize",
+		"@throw",
+		"@try",
+		"NO",
+		"Nil",
+		"YES",
+		"nil",
+		"self",
+		"super",
 	};
-	for(int k=0;k < 11;k++) {keys.push_back(K[k]);}
+	for(int k=0;k < 32;k++) {keys.push_back(K[k]);}
 
+	// Objective-C types
 	string T[] = {
-		"BOOL","in","inout","out","oneway"
+		"BOOL",
+		"CGFloat",
+		"CGPoint",
+		"CGRect",
+		"CGSize",
+		"Class",
+		"IMP",
+		"NSArray",
+		"NSBundle",
+		"NSData",
+		"NSDate",
+		"NSDictionary",
+		"NSError",
+		"NSInteger",
+		"NSMutableArray",
+		"NSMutableDictionary",
+		"NSMutableSet",
+		"NSMutableString",
+		"NSNotification",
+		"NSNotificationCenter",
+		"NSNumber",
+		"NSObject",
+		"NSSet",
+		"NSString",
+		"NSTimeInterval",
+		"NSUInteger",
+		"NSURL",
+		"SEL",
+		"bycopy",
+		"byref",
+		"id",
+		"in",
+		"inout",
+		"instancetype",
+		"nonnull",
+		"null_resettable",
+		"null_unspecified",
+		"nullable",
+		"oneway",
+		"out",
 	};
-	for(int t=0;t < 5;t++) {types.push_back(T[t]);}
+	for(int t=0;t < 40;t++) {types.push_back(T[t]);}
 }
