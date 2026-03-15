@@ -1,0 +1,19 @@
+// Author: Jeffrey Bakker  |  Date: May14th 2002  |  langperl.h
+
+// the PERL 5 Language definition file for Web C Plus Plus
+// Webcpp Copyright (C) 2002 Jeffrey Bakker
+
+#ifndef LANG_PERL_DEF_H
+#define LANG_PERL_DEF_H
+
+#include "engine.h"
+
+class LangPerl: public Engine {
+
+ public :
+	LangPerl();
+	virtual ~LangPerl() {IO->close();}
+	virtual void fill();
+};
+
+#endif  // LANG_PERL_DEF_H
