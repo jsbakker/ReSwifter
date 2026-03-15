@@ -2,38 +2,34 @@
 //  SyntaxHighlightWebView.swift
 //  ReSwifter
 //
-//  Displays syntax-highlighted source code using WebCpp and a native WKWebView.
+//  Displays syntax-highlighted source code using WebCpp and a native WebView.
 //
 
-import Foundation
 import SwiftUI
 import WebKit
 
-struct SyntaxHighlightWebView: NSViewRepresentable {
+struct SyntaxHighlightWebView: View {
     let sourceCode: String
 
-    func makeNSView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        webView.setValue(false, forKey: "drawsBackground")
-        loadHighlightedHTML(into: webView)
-        return webView
+    @State private var page = WebPage()
+
+    var body: some View {
+        WebView(page)
+            .webViewContentBackground(.hidden)
+            .webViewContextMenu { _ in }
+            .task(id: sourceCode) {
+                loadHighlightedHTML()
+            }
     }
 
-    func updateNSView(_ webView: WKWebView, context: Context) {
-        loadHighlightedHTML(into: webView)
-    }
-
-    private func loadHighlightedHTML(into webView: WKWebView) {
-        guard !sourceCode.isEmpty else {
-            webView.loadHTMLString("", baseURL: nil)
-            return
-        }
+    private func loadHighlightedHTML() {
+        guard !sourceCode.isEmpty else { return }
 
         // Extract just the code from a fenced code block if the snippet contains markdown.
         let code = extractCodeBlock(from: sourceCode)
 
         let html = WebCppDriver.highlightString(code, filename: "snippet.cpp") ?? fallbackHTML(for: code)
-        webView.loadHTMLString(html, baseURL: nil)
+        _ = page.load(html: html, baseURL: URL(string: "about:blank")!)
     }
 
     /// Pulls the contents of the first ``` fenced code block, or returns the original text as-is.
