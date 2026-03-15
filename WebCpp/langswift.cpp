@@ -101,7 +101,7 @@ void LangSwift::fill() {
 		"while",
 		"willSet",
 	};
-	for(int k=0;k < 86;k++) {keys.push_back(K[k]);}
+	for(int k=0;k < 84;k++) {keys.push_back(K[k]);}
 
 	// Swift built-in types
 	string T[] = {
