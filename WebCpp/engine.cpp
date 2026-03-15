@@ -367,6 +367,7 @@ bool Engine::colourSymbol(int s, int f) {
 void Engine::parseLabel() {
 
 	if(abortParse()) {return;}
+	if(buffer.empty()) {return;}
 
 	if(buffer.find("/*") != -1) {return;} //prevent comment loop
 	if(buffer.find("(*") != -1) {return;}
@@ -697,14 +698,21 @@ int Engine::noCaseFind(string search, int index) {
 // asserts word boundaries for keywords ---------------------------------------
 bool Engine::isKey(int before, int after) const {
 
-	if(buffer[before] == '#')   {return false;}
-	if(buffer[before] == '_')   {return false;}
-	if(buffer[after]  == '_')   {return false;}
-	if(isalnum(buffer[before])) {return false;}
-	if(isalnum(buffer[after]))  {return false;}
+	bool validBefore = (before < 0);
+	bool validAfter  = (after < 0 || after >= (int)buffer.size());
 
-	if(ispunct(buffer[before]) || isspace(buffer[before])) {
-		if(ispunct(buffer[after]) || isspace(buffer[after])) {
+	if(!validBefore) {
+		if(buffer[before] == '#')   {return false;}
+		if(buffer[before] == '_')   {return false;}
+		if(isalnum(buffer[before])) {return false;}
+	}
+	if(!validAfter) {
+		if(buffer[after]  == '_')   {return false;}
+		if(isalnum(buffer[after]))  {return false;}
+	}
+
+	if(validBefore || ispunct(buffer[before]) || isspace(buffer[before])) {
+		if(validAfter || ispunct(buffer[after]) || isspace(buffer[after])) {
 			return true;
 		}
 	}
@@ -763,8 +771,8 @@ void Engine::colourVariable(int index) {
 		else i++;
 	}
 
-	if(buffer[end -1] == '\"')     {end--;}
-	if(buffer[end -1] == ')')      {end--;}
+	if(end > 0 && buffer[end -1] == '\"')     {end--;}
+	if(end > 0 && buffer[end -1] == ')')      {end--;}
 
 	buffer.insert(end, "</font>");
 }
@@ -778,7 +786,7 @@ void Engine::parseComment(string cmnt) {
 	if(index == -1) {return;}
 
 // do not misktake HTML attributes for UNIX comments
-	if(cmnt == "#" && index != -1 && buffer[index -1] != '\\') {
+	if(cmnt == "#" && index != -1 && index > 0 && buffer[index -1] != '\\') {
 		if(index != 0) {
 			while(buffer[index -1] == '=' && index < string::npos) {
 				index = buffer.find("#",index+1);
@@ -787,8 +795,8 @@ void Engine::parseComment(string cmnt) {
 	}	
 //-----------------------------------------------//
 
-	if(buffer[index -1] == '$')  {return;}
-	if(buffer[index -1] == '\\') {return;}
+	if(index > 0 && buffer[index -1] == '$')  {return;}
+	if(index > 0 && buffer[index -1] == '\\') {return;}
 
 	colourComment(index);
 }
