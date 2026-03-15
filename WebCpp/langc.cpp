@@ -27,8 +27,34 @@ void LangC::fill() {
 	for(int k=0;k < 18;k++) {keys.push_back(K[k]);}
 
 	string T[] = {
-		"auto","char","double","float","int","long","register","short",
-		"signed","static","unsigned","void","volatile"
+		"auto",
+		"char",
+		"double",
+		"float",
+		"int",
+		"int8_t",
+		"int16_t",
+		"int32_t",
+		"int64_t",
+		"intmax_t",
+		"intptr_t",
+		"long",
+		"ptrdiff_t",
+		"register",
+		"short",
+		"signed",
+		"size_t",
+		"ssize_t",
+		"static",
+		"uint8_t",
+		"uint16_t",
+		"uint32_t",
+		"uint64_t",
+		"uintmax_t",
+		"uintptr_t",
+		"unsigned",
+		"void",
+		"volatile",
 	};
-	for(int t=0;t < 13;t++) {types.push_back(T[t]);}
+	for(int t=0;t < 28;t++) {types.push_back(T[t]);}
 }
