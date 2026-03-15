@@ -11,6 +11,8 @@ struct SnippetDetailView: View {
     @EnvironmentObject private var extensionService: ExtensionXPCService
     @ObservedObject var viewModel: SnippetViewModel
 
+    @State private var language: WebCppLanguage = .swift
+
     let selectedSnippet: SnippetItem?
 
     var body: some View {
@@ -39,9 +41,26 @@ struct SnippetDetailView: View {
                 .keyboardShortcut(.return, modifiers: .command)
             }
 
-            SyntaxHighlightWebView(sourceCode: selectedSnippet?.fullText ?? "")
+            SyntaxHighlightWebView(sourceCode: selectedSnippet?.fullText ?? "", language: language)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .cornerRadius(8)
+
+            HStack {
+                Picker("Language", selection: $language) {
+                    ForEach(WebCppLanguage.allCases) { lang in
+                        Text(lang.displayName)
+                            .tag(lang)
+                    }
+                }
+            }
+            .padding(8)
+        }
+        .onChange(of: selectedSnippet) {
+            let raw = selectedSnippet?.language ?? "swift"
+            language = WebCppLanguage.from(rawValue: raw)
+        }
+        .onChange(of: language) {
+            selectedSnippet?.language = language.rawValue
         }
     }
 }

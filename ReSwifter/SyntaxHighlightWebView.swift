@@ -10,6 +10,7 @@ import WebKit
 
 struct SyntaxHighlightWebView: View {
     let sourceCode: String
+    var language: WebCppLanguage = .swift
 
     @State private var page = WebPage()
 
@@ -17,7 +18,7 @@ struct SyntaxHighlightWebView: View {
         WebView(page)
             .webViewContentBackground(.hidden)
             .webViewContextMenu { _ in }
-            .task(id: sourceCode) {
+            .task(id: "\(sourceCode)\(language.rawValue)") {
                 loadHighlightedHTML()
             }
     }
@@ -28,7 +29,7 @@ struct SyntaxHighlightWebView: View {
         // Extract just the code from a fenced code block if the snippet contains markdown.
         let code = extractCodeBlock(from: sourceCode)
 
-        let html = WebCppDriver.highlightString(code, filename: "snippet.cpp") ?? fallbackHTML(for: code)
+        let html = WebCppDriver.highlightString(code, filename: language.dummyFilename) ?? fallbackHTML(for: code)
         _ = page.load(html: html, baseURL: URL(string: "about:blank")!)
     }
 
