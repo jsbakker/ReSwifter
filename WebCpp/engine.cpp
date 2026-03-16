@@ -402,7 +402,7 @@ void Engine::parseNum()
 	// grab indexes of all numbers into the vector
 	for(int i=0; i < buffer.size(); i++) {
 
-		if(isdigit(buffer[i]) && !isalpha(buffer[i-1])) {
+		if(isdigit(buffer[i]) && (i == 0 || !isalpha(buffer[i-1]))) {
 			end = i;
 
 			while(isdigit(buffer[end+1]) ||
@@ -505,8 +505,8 @@ void Engine::parseString(char quotetype, bool &inside) {
 
 	while (index < string::npos) {
 
-		if(buffer[index -1] == '\\') {
-			if(buffer[index -2] == '\'' && buffer[index +1] == '\'') {
+		if(index > 0 && buffer[index -1] == '\\') {
+			if(index > 1 && buffer[index -2] == '\'' && buffer[index +1] == '\'') {
 				index = buffer.find(quote,index+1);
 			}
 		}
@@ -527,7 +527,8 @@ void Engine::parseString(char quotetype, bool &inside) {
 		}
 
 		// keep escape characters in mind
-		while	(buffer[index -1] == '\\' &&
+		while	(index > 3 &&
+			 buffer[index -1] == '\\' &&
 			(buffer[index -2] != '\\' ||
 			(buffer[index -3] == '\\' &&
 			 buffer[index -4] != '\\'))) {
@@ -603,8 +604,8 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
 		index = buffer.find(search,index);
 		if(index == -1) {return;}
 
-		if(buffer[index -1] == '\\') {
-			if(buffer[index -2] == '\'' && buffer[index +1] == '\'') {
+		if(index > 0 && buffer[index -1] == '\\') {
+			if(index > 1 && buffer[index -2] == '\'' && buffer[index +1] == '\'') {
 				index = buffer.find(search,index+1);
 			}
 		}
@@ -828,8 +829,9 @@ void Engine::parseComment(string cmnt) {
 // do not misktake HTML attributes for UNIX comments
 	if(cmnt == "#" && index != -1 && index > 0 && buffer[index -1] != '\\') {
 		if(index != 0) {
-			while(buffer[index -1] == '=' && index < string::npos) {
+			while(index > 0 && index < (int)buffer.size() && buffer[index -1] == '=') {
 				index = buffer.find("#",index+1);
+				if(index == -1) {return;}
 			}
 		}
 	}	
