@@ -157,6 +157,7 @@ class Engine {
 	bool doAspComnt;
 	bool doBatComnt;
 	bool doTplString;
+	bool doRawString;
 
  //theme file I/O engine
  public:

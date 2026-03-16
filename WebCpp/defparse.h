@@ -34,6 +34,8 @@
 
 #define PARSE_TPL_DBL_STRING parseBigComment("\"\"\"", "\"\"\"", inTplString, "dblquot")
 
+#define PARSE_RAW_CPP_STRING parseBigComment("R\"(", ")\"", inTplString, "dblquot")
+
 // multiline comment parsing
 #define PARSE_A_MARKUP_COMNT parseBigComment("&lt;!-", "--&gt;", inComment)
 #define PARSE_PAS_MOD2_COMNT parseBigComment("(*", "*)", inComment)

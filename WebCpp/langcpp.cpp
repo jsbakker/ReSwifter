@@ -15,6 +15,7 @@ LangCPlusPlus::LangCPlusPlus() {
 	doPreProc   = Yes;
 	doBigComnt  = Yes;
 	doCinComnt  = Yes;
+	doRawString = Yes;
 }
 
 void LangCPlusPlus::fill() {

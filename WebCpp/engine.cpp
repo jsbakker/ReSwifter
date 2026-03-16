@@ -84,6 +84,7 @@ void Engine::init_switches() {
 	doAspComnt  = false;
 	doBatComnt  = false;
 	doTplString = false;
+	doRawString = false;
 
 	lncount  = 1;
 	tabwidth = 8;
@@ -944,6 +945,7 @@ PRINT_DEBUG(0);
 	if(doLabels)   PARSE_LABELS;
 
 	if(doTplString) PARSE_TPL_DBL_STRING;
+	if(doRawString) PARSE_RAW_CPP_STRING;
 
 	if(doStrings)
 	{
