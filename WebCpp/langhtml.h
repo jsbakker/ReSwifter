@@ -12,7 +12,7 @@ class LangHtml: public Engine {
 
  public:
 	LangHtml();
-	~LangHtml() {IO->close();}
+	virtual ~LangHtml() {IO->close();}
 
 	virtual void fill();
 };
