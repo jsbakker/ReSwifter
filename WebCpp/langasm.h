@@ -1,7 +1,8 @@
 // Author: Jeffrey Bakker  |  Date May14th 2002  |  langasm.h
 
 // the Assembly Language definition file for Web C Plus Plus
-// Webcpp Copyright (C) 2002 Jeffrey Bakker
+// Webcpp Copyright (C) 2002-2025 Jeffrey Bakker
+// Updated 2025 for modern x86-64, SSE/AVX/AVX-512, and ARM AArch64/NEON
 
 
 #ifndef LANG_ASM_DEF_H
