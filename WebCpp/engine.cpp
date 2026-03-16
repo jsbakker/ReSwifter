@@ -580,6 +580,9 @@ void Engine::colourString(int index, bool &inside, string cssclass) {
 // parse for multi-line strings -----------------------------------------------
 void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
 
+	// don't interfere when a heredoc owns the inMultiStr state
+	if(!heredocEnd.empty()) {return;}
+
 	string search;
 	int index, offset;
 
@@ -655,6 +658,9 @@ void Engine::parseHeredoc() {
 		// still inside heredoc — line is already coloured by endMultiLine mechanism
 		return;
 	}
+
+	// don't start a heredoc when a %Q{} string owns the inMultiStr state
+	if(inMultiStr) {return;}
 
 	// not inside a heredoc — look for a heredoc start on this line
 	// after pre_parse, << becomes &lt;&lt;
