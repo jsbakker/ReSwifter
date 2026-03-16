@@ -128,7 +128,7 @@ Options:\n\
 
 
 	string Langs = "\
-Ada95\t\t*.adb,*.ads,*.ali\n\
+Ada\t\t*.adb,*.ads,*.ali\n\
 Assembly\t*.asm,*.s\n\
 Asp\t\t*.asp,*.asa\n\
 Basic\t\t*.bas\n\
@@ -270,7 +270,7 @@ string Driver::checkExt(string filename) {
 	char filetype = getExt(filename);
 
 	switch(filetype) {
-		case (ADA_FILE) : LANG(LangAda95,"Ada file");
+		case (ADA_FILE) : LANG(LangAda,"Ada file");
 		case (ASM_FILE) : LANG(LangAssembler,"Assembly file");
 		case (ASP_FILE) : LANG(LangAsp,"ASP file");
 		case (BAS_FILE) : LANG(LangBasic,"Basic file");

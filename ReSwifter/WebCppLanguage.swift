@@ -49,7 +49,7 @@ enum WebCppLanguage: String, CaseIterable, Identifiable {
     /// Human-readable display name for the picker.
     var displayName: String {
         switch self {
-        case .ada:           return "Ada95"
+        case .ada:           return "Ada"
         case .assembly:      return "Assembly"
         case .asp:           return "ASP"
         case .basic:         return "Basic"
