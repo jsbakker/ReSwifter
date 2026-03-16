@@ -4,6 +4,9 @@
 
 #include "langsql.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangSQL ::LangSQL() {
 
 	fill();
@@ -25,5 +28,5 @@ void LangSQL ::fill() {
     "OUTER","PROCEDURE","REVOKE","RIGHT","ROLLBACK","SELECT","SET","SUM",
     "TABLE","TRANSACTION","TRIGGER","UNION","USER","VIEW","WHERE"
 	};
-	for(int k=0;k < 51;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

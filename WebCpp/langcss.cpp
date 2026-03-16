@@ -5,6 +5,9 @@
 
 #include "langcss.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangCSS::LangCSS() {
 
 	fill();
@@ -51,7 +54,7 @@ void LangCSS::fill() {
 		"to",
 		"unset",
 	};
-	for(int k=0;k < 31;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// CSS common properties
 	string T[] = {
@@ -178,5 +181,5 @@ void LangCSS::fill() {
 		"writing-mode",
 		"z-index",
 	};
-	for(int t=0;t < 119;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -6,6 +6,9 @@
 
 #include "langpython.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangPython::LangPython() {
 	
 	fill();
@@ -69,7 +72,7 @@ void LangPython::fill() {
 		"with",
 		"yield",
 	};
-	for(int k=0;k < 48;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Python 3.14 built-in types and typing module types
 	string T[] = {
@@ -109,5 +112,5 @@ void LangPython::fill() {
 		"str",
 		"tuple",
 	};
-	for(int t=0;t < 35;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

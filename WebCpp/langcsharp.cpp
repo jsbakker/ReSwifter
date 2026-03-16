@@ -5,6 +5,9 @@
 
 #include "langcsharp.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangCSharp ::LangCSharp() {
 
 	fill();
@@ -121,7 +124,7 @@ void LangCSharp ::fill() {
 		"with",
 		"yield",
 	};
-	for(int k=0;k < 99;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// C# built-in types and common framework types (C# 13 / .NET 9)
 	string T[] = {
@@ -187,6 +190,6 @@ void LangCSharp ::fill() {
 		"ushort",
 		"void",
 	};
-	for(int t=0;t < 61;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }
 

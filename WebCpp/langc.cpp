@@ -5,6 +5,9 @@
 
 #include "langc.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangC::LangC() {
 
 	fill();
@@ -24,7 +27,7 @@ void LangC::fill() {
 		"else","enum","extern","for","if","return","sizeof",
 		"struct","switch","typedef","union","while"
 	};
-	for(int k=0;k < 18;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	string T[] = {
 		"auto",
@@ -56,5 +59,5 @@ void LangC::fill() {
 		"void",
 		"volatile",
 	};
-	for(int t=0;t < 28;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -6,6 +6,9 @@
 
 #include "langphp.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangPhp::LangPhp()  {
 	
 	fill();
@@ -90,7 +93,7 @@ void LangPhp::fill(){
 		"xor",
 		"yield",
 	};
-	for(int k=0;k < 67;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// PHP 8.4 built-in types
 	string T[] = {
@@ -108,5 +111,5 @@ void LangPhp::fill(){
 		"string",
 		"void",
 	};
-	for(int t=0;t < 13;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

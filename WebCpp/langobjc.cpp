@@ -4,6 +4,9 @@
 
 #include "langobjc.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangObjectiveC ::LangObjectiveC() {
 
 	fill();
@@ -54,7 +57,7 @@ void LangObjectiveC ::fill() {
 		"self",
 		"super",
 	};
-	for(int k=0;k < 32;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Objective-C types
 	string T[] = {
@@ -99,5 +102,5 @@ void LangObjectiveC ::fill() {
 		"oneway",
 		"out",
 	};
-	for(int t=0;t < 40;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

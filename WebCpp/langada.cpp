@@ -5,6 +5,9 @@
 
 #include "langada.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangAda ::LangAda() {
 
 	fill();
@@ -95,7 +98,7 @@ void LangAda ::fill() {
 		"with",
 		"xor",
 	};
-	for(int k=0;k < 74;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Ada predefined types, subtypes, and common library types
 	string T[] = {
@@ -132,5 +135,5 @@ void LangAda ::fill() {
 		"Wide_Wide_Character",
 		"Wide_Wide_String",
 	};
-	for(int t=0;t < 32;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

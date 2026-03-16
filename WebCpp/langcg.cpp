@@ -4,6 +4,9 @@
 
 #include "langcg.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangCg ::LangCg() {
 
 	fill();
@@ -41,7 +44,7 @@ void LangCg ::fill() {
 "uniform",
 "while"
 	};
-	for(int k=0;k < 22;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	string T[] = {
 "bool",
@@ -60,5 +63,5 @@ void LangCg ::fill() {
 "void",
 "volatile",
 	};
-	for(int t=0;t < 15;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

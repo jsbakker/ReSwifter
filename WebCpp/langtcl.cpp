@@ -5,6 +5,9 @@
 
 #include "langtcl.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangTcl ::LangTcl() {
 
 	fill();
@@ -111,7 +114,7 @@ void LangTcl ::fill() {
 		"yieldto",
 		"zlib",
 	};
-	for(int k=0;k < 92;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Tcl 8.6/9.0 OO and type-related commands
 	string T[] = {
@@ -135,5 +138,5 @@ void LangTcl ::fill() {
 		"superclass",
 		"unexport",
 	};
-	for(int t=0;t < 19;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

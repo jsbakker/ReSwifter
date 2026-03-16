@@ -4,6 +4,9 @@
 
 #include "langbasic.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangBasic ::LangBasic() {
 
 	fill();
@@ -24,5 +27,5 @@ void LangBasic ::fill() {
 	"RESTORE","RETURN","RND","RUN","SAVE","SGN","SIN","SQR","SQRT","STOP",
 	"STR","TO","VAL","WEND","WHILE","XOR"
 	};
-	for(int k=0;k < 50;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

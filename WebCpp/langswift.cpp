@@ -2,6 +2,9 @@
 
 #include "langswift.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangSwift::LangSwift() {
 
 	fill();
@@ -149,7 +152,7 @@ void LangSwift::fill() {
 		"while",
 		"willSet",
 	};
-	for(int k=0;k < 131;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Swift built-in types
 	string T[] = {
@@ -180,5 +183,5 @@ void LangSwift::fill() {
 		"UInt64",
 		"Void",
 	};
-	for(int t=0;t < 26;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

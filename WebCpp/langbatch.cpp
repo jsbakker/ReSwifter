@@ -4,6 +4,9 @@
 
 #include "langbatch.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangBatch::LangBatch() {
 
 	fill();
@@ -29,5 +32,5 @@ void LangBatch::fill() {
 "replace","rmdir","rundll32","set","setlocal","share","shift","sort",
 "start","subst","time","title","tree","type","ver","verify","vol","xcopy"
 	};
-	for(int k=0;k < 73;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

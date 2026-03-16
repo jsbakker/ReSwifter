@@ -4,6 +4,9 @@
 
 #include "langemf.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangEmf ::LangEmf() {
 
 	fill();
@@ -44,5 +47,5 @@ void LangEmf ::fill() {
 "!while",
 "define-macro"
 	};
-	for(int k=0;k < 22;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

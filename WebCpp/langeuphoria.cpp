@@ -4,6 +4,9 @@
 
 #include "langeuphoria.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangEuphoria ::LangEuphoria() {
 
 	fill();
@@ -21,5 +24,5 @@ void LangEuphoria ::fill() {
   "with","without","xor","and"
 	};
 
-	for(int k=0;k < 24;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

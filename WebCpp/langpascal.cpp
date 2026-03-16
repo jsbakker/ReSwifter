@@ -5,6 +5,9 @@
 
 #include "langpascal.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangPascal ::LangPascal() {
 
 	fill();
@@ -119,7 +122,7 @@ void LangPascal ::fill() {
 		"writeln",
 		"xor",
 	};
-	for(int k=0;k < 99;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Object Pascal types (Free Pascal 3.2 / Delphi 12)
 	string T[] = {
@@ -176,5 +179,5 @@ void LangPascal ::fill() {
 		"string",
 		"word",
 	};
-	for(int t=0;t < 52;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -6,6 +6,9 @@
 
 #include "langasm.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangAssembler::LangAssembler() {
 
 	fill();
@@ -314,7 +317,7 @@ void LangAssembler::fill() {
 		"xsetbv",
 		"yield","zip1","zip2",
 	};
-	for(int k=0;k < 1482;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Registers (473 entries)
 	// x86/x86-64, x87 FPU, MMX, SSE, AVX, AVX-512,
@@ -411,5 +414,5 @@ void LangAssembler::fill() {
 		"zmm23","zmm24","zmm25","zmm26","zmm27","zmm28","zmm29","zmm3",
 		"zmm30","zmm31","zmm4","zmm5","zmm6","zmm7","zmm8","zmm9",
 	};
-	for(int t=0;t < 473;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

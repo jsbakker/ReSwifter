@@ -6,6 +6,9 @@
 
 #include "langperl.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangPerl::LangPerl() {
 	
 	fill();
@@ -99,7 +102,7 @@ void LangPerl::fill() {
 		"while",
 		"xor",
 	};
-	for(int k=0;k < 75;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Perl 5.40 built-in functions (filesystem, I/O, system)
 	string T[] = {
@@ -135,6 +138,6 @@ void LangPerl::fill() {
 		"unlink",
 		"untie",
 	};
-	for(int t=0;t < 31;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }
 

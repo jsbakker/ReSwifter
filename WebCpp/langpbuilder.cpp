@@ -5,6 +5,9 @@
 
 #include "langpbuilder.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangPBuilder::LangPBuilder() {
 
 	fill();
@@ -36,5 +39,5 @@ void LangPBuilder::fill() {
     "unsignedinteger","unsignedlong","until","update","updateblob","using",
     "variables","while","with","within"
 	};
-	for(int k=0;k < 118;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

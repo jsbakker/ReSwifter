@@ -6,6 +6,9 @@
 
 #include "langshell.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangShell::LangShell() {
 	
 	fill();
@@ -56,7 +59,7 @@ void LangShell::fill() {
 		"until",
 		"while",
 	};
-	for(int k=0;k < 36;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Common shell commands and utilities
 	string T[] = {
@@ -157,5 +160,5 @@ void LangShell::fill() {
 		"yes",
 		"zip",
 	};
-	for(int t=0;t < 96;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

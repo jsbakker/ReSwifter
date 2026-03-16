@@ -5,6 +5,9 @@
 
 #include "langxml.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangXML::LangXML() {
 
 	fill();
@@ -30,7 +33,7 @@ void LangXML::fill() {
 		"![INCLUDE[",
 		"![IGNORE[",
 	};
-	for(int k=0;k < 9;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// XML common attributes
 	string T[] = {
@@ -41,5 +44,5 @@ void LangXML::fill() {
 		"xml:space",
 		"xmlns",
 	};
-	for(int t=0;t < 6;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

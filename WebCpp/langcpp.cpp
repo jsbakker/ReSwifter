@@ -5,6 +5,9 @@
 
 #include "langcpp.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangCPlusPlus::LangCPlusPlus() {
 
 	fill();
@@ -67,7 +70,7 @@ void LangCPlusPlus::fill() {
 		"using",
 		"virtual",
 	};
-	for(int k=0;k < 44;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// C++ types (C++98 through C++23)
 	string T[] = {
@@ -78,5 +81,5 @@ void LangCPlusPlus::fill() {
 		"mutable",
 		"wchar_t",
 	};
-	for(int t=0;t < 6;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

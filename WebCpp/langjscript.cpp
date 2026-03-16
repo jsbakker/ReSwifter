@@ -5,6 +5,9 @@
 
 #include "langjscript.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangJScript ::LangJScript() {
 
 	fill();
@@ -66,7 +69,7 @@ void LangJScript ::fill() {
 		"with",
 		"yield",
 	};
-	for(int k=0;k < 46;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// JavaScript built-in types and globals (ES2025)
 	string T[] = {
@@ -110,6 +113,6 @@ void LangJScript ::fill() {
 		"WeakRef",
 		"WeakSet",
 	};
-	for(int t=0;t < 39;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }
 

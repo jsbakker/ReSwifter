@@ -4,6 +4,9 @@
 
 #include "langasp.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangAsp::LangAsp()  {
 	
 	fill();
@@ -32,5 +35,5 @@ void LangAsp::fill(){
 	"explicit", "on", "error", "goto"
 
 	};
-	for(int k=0;k < 71;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

@@ -5,6 +5,9 @@
 
 #include "langmodula.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangModula2 ::LangModula2() {
 
 	fill();
@@ -85,7 +88,7 @@ void LangModula2 ::fill() {
 		"WRITE",
 		"YIELD",
 	};
-	for(int k=0;k < 67;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Modula-2 types (ISO 10514 and R10)
 	string T[] = {
@@ -119,5 +122,5 @@ void LangModula2 ::fill() {
 		"UNICHAR",
 		"WORD",
 	};
-	for(int t=0;t < 29;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -5,6 +5,9 @@
 
 #include "langhaskell.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangHaskell ::LangHaskell() {
 
 	fill();
@@ -48,7 +51,7 @@ void LangHaskell ::fill() {
   "via",
   "where"
 	};
-	for(int k=0;k < 61;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Common Haskell types, type classes, and data constructors
 	string T[] = {
@@ -74,5 +77,5 @@ void LangHaskell ::fill() {
   "Vector","Void",
   "Word","Word8","Word16","Word32","Word64"
 	};
-	for(int t=0;t < 85;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -7,6 +7,9 @@
 
 #include "langvhdl.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangVHDL ::LangVHDL() {
 
 	fill();
@@ -128,7 +131,7 @@ void LangVHDL ::fill() {
 		"XNOR",
 		"XOR",
 	};
-	for(int k=0;k < 104;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// VHDL predefined types from package std.standard and ieee libraries
 	string T[] = {
@@ -158,5 +161,5 @@ void LangVHDL ::fill() {
 		"TIME_VECTOR",
 		"UNSIGNED",
 	};
-	for(int t=0;t < 25;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

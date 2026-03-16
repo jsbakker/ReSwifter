@@ -5,6 +5,9 @@
 
 #include "langruby.h"
 
+#include <algorithm>
+#include <iterator>
+
 LangRuby ::LangRuby() {
 
 	fill();
@@ -66,7 +69,7 @@ void LangRuby ::fill() {
 		"while",
 		"yield",
 	};
-	for(int k=0;k < 42;k++) {keys.push_back(K[k]);}
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
 	// Ruby 3.3 built-in types and core classes
 	string T[] = {
@@ -104,6 +107,6 @@ void LangRuby ::fill() {
 		"TrueClass",
 		"FalseClass",
 	};
-	for(int t=0;t < 33;t++) {types.push_back(T[t]);}
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }
 
