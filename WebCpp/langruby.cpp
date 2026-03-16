@@ -15,6 +15,8 @@ LangRuby ::LangRuby() {
 	doArrays   = Yes;
 	doHashes   = Yes;
 	doUnxComnt = Yes;
+	doHeredoc  = Yes;
+	doPercentQ = Yes;
 }
 
 void LangRuby ::fill() {

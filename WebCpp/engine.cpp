@@ -56,6 +56,8 @@ void Engine::init_switches() {
 	inBckQuotes = false;
 	inComment   = false;
 	inTplString = false;
+	inHeredoc   = false;
+	heredocEnd  = "";
 	endComment  = false;
 
 	// common language
@@ -85,6 +87,8 @@ void Engine::init_switches() {
 	doBatComnt  = false;
 	doTplString = false;
 	doRawString = false;
+	doHeredoc   = false;
+	doPercentQ  = false;
 
 	lncount  = 1;
 	tabwidth = 8;
@@ -212,6 +216,7 @@ bool Engine::abortParse() {
 	if(inBckQuotes)	{return true;}
 	if(inComment)	{return true;}
 	if(inTplString)	{return true;}
+	if(inHeredoc)	{return true;}
 
 	return false;
 }
@@ -461,6 +466,7 @@ void Engine::parseString(char quotetype, bool &inside) {
 
 	if(endComment)  {return;}
 	if(inTplString) {return;}
+	if(inHeredoc)   {return;}
 	if(doAdaComnt && !doRemComnt && quotetype == SIN_QUOTES) {return;}
 	if(doAspComnt && quotetype == SIN_QUOTES) {return;}
 
@@ -629,6 +635,74 @@ void Engine::parseBigComment(string start, string end, bool &inside, string cssO
 			if(inside) {endComment = true;}
 			return;
 		}
+	}
+}
+// parse for Ruby-style heredoc strings (<<TAG, <<-TAG, <<~TAG) ---------------
+void Engine::parseHeredoc() {
+
+	if(inHeredoc) {
+		// we are inside a heredoc — check if this line is the end marker
+		// the end marker must appear at the start of the line (after optional whitespace)
+		string trimmed = buffer;
+		int pos = 0;
+		while(pos < (int)trimmed.size() && (trimmed[pos] == ' ' || trimmed[pos] == '\t')) {pos++;}
+		string lineContent = trimmed.substr(pos);
+
+		if(lineContent == heredocEnd) {
+			// this line closes the heredoc — colour it and end
+			// position index at end of the marker so </font> closes after it
+			int endIdx = pos + (int)heredocEnd.size() - 1;
+			eraseTags(0,0);
+			colourString(endIdx, inHeredoc, "dblquot");
+			// inHeredoc is now false after colourString toggles it
+			heredocEnd = "";
+			return;
+		}
+		// still inside heredoc — line is already coloured by endComment mechanism
+		return;
+	}
+
+	// not inside a heredoc — look for a heredoc start on this line
+	// after pre_parse, << becomes &lt;&lt;
+	string marker = "&lt;&lt;";
+	int index = buffer.find(marker, 0);
+	if(index == -1) {return;}
+
+	while(index != -1 && index < (int)buffer.size()) {
+		int tagStart = index;
+		int pos = index + marker.size(); // past "&lt;&lt;"
+
+		// optional - or ~
+		if(pos < (int)buffer.size() && (buffer[pos] == '-' || buffer[pos] == '~')) {pos++;}
+
+		// optional quote character around the tag name
+		char quoteChar = 0;
+		if(pos < (int)buffer.size() && (buffer[pos] == '\'' || buffer[pos] == '"')) {
+			quoteChar = buffer[pos];
+			pos++;
+		}
+
+		// extract the tag name (must be a word: letters, digits, underscore)
+		int nameStart = pos;
+		while(pos < (int)buffer.size() && (isalnum(buffer[pos]) || buffer[pos] == '_')) {pos++;}
+
+		if(pos == nameStart) {
+			// no valid tag name found, skip this match
+			index = buffer.find(marker, tagStart + marker.size());
+			continue;
+		}
+
+		string tagName = buffer.substr(nameStart, pos - nameStart);
+
+		// skip closing quote if present
+		if(quoteChar && pos < (int)buffer.size() && buffer[pos] == quoteChar) {pos++;}
+
+		// store the end marker and start the heredoc
+		heredocEnd = tagName;
+		eraseTags(tagStart, 0);
+		colourString(tagStart, inHeredoc, "dblquot");
+		// inHeredoc is now true after colourString toggles it
+		return;
 	}
 }
 // parse for multi-line comments ----------------------------------------------
@@ -955,6 +1029,8 @@ PRINT_DEBUG(0);
 
 	if(doTplString) PARSE_TPL_DBL_STRING;
 	if(doRawString) PARSE_RAW_CPP_STRING;
+	if(doHeredoc)   PARSE_HEREDOC_STRING;
+	if(doPercentQ) {PARSE_PERCENT_QU_STR; PARSE_PERCENT_QL_STR;}
 
 	if(doStrings)
 	{
@@ -1019,7 +1095,7 @@ PRINT_DEBUG(6);
 
 	*IO << buffer << "\n";
 	if(!childLang) {parseChildLang();}
-	endComment = inComment || inTplString;
+	endComment = inComment || inTplString || inHeredoc;
 
 	lncount++;
 }

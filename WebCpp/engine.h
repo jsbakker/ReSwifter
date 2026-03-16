@@ -72,6 +72,7 @@ class Engine {
 
 	void parseBigComment(string start, string end, bool &inside);
 	void parseBigComment(string start, string end, bool &inside, string css);
+	void parseHeredoc();
 
 	void parseKeys();
 	void colourKeys(int index, string key, string cssclass);
@@ -158,6 +159,8 @@ class Engine {
 	bool doBatComnt;
 	bool doTplString;
 	bool doRawString;
+	bool doHeredoc;
+	bool doPercentQ;
 
  //theme file I/O engine
  public:
@@ -181,6 +184,8 @@ class Engine {
 	bool inHtmTags;
 	bool inComment;
 	bool inTplString;
+	bool inHeredoc;
+	string heredocEnd;
 	bool endComment;
 };
 

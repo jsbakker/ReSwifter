@@ -36,6 +36,12 @@
 
 #define PARSE_RAW_CPP_STRING parseBigComment("R\"(", ")\"", inTplString, "dblquot")
 
+#define PARSE_PERCENT_QU_STR parseBigComment("%Q{", "}", inTplString, "dblquot")
+
+#define PARSE_PERCENT_QL_STR parseBigComment("%q{", "}", inTplString, "sinquot")
+
+#define PARSE_HEREDOC_STRING parseHeredoc()
+
 // multiline comment parsing
 #define PARSE_A_MARKUP_COMNT parseBigComment("&lt;!-", "--&gt;", inComment)
 #define PARSE_PAS_MOD2_COMNT parseBigComment("(*", "*)", inComment)
