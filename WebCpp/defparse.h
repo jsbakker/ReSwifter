@@ -32,13 +32,13 @@
 #define PARSE_BCK_QUO_STRING parseString(BCK_QUOTES,inBckQuotes)
 // multiline string parsing
 
-#define PARSE_TPL_DBL_STRING parseBigComment("\"\"\"", "\"\"\"", inTplString, "dblquot")
+#define PARSE_TPL_DBL_STRING parseMultiStr("\"\"\"", "\"\"\"", inMultiStr, "dblquot")
 
-#define PARSE_RAW_CPP_STRING parseBigComment("R\"(", ")\"", inTplString, "dblquot")
+#define PARSE_RAW_CPP_STRING parseMultiStr("R\"(", ")\"", inMultiStr, "dblquot")
 
-#define PARSE_PERCENT_QU_STR parseBigComment("%Q{", "}", inTplString, "dblquot")
+#define PARSE_PERCENT_QU_STR parseMultiStr("%Q{", "}", inMultiStr, "dblquot")
 
-#define PARSE_PERCENT_QL_STR parseBigComment("%q{", "}", inTplString, "sinquot")
+#define PARSE_PERCENT_QL_STR parseMultiStr("%q{", "}", inMultiStr, "sinquot")
 
 #define PARSE_HEREDOC_STRING parseHeredoc()
 

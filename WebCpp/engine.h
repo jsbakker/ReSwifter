@@ -71,7 +71,7 @@ class Engine {
 	void colourString(int   index, bool &inside, string cssclass);
 
 	void parseBigComment(string start, string end, bool &inside);
-	void parseBigComment(string start, string end, bool &inside, string css);
+	void parseMultiStr(string start, string end, bool &inside, string css);
 	void parseHeredoc();
 
 	void parseKeys();
@@ -183,10 +183,9 @@ class Engine {
 	bool inBckQuotes;
 	bool inHtmTags;
 	bool inComment;
-	bool inTplString;
-	bool inHeredoc;
+	bool inMultiStr;
 	string heredocEnd;
-	bool endComment;
+	bool endMultiLine;
 };
 
 #endif  // _ENGINE_H

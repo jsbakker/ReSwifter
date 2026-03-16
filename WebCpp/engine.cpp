@@ -54,11 +54,10 @@ void Engine::init_switches() {
 	inDblQuotes = false;
 	inSinQuotes = false;
 	inBckQuotes = false;
-	inComment   = false;
-	inTplString = false;
-	inHeredoc   = false;
-	heredocEnd  = "";
-	endComment  = false;
+	inComment     = false;
+	inMultiStr    = false;
+	heredocEnd    = "";
+	endMultiLine  = false;
 
 	// common language
 	doStrings   = true;
@@ -208,15 +207,14 @@ bool Engine::abortParse() {
 //	if(doHtmlTags && inHtmTags)
 //			{return true;}
 
-	if(endComment)	{return true;}
+	if(endMultiLine)	{return true;}
 	if(inDblQuotes)	{return true;}
 	if(!doAspComnt)	{
 	if(inSinQuotes)	{return true;}
 	}
 	if(inBckQuotes)	{return true;}
 	if(inComment)	{return true;}
-	if(inTplString)	{return true;}
-	if(inHeredoc)	{return true;}
+	if(inMultiStr)	{return true;}
 
 	return false;
 }
@@ -464,9 +462,8 @@ bool Engine::colourNum(int s, int f) {
 // parse the buffer for strings -----------------------------------------------
 void Engine::parseString(char quotetype, bool &inside) {
 
-	if(endComment)  {return;}
-	if(inTplString) {return;}
-	if(inHeredoc)   {return;}
+	if(endMultiLine) {return;}
+	if(inMultiStr)   {return;}
 	if(doAdaComnt && !doRemComnt && quotetype == SIN_QUOTES) {return;}
 	if(doAspComnt && quotetype == SIN_QUOTES) {return;}
 
@@ -580,16 +577,13 @@ void Engine::colourString(int index, bool &inside, string cssclass) {
 
 	inside = !inside;
 }
-// parse for multi-line comments (with custom CSS class) ----------------------
-void Engine::parseBigComment(string start, string end, bool &inside, string cssOverride) {
+// parse for multi-line strings -----------------------------------------------
+void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
 
-	string search, escap, css;
-	int index,offset;
-	bool erase;
+	string search;
+	int index, offset;
 
 	index = 0;
-	erase = true;
-	css = cssOverride;
 
 	if(inside) {search = end;}
 	else {search = start;}
@@ -628,11 +622,11 @@ void Engine::parseBigComment(string start, string end, bool &inside, string cssO
 
 		index = buffer.find(search,offset);
 		if(index == -1) {
-			if(inside) {endComment = true;}
+			if(inside) {endMultiLine = true;}
 			return;
 		}
 		if(index > buffer.size()){
-			if(inside) {endComment = true;}
+			if(inside) {endMultiLine = true;}
 			return;
 		}
 	}
@@ -640,7 +634,7 @@ void Engine::parseBigComment(string start, string end, bool &inside, string cssO
 // parse for Ruby-style heredoc strings (<<TAG, <<-TAG, <<~TAG) ---------------
 void Engine::parseHeredoc() {
 
-	if(inHeredoc) {
+	if(inMultiStr && !heredocEnd.empty()) {
 		// we are inside a heredoc — check if this line is the end marker
 		// the end marker must appear at the start of the line (after optional whitespace)
 		string trimmed = buffer;
@@ -653,12 +647,12 @@ void Engine::parseHeredoc() {
 			// position index at end of the marker so </font> closes after it
 			int endIdx = pos + (int)heredocEnd.size() - 1;
 			eraseTags(0,0);
-			colourString(endIdx, inHeredoc, "dblquot");
-			// inHeredoc is now false after colourString toggles it
+			colourString(endIdx, inMultiStr, "dblquot");
+			// inMultiStr is now false after colourString toggles it
 			heredocEnd = "";
 			return;
 		}
-		// still inside heredoc — line is already coloured by endComment mechanism
+		// still inside heredoc — line is already coloured by endMultiLine mechanism
 		return;
 	}
 
@@ -700,8 +694,8 @@ void Engine::parseHeredoc() {
 		// store the end marker and start the heredoc
 		heredocEnd = tagName;
 		eraseTags(tagStart, 0);
-		colourString(tagStart, inHeredoc, "dblquot");
-		// inHeredoc is now true after colourString toggles it
+		colourString(tagStart, inMultiStr, "dblquot");
+		// inMultiStr is now true after colourString toggles it
 		return;
 	}
 }
@@ -752,7 +746,7 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
 		   !isInsideIt(index, "`", "`")) {
 			if(inside) {
 				index += end.size()-1;
-		                if(buffer.find(end) == -1) {endComment = true;}
+		                if(buffer.find(end) == -1) {endMultiLine = true;}
 			}
 			else if(erase)eraseTags(index,0);
 			colourString(index, inside, css);
@@ -909,6 +903,9 @@ void Engine::colourKeys(int index, string key, string cssclass) {
 // parse for variables --------------------------------------------------------
 void Engine::parseVariable(string var) {
 
+	if(endMultiLine) {return;}
+	if(inMultiStr)   {return;}
+
 	int index;
 	int test;
 
@@ -958,7 +955,8 @@ void Engine::colourVariable(int index) {
 // check for comments ---------------------------------------------------------
 void Engine::parseComment(string cmnt) {
 
-  if(inComment) {return;}
+  if(inComment)    {return;}
+  if(endMultiLine) {return;}
 
 	int index = buffer.find(cmnt,0);
 	if(index == -1) {return;}
@@ -1095,7 +1093,7 @@ PRINT_DEBUG(6);
 
 	*IO << buffer << "\n";
 	if(!childLang) {parseChildLang();}
-	endComment = inComment || inTplString || inHeredoc;
+	endMultiLine = inComment || inMultiStr;
 
 	lncount++;
 }
