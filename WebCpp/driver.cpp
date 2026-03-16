@@ -136,6 +136,7 @@ C#\t\t*.cs\n\
 C Source\t*.c,*.rc\n\
 C++ Source\t*.cc,*.cpp,*.cxx\n\
 C/C++ Header\t*.h,*.hh,*.hpp,*.hxx\n\
+Cascading StyleSheet\t\t*.css\n\
 Objective-C\t*.m\n\
 DOS Batch\t*.bat,*.cmd\n\
 EMF\t\t*.emf\n\
@@ -144,7 +145,7 @@ Fortran\t\t*.f,*.f77,*.f90,*.for,*.ftn\n\
 Haskell\t\t*.hs,*.lhs\n\
 Java\t\t*.java\n\
 JavaScript\t*.js\n\
-Markup\t\t*.htm,*.html,*.shtml,*.sgml,*.xml\n\
+Markup\t\t*.htm,*.html,*.shtml,*.sgml\n\
 Modula2\t\t*.def,*.mod\n\
 Nasa CLIPS\t*.clp\n\
 NVidia Cg\t*.cg\n\
@@ -161,6 +162,7 @@ Tcl\t\t*.tcl,*.tk\n\
 Unix shell\t*.sh\n\
 UnrealScript\t*.uc\n\
 VHDL\t\t*.v,*.vhd,*.vhdl\n\
+XML\t\t*.xml\n\
 Don't see your favorite language listed here?\n\
 Try http://webcpp.sourceforge.net/languages.php\n";
 
@@ -226,7 +228,7 @@ char Driver::getExt(string filename)
 	else if(extension == "shtm") {ext = HTM_FILE;}
 	else if(extension == "html") {ext = HTM_FILE;}
 	else if(extension ==  "htm") {ext = HTM_FILE;}
-	else if(extension ==  "xml") {ext = HTM_FILE;}
+	else if(extension ==  "xml") {ext = XML_FILE;}
 	else if(extension == "sgml") {ext = HTM_FILE;}
 	else if(extension == "java") {ext = JAV_FILE;}
 	else if(extension ==   "js") {ext = JSC_FILE;}
@@ -258,6 +260,7 @@ char Driver::getExt(string filename)
 	else if(extension ==    "v") {ext = VHD_FILE;}
 	else if(extension == "vhdl") {ext = VHD_FILE;}
 	else if(extension ==  "vhd") {ext = VHD_FILE;}
+	else if(extension ==  "css") {ext = CSS_FILE;}
 
 	else ext = TXT_FILE;
 	return ext;
@@ -279,6 +282,7 @@ string Driver::checkExt(string filename) {
 		case (CPP_FILE) : LANG(LangCPlusPlus,"C++ file");
 		case (C4G_FILE) : LANG(LangCg,"NVIDIA Cg file");
 		case (CLP_FILE) : LANG(LangClips,"NASA CLIPS file");
+		case (CSS_FILE) : LANG(LangCSS,"CSS file");
 		case (CSP_FILE) : LANG(LangCSharp,"C-Sharp file");
 		case (OBC_FILE) : LANG(LangObjectiveC,"Objective-C file");
 		case (EMF_FILE) : LANG(LangEmf,"MicroEmacs macro file");
@@ -302,6 +306,7 @@ string Driver::checkExt(string filename) {
 		case (TCL_FILE) : LANG(LangTcl,"Tcl script");
 		case (UNR_FILE) : LANG(LangUScript,"UnrealScript");
 		case (VHD_FILE) : LANG(LangVHDL,"VHDL file");
+		case (XML_FILE) : LANG(LangXML,"XML file");
 		default         : LANG(LangText,"Text file");
 	}
 }

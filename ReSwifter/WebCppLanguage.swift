@@ -18,6 +18,7 @@ enum WebCppLanguage: String, CaseIterable, Identifiable {
     case c          = "c"
     case cpp        = "cpp"
     case cSharp     = "cs"
+    case css        = "css"
     case cg         = "cg"
     case clips      = "clp"
     case emf        = "emf"
@@ -42,6 +43,7 @@ enum WebCppLanguage: String, CaseIterable, Identifiable {
     case shell      = "sh"
     case unrealScript = "uc"
     case vhdl       = "vhd"
+    case xml        = "xml"
     case text       = "txt"
 
     var id: String { rawValue }
@@ -57,13 +59,14 @@ enum WebCppLanguage: String, CaseIterable, Identifiable {
         case .c:             return "C"
         case .cpp:           return "C++"
         case .cSharp:        return "C#"
+        case .css:           return "Cascading StyleSheet"
         case .cg:            return "NVidia Cg"
         case .clips:         return "NASA CLIPS"
         case .emf:           return "EMF"
         case .euphoria:      return "Euphoria"
         case .fortran:       return "Fortran"
         case .haskell:       return "Haskell"
-        case .html:          return "Markup"
+        case .html:          return "HTML"
         case .java:          return "Java"
         case .javaScript:    return "JavaScript"
         case .modula2:       return "Modula2"
@@ -81,6 +84,7 @@ enum WebCppLanguage: String, CaseIterable, Identifiable {
         case .shell:         return "Unix Shell"
         case .unrealScript:  return "UnrealScript"
         case .vhdl:          return "VHDL"
+        case .xml:           return "XML"
         case .text:          return "Plain Text"
         }
     }

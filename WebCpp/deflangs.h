@@ -53,6 +53,8 @@
 #define UNR_FILE 0x54
 #define SWF_FILE 0x53
 #define VHD_FILE 0x76
+#define CSS_FILE 0x43
+#define XML_FILE 0x58
 
 #include "langada.h"
 #include "langasm.h"
@@ -64,6 +66,7 @@
 #include "langclips.h"
 #include "langcpp.h"
 #include "langcsharp.h"
+#include "langcss.h"
 #include "langemf.h"
 #include "langeuphoria.h"
 #include "langfortran.h"
@@ -87,5 +90,6 @@
 #include "langtext.h"
 #include "languscript.h"
 #include "langvhdl.h"
+#include "langxml.h"
 
 #endif //_DEF_LANGS_H

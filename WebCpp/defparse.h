@@ -24,7 +24,8 @@
 
 // linline parsing
 #define PARSE_INLINE_ASM     colourChildLang("asm", "}")
-#define PARSE_INLINE_JS      colourChildLang("text/javascript", "/script")
+#define PARSE_INLINE_JS      colourChildLang("&lt;script", "/script")
+#define PARSE_INLINE_CSS     colourChildLang("&lt;style", "/style")
 // string parsing
 #define PARSE_DBL_QUO_STRING parseString(DBL_QUOTES,inDblQuotes)
 #define PARSE_SIN_QUO_STRING parseString(SIN_QUOTES,inSinQuotes)

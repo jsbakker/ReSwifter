@@ -1181,7 +1181,8 @@ void Engine::parseChildLang() {
 	switch(langext)
 	{
 		case CPP_FILE	: PARSE_INLINE_ASM;	break;
-		case HTM_FILE	: PARSE_INLINE_JS;	break;
+		case HTM_FILE	: PARSE_INLINE_JS;
+				  PARSE_INLINE_CSS;	break;
 		default		: return;
 	}
 }
@@ -1199,7 +1200,13 @@ void Engine::colourChildLang(string beg, string end) {
 		switch(langext)
 		{
 			case CPP_FILE : CHILD(LangAssembler, ASM_FILE); break;
-			case HTM_FILE : CHILD(LangJScript,   JSC_FILE); break;
+			case HTM_FILE :
+				if(end == "/style") {
+					CHILD(LangCSS, CSS_FILE);
+				} else {
+					CHILD(LangJScript, JSC_FILE);
+				}
+				break;
 		}
 		Child->setupIO(IO);
 		Child->setChildLang(true);
