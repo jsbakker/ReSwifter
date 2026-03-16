@@ -13,11 +13,12 @@ LangCSharp ::LangCSharp() {
 	fill();
 	init_switches();
 
-	doSymbols  = Yes;
-	doLabels   = Yes;
-	doPreProc  = Yes;
-	doBigComnt = Yes;
-	doCinComnt = Yes;
+	doSymbols   = Yes;
+	doLabels    = Yes;
+	doPreProc   = Yes;
+	doBigComnt  = Yes;
+	doCinComnt  = Yes;
+	doTplString = Yes;
 }
 
 void LangCSharp ::fill() {

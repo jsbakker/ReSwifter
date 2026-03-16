@@ -18,6 +18,7 @@ LangJava::LangJava() {
 	doLabels    = Yes;
 	doBigComnt  = Yes;
 	doCinComnt  = Yes;
+	doTplString = Yes;
 }
 
 void LangJava::fill() {

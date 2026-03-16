@@ -20,6 +20,7 @@ LangPerl::LangPerl() {
 	doArrays   = Yes;
 	doHashes   = Yes;
 	doUnxComnt = Yes;
+	doHeredoc  = Yes;
 }
 
 void LangPerl::fill() {

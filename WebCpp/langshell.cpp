@@ -16,6 +16,7 @@ LangShell::LangShell() {
 
 	doScalars  = Yes;
 	doUnxComnt = Yes;
+	doHeredoc  = Yes;
 }
 
 void LangShell::fill() {
