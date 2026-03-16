@@ -10,6 +10,7 @@ LangSwift::LangSwift() {
 	doSymbols   = Yes;
 	doBigComnt  = Yes;
 	doCinComnt  = Yes;
+	doTplString = Yes;
 }
 
 void LangSwift::fill() {

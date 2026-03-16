@@ -13,6 +13,7 @@ LangPython::LangPython() {
 
 	doSymbols  = Yes;
 	doUnxComnt = Yes;
+	doTplString = Yes;
 }
 
 void LangPython::fill() {

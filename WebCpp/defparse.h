@@ -30,6 +30,10 @@
 #define PARSE_DBL_QUO_STRING parseString(DBL_QUOTES,inDblQuotes)
 #define PARSE_SIN_QUO_STRING parseString(SIN_QUOTES,inSinQuotes)
 #define PARSE_BCK_QUO_STRING parseString(BCK_QUOTES,inBckQuotes)
+// multiline string parsing
+
+#define PARSE_TPL_DBL_STRING parseBigComment("\"\"\"", "\"\"\"", inTplString, "dblquot")
+
 // multiline comment parsing
 #define PARSE_A_MARKUP_COMNT parseBigComment("&lt;!-", "--&gt;", inComment)
 #define PARSE_PAS_MOD2_COMNT parseBigComment("(*", "*)", inComment)

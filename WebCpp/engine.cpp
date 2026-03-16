@@ -55,6 +55,7 @@ void Engine::init_switches() {
 	inSinQuotes = false;
 	inBckQuotes = false;
 	inComment   = false;
+	inTplString = false;
 	endComment  = false;
 
 	// common language
@@ -82,6 +83,7 @@ void Engine::init_switches() {
 	doTclComnt  = false;
 	doAspComnt  = false;
 	doBatComnt  = false;
+	doTplString = false;
 
 	lncount  = 1;
 	tabwidth = 8;
@@ -208,6 +210,7 @@ bool Engine::abortParse() {
 	}
 	if(inBckQuotes)	{return true;}
 	if(inComment)	{return true;}
+	if(inTplString)	{return true;}
 
 	return false;
 }
@@ -568,6 +571,58 @@ void Engine::colourString(int index, bool &inside, string cssclass) {
 
 	inside = !inside;
 }
+// parse for multi-line comments (with custom CSS class) ----------------------
+void Engine::parseBigComment(string start, string end, bool &inside, string cssOverride) {
+
+	string search, escap, css;
+	int index,offset;
+	bool erase;
+
+	index = 0;
+	erase = true;
+	css = cssOverride;
+
+	if(inside) {search = end;}
+	else {search = start;}
+	
+	index = buffer.find(search,index);
+	if(index == -1) {return;}
+
+	while (index < string::npos) {
+
+		if(inside) {search = end;}
+		else {search = start;}		
+
+		index = buffer.find(search,index);
+		if(index == -1) {return;}
+
+		if(index > 0 && buffer[index -1] == '\\') {
+			if(index > 1 && buffer[index -2] == '\'' && buffer[index +1] == '\'') {
+				index = buffer.find(search,index+1);
+			}
+		}
+		if(index == -1) {return;}
+		if(inside) {
+			index += end.size()-1;
+			if(buffer.find(end) == -1) {endComment = true;}
+		}
+		else eraseTags(index,0);
+		colourString(index, inside, css);
+
+		if(inside) {
+			offset = index + 21;
+			search = end;
+		}
+		else {
+			offset = index +  7;
+			search = start;
+		}
+
+		index = buffer.find(search,offset);
+		if(index == -1)          {return;}
+		if(index > buffer.size()){return;}
+	}
+}
 // parse for multi-line comments ----------------------------------------------
 void Engine::parseBigComment(string start, string end, bool &inside) {
 
@@ -888,6 +943,8 @@ PRINT_DEBUG(0);
 
 	if(doLabels)   PARSE_LABELS;
 
+	if(doTplString) PARSE_TPL_DBL_STRING;
+
 	if(doStrings)
 	{
 		PARSE_DBL_QUO_STRING;
@@ -951,7 +1008,7 @@ PRINT_DEBUG(6);
 
 	*IO << buffer << "\n";
 	if(!childLang) {parseChildLang();}
-	endComment = inComment;
+	endComment = inComment || inTplString;
 
 	lncount++;
 }
