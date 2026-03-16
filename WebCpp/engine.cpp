@@ -459,6 +459,8 @@ bool Engine::colourNum(int s, int f) {
 // parse the buffer for strings -----------------------------------------------
 void Engine::parseString(char quotetype, bool &inside) {
 
+	if(endComment)  {return;}
+	if(inTplString) {return;}
 	if(doAdaComnt && !doRemComnt && quotetype == SIN_QUOTES) {return;}
 	if(doAspComnt && quotetype == SIN_QUOTES) {return;}
 
@@ -605,7 +607,6 @@ void Engine::parseBigComment(string start, string end, bool &inside, string cssO
 		if(index == -1) {return;}
 		if(inside) {
 			index += end.size()-1;
-			if(buffer.find(end) == -1) {endComment = true;}
 		}
 		else eraseTags(index,0);
 		colourString(index, inside, css);
@@ -620,8 +621,14 @@ void Engine::parseBigComment(string start, string end, bool &inside, string cssO
 		}
 
 		index = buffer.find(search,offset);
-		if(index == -1)          {return;}
-		if(index > buffer.size()){return;}
+		if(index == -1) {
+			if(inside) {endComment = true;}
+			return;
+		}
+		if(index > buffer.size()){
+			if(inside) {endComment = true;}
+			return;
+		}
 	}
 }
 // parse for multi-line comments ----------------------------------------------
@@ -932,6 +939,8 @@ void Engine::doParsing() {
 	}
 
 	IO->rline(buffer);
+	if(!IO->isIredir() && !IO->ifile) {return;}
+	if( IO->isIredir() && !cin)       {return;}
 
 	// preformat HTML escapes
 	PRE_PARSE_CODE;
