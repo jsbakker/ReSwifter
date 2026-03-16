@@ -1,7 +1,8 @@
 // Author: Jeffrey Bakker  |  Date: May14th 2002  |  langperl.cpp
 
-// the PERL 5 Language definition file for Web C Plus Plus
+// the Perl Language definition file for Web C Plus Plus
 // Webcpp Copyright (C) 2002 Jeffrey Bakker
+// Updated 2025 for modern Perl (Perl 5.40)
 
 #include "langperl.h"
 
@@ -20,23 +21,120 @@ LangPerl::LangPerl() {
 
 void LangPerl::fill() {
 
-	// PERL 5 keywords
+	// Perl 5.40 keywords
 	string K[] = {
-		"and","bless","chdir","chomp","chop","chr","case","delete",
-		"die","do","each","else","elsif","exit","foreach","for",
-		"function","if","in","join","keys","last","local","my","next",
-		"no","null","or","package","pack","printf","print","push",
-		"read","redo","require","return","seek","select","shift",
-		"splice","split","sub","tell","tied","then","undef","unless",
-		"untie","until","use","vars","warn","while","xor"
+		"and",
+		"bless",
+		"caller",
+		"chomp",
+		"chop",
+		"chr",
+		"class",
+		"cmp",
+		"constant",
+		"CORE",
+		"croak",
+		"defer",
+		"defined",
+		"delete",
+		"die",
+		"do",
+		"dump",
+		"each",
+		"else",
+		"elsif",
+		"eq",
+		"eval",
+		"exists",
+		"field",
+		"for",
+		"foreach",
+		"ge",
+		"goto",
+		"grep",
+		"gt",
+		"if",
+		"isa",
+		"join",
+		"keys",
+		"last",
+		"le",
+		"local",
+		"lt",
+		"map",
+		"method",
+		"my",
+		"ne",
+		"next",
+		"no",
+		"not",
+		"or",
+		"our",
+		"package",
+		"pop",
+		"print",
+		"printf",
+		"push",
+		"redo",
+		"ref",
+		"require",
+		"return",
+		"reverse",
+		"say",
+		"shift",
+		"sort",
+		"splice",
+		"split",
+		"state",
+		"sub",
+		"try",
+		"undef",
+		"unless",
+		"unshift",
+		"until",
+		"use",
+		"values",
+		"wantarray",
+		"warn",
+		"while",
+		"xor",
 	};
-	for(int k=0;k < 55;k++) {keys.push_back(K[k]);}
+	for(int k=0;k < 75;k++) {keys.push_back(K[k]);}
 
-	// filesystem operations
+	// Perl 5.40 built-in functions (filesystem, I/O, system)
 	string T[] = {
-		"close","closedir","flock","mkdir","open","opendir","readdir",
-		"rewinddir","rmdir","unlink"
+		"binmode",
+		"catch",
+		"chdir",
+		"chmod",
+		"chown",
+		"close",
+		"closedir",
+		"connect",
+		"exit",
+		"flock",
+		"mkdir",
+		"open",
+		"opendir",
+		"pack",
+		"read",
+		"readdir",
+		"rename",
+		"rewinddir",
+		"rmdir",
+		"seek",
+		"select",
+		"socket",
+		"stat",
+		"sysread",
+		"syswrite",
+		"tell",
+		"tied",
+		"tie",
+		"truncate",
+		"unlink",
+		"untie",
 	};
-	for(int t=0;t < 10;t++) {types.push_back(T[t]);}
+	for(int t=0;t < 31;t++) {types.push_back(T[t]);}
 }
 
