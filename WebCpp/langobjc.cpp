@@ -24,6 +24,7 @@ void LangObjectiveC ::fill() {
 	// Objective-C keywords (modern, through Xcode 16 / Clang 18)
 	// Note: C keywords are inherited from LangC
 	string K[] = {
+        "__block",
 		"@autoreleasepool",
 		"@available",
 		"@catch",

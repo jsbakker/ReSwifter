@@ -9,12 +9,12 @@
 
 #include "engine.h"
 
-class LangC : public Engine {
+class LangC : public virtual Engine {
 
  public:
 	LangC();
 	virtual ~LangC() {IO->close();}
-	virtual void fill();
+    void fill() override;
 };
 
 #endif  // _LANG_C_DEF_H

@@ -270,7 +270,7 @@ void Theme::typical() {
 
 	SCSfile = "typical";
 
-	setColour("#f9f9f9",BGCOLOR);
+	setColour("#ffffff",BGCOLOR);
 	setColour("#a900a9",PREPROC); //a900a9
 	setColour("#000000",NORTEXT);
 	setColour("#0077dd",SYMBOLS);

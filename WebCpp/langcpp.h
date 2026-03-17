@@ -8,12 +8,12 @@
 
 #include "langc.h"
 
-class LangCPlusPlus : public LangC {
+class LangCPlusPlus : public virtual LangC {
 
  public:
 	LangCPlusPlus();
 	virtual ~LangCPlusPlus() {IO->close();}
-	virtual void fill();
+    void fill() override;
 };
 
 #endif  // _LANG_CPP_DEF_H

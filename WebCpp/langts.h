@@ -1,0 +1,16 @@
+// The TypeScript Language definition file for Web C Plus Plus
+
+#ifndef LANG_DEF_TS
+#define LANG_DEF_TS
+
+#include "engine.h"
+
+class LangTypeScript : public Engine {
+
+ public:
+	LangTypeScript();
+	~LangTypeScript() {IO->close();}
+	virtual void fill();
+};
+
+#endif //LANG_DEF_TS

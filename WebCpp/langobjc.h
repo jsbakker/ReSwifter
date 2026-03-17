@@ -7,12 +7,12 @@
 
 #include "langc.h"
 
-class LangObjectiveC : public LangC {
+class LangObjectiveC : public virtual LangC {
 
  public:
 	LangObjectiveC();
-	~LangObjectiveC() {IO->close();}
-	virtual void fill();
+	virtual ~LangObjectiveC() {IO->close();}
+    void fill() override;
 
 };
 

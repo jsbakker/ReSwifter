@@ -55,6 +55,15 @@
 #define VHD_FILE 0x76
 #define CSS_FILE 0x43
 #define XML_FILE 0x58
+#define RST_FILE 0x30
+#define GOL_FILE 0x31
+#define TSC_FILE 0x32
+#define KOT_FILE 0x33
+#define VLA_FILE 0x34
+#define ZIG_FILE 0x35
+#define GLS_FILE 0x36
+#define HLS_FILE 0x37
+#define OCP_FILE 0x38
 
 #include "langada.h"
 #include "langasm.h"
@@ -91,5 +100,14 @@
 #include "languscript.h"
 #include "langvhdl.h"
 #include "langxml.h"
+#include "langrust.h"
+#include "langgo.h"
+#include "langts.h"
+#include "langkotlin.h"
+#include "langvala.h"
+#include "langzig.h"
+#include "langglsl.h"
+#include "langhlsl.h"
+#include "langobjcpp.h"
 
 #endif //_DEF_LANGS_H

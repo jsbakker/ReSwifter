@@ -214,6 +214,7 @@ char Driver::getExt(string filename)
 	else if(extension ==  "clp") {ext = CLP_FILE;}
 	else if(extension ==   "cs") {ext = CSP_FILE;}
 	else if(extension ==    "m") {ext = OBC_FILE;}
+    else if(extension ==   "mm") {ext = OCP_FILE;}
 	else if(extension ==  "emf") {ext = EMF_FILE;}
 	else if(extension ==    "e") {ext = EU4_FILE;}
 	else if(extension ==   "eu") {ext = EU4_FILE;}
@@ -261,6 +262,24 @@ char Driver::getExt(string filename)
 	else if(extension == "vhdl") {ext = VHD_FILE;}
 	else if(extension ==  "vhd") {ext = VHD_FILE;}
 	else if(extension ==  "css") {ext = CSS_FILE;}
+	else if(extension ==   "rs") {ext = RST_FILE;}
+	else if(extension ==   "go") {ext = GOL_FILE;}
+	else if(extension ==   "ts") {ext = TSC_FILE;}
+	else if(extension ==  "tsx") {ext = TSC_FILE;}
+	else if(extension ==   "kt") {ext = KOT_FILE;}
+	else if(extension ==  "kts") {ext = KOT_FILE;}
+	else if(extension == "vala") {ext = VLA_FILE;}
+	else if(extension == "vapi") {ext = VLA_FILE;}
+	else if(extension ==  "zig") {ext = ZIG_FILE;}
+	else if(extension == "glsl") {ext = GLS_FILE;}
+	else if(extension == "vert") {ext = GLS_FILE;}
+	else if(extension == "frag") {ext = GLS_FILE;}
+	else if(extension == "geom") {ext = GLS_FILE;}
+	else if(extension == "tesc") {ext = GLS_FILE;}
+	else if(extension == "tese") {ext = GLS_FILE;}
+	else if(extension == "comp") {ext = GLS_FILE;}
+	else if(extension == "hlsl") {ext = HLS_FILE;}
+	else if(extension == "hlsli") {ext = HLS_FILE;}
 
 	else ext = TXT_FILE;
 	return ext;
@@ -285,6 +304,7 @@ string Driver::checkExt(string filename) {
 		case (CSS_FILE) : LANG(LangCSS,"CSS file");
 		case (CSP_FILE) : LANG(LangCSharp,"C-Sharp file");
 		case (OBC_FILE) : LANG(LangObjectiveC,"Objective-C file");
+        case (OCP_FILE) : LANG(LangObjectiveCpp,"Objective-C++ file");
 		case (EMF_FILE) : LANG(LangEmf,"MicroEmacs macro file");
 		case (EU4_FILE) : LANG(LangEuphoria,"Euphoria file");
 		case (FTN_FILE) : LANG(LangFortran,"Fortran file");
@@ -307,6 +327,14 @@ string Driver::checkExt(string filename) {
 		case (UNR_FILE) : LANG(LangUScript,"UnrealScript");
 		case (VHD_FILE) : LANG(LangVHDL,"VHDL file");
 		case (XML_FILE) : LANG(LangXML,"XML file");
+		case (RST_FILE) : LANG(LangRust,"Rust file");
+		case (GOL_FILE) : LANG(LangGo,"Go file");
+		case (TSC_FILE) : LANG(LangTypeScript,"TypeScript file");
+		case (KOT_FILE) : LANG(LangKotlin,"Kotlin file");
+		case (VLA_FILE) : LANG(LangVala,"Vala file");
+		case (ZIG_FILE) : LANG(LangZig,"Zig file");
+		case (GLS_FILE) : LANG(LangGLSL,"GLSL file");
+		case (HLS_FILE) : LANG(LangHLSL,"HLSL file");
 		default         : LANG(LangText,"Text file");
 	}
 }
