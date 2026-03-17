@@ -137,18 +137,23 @@ C Source\t*.c,*.rc\n\
 C++ Source\t*.cc,*.cpp,*.cxx\n\
 C/C++ Header\t*.h,*.hh,*.hpp,*.hxx\n\
 Cascading StyleSheet\t\t*.css\n\
-Objective-C\t*.m\n\
 DOS Batch\t*.bat,*.cmd\n\
 EMF\t\t*.emf\n\
 Euphoria\t*.e,*.eu,*.ex\n\
 Fortran\t\t*.f,*.f77,*.f90,*.for,*.ftn\n\
 Haskell\t\t*.hs,*.lhs\n\
+HLSL\t\t*.hlsl,*.hlsli\n\
+GLSL\t\t*.glsl,*.vert,*.frag,*.geom,*.tesc,*.tese,*.comp\n\
+Go\t\t*.go\n\
 Java\t\t*.java\n\
 JavaScript\t*.js\n\
+Kotlin\t\t*.kt,*.kts\n\
 Markup\t\t*.htm,*.html,*.shtml,*.sgml\n\
 Modula2\t\t*.def,*.mod\n\
 Nasa CLIPS\t*.clp\n\
 NVidia Cg\t*.cg\n\
+Objective-C\t*.m\n\
+Objective-C++\t*.mm\n\
 Pascal\t\t*.pas\n\
 Perl\t\t*.cgi,*.pl,*.plx,*.plex,*.pm\n\
 PHP\t\t*.inc,*.php,*.php3,*.php4\n\
@@ -156,22 +161,22 @@ Power Builder\t*.pbl,*.pbr\n\
 Python\t\t*.py,*.pyw\n\
 RenderMan\t*.rib,*.sl\n\
 Ruby\t\t*.rb\n\
+Rust\t\t*.rs\n\
 SQL\t\t*.sql\n\
 Swift\t\t*.swift\n\
 Tcl\t\t*.tcl,*.tk\n\
+TypeScript\t*.ts,*.tsx\n\
 Unix shell\t*.sh\n\
 UnrealScript\t*.uc\n\
+Vala\t\t*.vala,*.vapi\n\
 VHDL\t\t*.v,*.vhd,*.vhdl\n\
 XML\t\t*.xml\n\
-Don't see your favorite language listed here?\n\
-Try http://webcpp.sourceforge.net/languages.php\n";
+Zig\t\t*.zig\n";
 
-	cerr	<< "Web C Plus Plus v0.8.4  "
-		<< "Copyright (C)2001-2004 Jeffrey Bakker\n"
-		<< "Released January 3rd 2004, "
+	cerr	<< "Web C Plus Plus v0.9.0  "
+		<< "Copyright (C)2001-2026 Jeffrey Bakker\n"
 		<< "Compiled " << __DATE__ << " at " << __TIME__ << "\n\n"
 		<< ((mode == HELP_LANGUAGES)?Langs:Usage);
-
 }
 // determines the filetype for syntax highlighting ----------------------------
 char Driver::getExt(string filename)
