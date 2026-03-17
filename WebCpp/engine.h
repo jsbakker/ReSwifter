@@ -72,7 +72,7 @@ class Engine {
 
 	void parseBigComment(string start, string end, bool &inside);
 	void parseMultiStr(string start, string end, bool &inside, string css);
-	void parseHeredoc();
+	void parseHeredoc(string marker = "&lt;&lt;");
 
 	void parseKeys();
 	void colourKeys(int index, string key, string cssclass);
@@ -161,6 +161,7 @@ class Engine {
 	bool doRawString;
 	bool doHeredoc;
 	bool doPercentQ;
+	bool doPhpHeredoc;
 
  //theme file I/O engine
  public:

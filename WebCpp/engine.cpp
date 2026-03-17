@@ -88,6 +88,7 @@ void Engine::init_switches() {
 	doRawString = false;
 	doHeredoc   = false;
 	doPercentQ  = false;
+	doPhpHeredoc = false;
 
 	lncount  = 1;
 	tabwidth = 8;
@@ -635,7 +636,7 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
 	}
 }
 // parse for Ruby-style heredoc strings (<<TAG, <<-TAG, <<~TAG) ---------------
-void Engine::parseHeredoc() {
+void Engine::parseHeredoc(string marker) {
 
 	if(inMultiStr && !heredocEnd.empty()) {
 		// we are inside a heredoc — check if this line is the end marker
@@ -644,6 +645,11 @@ void Engine::parseHeredoc() {
 		int pos = 0;
 		while(pos < (int)trimmed.size() && (trimmed[pos] == ' ' || trimmed[pos] == '\t')) {pos++;}
 		string lineContent = trimmed.substr(pos);
+
+		// strip trailing semicolon for languages like PHP where EOT; is valid
+		if(!lineContent.empty() && lineContent.back() == ';') {
+			lineContent = lineContent.substr(0, lineContent.size() - 1);
+		}
 
 		if(lineContent == heredocEnd) {
 			// this line closes the heredoc — colour it and end
@@ -663,13 +669,36 @@ void Engine::parseHeredoc() {
 	if(inMultiStr) {return;}
 
 	// not inside a heredoc — look for a heredoc start on this line
-	// after pre_parse, << becomes &lt;&lt;
-	string marker = "&lt;&lt;";
+	// after pre_parse, << becomes &lt;&lt; (or <<< becomes &lt;&lt;&lt; for PHP)
 	int index = buffer.find(marker, 0);
 	if(index == -1) {return;}
 
 	while(index != -1 && index < (int)buffer.size()) {
 		int tagStart = index;
+
+		// skip if the marker is inside a string literal
+		if(abortColour(tagStart)) {
+			index = buffer.find(marker, tagStart + marker.size());
+			continue;
+		}
+
+		// skip if the marker appears after a single-line comment start
+		// (single-line comments haven't been parsed yet at this point in doParsing)
+		if(doUnxComnt) {
+			int hashPos = buffer.find("#", 0);
+			if(hashPos != -1 && hashPos < tagStart) {
+				if(!isInsideIt(hashPos, "\"", "\"") &&
+				   !isInsideIt(hashPos, "'", "'")) {return;}
+			}
+		}
+		if(doCinComnt) {
+			int slashPos = buffer.find("//", 0);
+			if(slashPos != -1 && slashPos < tagStart) {
+				if(!isInsideIt(slashPos, "\"", "\"") &&
+				   !isInsideIt(slashPos, "'", "'")) {return;}
+			}
+		}
+
 		int pos = index + marker.size(); // past "&lt;&lt;"
 
 		// optional - or ~
@@ -1033,7 +1062,8 @@ PRINT_DEBUG(0);
 
 	if(doTplString) PARSE_TPL_DBL_STRING;
 	if(doRawString) PARSE_RAW_CPP_STRING;
-	if(doHeredoc)   PARSE_HEREDOC_STRING;
+	if(doHeredoc)      PARSE_HEREDOC_STRING;
+	if(doPhpHeredoc)   PARSE_PHP_HEREDOC;
 	if(doPercentQ) {PARSE_PERCENT_QU_STR; PARSE_PERCENT_QL_STR;}
 
 	if(doStrings)

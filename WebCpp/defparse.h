@@ -40,7 +40,9 @@
 
 #define PARSE_PERCENT_QL_STR parseMultiStr("%q{", "}", inMultiStr, "sinquot")
 
-#define PARSE_HEREDOC_STRING parseHeredoc()
+#define PARSE_HEREDOC_STRING parseHeredoc("&lt;&lt;")
+
+#define PARSE_PHP_HEREDOC    parseHeredoc("&lt;&lt;&lt;")
 
 // multiline comment parsing
 #define PARSE_A_MARKUP_COMNT parseBigComment("&lt;!-", "--&gt;", inComment)

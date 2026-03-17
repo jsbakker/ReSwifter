@@ -14,11 +14,12 @@ LangPhp::LangPhp()  {
 	fill();
 	init_switches();
 
-	doSymbols  = Yes;
-	doScalars  = Yes;
-	doBigComnt = Yes;
-	doCinComnt = Yes;
-	doUnxComnt = Yes;
+	doSymbols    = Yes;
+	doScalars    = Yes;
+	doBigComnt   = Yes;
+	doCinComnt   = Yes;
+	doUnxComnt   = Yes;
+	doPhpHeredoc = Yes;
 }
 
 void LangPhp::fill(){
