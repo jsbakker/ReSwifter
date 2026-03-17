@@ -1233,7 +1233,7 @@ syntax highlighting by<br><br>\n\
 </tr><tr><td colspan=6>\n\
 <a href=\"http://webcpp.sf.net\"><center><b>\
 <font color=#ffffff>web c plus plus</font></b></center>\n\
-</a></td></tr>\n\</table>\n<br>\n</center>";
+</a></td></tr>\n</table>\n<br>\n</center>";
 
 		*IO << made;
 	}
