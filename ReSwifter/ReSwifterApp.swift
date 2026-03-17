@@ -43,8 +43,7 @@ struct ReSwifterApp: App {
                                 string: """
                                 ReSwifter Copyright (c) 2026 Jeffrey Bakker
 
-                                Syntax highlighting provided by CodeEditor framework, Copyright (c) 2021 ZeeZide, MIT License:
-                                https://github.com/ZeeZide/CodeEditor
+                                Syntax highlighting provided by WebCpp framework, Copyright (c) 2001-2026 Jeffrey Bakker
 
                                 MIT License
 

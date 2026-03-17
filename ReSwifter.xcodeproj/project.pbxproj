@@ -13,7 +13,6 @@
 		007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94862F52A2ED00730E7F /* Cocoa.framework */; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67432F5BFD53000FB801 /* HighlightedTextEditor */; };
-		009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67462F5BFF21000FB801 /* CodeEditor */; };
 		009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
@@ -166,7 +165,6 @@
 				009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */,
 				00312DDC2F66400F0099824D /* WebCpp.framework in Frameworks */,
 				009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */,
-				009C67472F5BFF21000FB801 /* CodeEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,7 +289,6 @@
 			name = ReSwifter;
 			packageProductDependencies = (
 				009C67432F5BFD53000FB801 /* HighlightedTextEditor */,
-				009C67462F5BFF21000FB801 /* CodeEditor */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -406,7 +403,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */,
-				009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 007A94552F52A18000730E7F /* Products */;
@@ -1071,14 +1067,6 @@
 				minimumVersion = 2.1.2;
 			};
 		};
-		009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ZeeZide/CodeEditor.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.6;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1086,11 +1074,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */;
 			productName = HighlightedTextEditor;
-		};
-		009C67462F5BFF21000FB801 /* CodeEditor */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 009C67452F5BFF21000FB801 /* XCRemoteSwiftPackageReference "CodeEditor" */;
-			productName = CodeEditor;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
