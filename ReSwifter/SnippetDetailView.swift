@@ -41,9 +41,15 @@ struct SnippetDetailView: View {
                 .keyboardShortcut(.return, modifiers: .command)
             }
 
-            SyntaxHighlightWebView(sourceCode: selectedSnippet?.fullText ?? "", language: language)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .cornerRadius(8)
+            HighlightedEditorView(
+                text: Binding(
+                    get: { selectedSnippet?.fullText ?? "" },
+                    set: { selectedSnippet?.fullText = $0 }
+                ),
+                language: language
+            )
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .cornerRadius(8)
 
             HStack {
                 Picker("Language", selection: $language) {
