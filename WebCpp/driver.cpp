@@ -1,19 +1,5 @@
 /* webcpp - driver.cpp
- * Copyright (C)2001-2003 Jeffrey Bakker
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
    ___________________________________ .. .
  */
 
@@ -136,15 +122,17 @@ C#\t\t*.cs\n\
 C Source\t*.c,*.rc\n\
 C++ Source\t*.cc,*.cpp,*.cxx\n\
 C/C++ Header\t*.h,*.hh,*.hpp,*.hxx\n\
-Cascading StyleSheet\t\t*.css\n\
+CSS\t\t*.css\n\
 DOS Batch\t*.bat,*.cmd\n\
 EMF\t\t*.emf\n\
 Euphoria\t*.e,*.eu,*.ex\n\
+F#\t\t*.fs,*.fsi,*.fsx\n\
 Fortran\t\t*.f,*.f77,*.f90,*.for,*.ftn\n\
-Haskell\t\t*.hs,*.lhs\n\
-HLSL\t\t*.hlsl,*.hlsli\n\
+Gherkin\t\t*.feature\n\
 GLSL\t\t*.glsl,*.vert,*.frag,*.geom,*.tesc,*.tese,*.comp\n\
 Go\t\t*.go\n\
+Haskell\t\t*.hs,*.lhs\n\
+HLSL\t\t*.hlsl,*.hlsli\n\
 Java\t\t*.java\n\
 JavaScript\t*.js\n\
 Kotlin\t\t*.kt,*.kts\n\
@@ -154,14 +142,17 @@ Nasa CLIPS\t*.clp\n\
 NVidia Cg\t*.cg\n\
 Objective-C\t*.m\n\
 Objective-C++\t*.mm\n\
+OCaml\t\t*.ml,*.mli\n\
 Pascal\t\t*.pas\n\
 Perl\t\t*.cgi,*.pl,*.plx,*.plex,*.pm\n\
 PHP\t\t*.inc,*.php,*.php3,*.php4\n\
 Power Builder\t*.pbl,*.pbr\n\
 Python\t\t*.py,*.pyw\n\
+R\t\t*.r\n\
 RenderMan\t*.rib,*.sl\n\
 Ruby\t\t*.rb\n\
 Rust\t\t*.rs\n\
+Scala\t\t*.scala,*.sc\n\
 SQL\t\t*.sql\n\
 Swift\t\t*.swift\n\
 Tcl\t\t*.tcl,*.tk\n\
@@ -285,6 +276,15 @@ char Driver::getExt(string filename)
 	else if(extension == "comp") {ext = GLS_FILE;}
 	else if(extension == "hlsl") {ext = HLS_FILE;}
 	else if(extension == "hlsli") {ext = HLS_FILE;}
+	else if(extension ==    "r") {ext = R_FILE;}
+	else if(extension == "feature") {ext = GHK_FILE;}
+	else if(extension ==   "fs") {ext = FSH_FILE;}
+	else if(extension ==  "fsi") {ext = FSH_FILE;}
+	else if(extension ==  "fsx") {ext = FSH_FILE;}
+	else if(extension == "scala") {ext = SCA_FILE;}
+	else if(extension ==   "sc") {ext = SCA_FILE;}
+	else if(extension ==   "ml") {ext = OML_FILE;}
+	else if(extension ==  "mli") {ext = OML_FILE;}
 
 	else ext = TXT_FILE;
 	return ext;
@@ -340,6 +340,11 @@ string Driver::checkExt(string filename) {
 		case (ZIG_FILE) : LANG(LangZig,"Zig file");
 		case (GLS_FILE) : LANG(LangGLSL,"GLSL file");
 		case (HLS_FILE) : LANG(LangHLSL,"HLSL file");
+		case (R_FILE)   : LANG(LangR,"R file");
+		case (GHK_FILE) : LANG(LangGherkin,"Gherkin feature file");
+		case (FSH_FILE) : LANG(LangFSharp,"F# file");
+		case (SCA_FILE) : LANG(LangScala,"Scala file");
+		case (OML_FILE) : LANG(LangOCaml,"OCaml file");
 		default         : LANG(LangText,"Text file");
 	}
 }

@@ -1,7 +1,7 @@
 // Author: Jeffrey Bakker  |  Date: May14th 2002  |  langc.cpp
 
 // the C Language definition file for Web C Plus Plus
-// Webcpp Copyright (C) 2002 Jeffrey Bakker
+// Webcpp Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
 
 #include "langc.h"
 

@@ -1,19 +1,5 @@
 /* webcpp - deflangs.h
- * Copyright (C)2001-2003 Jeffrey Bakker
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
    ___________________________________ .. .
  */
 
@@ -64,6 +50,11 @@
 #define GLS_FILE 0x36
 #define HLS_FILE 0x37
 #define OCP_FILE 0x38
+#define R_FILE   0x39
+#define GHK_FILE 0x3A
+#define FSH_FILE 0x3B
+#define SCA_FILE 0x3C
+#define OML_FILE 0x3D
 
 #include "langada.h"
 #include "langasm.h"
@@ -109,5 +100,10 @@
 #include "langglsl.h"
 #include "langhlsl.h"
 #include "langobjcpp.h"
+#include "langr.h"
+#include "langgherkin.h"
+#include "langfsharp.h"
+#include "langscala.h"
+#include "langocaml.h"
 
 #endif //_DEF_LANGS_H

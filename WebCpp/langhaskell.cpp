@@ -1,7 +1,7 @@
 // The Haskell Language definition file for Web C Plus Plus
 // Author: Jeffrey Bakker | Date: May 14th 2002 | langhaskell.cpp
-// Copyright (C) 2002-2025 Jeffrey Bakker
-// Updated 2025 for modern Haskell (GHC 9.x, Haskell 2010)
+// Webcpp Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
+// Updated 2026 for modern Haskell (GHC 9.x, Haskell 2010)
 
 #include "langhaskell.h"
 

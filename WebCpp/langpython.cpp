@@ -1,8 +1,8 @@
 // Author: Jeffrey Bakker  |  Date: May14th 2002  |  langpython.cpp
 
 // the Python Language definition file for Web C Plus Plus
-// Webcpp Copyright (C) 2002 Jeffrey Bakker
-// Updated 2025 for Python 3.14
+// Webcpp Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
+// Updated 2026 for Python 3.14
 
 #include "langpython.h"
 

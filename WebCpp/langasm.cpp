@@ -2,7 +2,7 @@
 
 // the Assembler Language definition file for Web C Plus Plus
 // Webcpp Copyright (C) 2002 Jeffrey Bakker
-// Updated 2025 for modern x86-64, SSE/AVX/AVX-512, and ARM AArch64/NEON
+// Updated 2026 for modern x86-64, SSE/AVX/AVX-512, and ARM AArch64/NEON
 
 #include "langasm.h"
 

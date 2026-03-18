@@ -1,3 +1,5 @@
+// Webcpp Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
+
 #include "engine.h"
 
 #ifndef _LANG_DEF_TEXT_H

@@ -1,8 +1,8 @@
 // Author: Jeffrey Bakker  |  Date: May14th 2002  |  langperl.cpp
 
 // the Perl Language definition file for Web C Plus Plus
-// Webcpp Copyright (C) 2002 Jeffrey Bakker
-// Updated 2025 for modern Perl (Perl 5.40)
+// Webcpp Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
+// Updated 2026 for modern Perl (Perl 5.40)
 
 #include "langperl.h"
 
