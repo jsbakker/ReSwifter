@@ -124,6 +124,66 @@ func parseWebCppHTML(_ html: String) -> WebCppParseResult {
     return WebCppParseResult(plainText: trimmedText, tokenRanges: adjustedRanges)
 }
 
+/// Re-maps token ranges from the parser's reconstructed plain text onto the
+/// original source text.
+///
+/// WebCpp's engine may insert extra characters (e.g. a trailing space on every
+/// preprocessor line — see `parsePreProc` in engine.cpp) that appear in the
+/// HTML output but are not present in the original source.  Without correction,
+/// each such insertion shifts every subsequent range by one UTF-16 code unit,
+/// producing visibly wrong colours.
+///
+/// This function performs a simple O(n) forward alignment: it walks both texts
+/// in lockstep, advancing past any extra characters in the parsed text, and
+/// builds a position map used to translate ranges.
+func rebaseTokenRanges(_ result: WebCppParseResult,
+                        to originalText: String) -> WebCppParseResult {
+
+    let pUnits = Array(result.plainText.utf16)
+    let oUnits = Array(originalText.utf16)
+
+    // posMap[i] = the UTF-16 offset in `originalText` that corresponds to
+    //             UTF-16 offset `i` in `result.plainText`.
+    var posMap = [Int](repeating: 0, count: pUnits.count + 1)
+
+    var pi = 0          // index into pUnits (parsed)
+    var oi = 0          // index into oUnits (original)
+
+    while pi < pUnits.count && oi < oUnits.count {
+        if pUnits[pi] == oUnits[oi] {
+            posMap[pi] = oi
+            pi += 1
+            oi += 1
+        } else {
+            // Extra code unit in the parsed text — skip it.
+            posMap[pi] = oi
+            pi += 1
+        }
+    }
+    // Any remaining parsed positions (all past the end of original)
+    while pi < pUnits.count {
+        posMap[pi] = oi
+        pi += 1
+    }
+    posMap[pUnits.count] = oi          // sentinel for end-of-range lookups
+
+    let remapped = result.tokenRanges.compactMap { token -> WebCppTokenRange? in
+        let start = token.range.location
+        let end   = start + token.range.length
+        guard start < posMap.count, end < posMap.count else { return nil }
+
+        let newStart  = posMap[start]
+        let newEnd    = posMap[end]
+        let newLength = newEnd - newStart
+        guard newLength > 0, newStart + newLength <= oUnits.count else { return nil }
+        return WebCppTokenRange(
+            range: NSRange(location: newStart, length: newLength),
+            tokenClass: token.tokenClass)
+    }
+
+    return WebCppParseResult(plainText: originalText, tokenRanges: remapped)
+}
+
 // MARK: - Helpers
 
 private func appendChar(_ ch: Character, to text: inout String, count: inout Int) {

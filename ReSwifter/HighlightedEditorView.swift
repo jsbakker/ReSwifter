@@ -133,7 +133,14 @@ struct HighlightedEditorView: NSViewRepresentable {
                   let html = WebCppDriver.highlightString(text, filename: language.dummyFilename),
                   let storage = textView.textStorage else { return }
 
-            let result   = parseWebCppHTML(html)
+            var result = parseWebCppHTML(html)
+
+            // WebCpp may insert extra characters (e.g. trailing spaces on
+            // preprocessor lines).  Realign the parsed ranges to the actual
+            // source text so the colours land on the right characters.
+            if result.plainText != text {
+                result = rebaseTokenRanges(result, to: text)
+            }
             let monoFont = HighlightedEditorView.monoFont
             let monoBold = HighlightedEditorView.monoBold
             let monoItalic = HighlightedEditorView.monoItalic
