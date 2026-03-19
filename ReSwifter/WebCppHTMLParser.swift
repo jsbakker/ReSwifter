@@ -103,16 +103,26 @@ func parseWebCppHTML(_ html: String) -> WebCppParseResult {
     }
 
     // ── 3. Trim WebCpp's leading/trailing newlines ─────────────────────────
-    // WebCpp emits <pre>\n\n…\n\n</pre>; those wrapper newlines are not part
-    // of the source code.
+    // WebCpp emits exactly <pre>\n\n…\n\n</pre> (engine.cpp begHtml/endHtml).
+    // Strip only those fixed 2 newlines on each side — never more.
+    // Using trimmingCharacters(in: .newlines) would also consume any blank
+    // lines the user intentionally placed at the start/end of their snippet,
+    // shifting every subsequent token range and producing wrong/absent colours.
     var leadingUTF16 = 0
-    for ch in plainText {
-        guard ch.isNewline else { break }
-        leadingUTF16 += ch.utf16.count
+    var trimmed      = plainText
+    var n            = 0
+    while n < 2, let first = trimmed.first, first.isNewline {
+        leadingUTF16 += first.utf16.count
+        trimmed.removeFirst()
+        n += 1
     }
-
-    let trimmedText    = plainText.trimmingCharacters(in: .newlines)
-    let trimmedUTF16   = trimmedText.utf16.count
+    n = 0
+    while n < 2, let last = trimmed.last, last.isNewline {
+        trimmed.removeLast()
+        n += 1
+    }
+    let trimmedText  = trimmed
+    let trimmedUTF16 = trimmedText.utf16.count
 
     let adjustedRanges = tokenRanges.compactMap { tr -> WebCppTokenRange? in
         let loc = tr.range.location - leadingUTF16
