@@ -406,24 +406,24 @@ void Driver::drive() {
 	while(lang->IO->ifile && cin) {
 		lang->doParsing();
 
-		if( ((lang->getLineCount()*100)/percent) < 101 ) {
-
-			cerr << '\r';
-
-			if(!lang->IO->isIredir()) {
-
-				cerr	<< ((lang->getLineCount() * 100) / percent)
-					<< "% Complete ";
-			}
-			cerr << "@ line " << lang->getLineCount()-1;
-		}
+//		if( ((lang->getLineCount()*100)/percent) < 101 ) {
+//
+//			cerr << '\r';
+//
+//			if(!lang->IO->isIredir()) {
+//
+//				cerr	<< ((lang->getLineCount() * 100) / percent)
+//					<< "% Complete ";
+//			}
+//			cerr << "@ line " << lang->getLineCount()-1;
+//		}
 	}
 	lang->endHtml();
 
 	time_end = clock();
 	time_dif = time_end - time_beg;
 
-	cerr << " took " << setprecision(3)
+	cerr << "Parsing took " << setprecision(3)
 			 << (double) time_dif / CYCLE_SPEED << " seconds.\n";
 
 	lang->IO->close();
