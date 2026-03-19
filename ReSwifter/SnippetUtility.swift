@@ -72,31 +72,31 @@ final class SnippetUtility: Sendable {
     }
 
     func cleanup(_ snippet: String) async -> String {
-        let result = await submit(query: "Cleanup this code and use standard conventions:\n\(snippet)")
+        let result = await submit(query: "Cleanup this code and use standard conventions (use language name in tripe-backtick code blocks):\n\(snippet)")
         print("Cleaned up code:\n\(result)")
         return result == "Error" ? "Cleanup Error" : result
     }
 
     func refactor(_ snippet: String) async -> String {
-        let result = await submit(query: "Refactor this code to use best practices:\n\(snippet)")
+        let result = await submit(query: "Refactor this code to use best practices (use language name in tripe-backtick code blocks):\n\(snippet)")
         print("Refactored code:\n\(result)")
         return result == "Error" ? "Refactor Error" : result
     }
 
     func convert(_ snippet: String) async -> String {
-        let result = await submit(query: "Convert this code to Swift and use Swift conventions:\n\(snippet)")
+        let result = await submit(query: "Convert this code to Swift and use Swift conventions (use language name in tripe-backtick code blocks):\n\(snippet)")
         print("Converted code:\n\(result)")
         return result == "Error" ? "Convert Error" : result
     }
 
     func document(_ snippet: String) async -> String {
-        let result = await submit(query: "Add doc comments into this code for Swift DocC:\n\(snippet)")
+        let result = await submit(query: "Add doc comments into this code for Swift DocC (use language name in tripe-backtick code blocks):\n\(snippet)")
         print("Documented code:\n\(result)")
         return result == "Error" ? "Document code Error" : result
     }
 
     func review(_ snippet: String) async -> String {
-        let result = await submit(query: "Review this code to catch code smells, potential bugs or opportunuties for improvement:\n\(snippet)")
+        let result = await submit(query: "Review this code to catch code smells, potential bugs or opportunuties for improvement (use language name in tripe-backtick code blocks):\n\(snippet)")
         print("Reviewed code:\n\(result)")
         return result == "Error" ? "Review Error" : result
     }

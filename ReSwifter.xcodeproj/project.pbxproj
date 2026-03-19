@@ -16,6 +16,7 @@
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		00DE443E2F6C89B000188043 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 00DE443D2F6C89B000188043 /* Textual */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00DE443E2F6C89B000188043 /* Textual in Frameworks */,
 				00312DDC2F66400F0099824D /* WebCpp.framework in Frameworks */,
 				009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */,
 			);
@@ -286,6 +288,7 @@
 			);
 			name = ReSwifter;
 			packageProductDependencies = (
+				00DE443D2F6C89B000188043 /* Textual */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -399,6 +402,7 @@
 			mainGroup = 007A944B2F52A18000730E7F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 007A94552F52A18000730E7F /* Products */;
@@ -1053,6 +1057,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/textual";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		00DE443D2F6C89B000188043 /* Textual */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */;
+			productName = Textual;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 007A944C2F52A18000730E7F /* Project object */;
 }
