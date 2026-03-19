@@ -94,6 +94,15 @@ class SnippetViewModel: ObservableObject {
         modelContext.insert(newItem)
         selectedSnippetId = newItem.id
 
+        // If folder name is same as supported language name,
+        // then new snippet can use that language by default
+        for lang in WebCppLanguage.allCases {
+            if lang.displayName == newItem.folder?.name {
+                newItem.language = lang.rawValue
+                break
+            }
+        }
+
         Task {
             newItem.summary = await snippetUtility.summarize(newItem.fullText)
             pendingItemIds.remove(newItem.id)
