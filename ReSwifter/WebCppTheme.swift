@@ -13,7 +13,7 @@ enum WebCppTheme {
     // MARK: - Background
 
     /// The background color of the code view (WebCpp's BGCOLOR).
-    static let backgroundColor = NSColor.fromHex("#ffffff")
+    static let backgroundColor = NSColor.fromHex("#fafafa")
 
     // MARK: - Token Colors
 
@@ -21,7 +21,7 @@ enum WebCppTheme {
     /// Falls back to `nortext` (black) for unrecognised class names.
     static func color(for tokenClass: String) -> NSColor {
         switch tokenClass {
-        case "bgcolor":  return .fromHex("#ffffff")
+        case "bgcolor":  return .fromHex("#fafafa")
         case "preproc":  return .fromHex("#a900a9")
         case "nortext":  return .fromHex("#000000")
         case "symbols":  return .fromHex("#0077dd")
