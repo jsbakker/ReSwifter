@@ -1005,7 +1005,7 @@ void Engine::colourComment(int index) {
 		return;
 	}
 	if(doCinComnt) {
-		if(buffer.rfind("http:",index) == index -5)	{return;}
+		if(index >= 5 && buffer.rfind("http:",index) == index -5)	{return;}
 		if(buffer.rfind("!DOCTYPE", index) != -1)	{return;}
 	}
 
