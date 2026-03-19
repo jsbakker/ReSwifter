@@ -17,6 +17,7 @@ import SwiftData
     var favorite: Bool = false
     var folder: FolderItem?
     var language: String = "swift"
+    var generated: Bool = false
 
     @Transient var pendingUpdate: Bool = false
 

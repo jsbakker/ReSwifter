@@ -112,6 +112,8 @@ class SnippetViewModel: ObservableObject {
     func addUpdatedSnippet(summary: String, fullText: String, modelContext: ModelContext, folders: [FolderItem]) {
         let newItem = SnippetItem(summary: summary, fullText: fullText)
         newItem.folder = selectedFolderItem(from: folders)
+        newItem.language = "txt"
+        newItem.generated = true
         modelContext.insert(newItem)
         selectedSnippetId = newItem.id
     }
