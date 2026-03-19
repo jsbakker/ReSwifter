@@ -12,7 +12,6 @@
 		00312DDD2F66400F0099824D /* WebCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94862F52A2ED00730E7F /* Cocoa.framework */; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 009C67432F5BFD53000FB801 /* HighlightedTextEditor */; };
 		009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
@@ -162,7 +161,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				009C67442F5BFD53000FB801 /* HighlightedTextEditor in Frameworks */,
 				00312DDC2F66400F0099824D /* WebCpp.framework in Frameworks */,
 				009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */,
 			);
@@ -288,7 +286,6 @@
 			);
 			name = ReSwifter;
 			packageProductDependencies = (
-				009C67432F5BFD53000FB801 /* HighlightedTextEditor */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -402,7 +399,6 @@
 			mainGroup = 007A944B2F52A18000730E7F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 007A94552F52A18000730E7F /* Products */;
@@ -1057,25 +1053,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kyle-n/HighlightedTextEditor";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		009C67432F5BFD53000FB801 /* HighlightedTextEditor */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 009C67422F5BFD53000FB801 /* XCRemoteSwiftPackageReference "HighlightedTextEditor" */;
-			productName = HighlightedTextEditor;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 007A944C2F52A18000730E7F /* Project object */;
 }
