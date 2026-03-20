@@ -51,6 +51,27 @@ struct SnippetCommandMenu: View {
 
         Divider()
 
+        Button("Explain", systemImage: "info") {
+            guard let item = selectedSnippet else { return }
+            viewModel.explain(item, modelContext: modelContext, folders: folders)
+        }
+        .disabled(!hasSelection)
+        .keyboardShortcut("E", modifiers: [.command])
+
+        Button("Document", systemImage: "document") {
+            guard let item = selectedSnippet else { return }
+            viewModel.document(item, modelContext: modelContext, folders: folders)
+        }
+        .disabled(!hasSelection)
+        .keyboardShortcut("D", modifiers: [.command])
+
+        Button("Review", systemImage: "quote.bubble") {
+            guard let item = selectedSnippet else { return }
+            viewModel.review(item, modelContext: modelContext, folders: folders)
+        }
+        .disabled(!hasSelection)
+        .keyboardShortcut("R", modifiers: [.command, .shift])
+
         Button("Cleanup", systemImage: "wand.and.stars") {
             guard let item = selectedSnippet else { return }
             viewModel.cleanup(item, modelContext: modelContext, folders: folders)
@@ -71,20 +92,6 @@ struct SnippetCommandMenu: View {
         }
         .disabled(!hasSelection)
         .keyboardShortcut("S", modifiers: [.command, .shift])
-
-        Button("Document", systemImage: "document") {
-            guard let item = selectedSnippet else { return }
-            viewModel.document(item, modelContext: modelContext, folders: folders)
-        }
-        .disabled(!hasSelection)
-        .keyboardShortcut("D", modifiers: [.command])
-
-        Button("Review", systemImage: "quote.bubble") {
-            guard let item = selectedSnippet else { return }
-            viewModel.review(item, modelContext: modelContext, folders: folders)
-        }
-        .disabled(!hasSelection)
-        .keyboardShortcut("R", modifiers: [.command, .shift])
 
         Divider()
 

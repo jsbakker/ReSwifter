@@ -92,6 +92,21 @@ struct SnippetRowView: View {
 
                 Divider()
 
+                Button("Explain", systemImage: "info") {
+                    viewModel.explain(item, modelContext: modelContext, folders: folders)
+                }
+                .disabled(isPending)
+
+                Button("Document", systemImage: "document") {
+                    viewModel.document(item, modelContext: modelContext, folders: folders)
+                }
+                .disabled(isPending)
+
+                Button("Review", systemImage: "quote.bubble") {
+                    viewModel.review(item, modelContext: modelContext, folders: folders)
+                }
+                .disabled(isPending)
+
                 Button("Cleanup", systemImage: "wand.and.stars") {
                     viewModel.cleanup(item, modelContext: modelContext, folders: folders)
                 }
@@ -104,16 +119,6 @@ struct SnippetRowView: View {
 
                 Button("Convert to Swift", systemImage: "brain") {
                     viewModel.convert(item, modelContext: modelContext, folders: folders)
-                }
-                .disabled(isPending)
-
-                Button("Document", systemImage: "document") {
-                    viewModel.document(item, modelContext: modelContext, folders: folders)
-                }
-                .disabled(isPending)
-
-                Button("Review", systemImage: "quote.bubble") {
-                    viewModel.review(item, modelContext: modelContext, folders: folders)
                 }
                 .disabled(isPending)
 

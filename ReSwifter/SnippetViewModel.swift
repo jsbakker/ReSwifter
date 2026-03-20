@@ -153,6 +153,10 @@ class SnippetViewModel: ObservableObject {
         performAIAction(on: item, summaryPrefix: "Converted", transform: { await $0.convert($1) }, modelContext: modelContext, folders: folders)
     }
 
+    func explain(_ item: SnippetItem, modelContext: ModelContext, folders: [FolderItem]) {
+        performAIAction(on: item, summaryPrefix: "Explained", transform: { await $0.explain($1) }, modelContext: modelContext, folders: folders)
+    }
+
     func document(_ item: SnippetItem, modelContext: ModelContext, folders: [FolderItem]) {
         performAIAction(on: item, summaryPrefix: "Documented", transform: { await $0.document($1) }, modelContext: modelContext, folders: folders)
     }
