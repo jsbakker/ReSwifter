@@ -10,9 +10,7 @@
 		00312DD02F653E7C0099824D /* PRIVACY_POLICY.md in Resources */ = {isa = PBXBuildFile; fileRef = 00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */; };
 		00312DDC2F66400F0099824D /* WebCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; };
 		00312DDD2F66400F0099824D /* WebCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94862F52A2ED00730E7F /* Cocoa.framework */; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -186,8 +184,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				007A94872F52A2ED00730E7F /* Cocoa.framework in Frameworks */,
-				009C675B2F5C05F7000FB801 /* FoundationModels.framework in Frameworks */,
 				00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -925,14 +921,14 @@
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ReSwifterXCode/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterXCode;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = ReSwifter;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "(C) 2026 Jeffrey Bakker";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 26.03;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
@@ -974,14 +970,14 @@
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ReSwifterXCode/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ReSwifterXCode;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = ReSwifter;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "(C) 2026 Jeffrey Bakker";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 26.03;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
