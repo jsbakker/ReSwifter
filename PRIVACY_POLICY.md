@@ -32,7 +32,7 @@ Apple Intelligence must be enabled on your Mac for these features to be availabl
 
 ## Third-Party Services
 
-ReSwifter does **not** use any third-party services, SDKs, analytics platforms, or advertising frameworks. The app includes open-source libraries (CodeEditor and HighlightedTextEditor) for syntax highlighting, which operate entirely locally with no network activity.
+ReSwifter does **not** use any third-party services, SDKs, analytics platforms, or advertising frameworks. The app includes open-source libraries (Textual and Web C Plus Plus) for syntax highlighting, which operate entirely locally with no network activity.
 
 ## App Sandbox
 
