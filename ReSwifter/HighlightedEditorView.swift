@@ -55,6 +55,11 @@ struct HighlightedEditorView: NSViewRepresentable {
         Coordinator(binding: $text)
     }
 
+    static func dismantleNSView(_ scrollView: NSScrollView, coordinator: Coordinator) {
+        guard let textView = scrollView.documentView as? NSTextView else { return }
+        textView.undoManager?.removeAllActions()
+    }
+
     // MARK: - Private setup
 
     private func configureTextView(_ textView: NSTextView, coordinator: Coordinator) {
@@ -118,6 +123,9 @@ struct HighlightedEditorView: NSViewRepresentable {
 
             // Replace text — this resets the selection to position 0.
             textView.string = text
+            // Clear the undo stack so actions from the previous snippet
+            // don't bleed into this one.
+            textView.undoManager?.removeAllActions()
             textView.typingAttributes = [
                 .font:            HighlightedEditorView.monoFont,
                 .foregroundColor: WebCppTheme.color(for: "nortext")
