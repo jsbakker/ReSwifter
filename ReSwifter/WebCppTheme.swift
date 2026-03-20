@@ -22,16 +22,16 @@ enum WebCppTheme {
     static func color(for tokenClass: String) -> NSColor {
         switch tokenClass {
         case "bgcolor":  return .fromHex("#fafafa")
-        case "preproc":  return .fromHex("#a900a9")
+        case "preproc":  return .fromHex("#6E200D")
         case "nortext":  return .fromHex("#000000")
-        case "symbols":  return .fromHex("#0077dd")
-        case "keyword":  return .fromHex("#224fff")
-        case "keytype":  return .fromHex("#ff9933")
-        case "integer":  return .fromHex("#ff0032")
-        case "floatpt":  return .fromHex("#ff23a6")
-        case "dblquot":  return .fromHex("#00b800")
-        case "sinquot":  return .fromHex("#00b86b")
-        case "comment":  return .fromHex("#666666")
+        case "symbols":  return .fromHex("#0077DD") // TODO
+        case "keyword":  return .fromHex("#B40062")
+        case "keytype":  return .fromHex("#AA0D91")
+        case "integer":  return .fromHex("#000BFF")
+        case "floatpt":  return .fromHex("#2211AA") // TODO?
+        case "dblquot":  return .fromHex("#BA0011")
+        case "sinquot":  return .fromHex("#000BFF")
+        case "comment":  return .fromHex("#5E5E5E")
         default:         return .fromHex("#000000")
         }
     }

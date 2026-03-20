@@ -58,7 +58,8 @@ struct SnippetDetailView: View {
                             .emphasis(.italic, .underlineStyle(.single))
                     )
                     .textual.textSelection(.enabled)
-                    .textual.highlighterTheme(.default)
+                    .textual.highlighterTheme(.xcode)
+                    .textual.structuredTextStyle(.default)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .cornerRadius(8)
