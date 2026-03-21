@@ -3,7 +3,8 @@
 //  ReSwifter
 //
 //  Maps WebCpp CSS token class names to NSColor values.
-//  Colors mirror the "typical" theme defined in WebCpp/theme.cpp: Theme::typical().
+//  Each color is adaptive: it resolves to a light or dark variant
+//  automatically based on the current NSAppearance.
 //
 
 import AppKit
@@ -12,27 +13,27 @@ enum WebCppTheme {
 
     // MARK: - Background
 
-    /// The background color of the code view (WebCpp's BGCOLOR).
-    static let backgroundColor = NSColor.fromHex("#fafafa")
+    /// The background color of the code view. Adapts to light/dark mode.
+    static let backgroundColor = NSColor.adaptive(light: "#fafafa", dark: "#18181C")
 
     // MARK: - Token Colors
 
-    /// Returns the foreground `NSColor` for a given WebCpp CSS class name.
-    /// Falls back to `nortext` (black) for unrecognised class names.
+    /// Returns the adaptive foreground `NSColor` for a given WebCpp CSS class name.
+    /// Falls back to `nortext` for unrecognised class names.
     static func color(for tokenClass: String) -> NSColor {
         switch tokenClass {
-        case "bgcolor":  return .fromHex("#fafafa")
-        case "preproc":  return .fromHex("#6E200D")
-        case "nortext":  return .fromHex("#000000")
-        case "symbols":  return .fromHex("#0077DD") // TODO
-        case "keyword":  return .fromHex("#B40062")
-        case "keytype":  return .fromHex("#AA0D91")
-        case "integer":  return .fromHex("#000BFF")
-        case "floatpt":  return .fromHex("#2211AA") // TODO?
-        case "dblquot":  return .fromHex("#BA0011")
-        case "sinquot":  return .fromHex("#000BFF")
-        case "comment":  return .fromHex("#5E5E5E")
-        default:         return .fromHex("#000000")
+        case "bgcolor":  return .adaptive(light: "#fafafa",  dark: "#18181C")
+        case "preproc":  return .adaptive(light: "#6E200D",  dark: "#FD8F3F")
+        case "nortext":  return .adaptive(light: "#000000",  dark: "#FFFFFF")
+        case "symbols":  return .adaptive(light: "#0077DD",  dark: "#0077DD")
+        case "keyword":  return .adaptive(light: "#B40062",  dark: "#E4529A")
+        case "keytype":  return .adaptive(light: "#AA0D91",  dark: "#AB64FF")
+        case "integer":  return .adaptive(light: "#000BFF",  dark: "#FFE76D")
+        case "floatpt":  return .adaptive(light: "#2211AA",  dark: "#FFE76D")
+        case "dblquot":  return .adaptive(light: "#BA0011",  dark: "#FC4651")
+        case "sinquot":  return .adaptive(light: "#000BFF",  dark: "#FFE76D")
+        case "comment":  return .adaptive(light: "#5E5E5E",  dark: "#6C7987")
+        default:         return .adaptive(light: "#000000",  dark: "#FFFFFF")
         }
     }
 
@@ -49,9 +50,18 @@ enum WebCppTheme {
     }
 }
 
-// MARK: - NSColor hex factory
+// MARK: - NSColor adaptive + hex factory
 
 private extension NSColor {
+    /// Creates an adaptive `NSColor` that resolves to `light` in light mode
+    /// and `dark` in dark mode, using the current `NSAppearance`.
+    static func adaptive(light lightHex: String, dark darkHex: String) -> NSColor {
+        NSColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            return isDark ? .fromHex(darkHex) : .fromHex(lightHex)
+        }
+    }
+
     /// Creates an `NSColor` from a 6-digit hex string such as `"#224fff"` or `"224fff"`.
     static func fromHex(_ hex: String) -> NSColor {
         let hex = hex.trimmingCharacters(in: .init(charactersIn: "#"))

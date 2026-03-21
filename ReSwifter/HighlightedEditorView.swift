@@ -17,6 +17,8 @@ import AppKit
 
 struct HighlightedEditorView: NSViewRepresentable {
 
+    @Environment(\.colorScheme) var systemColorScheme
+
     @Binding var text: String
     var language: WebCppLanguage
 
@@ -30,6 +32,7 @@ struct HighlightedEditorView: NSViewRepresentable {
 
         configureTextView(textView, coordinator: context.coordinator)
         context.coordinator.textView = textView
+        context.coordinator.currentColorScheme = systemColorScheme
         context.coordinator.setContent(text, language: language)
         return scrollView
     }
@@ -47,6 +50,12 @@ struct HighlightedEditorView: NSViewRepresentable {
         } else if coord.currentLanguage != language {
             // Language picker changed: re-highlight existing text.
             coord.currentLanguage = language
+            coord.applyHighlighting(to: textView, text: text, language: language)
+        } else if coord.currentColorScheme != systemColorScheme {
+            // Color scheme changed: update background and re-apply token colors.
+            coord.currentColorScheme = systemColorScheme
+            textView.backgroundColor    = WebCppTheme.backgroundColor
+            textView.insertionPointColor = WebCppTheme.color(for: "nortext")
             coord.applyHighlighting(to: textView, text: text, language: language)
         }
     }
@@ -108,6 +117,7 @@ struct HighlightedEditorView: NSViewRepresentable {
 
         var binding: Binding<String>
         var currentLanguage: WebCppLanguage = .swift
+        var currentColorScheme: ColorScheme = .light
         weak var textView: NSTextView?
         private var debounceItem: DispatchWorkItem?
 
