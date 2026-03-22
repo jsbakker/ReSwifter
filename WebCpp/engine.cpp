@@ -334,6 +334,16 @@ void Engine::parseSymbol() {
 			end = i;
 			while(isSymbol(buffer[end+1])) {end++;}
 
+			// skip symbol spans that form comment markers
+			if(buffer[i] == '-') {
+				string span = buffer.substr(i, end - i + 1);
+				if(doAdaComnt && span.find("--") != string::npos) {i = end; continue;}
+				if(doHskComnt) {
+					if(i > 0 && buffer[i-1] == '{') {i = end; continue;}
+					if(end+1 < (int)buffer.size() && buffer[end+1] == '}') {i = end; continue;}
+				}
+			}
+
 			if(colourSymbol(i,end)) {
 
 				insert += 27;

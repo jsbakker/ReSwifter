@@ -34,7 +34,7 @@
 #define PARSE_A_MARKUP_COMNT parseBigComment("&lt;!-", "--&gt;", inComment)
 #define PARSE_PAS_MOD2_COMNT parseBigComment("(*", "*)", inComment)
 #define PARSE_CLASSICC_COMNT parseBigComment("/*", "*/", inComment)
-#define PARSE_HASKL_98_COMNT parseBigComment("{-", "-", inComment)
+#define PARSE_HASKL_98_COMNT parseBigComment("{-", "-}", inComment)
 #define PARSE_HTML_TAGS      parseBigComment("&lt;", "&gt;", inHtmTags)
 // single line comment parsing
 #define PARSE_A_MS_ASP_COMNT parseComment("'")
