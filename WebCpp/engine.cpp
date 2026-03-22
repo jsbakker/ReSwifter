@@ -928,6 +928,7 @@ void Engine::parseVariable(string var) {
 
 	if(endMultiLine) {return;}
 	if(inMultiStr)   {return;}
+	if(inComment)    {return;}
 
 	int index;
 	int test;

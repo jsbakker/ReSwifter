@@ -85,6 +85,41 @@ struct ValaMultilineStringTests {
         #expect(!html.contains("<font CLASS=comment>// not a comment</font>"))
     }
 
+    @Test func typesInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        string x = \"\"\"
+        bool int double float
+        \"\"\";
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func symbolsInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        \"\"\"
+        + - * = < > => ::
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=symbols>"))
+    }
+
+    @Test func preprocessorInsideMultilineStringIsNotHighlighted() {
+        let source = """
+        string x = \"\"\"
+        #if DEBUG
+        #define FOO
+        #endif
+        \"\"\";
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

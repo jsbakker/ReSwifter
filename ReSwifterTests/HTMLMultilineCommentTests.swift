@@ -15,14 +15,14 @@ struct HTMLMultilineCommentTests {
 
     // MARK: Block comment basics
 
-    @Test func singleLineBlockCommentIsHighlighted() {
+    @Test func singleLineMultilineCommentIsHighlighted() {
         let source = "<!-- this is a comment -->"
         let html = highlight(source)
 
         #expect(html.contains("<font CLASS=comment>&lt;!-- this is a comment --&gt;</font>"))
     }
 
-    @Test func multilineBlockCommentIsHighlighted() {
+    @Test func multilineMultilineCommentIsHighlighted() {
         let source = """
         <!-- first line
              second line
@@ -36,7 +36,7 @@ struct HTMLMultilineCommentTests {
 
     // MARK: Nothing inside block comments should highlight
 
-    @Test func tagsInsideBlockCommentAreNotHighlighted() {
+    @Test func tagsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         <!-- <div class="test">
              <p>hello</p>
@@ -48,7 +48,18 @@ struct HTMLMultilineCommentTests {
         #expect(html.contains("<font CLASS=comment>&lt;!-- &lt;div"))
     }
 
-    @Test func stringsInsideBlockCommentAreNotHighlighted() {
+    @Test func numbersInsideMultilineCommentAreNotHighlighted() {
+        let source = """
+        <!-- 42 3.14
+             0xFF 100 -->
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=integer>"))
+        #expect(!html.contains("<font CLASS=floatpt>"))
+    }
+
+    @Test func stringsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         <!-- "hello world"
              'test string' -->

@@ -60,6 +60,28 @@ struct PythonMultilineStringTests {
         #expect(html.contains("<font CLASS=comment># this is a comment</font>"))
     }
 
+    @Test func typesInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        x = \"\"\"
+        int str float list
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func symbolsInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        \"\"\"
+        + - * = < > ** //
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=symbols>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

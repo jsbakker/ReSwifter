@@ -15,14 +15,14 @@ struct OCamlMultilineCommentTests {
 
     // MARK: Block comment basics
 
-    @Test func singleLineBlockCommentIsHighlighted() {
+    @Test func singleLineMultilineCommentIsHighlighted() {
         let source = "(* this is a comment *)"
         let html = highlight(source)
 
         #expect(html.contains("<font CLASS=comment>(* this is a comment *)</font>"))
     }
 
-    @Test func multilineBlockCommentIsHighlighted() {
+    @Test func multilineMultilineCommentIsHighlighted() {
         let source = """
         (* first line
            second line
@@ -34,7 +34,7 @@ struct OCamlMultilineCommentTests {
         #expect(html.contains("third line *)</font>"))
     }
 
-    @Test func inlineBlockCommentInCodeIsHighlighted() {
+    @Test func inlineMultilineCommentInCodeIsHighlighted() {
         let source = "let x = 1 (* inline *) + 2"
         let html = highlight(source)
 
@@ -43,7 +43,7 @@ struct OCamlMultilineCommentTests {
 
     // MARK: Nothing inside block comments should highlight
 
-    @Test func keywordsInsideBlockCommentAreNotHighlighted() {
+    @Test func keywordsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* let rec match
            module open type *)
@@ -53,7 +53,7 @@ struct OCamlMultilineCommentTests {
         #expect(!html.contains("<font CLASS=keyword>"))
     }
 
-    @Test func numbersInsideBlockCommentAreNotHighlighted() {
+    @Test func numbersInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* 42 3.14
            0xFF 100 *)
@@ -64,7 +64,27 @@ struct OCamlMultilineCommentTests {
         #expect(!html.contains("<font CLASS=floatpt>"))
     }
 
-    @Test func stringsInsideBlockCommentAreNotHighlighted() {
+    @Test func typesInsideMultilineCommentAreNotHighlighted() {
+        let source = """
+        (* int string bool
+           float char *)
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func symbolsInsideMultilineCommentAreNotHighlighted() {
+        let source = """
+        (* + - * = < >
+           -> |> :: *)
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=symbols>"))
+    }
+
+    @Test func stringsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* "hello world"
            'c' *)

@@ -15,14 +15,14 @@ struct Modula2MultilineCommentTests {
 
     // MARK: Block comment basics
 
-    @Test func singleLineBlockCommentIsHighlighted() {
+    @Test func singleLineMultilineCommentIsHighlighted() {
         let source = "(* this is a comment *)"
         let html = highlight(source)
 
         #expect(html.contains("<font CLASS=comment>(* this is a comment *)</font>"))
     }
 
-    @Test func multilineBlockCommentIsHighlighted() {
+    @Test func multilineMultilineCommentIsHighlighted() {
         let source = """
         (* first line
            second line
@@ -34,7 +34,7 @@ struct Modula2MultilineCommentTests {
         #expect(html.contains("third line *)</font>"))
     }
 
-    @Test func inlineBlockCommentInCodeIsHighlighted() {
+    @Test func inlineMultilineCommentInCodeIsHighlighted() {
         let source = "x := 1 (* inline *) + 2;"
         let html = highlight(source)
 
@@ -43,7 +43,7 @@ struct Modula2MultilineCommentTests {
 
     // MARK: Nothing inside block comments should highlight
 
-    @Test func keywordsInsideBlockCommentAreNotHighlighted() {
+    @Test func keywordsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* MODULE PROCEDURE
            BEGIN END TYPE *)
@@ -53,7 +53,7 @@ struct Modula2MultilineCommentTests {
         #expect(!html.contains("<font CLASS=keyword>"))
     }
 
-    @Test func numbersInsideBlockCommentAreNotHighlighted() {
+    @Test func numbersInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* 42 3.14
            0FFH 100 *)
@@ -64,7 +64,17 @@ struct Modula2MultilineCommentTests {
         #expect(!html.contains("<font CLASS=floatpt>"))
     }
 
-    @Test func stringsInsideBlockCommentAreNotHighlighted() {
+    @Test func typesInsideMultilineCommentAreNotHighlighted() {
+        let source = """
+        (* INTEGER BOOLEAN
+           CARDINAL ARRAY *)
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func stringsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* "hello world"
            'test' *)

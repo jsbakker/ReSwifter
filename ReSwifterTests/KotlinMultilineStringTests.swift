@@ -85,6 +85,28 @@ struct KotlinMultilineStringTests {
         #expect(!html.contains("<font CLASS=comment>// not a comment</font>"))
     }
 
+    @Test func typesInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        val x = \"\"\"
+        Int String Boolean Array
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func symbolsInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        \"\"\"
+        + - * = < > -> ::
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=symbols>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

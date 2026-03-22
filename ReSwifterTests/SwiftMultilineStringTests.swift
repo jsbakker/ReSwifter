@@ -104,6 +104,28 @@ struct SwiftMultilineStringTests {
         #expect(!html.contains("<font CLASS=comment>// not a comment</font>"))
     }
 
+    @Test func typesInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        let x = \"\"\"
+        Int String Bool Double
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func symbolsInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        \"\"\"
+        + - * = < > -> =>
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=symbols>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

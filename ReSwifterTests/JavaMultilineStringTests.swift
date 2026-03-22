@@ -85,6 +85,28 @@ struct JavaMultilineStringTests {
         #expect(!html.contains("<font CLASS=comment>// not a comment</font>"))
     }
 
+    @Test func typesInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        String x = \"\"\"
+        Boolean Integer String
+        \"\"\";
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func symbolsInsideMultilineStringAreNotHighlighted() {
+        let source = """
+        \"\"\"
+        + - * = < > -> ::
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=symbols>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

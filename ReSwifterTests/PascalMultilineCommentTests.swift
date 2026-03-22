@@ -15,14 +15,14 @@ struct PascalMultilineCommentTests {
 
     // MARK: Block comment basics
 
-    @Test func singleLineBlockCommentIsHighlighted() {
+    @Test func singleLineMultilineCommentIsHighlighted() {
         let source = "(* this is a comment *)"
         let html = highlight(source)
 
         #expect(html.contains("<font CLASS=comment>(* this is a comment *)</font>"))
     }
 
-    @Test func multilineBlockCommentIsHighlighted() {
+    @Test func multilineMultilineCommentIsHighlighted() {
         let source = """
         (* first line
            second line
@@ -34,7 +34,7 @@ struct PascalMultilineCommentTests {
         #expect(html.contains("third line *)</font>"))
     }
 
-    @Test func inlineBlockCommentInCodeIsHighlighted() {
+    @Test func inlineMultilineCommentInCodeIsHighlighted() {
         let source = "x := 1 (* inline *) + 2;"
         let html = highlight(source)
 
@@ -43,7 +43,7 @@ struct PascalMultilineCommentTests {
 
     // MARK: Nothing inside block comments should highlight
 
-    @Test func keywordsInsideBlockCommentAreNotHighlighted() {
+    @Test func keywordsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* begin end procedure
            function program unit *)
@@ -53,7 +53,7 @@ struct PascalMultilineCommentTests {
         #expect(!html.contains("<font CLASS=keyword>"))
     }
 
-    @Test func numbersInsideBlockCommentAreNotHighlighted() {
+    @Test func numbersInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* 42 3.14
            $FF 100 *)
@@ -64,7 +64,7 @@ struct PascalMultilineCommentTests {
         #expect(!html.contains("<font CLASS=floatpt>"))
     }
 
-    @Test func stringsInsideBlockCommentAreNotHighlighted() {
+    @Test func stringsInsideMultilineCommentAreNotHighlighted() {
         let source = """
         (* 'hello world'
            "test" *)
@@ -75,7 +75,27 @@ struct PascalMultilineCommentTests {
         #expect(!html.contains("<font CLASS=squot>"))
     }
 
-    @Test func singleLineCommentInsideBlockCommentDoesNotBreak() {
+    @Test func typesInsideMultilineCommentAreNotHighlighted() {
+        let source = """
+        (* Integer Boolean String
+           Byte Cardinal *)
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=keytype>"))
+    }
+
+    @Test func hashVariablesInsideMultilineCommentAreNotHighlighted() {
+        let source = """
+        (* %variable
+           %hash *)
+        """
+        let html = highlight(source)
+
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    @Test func singleLineCommentInsideMultilineCommentDoesNotBreak() {
         let source = """
         (* // not a line comment
            still a block comment *)
