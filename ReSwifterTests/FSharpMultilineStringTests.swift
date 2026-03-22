@@ -4,7 +4,7 @@
 //
 
 import Testing
-@testable import ReSwifter
+import WebCpp
 
 /// Tests for triple-quoted multiline string highlighting in F#.
 /// F# uses `(* *)` block comments and `//` single-line comments (no `/* */`).

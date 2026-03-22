@@ -12,6 +12,7 @@
 		00312DDD2F66400F0099824D /* WebCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
+		00AABB012F6E000000000001 /* WebCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00DE443E2F6C89B000188043 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 00DE443D2F6C89B000188043 /* Textual */; };
@@ -170,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00AABB012F6E000000000001 /* WebCpp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -820,11 +822,15 @@
 		007A947B2F52A18200730E7F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterTests;
@@ -834,18 +840,21 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReSwifter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReSwifter";
 			};
 			name = Debug;
 		};
 		007A947C2F52A18200730E7F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifterTests;
@@ -855,7 +864,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReSwifter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReSwifter";
 			};
 			name = Release;
 		};

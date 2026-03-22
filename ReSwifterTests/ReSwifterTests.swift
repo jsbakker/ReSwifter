@@ -6,7 +6,6 @@
 //
 
 import Testing
-@testable import ReSwifter
 
 struct ReSwifterTests {
 
