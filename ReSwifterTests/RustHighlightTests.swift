@@ -76,4 +76,34 @@ struct RustHighlightTests {
         let html = highlight("// comment")
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        #[derive(Debug)]
+        // Line comment
+        async fn example() {
+            let x: i32 = 42;
+            let pi: f64 = 3.14;
+            let s: &str = "hello";
+            let c: char = 'x';
+            let b: Box<i32> = Box::new(x + 1);
+            let flag: bool = true;
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>async</font>"))
+        #expect(html.contains("<font CLASS=keytype>Box</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=preproc>#[</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

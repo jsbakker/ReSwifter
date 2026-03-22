@@ -81,4 +81,34 @@ struct ScalaHighlightTests {
         let html = highlight(source)
         #expect(html.contains("<font CLASS=dblquot>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        // Line comment
+        abstract class Example {
+            val flag: Boolean = true
+            var x: Int = 42
+            val pi: Double = 3.14
+            def run(): Unit = {
+                val s: String = "hello"
+                val c: Char = 'x'
+                val result: Any = x + 1
+            }
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>abstract</font>"))
+        #expect(html.contains("<font CLASS=keytype>Any</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

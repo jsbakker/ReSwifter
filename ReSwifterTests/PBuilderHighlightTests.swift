@@ -55,4 +55,33 @@ struct PBuilderHighlightTests {
         let html = highlight("// comment")
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        // Line comment
+        integer x
+        x = 42
+        decimal y
+        y = 3.14
+        string s
+        s = "hello"
+        string t
+        t = 'world'
+        if x > 0 then
+            messagebox(s, t)
+        end if
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>and</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

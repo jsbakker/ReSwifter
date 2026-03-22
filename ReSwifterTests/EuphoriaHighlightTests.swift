@@ -53,4 +53,30 @@ struct EuphoriaHighlightTests {
         let html = highlight("-- comment")
         #expect(html.contains("<font CLASS=comment>-- comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        -- Euphoria comment
+        integer x
+        x = 42
+        atom y
+        y = 3.14
+        sequence s
+        s = "hello"
+        if x > 0 then
+            puts(1, 'c')
+        end if
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>then</font>"))
+        #expect(html.contains("<font CLASS=keytype>integer</font>"))
+        #expect(html.contains("<font CLASS=keytype>atom</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>-- Euphoria comment</font>"))
+    }
 }

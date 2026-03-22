@@ -64,4 +64,27 @@ struct XMLHighlightTests {
         let html = highlight("<div>")
         #expect(html.contains("<font CLASS=preproc>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!-- XML comment -->
+        <root>
+            <item id='42'>
+                <value>3.14</value>
+            </item>
+        </root>
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keytype>encoding</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted attribute highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted attribute highlighted
+        #expect(html.contains("<font CLASS=preproc>")) // XML tag highlighted
+        #expect(html.contains("<font CLASS=comment>")) // XML comment highlighted
+    }
 }

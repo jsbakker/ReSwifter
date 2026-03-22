@@ -63,4 +63,26 @@ struct EmfHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        ; Emf comment
+        !force
+        $scalar = "hello"
+        @array = 'world'
+        %hash
+        label1:
+            !bell
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>; Emf comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>")) // scalar/array/hash variable highlighted
+        #expect(html.contains("<font CLASS=preproc>label1:</font>"))
+    }
 }

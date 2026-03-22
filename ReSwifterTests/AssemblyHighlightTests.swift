@@ -76,4 +76,29 @@ struct AssemblyHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        ; Assembly comment
+        .section .text
+        .global _start
+        _start:
+            mov eax, 42
+            add eax, 3
+            int 0x80
+        /* block comment */
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>mov</font>"))
+        #expect(html.contains("<font CLASS=keyword>add</font>"))
+        #expect(html.contains("<font CLASS=keytype>eax</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=comment>; Assembly comment</font>"))
+        #expect(html.contains("<font CLASS=comment>/* block comment */</font>"))
+        #expect(html.contains("<font CLASS=preproc>.section</font>"))
+        #expect(html.contains("<font CLASS=preproc>_start:</font>"))
+    }
 }

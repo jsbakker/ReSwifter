@@ -77,4 +77,32 @@ struct PythonHighlightTests {
         let html = highlight(source)
         #expect(html.contains("<font CLASS=dblquot>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        # Python comment
+        class Example:
+            def run(self):
+                x: int = 42
+                y: float = 3.14
+                s: str = "hello"
+                t: str = 'world'
+                flag: bool = True
+                x = x + 1
+                result: Any = None
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>class</font>"))
+        #expect(html.contains("<font CLASS=keyword>def</font>"))
+        #expect(html.contains("<font CLASS=keytype>Any</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment># Python comment</font>"))
+    }
 }

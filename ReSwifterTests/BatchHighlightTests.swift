@@ -65,4 +65,29 @@ struct BatchHighlightTests {
         let html = highlight("REM comment")
         #expect(html.contains("<font CLASS=comment>REM comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        REM Batch comment
+        :: Another comment
+        @echo off
+        set x=42
+        set y=3.14
+        echo "Hello"
+        echo %PATH%
+        echo 'done'
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>echo</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>REM Batch comment</font>"))
+        #expect(html.contains("<font CLASS=comment>:: Another comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>")) // hash/percent variable highlighted
+    }
 }

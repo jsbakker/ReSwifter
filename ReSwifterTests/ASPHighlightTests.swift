@@ -45,4 +45,25 @@ struct ASPHighlightTests {
         let html = highlight("' comment")
         #expect(html.contains("<font CLASS=comment>' comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        ' This is an ASP comment
+        response.write "Hello"
+        select case x
+        case 42
+            y = 3.14
+        end select
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>select</font>"))
+        #expect(html.contains("<font CLASS=keyword>case</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>")) // ASP comment highlighted
+    }
 }

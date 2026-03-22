@@ -57,4 +57,33 @@ struct Modula2HighlightTests {
         let html = highlight("(* a comment *)")
         #expect(html.contains("<font CLASS=comment>(* a comment *)</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        (* Block comment *)
+        MODULE Hello;
+        FROM InOut IMPORT WriteString;
+        VAR
+            x : INTEGER;
+            y : REAL;
+            s : ARRAY [0..10] OF CHAR;
+        BEGIN
+            x := 42;
+            y := 3.14;
+            s := "hello";
+            WriteString('world');
+        END Hello.
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>MODULE</font>"))
+        #expect(html.contains("<font CLASS=keytype>INTEGER</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>(* Block comment *)</font>"))
+    }
 }

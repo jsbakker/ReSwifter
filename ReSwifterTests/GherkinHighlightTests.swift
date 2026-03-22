@@ -46,4 +46,27 @@ struct GherkinHighlightTests {
         let html = highlight("# comment")
         #expect(html.contains("<font CLASS=comment># comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        # Gherkin comment
+        Feature: Login
+          Background: User exists
+          Scenario: Valid login
+            Given a user "admin"
+            When they enter 'password'
+            Then they see $dashboard
+            And the count is <total>
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>Given</font>"))
+        #expect(html.contains("<font CLASS=keyword>Feature</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=preproc>")) // scalar variable highlighted
+        #expect(html.contains("<font CLASS=comment># Gherkin comment</font>"))
+    }
 }

@@ -89,4 +89,34 @@ struct PerlHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        # Perl comment
+        use strict;
+        my $scalar = 42;
+        my @array = (3.14, "hello");
+        my %hash = ('key' => 'value');
+        sub example {
+            bless {}, 'Example';
+            $scalar = $scalar + 1;
+        label:
+            print $scalar;
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>bless</font>"))
+        #expect(html.contains("<font CLASS=keytype>binmode</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment># Perl comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>")) // scalar variable highlighted
+        #expect(html.contains("<font CLASS=preproc>label:</font>"))
+    }
 }

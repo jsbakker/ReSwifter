@@ -90,4 +90,41 @@ struct CPlusPlusHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        #include <iostream>
+        // Line comment
+        class Example {
+        public:
+            bool flag = true;
+            int x = 42;
+            double pi = 3.14;
+            void run() {
+                auto s = "hello";
+                char c = 'x';
+                auto raw = R"(raw string)";
+                x = x + 1;
+        label:
+                std::cout << x;
+            }
+        };
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>class</font>"))
+        #expect(html.contains("<font CLASS=keytype>bool</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=preproc>#include</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>label:</font>"))
+    }
 }

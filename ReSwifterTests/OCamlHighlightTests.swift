@@ -64,4 +64,28 @@ struct OCamlHighlightTests {
         let html = highlight("(* a comment *)")
         #expect(html.contains("<font CLASS=comment>(* a comment *)</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        (* Block comment *)
+        let x : int = 42
+        let pi : float = 3.14
+        let s : string = "hello"
+        let c : char = 'x'
+        let flag : bool = true
+        let result = x + 1
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>let</font>"))
+        #expect(html.contains("<font CLASS=keytype>bool</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>(* Block comment *)</font>"))
+    }
 }

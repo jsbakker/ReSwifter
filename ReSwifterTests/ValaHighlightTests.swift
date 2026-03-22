@@ -88,4 +88,38 @@ struct ValaHighlightTests {
         let html = highlight(source)
         #expect(html.contains("<font CLASS=dblquot>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        #if HAVE_FEATURE
+        // Line comment
+        abstract class Example : Object {
+            bool flag;
+            int x = 42;
+            double pi = 3.14;
+            async void run() {
+                string s = "hello";
+                char c = 'x';
+                x = x + 1;
+            }
+        }
+        #endif
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>abstract</font>"))
+        #expect(html.contains("<font CLASS=keyword>async</font>"))
+        #expect(html.contains("<font CLASS=keytype>bool</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=preproc>#if</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

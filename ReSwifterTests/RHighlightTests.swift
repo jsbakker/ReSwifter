@@ -65,4 +65,29 @@ struct RHighlightTests {
         let html = highlight("# comment")
         #expect(html.contains("<font CLASS=comment># comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        # R comment
+        x <- 42
+        y <- 3.14
+        s <- "hello"
+        t <- 'world'
+        flag <- FALSE
+        v <- array(c(1, 2, 3))
+        result <- x + 1
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>FALSE</font>"))
+        #expect(html.contains("<font CLASS=keytype>array</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment># R comment</font>"))
+    }
 }

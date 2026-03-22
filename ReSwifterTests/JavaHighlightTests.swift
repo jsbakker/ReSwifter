@@ -88,4 +88,37 @@ struct JavaHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        // Line comment
+        abstract class Example {
+            Boolean flag;
+            int x = 42;
+            double pi = 3.14;
+            void run() {
+                String s = "hello";
+                char c = 'x';
+                x = x + 1;
+        label:
+                System.out.println(x);
+            }
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>abstract</font>"))
+        #expect(html.contains("<font CLASS=keytype>Boolean</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>label:</font>"))
+    }
 }

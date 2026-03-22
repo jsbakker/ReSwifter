@@ -83,4 +83,38 @@ struct UScriptHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        #exec texture import name=MyTex
+        // Line comment
+        class MyActor extends Actor;
+        var Vector position;
+        var int x;
+        event Tick(float delta) {
+            x = 42;
+            local Plane p;
+            local string s;
+            s = "hello";
+            x = x + 1;
+        label:
+            Log(s);
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>class</font>"))
+        #expect(html.contains("<font CLASS=keyword>extends</font>"))
+        #expect(html.contains("<font CLASS=keytype>Vector</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=preproc>#exec</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>label:</font>"))
+    }
 }

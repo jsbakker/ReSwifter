@@ -64,4 +64,31 @@ struct HaskellHighlightTests {
         let html = highlight("-- comment")
         #expect(html.contains("<font CLASS=comment>-- comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        {- Block comment -}
+        -- Line comment
+        module Main where
+        import Data.List
+        main :: IO ()
+        main = do
+            let x = 42
+            let y = 3.14
+            putStrLn "hello"
+            let z = x + 1
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>module</font>"))
+        #expect(html.contains("<font CLASS=keytype>IO</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>{- Block comment -}</font>"))
+        #expect(html.contains("<font CLASS=comment>-- Line comment</font>"))
+    }
 }

@@ -67,4 +67,35 @@ struct AdaHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        with Ada.Text_IO; use Ada.Text_IO;
+        -- This is an Ada comment
+        procedure Hello is
+           Count : Integer := 42;
+           Rate  : Float   := 3.14;
+           Name  : String  := "world";
+           Ch    : Character := 'x';
+           Flag  : Boolean := True;
+        label_one:
+           Put_Line("Hello " & Name);
+           Count := Count + 1;
+        end Hello;
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>procedure</font>"))
+        #expect(html.contains("<font CLASS=keytype>Integer</font>"))
+        #expect(html.contains("<font CLASS=keytype>Boolean</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>-- This is an Ada comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>label_one:</font>"))
+    }
 }

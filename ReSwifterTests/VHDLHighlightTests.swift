@@ -67,4 +67,42 @@ struct VHDLHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        -- VHDL comment
+        library IEEE;
+        use IEEE.STD_LOGIC_1164.ALL;
+        entity counter is
+            port(
+                clk : in BIT;
+                count : out BIT_VECTOR(7 downto 0)
+            );
+        end counter;
+        architecture rtl of counter is
+            signal x : INTEGER := 42;
+            signal y : REAL := 3.14;
+            signal s : STRING := "hello";
+        label1:
+            process(clk)
+            begin
+                x <= x + 1;
+            end process;
+        end rtl;
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>entity</font>"))
+        #expect(html.contains("<font CLASS=keyword>architecture</font>"))
+        #expect(html.contains("<font CLASS=keytype>BIT</font>"))
+        #expect(html.contains("<font CLASS=keytype>INTEGER</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>-- VHDL comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>label1:</font>"))
+    }
 }

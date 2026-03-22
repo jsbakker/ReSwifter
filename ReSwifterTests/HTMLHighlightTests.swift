@@ -64,4 +64,29 @@ struct HTMLHighlightTests {
         let html = highlight("<div>")
         #expect(html.contains("<font CLASS=preproc>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        <!-- HTML comment -->
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Test 42</title>
+        </head>
+        <body class="main" id='content'>
+            <p>Value is 3.14</p>
+        </body>
+        </html>
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted attribute highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted attribute highlighted
+        #expect(html.contains("<font CLASS=preproc>")) // HTML tag highlighted
+        #expect(html.contains("<font CLASS=comment>")) // HTML comment highlighted
+    }
 }

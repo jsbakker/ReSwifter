@@ -82,4 +82,35 @@ struct RubyHighlightTests {
         let html = highlight("# comment")
         #expect(html.contains("<font CLASS=comment># comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        # Ruby comment
+        class Example
+            def run
+                @instance = 42
+                $global = 3.14
+                %hash = {}
+                s = "hello"
+                t = 'world'
+                arr = Array.new
+                x = @instance + 1
+            end
+        end
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>class</font>"))
+        #expect(html.contains("<font CLASS=keyword>def</font>"))
+        #expect(html.contains("<font CLASS=keytype>Array</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment># Ruby comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>")) // instance/global variable highlighted
+    }
 }

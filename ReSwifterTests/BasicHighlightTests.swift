@@ -58,4 +58,33 @@ struct BasicHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        REM This is a BASIC remark
+        ; Also a comment
+        DIM x AS INTEGER
+        x = 42
+        y = 3.14
+        PRINT "Hello"
+        IF x > 0 THEN
+            PRINT 'greeting'
+        END IF
+        label1:
+            GOTO label1
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>PRINT</font>"))
+        #expect(html.contains("<font CLASS=keyword>GOTO</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>REM This is a BASIC remark</font>"))
+        #expect(html.contains("<font CLASS=comment>; Also a comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>label1:</font>"))
+    }
 }

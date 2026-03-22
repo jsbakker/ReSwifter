@@ -65,4 +65,32 @@ struct ZigHighlightTests {
         let html = highlight("// comment")
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        // Zig comment
+        const std = @import("std");
+        pub fn main() !void {
+            var x: i32 = 42;
+            var y: f64 = 3.14;
+            const s: []const u8 = "hello";
+            const c: u8 = 'x';
+            const err: anyerror = undefined;
+            x = x + 1;
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>const</font>"))
+        #expect(html.contains("<font CLASS=keyword>pub</font>"))
+        #expect(html.contains("<font CLASS=keytype>anyerror</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>// Zig comment</font>"))
+    }
 }

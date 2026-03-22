@@ -57,4 +57,29 @@ struct SQLHighlightTests {
         let html = highlight("-- comment")
         #expect(html.contains("<font CLASS=comment>-- comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        -- SQL comment
+        /* Block comment */
+        SELECT name, age
+        FROM users
+        WHERE age > 42
+        AND salary = 3.14
+        AND status = "active"
+        ORDER BY name;
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>SELECT</font>"))
+        #expect(html.contains("<font CLASS=keyword>FROM</font>"))
+        #expect(html.contains("<font CLASS=keytype>BIGINT</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>-- SQL comment</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+    }
 }

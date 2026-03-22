@@ -81,4 +81,31 @@ struct FSharpHighlightTests {
         let html = highlight(source)
         #expect(html.contains("<font CLASS=dblquot>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        (* Block comment *)
+        // Line comment
+        let abstract = false
+        let x : int = 42
+        let pi : float = 3.14
+        let s : string = "hello"
+        let c : char = 'x'
+        let b : bool = true
+        x + 1 |> ignore
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>let</font>"))
+        #expect(html.contains("<font CLASS=keytype>bool</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>(* Block comment *)</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

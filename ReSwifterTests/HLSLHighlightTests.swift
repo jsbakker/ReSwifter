@@ -76,4 +76,36 @@ struct HLSLHighlightTests {
         let html = highlight("// comment")
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        #include "common.hlsli"
+        // Line comment
+        cbuffer Constants : register(b0) {
+            float4x4 worldMatrix;
+            bool flag;
+            int x = 42;
+            float y = 3.14;
+            Buffer buf;
+        }
+        float4 main() : SV_Target {
+            return x + 1;
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>cbuffer</font>"))
+        #expect(html.contains("<font CLASS=keytype>Buffer</font>"))
+        #expect(html.contains("<font CLASS=keytype>bool</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=preproc>#include</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

@@ -76,4 +76,32 @@ struct RenderManHighlightTests {
         let html = highlight("// comment")
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        #include "helper.h"
+        // Line comment
+        displacement bumpy(float amount = 1.0) {
+            color c;
+            int x = 42;
+            float y = 3.14;
+            string s = "hello";
+            x = x + 1;
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>displacement</font>"))
+        #expect(html.contains("<font CLASS=keytype>color</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=preproc>#include</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

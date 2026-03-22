@@ -69,4 +69,35 @@ struct PascalHighlightTests {
         let html = highlight("// comment")
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        (* Block comment *)
+        // Line comment
+        program Hello;
+        var
+            x : Integer;
+            y : Real;
+            s : AnsiString;
+            c : AnsiChar;
+        begin
+            x := 42;
+            y := 3.14;
+            s := "hello";
+            c := 'x';
+        end.
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>program</font>"))
+        #expect(html.contains("<font CLASS=keytype>AnsiString</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>(* Block comment *)</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

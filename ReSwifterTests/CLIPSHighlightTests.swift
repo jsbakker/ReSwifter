@@ -65,4 +65,28 @@ struct CLIPSHighlightTests {
         let html = highlight("; comment")
         #expect(html.contains("<font CLASS=comment>; comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        ; CLIPS comment
+        (defrule example
+            (test (> 42 3.14))
+            =>
+            (printout t "Hello" crlf)
+            (bind ?x 'world')
+            (assert (result TRUE))
+        )
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>TRUE</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>></font>"))
+        #expect(html.contains("<font CLASS=comment>; CLIPS comment</font>"))
+    }
 }

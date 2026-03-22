@@ -69,4 +69,34 @@ struct TypeScriptHighlightTests {
         let html = highlight("// comment")
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        // Line comment
+        abstract class Example {
+            async run(): Promise<void> {
+                const x: number = 42;
+                let pi: number = 3.14;
+                let s: string = "hello";
+                let c: string = 'world';
+                let arr: Array<number> = [x + 1];
+            }
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>abstract</font>"))
+        #expect(html.contains("<font CLASS=keyword>async</font>"))
+        #expect(html.contains("<font CLASS=keytype>Array</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

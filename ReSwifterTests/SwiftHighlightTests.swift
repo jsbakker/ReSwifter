@@ -81,4 +81,34 @@ struct SwiftHighlightTests {
         let html = highlight(source)
         #expect(html.contains("<font CLASS=dblquot>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        // Line comment
+        actor MyActor {
+            var x: Int = 42
+            var pi: Double = 3.14
+            func run() async {
+                let s: String = "hello"
+                let c: Character = "x"
+                let flag: Any = true
+                x = x + 1
+            }
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>actor</font>"))
+        #expect(html.contains("<font CLASS=keyword>async</font>"))
+        #expect(html.contains("<font CLASS=keytype>Any</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+    }
 }

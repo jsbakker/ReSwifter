@@ -57,4 +57,28 @@ struct CSSHighlightTests {
         let html = highlight("/* a comment */")
         #expect(html.contains("<font CLASS=comment>/* a comment */</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* CSS comment */
+        @import url("style.css");
+        body {
+            color: red;
+            margin: 42px;
+            opacity: 3.14;
+            font-family: 'serif';
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>import</font>"))
+        #expect(html.contains("<font CLASS=keytype>color</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>/* CSS comment */</font>"))
+    }
 }

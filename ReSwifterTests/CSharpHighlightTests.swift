@@ -95,4 +95,40 @@ struct CSharpHighlightTests {
         let html = highlight("label:")
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        /* Block comment */
+        #region MyRegion
+        // Line comment
+        abstract class Example {
+            Action callback;
+            int x = 42;
+            double pi = 3.14;
+            void Run() {
+                string s = "hello";
+                char c = 'x';
+                x = x + 1;
+        label:
+                Console.WriteLine(x);
+            }
+        }
+        #endregion
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>abstract</font>"))
+        #expect(html.contains("<font CLASS=keytype>Action</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=preproc>#region</font>"))
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>label:</font>"))
+    }
 }

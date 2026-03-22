@@ -65,4 +65,31 @@ struct TclHighlightTests {
         let html = highlight("# comment")
         #expect(html.contains("<font CLASS=comment># comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        # Tcl comment
+        set x 42
+        set y 3.14
+        set s "hello"
+        set t 'world'
+        set $var value
+        puts $s
+        if {$x > 0} {
+            binary scan $s a5 result
+        }
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>set</font>"))
+        #expect(html.contains("<font CLASS=keytype>binary</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment># Tcl comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>")) // scalar variable highlighted
+    }
 }

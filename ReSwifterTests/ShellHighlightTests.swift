@@ -65,4 +65,32 @@ struct ShellHighlightTests {
         let html = highlight("# comment")
         #expect(html.contains("<font CLASS=comment># comment</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        #!/bin/bash
+        # Shell comment
+        x=42
+        y=3.14
+        s="hello"
+        t='world'
+        echo $x
+        arr=(apt ar awk)
+        if [ $x -gt 0 ]; then
+            echo "positive"
+        fi
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>echo</font>"))
+        #expect(html.contains("<font CLASS=keytype>apt</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment># Shell comment</font>"))
+        #expect(html.contains("<font CLASS=preproc>")) // scalar variable highlighted
+    }
 }

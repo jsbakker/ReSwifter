@@ -64,4 +64,32 @@ struct FortranHighlightTests {
         let html = highlight("/* a comment */")
         #expect(html.contains("<font CLASS=comment>/* a comment */</font>"))
     }
+
+    // MARK: - Comprehensive Snippet
+
+    @Test func comprehensiveSnippetHighlightsAllRules() {
+        let source = """
+        ! Fortran comment
+        /* Block comment */
+        PROGRAM Hello
+            INTEGER :: x = 42
+            REAL :: y = 3.14
+            CHARACTER(len=5) :: s = "world"
+            BYTE :: b
+            IF (x > 0) THEN
+                PRINT *, 'Hello'
+            END IF
+        END PROGRAM
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>PROGRAM</font>"))
+        #expect(html.contains("<font CLASS=keytype>BYTE</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
+        #expect(html.contains("<font CLASS=comment>! Fortran comment</font>"))
+    }
 }
