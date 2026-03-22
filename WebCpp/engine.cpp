@@ -723,6 +723,8 @@ void Engine::parseHeredoc(string marker) {
 // parse for multi-line comments ----------------------------------------------
 void Engine::parseBigComment(string start, string end, bool &inside) {
 
+	if(inMultiStr) {return;}
+
 	string search, escap, css;
 	int index,offset;
 	bool erase;
