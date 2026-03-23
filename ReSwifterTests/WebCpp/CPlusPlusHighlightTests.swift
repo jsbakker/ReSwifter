@@ -91,6 +91,34 @@ struct CPlusPlusHighlightTests {
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
 
+    // MARK: - Block comment regression
+
+    /// Bug: when two block comments appear on the same line (e.g. commenting
+    /// out unused parameter names in a lambda), keywords between them were not
+    /// highlighted. The parity-based isInsideIt() counted /* and */ that were
+    /// already wrapped in <font> tags, producing incorrect results.
+    @Test func keywordBetweenTwoBlockCommentsIsHighlighted() {
+        let source = "int /* unused int */, int /* unused */, int c"
+        let html = highlight(source)
+
+        // All three "int" keywords must be highlighted
+        let intCount = html.components(separatedBy: "<font CLASS=keytype>int</font>").count - 1
+        #expect(intCount == 3, "Expected 3 highlighted 'int' keywords, got \(intCount)")
+
+        // Both block comments must be highlighted
+        #expect(html.contains("<font CLASS=comment>/* unused int */</font>"))
+        #expect(html.contains("<font CLASS=comment>/* unused */</font>"))
+    }
+
+    /// Ensure a single block comment still works correctly after the fix.
+    @Test func singleBlockCommentDoesNotBreakKeywords() {
+        let source = "int /* comment */ x = 42;"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=keytype>int</font>"))
+        #expect(html.contains("<font CLASS=comment>/* comment */</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+    }
+
     // MARK: - Comprehensive Snippet
 
     @Test func comprehensiveSnippetHighlightsAllRules() {

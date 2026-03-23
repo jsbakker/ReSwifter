@@ -61,7 +61,7 @@ class Engine {
 	void parseHeredoc(string marker = "&lt;&lt;");
 
 	void parseKeys();
-	void colourKeys(int index, string key, string cssclass);
+	bool colourKeys(int index, string key, string cssclass);
 	bool isKey(int start, int end) const;
 	int  noCaseFind(string search, int index);
 	

@@ -19,6 +19,9 @@ Child->setLangExt( y )
 #include <cctype>
 using namespace std;
 
+// forward declaration (defined near colourKeys)
+static bool isInsideFontTag(const string &buffer, int index);
+
 
 // initialize data members ----------------------------------------------------
 void Engine::init_switches() {
@@ -227,7 +230,7 @@ bool Engine::isInsideIt(int index, string start, string end) {
 
 	// count the number of starts and ends
 	// and return true for an odd number
-	
+
 	if(buffer.find(start,0) == string::npos) {return false;}
 
 	int l = 0;
@@ -236,14 +239,18 @@ bool Engine::isInsideIt(int index, string start, string end) {
 
 	idx = buffer.find(end,index);
 	while(idx != (int)string::npos && idx < (int)buffer.size()) {
-		if(idx > 0 && buffer[idx-1] != '\\'){r++;}
+		if(idx > 0 && buffer[idx-1] != '\\'){
+			if(!isInsideFontTag(buffer, idx)) r++;
+		}
 		else if(idx == 0){r++;}
 		idx = buffer.find(end,idx+1);
 	}
 
 	idx = buffer.rfind(start,index);
 	while(idx >= 0 && idx < (int)buffer.size()) {
-		if(idx > 0 && buffer[idx-1] != '\\'){l++;}
+		if(idx > 0 && buffer[idx-1] != '\\'){
+			if(!isInsideFontTag(buffer, idx)) l++;
+		}
 		else if(idx == 0){l++;}
 		if(idx == 0) break;
 		idx = buffer.rfind(start,idx-1);
@@ -815,10 +822,12 @@ void Engine::parseKeys() {
 
 		while(index < buffer.size() && index != -1) {
 
+			bool inserted = false;
 			if(isKey(index-1, (index) + keys[i].size())) {
-				colourKeys(index, keys[i], "keyword");
+				inserted = colourKeys(index, keys[i], "keyword");
 			}
-			index = noCaseFind(cmpkey,(index+cmpkey.size()+offset));
+			int skip = inserted ? offset : 0;
+			index = noCaseFind(cmpkey,(index+cmpkey.size()+skip));
 		}
 	}
 
@@ -829,10 +838,12 @@ void Engine::parseKeys() {
 
 		while(index < buffer.size() && index != -1) {
 
+			bool inserted = false;
 			if(isKey(index-1, (index) + types[i].size())) {
-				colourKeys(index, types[i], "keytype");
+				inserted = colourKeys(index, types[i], "keytype");
 			}
-			index = noCaseFind(cmpkey,(index+cmpkey.size()+offset));
+			int skip = inserted ? offset : 0;
+			index = noCaseFind(cmpkey,(index+cmpkey.size()+skip));
 		}
 	}
 }
@@ -918,19 +929,20 @@ static bool isInsideFontTag(const string &buffer, int index) {
 	return false;
 }
 // colourize the keywords -----------------------------------------------------
-void Engine::colourKeys(int index, string key, string cssclass) {
+bool Engine::colourKeys(int index, string key, string cssclass) {
 
 	if(isInsideTag(index)) {
-		return;
+		return false;
 	}
 	if(isInsideFontTag(buffer, index)) {
-		return;
+		return false;
 	}
 	if(abortColour(index)) {
-		return;
+		return false;
 	}
 	buffer.insert(index, "<font CLASS=" + cssclass + ">");
 	buffer.insert(index+key.size()+20, "</font>");
+	return true;
 }
 //-----------------------------------------------------------------------------
 // parse for variables --------------------------------------------------------
