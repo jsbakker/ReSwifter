@@ -33,7 +33,7 @@ class Engine {
 	bool abortParse();
 	bool abortColour(int index);
 
-	bool isInsideIt(int index, string start, string end);
+	bool isInsideIt(int index, string start, string end, bool skipTagged = false);
 	bool isInsideTag(int index);
 	bool isNotWord(int index);
 	void eraseTags(int start, int fin);

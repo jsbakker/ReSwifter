@@ -214,8 +214,8 @@ bool Engine::abortColour(int index) {
 	if(doHtmComnt
 	&& ( isInsideIt(index,"&lt;","&gt;")
 	&&   isInsideIt(index,"&gt;","&lt;") ))	{return true;}
-	if(isInsideIt(index,"/*","*/"))		{return true;}
-	if(isInsideIt(index,"(*","*)"))		{return true;}
+	if(isInsideIt(index,"/*","*/",true))	{return true;}
+	if(isInsideIt(index,"(*","*)",true))	{return true;}
 	if(isInsideIt(index,"&lt;!","&gt;"))	{return true;}
 	if(isInsideIt(index,"\"","\""))		{return true;}
 	if(!doAspComnt) {
@@ -226,7 +226,7 @@ bool Engine::abortColour(int index) {
 	return false;
 }
 // check if the index is inside the specified boundaries ----------------------
-bool Engine::isInsideIt(int index, string start, string end) {
+bool Engine::isInsideIt(int index, string start, string end, bool skipTagged) {
 
 	// count the number of starts and ends
 	// and return true for an odd number
@@ -240,7 +240,7 @@ bool Engine::isInsideIt(int index, string start, string end) {
 	idx = buffer.find(end,index);
 	while(idx != (int)string::npos && idx < (int)buffer.size()) {
 		if(idx > 0 && buffer[idx-1] != '\\'){
-			if(!isInsideFontTag(buffer, idx)) r++;
+			if(!skipTagged || !isInsideFontTag(buffer, idx)) r++;
 		}
 		else if(idx == 0){r++;}
 		idx = buffer.find(end,idx+1);
@@ -249,7 +249,7 @@ bool Engine::isInsideIt(int index, string start, string end) {
 	idx = buffer.rfind(start,index);
 	while(idx >= 0 && idx < (int)buffer.size()) {
 		if(idx > 0 && buffer[idx-1] != '\\'){
-			if(!isInsideFontTag(buffer, idx)) l++;
+			if(!skipTagged || !isInsideFontTag(buffer, idx)) l++;
 		}
 		else if(idx == 0){l++;}
 		if(idx == 0) break;
