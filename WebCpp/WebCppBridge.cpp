@@ -6,9 +6,9 @@
 #include "driver.h"
 #include <cstdlib>
 #include <cstring>
-#include <sstream>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 // Helper: duplicate a std::string as a C-allocated char*.
@@ -22,17 +22,13 @@ static char *dup_string(const string &s) {
 
 extern "C" {
 
-WebCppDriverRef webcpp_driver_create(void) {
-    return new Driver();
-}
+WebCppDriverRef webcpp_driver_create(void) { return new Driver(); }
 
 void webcpp_driver_destroy(WebCppDriverRef driver) {
     delete static_cast<Driver *>(driver);
 }
 
-void webcpp_driver_help(char mode) {
-    Driver::help(mode);
-}
+void webcpp_driver_help(char mode) { Driver::help(mode); }
 
 bool webcpp_driver_switch_parser(WebCppDriverRef driver, const char *arg) {
     return static_cast<Driver *>(driver)->switch_parser(string(arg));
@@ -51,12 +47,10 @@ void webcpp_driver_make_index(const char *prefix) {
     Driver::makeIndex(string(prefix ? prefix : ""));
 }
 
-bool webcpp_driver_prep_files(WebCppDriverRef driver,
-                              const char *ifile,
-                              const char *ofile,
-                              char over) {
-    return static_cast<Driver *>(driver)->prep_files(
-        string(ifile), string(ofile), over);
+bool webcpp_driver_prep_files(WebCppDriverRef driver, const char *ifile,
+                              const char *ofile, char over) {
+    return static_cast<Driver *>(driver)->prep_files(string(ifile),
+                                                     string(ofile), over);
 }
 
 char *webcpp_driver_get_title(WebCppDriverRef driver) {
@@ -68,24 +62,25 @@ void webcpp_driver_drive(WebCppDriverRef driver) {
     static_cast<Driver *>(driver)->drive();
 }
 
-char *webcpp_driver_highlight_string(const char *source,
-                                     const char *filename,
+char *webcpp_driver_highlight_string(const char *source, const char *filename,
                                      const char **options) {
     // Write source to a uniquely-named temporary file so that
     // concurrent callers (e.g. parallel unit tests) don't collide.
     const char *tmpDir = getenv("TMPDIR");
-    if (!tmpDir) tmpDir = "/tmp";
+    if (!tmpDir)
+        tmpDir = "/tmp";
 
     // Build a per-call suffix from the thread ID and a counter
     static _Atomic unsigned long long counter = 0;
     unsigned long long seq = counter++;
     string suffix = to_string(seq);
-    string tmpIn  = string(tmpDir) + "/webcpp_in_"  + suffix + ".tmp";
+    string tmpIn = string(tmpDir) + "/webcpp_in_" + suffix + ".tmp";
     string tmpOut = string(tmpDir) + "/webcpp_out_" + suffix + ".tmp";
 
     {
         ofstream ofs(tmpIn.c_str());
-        if (!ofs) return nullptr;
+        if (!ofs)
+            return nullptr;
         ofs << source;
     }
 
@@ -111,7 +106,8 @@ char *webcpp_driver_highlight_string(const char *source,
 
     // Read the output file into a string
     ifstream ifs(tmpOut.c_str());
-    if (!ifs) return nullptr;
+    if (!ifs)
+        return nullptr;
 
     ostringstream oss;
     oss << ifs.rdbuf();
@@ -124,8 +120,6 @@ char *webcpp_driver_highlight_string(const char *source,
     return dup_string(html);
 }
 
-void webcpp_free_string(char *str) {
-    free(str);
-}
+void webcpp_free_string(char *str) { free(str); }
 
 } // extern "C"

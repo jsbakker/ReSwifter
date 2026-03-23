@@ -8,10 +8,10 @@
 
 class LangRust : public Engine {
 
- public:
-	LangRust();
-	~LangRust() {IO->close();}
-	virtual void fill();
+  public:
+    LangRust();
+    ~LangRust() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_RUST
+#endif // LANG_DEF_RUST

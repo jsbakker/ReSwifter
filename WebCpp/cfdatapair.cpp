@@ -30,54 +30,58 @@
  * _______. ..
  */
 
-
-#include "cfdatapair.h" 
+#include "cfdatapair.h"
 
 // overloaded stream operators ------------------------------------------------
-void CFdatapair::operator<<(string  mldata) {translateML(mldata);}
-void CFdatapair::operator>>(string& mldata) {mldata = info_ml();}
+void CFdatapair::operator<<(string mldata) { translateML(mldata); }
+void CFdatapair::operator>>(string &mldata) { mldata = info_ml(); }
 // Constructors ---------------------------------------------------------------
-CFdatapair::CFdatapair()                   {name = "name"; value = "value";}
-CFdatapair::CFdatapair(string mldata)      {translateML(mldata);}
-CFdatapair::CFdatapair(string n, string v) {name = n; value = v;}
+CFdatapair::CFdatapair() {
+    name = "name";
+    value = "value";
+}
+CFdatapair::CFdatapair(string mldata) { translateML(mldata); }
+CFdatapair::CFdatapair(string n, string v) {
+    name = n;
+    value = v;
+}
 // set methods ----------------------------------------------------------------
-void CFdatapair::setname(string n)  {name  = n;} // changes the name
-void CFdatapair::setvalue(string v) {value = v;} // changes the value
+void CFdatapair::setname(string n) { name = n; }   // changes the name
+void CFdatapair::setvalue(string v) { value = v; } // changes the value
 // get methods ----------------------------------------------------------------
-string CFdatapair::getname()  const {return name;}  // returns the name
-string CFdatapair::getvalue() const {return value;} // returns the value
+string CFdatapair::getname() const { return name; }   // returns the name
+string CFdatapair::getvalue() const { return value; } // returns the value
 //-----------------------------------------------------------------------------
-string CFdatapair::info_nv()  const { // return the name and value in a string
+string CFdatapair::info_nv() const { // return the name and value in a string
 
- return name + ": " + value;
+    return name + ": " + value;
 } //---------------------------------------------------------------------------
-string CFdatapair::info_ml()  const { // return name and value in markup format
+string CFdatapair::info_ml() const { // return name and value in markup format
 
- return ("<" + name + ">" + value + "</" + name + ">");
+    return ("<" + name + ">" + value + "</" + name + ">");
 } //---------------------------------------------------------------------------
 // swaps the name/value -------------------------------------------------------
 void CFdatapair::swap() {
- string temp;
- temp  = name;
- name  = value;
- value = temp;
+    string temp;
+    temp = name;
+    name = value;
+    value = temp;
 } //---------------------------------------------------------------------------
-// convert XML-Style string data into name/value pair ------------------------- 
+// convert XML-Style string data into name/value pair -------------------------
 void CFdatapair::translateML(string mldata) {
 
- string ntmp, vtmp;
- int    open, close;
- 
- open  = mldata.find("<",0);
- close = mldata.find(">",open);
- ntmp  = mldata.substr(open+1,(close - open) -1);
-// ntmp  = mldata.substr(open+1,close-1);
+    string ntmp, vtmp;
+    int open, close;
 
- open  = mldata.find("</",close);
- vtmp  = mldata.substr(close+1,(open - close -1));
+    open = mldata.find("<", 0);
+    close = mldata.find(">", open);
+    ntmp = mldata.substr(open + 1, (close - open) - 1);
+    // ntmp  = mldata.substr(open+1,close-1);
 
- name  = ntmp;
- value = vtmp;
+    open = mldata.find("</", close);
+    vtmp = mldata.substr(close + 1, (open - close - 1));
+
+    name = ntmp;
+    value = vtmp;
 }
 //-----------------------------------------------------------------------------
-

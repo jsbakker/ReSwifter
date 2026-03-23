@@ -93,21 +93,19 @@
  * _______. ..
  */
 
-
 #ifndef _C4_FILE_H
 #define _C4_FILE_H
 
 #define C4_FILE_VER "1.2.3"
 
-
 // whitespace defines ----------------------------------------------------------
-#if     defined(WIN32)
-#define ENDL    "\r\n"
-#elif   defined(UNIX)
-#define ENDL    "\n"
-#else   // other OS
-#define ENDL    "\n"
-#endif  // defined(WIN32/UNIX)
+#if defined(WIN32)
+#define ENDL "\r\n"
+#elif defined(UNIX)
+#define ENDL "\n"
+#else // other OS
+#define ENDL "\n"
+#endif // defined(WIN32/UNIX)
 
 #define NIXENDL "\n"
 #define DOSENDL "\r\n"
@@ -116,85 +114,106 @@
 #define SPACE_8 "        "
 
 // file open modes ----------
-#define MODE_READ        0x72
-#define MODE_WRITE       0x77
+#define MODE_READ 0x72
+#define MODE_WRITE 0x77
 #define PROMPT_OVERWRITE 0x77
-#define FORCE_OVERWRITE  0x66
-#define NEVER_OVERWRITE  0x6B
+#define FORCE_OVERWRITE 0x66
+#define NEVER_OVERWRITE 0x6B
 //--------------------------..
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 using namespace std;
 
-
 class CFfile {
 
- public:
-  // (Con/De)structors ---------------------------------------------------------
-  CFfile();
-  CFfile(string filename, char io);
-  CFfile(string filein, string fileout);
-  ~CFfile();
-  // Initialize bool data members ----------------------------------------------
-  void init_switches();
-  //----------------------------------------------------------------------------
-  // Operator overloading ------------------------------------------------------
-  template <class T> CFfile& operator<<(T var)  {write(var);return *this;}
-  template <class T> CFfile& operator>>(T& var) {read (var);return *this;}
-  //----------------------------------------------------------------------------
-  // File open methods ---------------------------------------------------------
-  bool exists(string fname);      // check if a file exists
-  bool openR(string INfile);      // opens file for reading
-  bool openW(string OUTfile);     // opens file for writing
-  bool openW(string fn, bool ow); // open, specify overwrite
-  bool open(string fn, char io);  // open, specify mode
+  public:
+    // (Con/De)structors
+    // ---------------------------------------------------------
+    CFfile();
+    CFfile(string filename, char io);
+    CFfile(string filein, string fileout);
+    ~CFfile();
+    // Initialize bool data members
+    // ----------------------------------------------
+    void init_switches();
+    //----------------------------------------------------------------------------
+    // Operator overloading
+    // ------------------------------------------------------
+    template <class T> CFfile &operator<<(T var) {
+        write(var);
+        return *this;
+    }
+    template <class T> CFfile &operator>>(T &var) {
+        read(var);
+        return *this;
+    }
+    //----------------------------------------------------------------------------
+    // File open methods
+    // ---------------------------------------------------------
+    bool exists(string fname);      // check if a file exists
+    bool openR(string INfile);      // opens file for reading
+    bool openW(string OUTfile);     // opens file for writing
+    bool openW(string fn, bool ow); // open, specify overwrite
+    bool open(string fn, char io);  // open, specify mode
 
-  bool isIopen() {return iopen;}  // is infile open?
-  bool isOopen() {return oopen;}  // is outfile open?
-  //----------------------------------------------------------------------------
-  // File pointer location methods ---------------------------------------------
-  void setIFptr(long location);   // set the infile pointer location
-  void setOFptr(long location);   // set the outfile pointer location
-  long getIFptr();                // get the infile pointer location
-  long getOFptr();                // get the outfile pointer location
-  // get the filenames ---------------------------------------------------------
-  inline string getStrIf() {return str_if;}
-  inline string getStrOf() {return str_of;}
-  //----------------------------------------------------------------------------
-  // I/O redirection methods ---------------------------------------------------
-  bool isIredir() const;          // returns the input mode
-  bool isOredir() const;          // returns the output mode
-  void toggleImode();             // toggles input mode (FILE or STDIN)
-  void toggleOmode();             // toggles output mode (FILE or STDIN)
-  //----------------------------------------------------------------------------
-  // Read/Write methods --------------------------------------------------------
-  template <class T> void read(T &buffer) {(iredir?  cin:ifile) >> buffer;}
-  template <class T> void write(T buffer) {(oredir? cout:ofile) << buffer;}
-  // Special purpose read methods ----------------------------------------------
-  void rline(string &buffer);                // read a line to the string
-  void rfile(string &buffer);                // read a file to the string
-  void backup(string fname, string bname);   // copy a file
-  // File close methods --------------------------------------------------------
-  void closeR();   // close the input file
-  void closeW();   // close the output file
-  void close();    // close all
-  //----------------------------------------------------------------------------
-  // These are public, so you can still use them raw ---------------------------
-  ifstream ifile;  // input file stream
-  ofstream ofile;  // output file stream
-  //----------------------------------------------------------------------------
- protected:
-  // I/O redirection switches --------------------------------------------------
-  bool iredir;
-  bool oredir;
-  bool iopen;
-  bool oopen;
-  // filenames -----------------------------------------------------------------
-  string str_if;
-  string str_of;
+    bool isIopen() { return iopen; } // is infile open?
+    bool isOopen() { return oopen; } // is outfile open?
+    //----------------------------------------------------------------------------
+    // File pointer location methods
+    // ---------------------------------------------
+    void setIFptr(long location); // set the infile pointer location
+    void setOFptr(long location); // set the outfile pointer location
+    long getIFptr();              // get the infile pointer location
+    long getOFptr();              // get the outfile pointer location
+    // get the filenames
+    // ---------------------------------------------------------
+    inline string getStrIf() { return str_if; }
+    inline string getStrOf() { return str_of; }
+    //----------------------------------------------------------------------------
+    // I/O redirection methods
+    // ---------------------------------------------------
+    bool isIredir() const; // returns the input mode
+    bool isOredir() const; // returns the output mode
+    void toggleImode();    // toggles input mode (FILE or STDIN)
+    void toggleOmode();    // toggles output mode (FILE or STDIN)
+    //----------------------------------------------------------------------------
+    // Read/Write methods
+    // --------------------------------------------------------
+    template <class T> void read(T &buffer) {
+        (iredir ? cin : ifile) >> buffer;
+    }
+    template <class T> void write(T buffer) {
+        (oredir ? cout : ofile) << buffer;
+    }
+    // Special purpose read methods
+    // ----------------------------------------------
+    void rline(string &buffer);              // read a line to the string
+    void rfile(string &buffer);              // read a file to the string
+    void backup(string fname, string bname); // copy a file
+    // File close methods
+    // --------------------------------------------------------
+    void closeR(); // close the input file
+    void closeW(); // close the output file
+    void close();  // close all
+    //----------------------------------------------------------------------------
+    // These are public, so you can still use them raw
+    // ---------------------------
+    ifstream ifile; // input file stream
+    ofstream ofile; // output file stream
+    //----------------------------------------------------------------------------
+  protected:
+    // I/O redirection switches
+    // --------------------------------------------------
+    bool iredir;
+    bool oredir;
+    bool iopen;
+    bool oopen;
+    // filenames
+    // -----------------------------------------------------------------
+    string str_if;
+    string str_of;
 };
 
-#endif  // _C4_FILE_H 
-
+#endif // _C4_FILE_H

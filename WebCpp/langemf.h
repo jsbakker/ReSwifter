@@ -11,11 +11,10 @@
 
 class LangEmf : public Engine {
 
- public:
-	LangEmf();
-	~LangEmf() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangEmf();
+    ~LangEmf() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_EMF
+#endif // LANG_DEF_EMF

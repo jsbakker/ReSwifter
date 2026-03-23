@@ -9,34 +9,21 @@
 
 LangGherkin::LangGherkin() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doNumbers   = No;
-	doScalars   = Yes;
-	doUnxComnt  = Yes;  // # comments
+    doNumbers = No;
+    doScalars = Yes;
+    doUnxComnt = Yes; // # comments
 }
 
 void LangGherkin::fill() {
 
-	// Gherkin step and structural keywords (Cucumber/SpecFlow/Behave)
-	string K[] = {
-		"Abstract",
-		"Ability",
-		"And",
-		"Background",
-		"But",
-		"Example",
-		"Examples",
-		"Feature",
-		"Given",
-		"Outline",
-		"Rule",
-		"Scenario",
-		"Scenarios",
-		"Template",
-		"Then",
-		"When",
-	};
-	std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
+    // Gherkin step and structural keywords (Cucumber/SpecFlow/Behave)
+    string K[] = {
+        "Abstract",  "Ability",  "And",   "Background", "But",  "Example",
+        "Examples",  "Feature",  "Given", "Outline",    "Rule", "Scenario",
+        "Scenarios", "Template", "Then",  "When",
+    };
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

@@ -8,10 +8,10 @@
 
 class LangTypeScript : public Engine {
 
- public:
-	LangTypeScript();
-	~LangTypeScript() {IO->close();}
-	virtual void fill();
+  public:
+    LangTypeScript();
+    ~LangTypeScript() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_TS
+#endif // LANG_DEF_TS

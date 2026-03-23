@@ -10,12 +10,10 @@
 
 class LangHaskell : public Engine {
 
- public:
-	LangHaskell();
-	~LangHaskell() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangHaskell();
+    ~LangHaskell() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_Haskell
-
+#endif // LANG_DEF_Haskell

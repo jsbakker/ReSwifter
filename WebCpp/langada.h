@@ -11,10 +11,10 @@
 
 class LangAda : public Engine {
 
- public:
-	LangAda();
-	~LangAda() {IO->close();}
-	virtual void fill();
+  public:
+    LangAda();
+    ~LangAda() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_Ada
+#endif // LANG_DEF_Ada

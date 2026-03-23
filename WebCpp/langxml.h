@@ -8,13 +8,13 @@
 
 #include "engine.h"
 
-class LangXML: public Engine {
+class LangXML : public Engine {
 
- public:
-	LangXML();
-	virtual ~LangXML() {IO->close();}
+  public:
+    LangXML();
+    virtual ~LangXML() { IO->close(); }
 
-	virtual void fill();
+    virtual void fill();
 };
 
-#endif  // LANG_XML_DEF_H
+#endif // LANG_XML_DEF_H

@@ -6,16 +6,14 @@
 #ifndef LANG_JAVA_DEF_H
 #define LANG_JAVA_DEF_H
 
-
-
 #include "engine.h"
 
-class LangJava: public Engine {
+class LangJava : public Engine {
 
- public:
-	LangJava();
-	virtual ~LangJava() {IO->close();}
-	virtual void fill();
+  public:
+    LangJava();
+    virtual ~LangJava() { IO->close(); }
+    virtual void fill();
 };
 
-#endif  // LANG_JAVA_DEF_H
+#endif // LANG_JAVA_DEF_H

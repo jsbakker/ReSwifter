@@ -10,27 +10,26 @@
 
 LangEuphoria ::LangEuphoria() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-
-	doAdaComnt  = Yes;
+    doAdaComnt = Yes;
 }
 
 void LangEuphoria ::fill() {
 
-	string K[] = {
-	"and","break","by","case","constant","continue","do","else","elsif",
-	"elsifdef","elsedef","end","endif","enum","exit","export","fall_through",
-	"fallthru","for","function","global","goto","if","ifdef","include",
-	"label","namespace","not","or","override","procedure","public","return",
-	"switch","then","to","type","while","with","without","xor"
-	};
-	std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
+    string K[] = {"and",       "break",        "by",       "case",   "constant",
+                  "continue",  "do",           "else",     "elsif",  "elsifdef",
+                  "elsedef",   "end",          "endif",    "enum",   "exit",
+                  "export",    "fall_through", "fallthru", "for",    "function",
+                  "global",    "goto",         "if",       "ifdef",  "include",
+                  "label",     "namespace",    "not",      "or",     "override",
+                  "procedure", "public",       "return",   "switch", "then",
+                  "to",        "type",         "while",    "with",   "without",
+                  "xor"};
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// Euphoria built-in types
-	string T[] = {
-	"atom","integer","object","sequence"
-	};
-	std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
+    // Euphoria built-in types
+    string T[] = {"atom", "integer", "object", "sequence"};
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

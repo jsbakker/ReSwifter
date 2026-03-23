@@ -30,41 +30,37 @@
  * _______. ..
  */
 
+#ifndef _C4_DATA_PAIR
+#define _C4_DATA_PAIR
 
-#ifndef _C4_DATA_PAIR 
-#define _C4_DATA_PAIR 
-
-#include <string> 
+#include <string>
 using namespace std;
 
 class CFdatapair {
 
- public:
-
-  void operator<<(string  mldata);//{translateML(mldata);}
-  void operator>>(string& mldata);//{mldata = info_ml();}
-  //---------------------------------------------------------------------------
-  CFdatapair();                   // default constructor
-  CFdatapair(string mldata);      // create datapair with markup data
-  CFdatapair(string n, string v); // create datapair with name and value
-  //---------------------------------------------------------------------------
-  string getname()  const;        // return the name
-  string getvalue() const;        // return the value
-  void setname (string n);        // change the name
-  void setvalue(string v);        // change the value
-  //---------------------------------------------------------------------------
-  string info_nv()  const;        // return the name/value in printable format
-  string info_ml()  const;        // return the name/value in markup format
-  //---------------------------------------------------------------------------
-  void translateML(string mldata);// change the name/value using markup data
-  void swap();                    // swap the name and value
-  //---------------------------------------------------------------------------
- protected:
-
-  string name;
-  string value;
-  //---------------------------------------------------------------------------
+  public:
+    void operator<<(string mldata);  //{translateML(mldata);}
+    void operator>>(string &mldata); //{mldata = info_ml();}
+    //---------------------------------------------------------------------------
+    CFdatapair();                   // default constructor
+    CFdatapair(string mldata);      // create datapair with markup data
+    CFdatapair(string n, string v); // create datapair with name and value
+    //---------------------------------------------------------------------------
+    string getname() const;  // return the name
+    string getvalue() const; // return the value
+    void setname(string n);  // change the name
+    void setvalue(string v); // change the value
+    //---------------------------------------------------------------------------
+    string info_nv() const; // return the name/value in printable format
+    string info_ml() const; // return the name/value in markup format
+    //---------------------------------------------------------------------------
+    void translateML(string mldata); // change the name/value using markup data
+    void swap();                     // swap the name and value
+    //---------------------------------------------------------------------------
+  protected:
+    string name;
+    string value;
+    //---------------------------------------------------------------------------
 };
 
-#endif  // _C4_DATA_PAIR 
-
+#endif // _C4_DATA_PAIR

@@ -10,10 +10,10 @@
 
 class LangUScript : public LangC {
 
- public:
-	LangUScript();
-	virtual ~LangUScript() {IO->close();}
-	virtual void fill();
+  public:
+    LangUScript();
+    virtual ~LangUScript() { IO->close(); }
+    virtual void fill();
 };
 
-#endif  // _LANG_UNREALSCRIPT_DEF_H
+#endif // _LANG_UNREALSCRIPT_DEF_H

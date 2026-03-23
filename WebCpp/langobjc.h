@@ -10,11 +10,10 @@
 
 class LangObjectiveC : public virtual LangC {
 
- public:
-	LangObjectiveC();
-	virtual ~LangObjectiveC() {IO->close();}
+  public:
+    LangObjectiveC();
+    virtual ~LangObjectiveC() { IO->close(); }
     void fill() override;
-
 };
 
-#endif //LANG_DEF_ObjectiveC
+#endif // LANG_DEF_ObjectiveC

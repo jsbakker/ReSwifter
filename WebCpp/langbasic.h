@@ -9,11 +9,10 @@
 
 class LangBasic : public Engine {
 
- public:
-	LangBasic();
-	~LangBasic() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangBasic();
+    ~LangBasic() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_Basic
+#endif // LANG_DEF_Basic

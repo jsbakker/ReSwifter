@@ -10,38 +10,45 @@
 
 LangSQL ::LangSQL() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doCaseKeys  = No;
-	doAdaComnt  = Yes;
-	doBigComnt  = Yes;
+    doCaseKeys = No;
+    doAdaComnt = Yes;
+    doBigComnt = Yes;
 }
 
 void LangSQL ::fill() {
 
-	string K[] = {
-	"ADD","ALL","ALTER","AND","ANY","AS","AVERAGE","BEGIN","BETWEEN","BY",
-	"CASE","CHECK","CLOSE","COLUMN","COMMIT","CONNECT","CONSTRAINT","COUNT",
-	"CREATE","CROSS","CURSOR","DATABASE","DEALLOCATE","DECLARE","DELETE",
-	"DISTINCT","DIVIDE","DROP","ELSE","END","EXCEPT","EXECUTE","EXISTS",
-	"FETCH","FOR","FOREIGN","FROM","FULL","GRANT","GROUP","HAVING","IN",
-	"INDEX","INNER","INSERT","INTERSECT","INTO","IS","JOIN","KEY","LEFT",
-	"LIKE","LIMIT","MAXIMUM","MERGE","MINIMUM","NATURAL","NOT","NULL",
-	"OFFSET","ON","ONLY","OPEN","OR","ORDER","OUTER","OVER","PARTITION",
-	"PRIMARY","PROCEDURE","REFERENCES","REVOKE","RIGHT","ROLLBACK","ROW",
-	"ROWS","SAVEPOINT","SCHEMA","SELECT","SEQUENCE","SET","SOME","SUM",
-	"TABLE","THEN","TRANSACTION","TRIGGER","TRUNCATE","UNION","UNIQUE",
-	"UPDATE","USER","VALUES","VIEW","WHEN","WHERE","WITH"
-	};
-	std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
+    string K[] = {
+        "ADD",         "ALL",        "ALTER",      "AND",      "ANY",
+        "AS",          "AVERAGE",    "BEGIN",      "BETWEEN",  "BY",
+        "CASE",        "CHECK",      "CLOSE",      "COLUMN",   "COMMIT",
+        "CONNECT",     "CONSTRAINT", "COUNT",      "CREATE",   "CROSS",
+        "CURSOR",      "DATABASE",   "DEALLOCATE", "DECLARE",  "DELETE",
+        "DISTINCT",    "DIVIDE",     "DROP",       "ELSE",     "END",
+        "EXCEPT",      "EXECUTE",    "EXISTS",     "FETCH",    "FOR",
+        "FOREIGN",     "FROM",       "FULL",       "GRANT",    "GROUP",
+        "HAVING",      "IN",         "INDEX",      "INNER",    "INSERT",
+        "INTERSECT",   "INTO",       "IS",         "JOIN",     "KEY",
+        "LEFT",        "LIKE",       "LIMIT",      "MAXIMUM",  "MERGE",
+        "MINIMUM",     "NATURAL",    "NOT",        "NULL",     "OFFSET",
+        "ON",          "ONLY",       "OPEN",       "OR",       "ORDER",
+        "OUTER",       "OVER",       "PARTITION",  "PRIMARY",  "PROCEDURE",
+        "REFERENCES",  "REVOKE",     "RIGHT",      "ROLLBACK", "ROW",
+        "ROWS",        "SAVEPOINT",  "SCHEMA",     "SELECT",   "SEQUENCE",
+        "SET",         "SOME",       "SUM",        "TABLE",    "THEN",
+        "TRANSACTION", "TRIGGER",    "TRUNCATE",   "UNION",    "UNIQUE",
+        "UPDATE",      "USER",       "VALUES",     "VIEW",     "WHEN",
+        "WHERE",       "WITH"};
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// SQL data types
-	string T[] = {
-	"BIGINT","BINARY","BIT","BLOB","BOOLEAN","CHAR","CHARACTER","CLOB",
-	"DATE","DATETIME","DECIMAL","DOUBLE","FLOAT","INT","INTEGER","INTERVAL",
-	"NCHAR","NCLOB","NUMERIC","NVARCHAR","PRECISION","REAL","SMALLINT",
-	"TEXT","TIME","TIMESTAMP","TINYINT","VARCHAR","VARYING"
-	};
-	std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
+    // SQL data types
+    string T[] = {"BIGINT",    "BINARY",    "BIT",      "BLOB",    "BOOLEAN",
+                  "CHAR",      "CHARACTER", "CLOB",     "DATE",    "DATETIME",
+                  "DECIMAL",   "DOUBLE",    "FLOAT",    "INT",     "INTEGER",
+                  "INTERVAL",  "NCHAR",     "NCLOB",    "NUMERIC", "NVARCHAR",
+                  "PRECISION", "REAL",      "SMALLINT", "TEXT",    "TIME",
+                  "TIMESTAMP", "TINYINT",   "VARCHAR",  "VARYING"};
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

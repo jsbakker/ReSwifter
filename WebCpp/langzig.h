@@ -8,10 +8,10 @@
 
 class LangZig : public Engine {
 
- public:
-	LangZig();
-	~LangZig() {IO->close();}
-	virtual void fill();
+  public:
+    LangZig();
+    ~LangZig() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_ZIG
+#endif // LANG_DEF_ZIG

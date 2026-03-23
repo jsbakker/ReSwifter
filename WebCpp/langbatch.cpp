@@ -9,39 +9,46 @@
 
 LangBatch::LangBatch() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doCaseKeys  = No;
+    doCaseKeys = No;
 
-	doHashes    = Yes;
-    doRemComnt  = Yes;
-    doBatComnt  = Yes;
+    doHashes = Yes;
+    doRemComnt = Yes;
+    doBatComnt = Yes;
 }
 
 void LangBatch::fill() {
-	// Internal commands and batch-specific keywords
-	string K[] = {
-"assoc","break","call","cd","chdir","cls","copy","date","defined","del",
-"dir","do","echo","else","endlocal","equ","erase","errorlevel","exist",
-"exit","fc","for","ftype","geq","goto","gtr","if","in","label","leq",
-"lss","md","mkdir","more","move","neq","not","path","pause","popd",
-"prompt","pushd","rd","ren","rename","replace","rmdir","set","setlocal",
-"shift","sort","start","time","title","tree","type","ver","verify","vol"
-	};
-	std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
+    // Internal commands and batch-specific keywords
+    string K[] = {
+        "assoc",    "break", "call",     "cd",      "chdir",  "cls",
+        "copy",     "date",  "defined",  "del",     "dir",    "do",
+        "echo",     "else",  "endlocal", "equ",     "erase",  "errorlevel",
+        "exist",    "exit",  "fc",       "for",     "ftype",  "geq",
+        "goto",     "gtr",   "if",       "in",      "label",  "leq",
+        "lss",      "md",    "mkdir",    "more",    "move",   "neq",
+        "not",      "path",  "pause",    "popd",    "prompt", "pushd",
+        "rd",       "ren",   "rename",   "replace", "rmdir",  "set",
+        "setlocal", "shift", "sort",     "start",   "time",   "title",
+        "tree",     "type",  "ver",      "verify",  "vol"};
+    std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// External commands commonly used in batch files
-	string T[] = {
-"at","attrib","bcdedit","bitsadmin","cacls","chcp","chkdsk","chkntfs",
-"cipher","clip","cmd","cmdkey","color","comp","compact","control",
-"convert","dism","diskcomp","diskcopy","doskey","driverquery","eventcreate",
-"expand","find","findstr","format","forfiles","graftabl","help","icacls",
-"ipconfig","mklink","msiexec","net","netsh","netstat","nslookup","openfiles",
-"pathping","ping","powershell","print","pwsh","recover","reg","regsvr32",
-"robocopy","runas","rundll32","sc","schtasks","share","shutdown","subst",
-"systeminfo","takeown","taskkill","tasklist","timeout","tracert","where",
-"whoami","wmic","wsl","xcopy"
-	};
-	std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
+    // External commands commonly used in batch files
+    string T[] = {
+        "at",         "attrib",      "bcdedit",     "bitsadmin", "cacls",
+        "chcp",       "chkdsk",      "chkntfs",     "cipher",    "clip",
+        "cmd",        "cmdkey",      "color",       "comp",      "compact",
+        "control",    "convert",     "dism",        "diskcomp",  "diskcopy",
+        "doskey",     "driverquery", "eventcreate", "expand",    "find",
+        "findstr",    "format",      "forfiles",    "graftabl",  "help",
+        "icacls",     "ipconfig",    "mklink",      "msiexec",   "net",
+        "netsh",      "netstat",     "nslookup",    "openfiles", "pathping",
+        "ping",       "powershell",  "print",       "pwsh",      "recover",
+        "reg",        "regsvr32",    "robocopy",    "runas",     "rundll32",
+        "sc",         "schtasks",    "share",       "shutdown",  "subst",
+        "systeminfo", "takeown",     "taskkill",    "tasklist",  "timeout",
+        "tracert",    "where",       "whoami",      "wmic",      "wsl",
+        "xcopy"};
+    std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

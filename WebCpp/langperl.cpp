@@ -10,135 +10,47 @@
 #include <iterator>
 
 LangPerl::LangPerl() {
-	
-	fill();
-	init_switches();
 
-	doSymbols  = Yes;
-	doLabels   = Yes;
-	doScalars  = Yes;
-	doArrays   = Yes;
-	doHashes   = Yes;
-	doUnxComnt = Yes;
-	doHeredoc  = Yes;
+    fill();
+    init_switches();
+
+    doSymbols = Yes;
+    doLabels = Yes;
+    doScalars = Yes;
+    doArrays = Yes;
+    doHashes = Yes;
+    doUnxComnt = Yes;
+    doHeredoc = Yes;
 }
 
 void LangPerl::fill() {
 
-	// Perl 5.40 keywords
-	string K[] = {
-		"and",
-		"bless",
-		"caller",
-		"chomp",
-		"chop",
-		"chr",
-		"class",
-		"cmp",
-		"constant",
-		"CORE",
-		"croak",
-		"defer",
-		"defined",
-		"delete",
-		"die",
-		"do",
-		"dump",
-		"each",
-		"else",
-		"elsif",
-		"eq",
-		"eval",
-		"exists",
-		"field",
-		"for",
-		"foreach",
-		"ge",
-		"goto",
-		"grep",
-		"gt",
-		"if",
-		"isa",
-		"join",
-		"keys",
-		"last",
-		"le",
-		"local",
-		"lt",
-		"map",
-		"method",
-		"my",
-		"ne",
-		"next",
-		"no",
-		"not",
-		"or",
-		"our",
-		"package",
-		"pop",
-		"print",
-		"printf",
-		"push",
-		"redo",
-		"ref",
-		"require",
-		"return",
-		"reverse",
-		"say",
-		"shift",
-		"sort",
-		"splice",
-		"split",
-		"state",
-		"sub",
-		"try",
-		"undef",
-		"unless",
-		"unshift",
-		"until",
-		"use",
-		"values",
-		"wantarray",
-		"warn",
-		"while",
-		"xor",
-	};
+    // Perl 5.40 keywords
+    string K[] = {
+        "and",     "bless",   "caller",   "chomp",  "chop",   "chr",
+        "class",   "cmp",     "constant", "CORE",   "croak",  "defer",
+        "defined", "delete",  "die",      "do",     "dump",   "each",
+        "else",    "elsif",   "eq",       "eval",   "exists", "field",
+        "for",     "foreach", "ge",       "goto",   "grep",   "gt",
+        "if",      "isa",     "join",     "keys",   "last",   "le",
+        "local",   "lt",      "map",      "method", "my",     "ne",
+        "next",    "no",      "not",      "or",     "our",    "package",
+        "pop",     "print",   "printf",   "push",   "redo",   "ref",
+        "require", "return",  "reverse",  "say",    "shift",  "sort",
+        "splice",  "split",   "state",    "sub",    "try",    "undef",
+        "unless",  "unshift", "until",    "use",    "values", "wantarray",
+        "warn",    "while",   "xor",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// Perl 5.40 built-in functions (filesystem, I/O, system)
-	string T[] = {
-		"binmode",
-		"catch",
-		"chdir",
-		"chmod",
-		"chown",
-		"close",
-		"closedir",
-		"connect",
-		"exit",
-		"flock",
-		"mkdir",
-		"open",
-		"opendir",
-		"pack",
-		"read",
-		"readdir",
-		"rename",
-		"rewinddir",
-		"rmdir",
-		"seek",
-		"select",
-		"socket",
-		"stat",
-		"sysread",
-		"syswrite",
-		"tell",
-		"tied",
-		"tie",
-		"truncate",
-		"unlink",
-		"untie",
-	};
+    // Perl 5.40 built-in functions (filesystem, I/O, system)
+    string T[] = {
+        "binmode",  "catch",   "chdir",  "chmod",   "chown",    "close",
+        "closedir", "connect", "exit",   "flock",   "mkdir",    "open",
+        "opendir",  "pack",    "read",   "readdir", "rename",   "rewinddir",
+        "rmdir",    "seek",    "select", "socket",  "stat",     "sysread",
+        "syswrite", "tell",    "tied",   "tie",     "truncate", "unlink",
+        "untie",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }
-

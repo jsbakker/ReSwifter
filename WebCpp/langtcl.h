@@ -10,11 +10,10 @@
 
 class LangTcl : public Engine {
 
- public:
-	LangTcl();
-	~LangTcl() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangTcl();
+    ~LangTcl() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_Tcl
+#endif // LANG_DEF_Tcl

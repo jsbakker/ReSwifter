@@ -10,59 +10,28 @@
 
 LangCg ::LangCg() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doSymbols   = Yes;
-	doPreProc   = Yes;
-	doCinComnt  = Yes;
-	doBigComnt  = Yes;
+    doSymbols = Yes;
+    doPreProc = Yes;
+    doCinComnt = Yes;
+    doBigComnt = Yes;
 }
 
 void LangCg ::fill() {
 
-	string K[] = {
-"break",
-"case",
-"const",
-"continue",
-"default",
-"discard",
-"do",
-"else",
-"enum",
-"extern",
-"false",
-"for",
-"function",
-"goto",
-"if",
-"return",
-"struct",
-"switch",
-"true",
-"typedef",
-"uniform",
-"while"
-	};
+    string K[] = {"break",   "case",   "const",    "continue", "default",
+                  "discard", "do",     "else",     "enum",     "extern",
+                  "false",   "for",    "function", "goto",     "if",
+                  "return",  "struct", "switch",   "true",     "typedef",
+                  "uniform", "while"};
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	string T[] = {
-"bool",
-"float4x4",
-"float4",
-"float3x3",
-"float3",
-"float2x2",
-"float2",
-"float",
-"in",
-"inout",
-"int",
-"out",
-"static",
-"void",
-"volatile",
-	};
+    string T[] = {
+        "bool",     "float4x4", "float4", "float3x3", "float3",
+        "float2x2", "float2",   "float",  "in",       "inout",
+        "int",      "out",      "static", "void",     "volatile",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -8,11 +8,10 @@
 
 class LangFSharp : public Engine {
 
- public:
-	LangFSharp();
-	~LangFSharp() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangFSharp();
+    ~LangFSharp() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_FSHARP
+#endif // LANG_DEF_FSHARP

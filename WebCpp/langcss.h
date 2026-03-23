@@ -8,13 +8,13 @@
 
 #include "engine.h"
 
-class LangCSS: public Engine {
+class LangCSS : public Engine {
 
- public:
-	LangCSS();
-	virtual ~LangCSS() {IO->close();}
+  public:
+    LangCSS();
+    virtual ~LangCSS() { IO->close(); }
 
-	virtual void fill();
+    virtual void fill();
 };
 
-#endif  // LANG_CSS_DEF_H
+#endif // LANG_CSS_DEF_H

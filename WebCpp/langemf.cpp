@@ -10,46 +10,25 @@
 
 LangEmf ::LangEmf() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-
-	doNumbers   = No;
-	doLabels    = Yes;
-	doScalars   = Yes;
-	doArrays    = Yes;
-	doHashes    = Yes;
-	doAsmComnt  = Yes;
+    doNumbers = No;
+    doLabels = Yes;
+    doScalars = Yes;
+    doArrays = Yes;
+    doHashes = Yes;
+    doAsmComnt = Yes;
 }
 
 void LangEmf ::fill() {
 
-	string K[] = {
-"!abort",
-"!bell",
-"!continue",
-"!done",
-"!ehelp",
-"!elif",
-"!else",
-"!emacro",
-"!end",
-"!endif",
-"!force",
-"!goto",
-"!if",
-"!iif",
-"!jump",
-"!nmacro",
-"!repeat",
-"!return",
-"!tgoto",
-"!tjump",
-"!until",
-"!while",
-"0define-macro",
-"define-macro",
-"undefine-macro"
-	};
+    string K[] = {"!abort",        "!bell",   "!continue",     "!done",
+                  "!ehelp",        "!elif",   "!else",         "!emacro",
+                  "!end",          "!endif",  "!force",        "!goto",
+                  "!if",           "!iif",    "!jump",         "!nmacro",
+                  "!repeat",       "!return", "!tgoto",        "!tjump",
+                  "!until",        "!while",  "0define-macro", "define-macro",
+                  "undefine-macro"};
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

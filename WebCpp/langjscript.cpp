@@ -11,109 +11,70 @@
 
 LangJScript ::LangJScript() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doSymbols   = Yes;
-	doCinComnt  = Yes;
-	doBigComnt  = Yes;
+    doSymbols = Yes;
+    doCinComnt = Yes;
+    doBigComnt = Yes;
 }
 
 void LangJScript ::fill() {
 
-	// JavaScript keywords (ES2025)
-	string K[] = {
-		"as",
-		"async",
-		"await",
-		"break",
-		"case",
-		"catch",
-		"class",
-		"const",
-		"continue",
-		"debugger",
-		"default",
-		"delete",
-		"do",
-		"else",
-		"export",
-		"extends",
-		"false",
-		"finally",
-		"for",
-		"from",
-		"function",
-		"get",
-		"if",
-		"import",
-		"in",
-		"instanceof",
-		"let",
-		"new",
-		"null",
-		"of",
-		"return",
-		"set",
-		"static",
-		"super",
-		"switch",
-		"this",
-		"throw",
-		"true",
-		"try",
-		"typeof",
-		"undefined",
-		"var",
-		"void",
-		"while",
-		"with",
-		"yield",
-	};
+    // JavaScript keywords (ES2025)
+    string K[] = {
+        "as",     "async",      "await",    "break",    "case",      "catch",
+        "class",  "const",      "continue", "debugger", "default",   "delete",
+        "do",     "else",       "export",   "extends",  "false",     "finally",
+        "for",    "from",       "function", "get",      "if",        "import",
+        "in",     "instanceof", "let",      "new",      "null",      "of",
+        "return", "set",        "static",   "super",    "switch",    "this",
+        "throw",  "true",       "try",      "typeof",   "undefined", "var",
+        "void",   "while",      "with",     "yield",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// JavaScript built-in types and globals (ES2025)
-	string T[] = {
-		"Array",
-		"ArrayBuffer",
-		"BigInt",
-		"Boolean",
-		"DataView",
-		"Date",
-		"Error",
-		"Float32Array",
-		"Float64Array",
-		"Function",
-		"Generator",
-		"Int8Array",
-		"Int16Array",
-		"Int32Array",
-		"Intl",
-		"Iterator",
-		"JSON",
-		"Map",
-		"Math",
-		"Number",
-		"Object",
-		"Promise",
-		"Proxy",
-		"RangeError",
-		"ReferenceError",
-		"Reflect",
-		"RegExp",
-		"Set",
-		"SharedArrayBuffer",
-		"String",
-		"Symbol",
-		"SyntaxError",
-		"TypeError",
-		"Uint8Array",
-		"Uint16Array",
-		"Uint32Array",
-		"WeakMap",
-		"WeakRef",
-		"WeakSet",
-	};
+    // JavaScript built-in types and globals (ES2025)
+    string T[] = {
+        "Array",
+        "ArrayBuffer",
+        "BigInt",
+        "Boolean",
+        "DataView",
+        "Date",
+        "Error",
+        "Float32Array",
+        "Float64Array",
+        "Function",
+        "Generator",
+        "Int8Array",
+        "Int16Array",
+        "Int32Array",
+        "Intl",
+        "Iterator",
+        "JSON",
+        "Map",
+        "Math",
+        "Number",
+        "Object",
+        "Promise",
+        "Proxy",
+        "RangeError",
+        "ReferenceError",
+        "Reflect",
+        "RegExp",
+        "Set",
+        "SharedArrayBuffer",
+        "String",
+        "Symbol",
+        "SyntaxError",
+        "TypeError",
+        "Uint8Array",
+        "Uint16Array",
+        "Uint32Array",
+        "WeakMap",
+        "WeakRef",
+        "WeakSet",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }
-

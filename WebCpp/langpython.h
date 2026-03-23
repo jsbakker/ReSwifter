@@ -10,11 +10,11 @@
 
 class LangPython : public Engine {
 
- public:
-	LangPython();
-	~LangPython() {IO->close();}
+  public:
+    LangPython();
+    ~LangPython() { IO->close(); }
 
-	virtual void fill();
+    virtual void fill();
 };
 
-#endif  // LANG_PYTHON_DEF_H
+#endif // LANG_PYTHON_DEF_H

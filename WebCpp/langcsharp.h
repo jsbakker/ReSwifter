@@ -10,11 +10,10 @@
 
 class LangCSharp : public Engine {
 
- public:
-	LangCSharp();
-	~LangCSharp() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangCSharp();
+    ~LangCSharp() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_CSharp
+#endif // LANG_DEF_CSharp

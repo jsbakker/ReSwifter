@@ -10,11 +10,10 @@
 
 class LangModula2 : public Engine {
 
- public:
-	LangModula2();
-	~LangModula2() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangModula2();
+    ~LangModula2() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_Modula2
+#endif // LANG_DEF_Modula2

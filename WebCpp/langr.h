@@ -8,11 +8,10 @@
 
 class LangR : public Engine {
 
- public:
-	LangR();
-	~LangR() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangR();
+    ~LangR() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_R
+#endif // LANG_DEF_R

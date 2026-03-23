@@ -10,39 +10,27 @@
 
 LangXML::LangXML() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doNumbers   = Yes;
-	doCaseKeys  = Yes;
-	doHtmlTags  = Yes;
-	doHtmComnt  = Yes;
+    doNumbers = Yes;
+    doCaseKeys = Yes;
+    doHtmlTags = Yes;
+    doHtmComnt = Yes;
 }
 
 void LangXML::fill() {
 
-	// XML declarations and processing instructions
-	string K[] = {
-		"?xml",
-		"!DOCTYPE",
-		"!ELEMENT",
-		"!ATTLIST",
-		"!ENTITY",
-		"!NOTATION",
-		"![CDATA[",
-		"![INCLUDE[",
-		"![IGNORE[",
-	};
+    // XML declarations and processing instructions
+    string K[] = {
+        "?xml",      "!DOCTYPE", "!ELEMENT",   "!ATTLIST",  "!ENTITY",
+        "!NOTATION", "![CDATA[", "![INCLUDE[", "![IGNORE[",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// XML common attributes
-	string T[] = {
-		"encoding",
-		"standalone",
-		"version",
-		"xml:lang",
-		"xml:space",
-		"xmlns",
-	};
+    // XML common attributes
+    string T[] = {
+        "encoding", "standalone", "version", "xml:lang", "xml:space", "xmlns",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

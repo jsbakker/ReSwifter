@@ -8,12 +8,12 @@
 
 #include "engine.h"
 
-class LangPerl: public Engine {
+class LangPerl : public Engine {
 
- public :
-	LangPerl();
-	virtual ~LangPerl() {IO->close();}
-	virtual void fill();
+  public:
+    LangPerl();
+    virtual ~LangPerl() { IO->close(); }
+    virtual void fill();
 };
 
-#endif  // LANG_PERL_DEF_H
+#endif // LANG_PERL_DEF_H

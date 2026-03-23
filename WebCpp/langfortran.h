@@ -10,11 +10,10 @@
 
 class LangFortran : public Engine {
 
- public:
-	LangFortran();
-	~LangFortran() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangFortran();
+    ~LangFortran() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_Fortran
+#endif // LANG_DEF_Fortran

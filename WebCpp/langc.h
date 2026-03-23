@@ -3,7 +3,6 @@
 // the C Language definition file for Web C Plus Plus
 // Webcpp Copyright (C)2001-2004, (C)2026 Jeffrey Bakker
 
-
 #ifndef _LANG_C_DEF_H
 #define _LANG_C_DEF_H
 
@@ -11,10 +10,10 @@
 
 class LangC : public virtual Engine {
 
- public:
-	LangC();
-	virtual ~LangC() {IO->close();}
+  public:
+    LangC();
+    virtual ~LangC() { IO->close(); }
     void fill() override;
 };
 
-#endif  // _LANG_C_DEF_H
+#endif // _LANG_C_DEF_H

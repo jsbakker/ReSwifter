@@ -11,11 +11,10 @@
 
 class LangEuphoria : public Engine {
 
- public:
-	LangEuphoria();
-	~LangEuphoria() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangEuphoria();
+    ~LangEuphoria() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_EUPHORIA
+#endif // LANG_DEF_EUPHORIA

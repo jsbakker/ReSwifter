@@ -6,11 +6,11 @@
 
 #include "langhtml.h"
 
-class LangAsp :public LangHtml {
- public:
-	LangAsp();
-	~LangAsp() {IO->close();}
-	virtual void fill();
+class LangAsp : public LangHtml {
+  public:
+    LangAsp();
+    ~LangAsp() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_ASP
+#endif // LANG_DEF_ASP

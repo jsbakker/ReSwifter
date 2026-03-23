@@ -8,11 +8,10 @@
 
 class LangScala : public Engine {
 
- public:
-	LangScala();
-	~LangScala() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangScala();
+    ~LangScala() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_SCALA
+#endif // LANG_DEF_SCALA

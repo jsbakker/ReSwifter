@@ -5,1288 +5,1612 @@
 
 //--build=i386-linux --host=i386-linux --target=i386-linux
 
-#define CHILD( x , y ) Child=new ( x );\
-Child->setLangExt( y )
+#define CHILD(x, y)                                                            \
+    Child = new (x);                                                           \
+    Child->setLangExt(y)
 
 // uncomment to debug
-//#include "defdebug.h"
+// #include "defdebug.h"
 
+#include "engine.h"
 #include "deflangs.h"
 #include "defparse.h"
 #include "defsys.h"
-#include "engine.h"
-#include <cstdlib>
 #include <cctype>
+#include <cstdlib>
 using namespace std;
 
 // forward declaration (defined near colourKeys)
 static bool isInsideFontTag(const string &buffer, int index);
 
-
 // initialize data members ----------------------------------------------------
 void Engine::init_switches() {
 
-	childLang   = false;
+    childLang = false;
 
-	// command line options
-	opt_bigtab  = false;
-	opt_webcpp  = false;
-	opt_hypinc  = false;
-	opt_follow  = false;
-	opt_number  = false;
-	opt_extcss  = false;
-	opt_anchor  = false;
-	opt_htsnip  = false;
+    // command line options
+    opt_bigtab = false;
+    opt_webcpp = false;
+    opt_hypinc = false;
+    opt_follow = false;
+    opt_number = false;
+    opt_extcss = false;
+    opt_anchor = false;
+    opt_htsnip = false;
 
-	// abort switches
-	inHtmTags   = false;
-	inDblQuotes = false;
-	inSinQuotes = false;
-	inBckQuotes = false;
-	inComment     = false;
-	inMultiStr    = false;
-	heredocEnd    = "";
-	endMultiLine  = false;
+    // abort switches
+    inHtmTags = false;
+    inDblQuotes = false;
+    inSinQuotes = false;
+    inBckQuotes = false;
+    inComment = false;
+    inMultiStr = false;
+    heredocEnd = "";
+    endMultiLine = false;
 
-	// common language
-	doStrings   = true;
-	doNumbers   = true;
-	doKeywords  = true;
-	doCaseKeys  = true;
-	doSymbols   = false;
-	doLabels    = false;
-	doPreProc   = false;
-	doScalars   = false;
-	doArrays    = false;
-	doHashes    = false;
-	doHtmlTags  = false;
-	doHtmComnt  = false;
-	doHskComnt  = false;
-	doPasComnt  = false;
-	doBigComnt  = false;
-	doCinComnt  = false;
-	doUnxComnt  = false;
-	doAsmComnt  = false;
-	doRemComnt  = false;
-	doAdaComnt  = false;
-	doFtnComnt  = false;
-	doTclComnt  = false;
-	doAspComnt  = false;
-	doBatComnt  = false;
-	doTplString = false;
-	doRawString = false;
-	doHeredoc   = false;
-	doPercentQ  = false;
-	doPhpHeredoc = false;
+    // common language
+    doStrings = true;
+    doNumbers = true;
+    doKeywords = true;
+    doCaseKeys = true;
+    doSymbols = false;
+    doLabels = false;
+    doPreProc = false;
+    doScalars = false;
+    doArrays = false;
+    doHashes = false;
+    doHtmlTags = false;
+    doHtmComnt = false;
+    doHskComnt = false;
+    doPasComnt = false;
+    doBigComnt = false;
+    doCinComnt = false;
+    doUnxComnt = false;
+    doAsmComnt = false;
+    doRemComnt = false;
+    doAdaComnt = false;
+    doFtnComnt = false;
+    doTclComnt = false;
+    doAspComnt = false;
+    doBatComnt = false;
+    doTplString = false;
+    doRawString = false;
+    doHeredoc = false;
+    doPercentQ = false;
+    doPhpHeredoc = false;
 
-	lncount  = 1;
-	tabwidth = 8;
-	tw = "8";
+    lncount = 1;
+    tabwidth = 8;
+    tw = "8";
 }
 // set the width of the tabs --------------------------------------------------
 void Engine::setTabWidth(string width) {
 
-	tabwidth = atoi(width.data());
-	if(tabwidth == 0) {
-        	tabwidth = 8;
-		tw = "8";
-	}
-	tw = width;
+    tabwidth = atoi(width.data());
+    if (tabwidth == 0) {
+        tabwidth = 8;
+        tw = "8";
+    }
+    tw = width;
 }
 // format the plain text for proper display in HTML ---------------------------
 void Engine::pre_parse() {
 
-	// the virtual Nth character factoring in for escapes
-	int i_esc = 0;
+    // the virtual Nth character factoring in for escapes
+    int i_esc = 0;
 
-	for (int i=0; i < (int)buffer.size(); i++) {
+    for (int i = 0; i < (int)buffer.size(); i++) {
 
-		// escape from HTML escapes
-		if (buffer[i] == '&') {buffer.replace(i,1,"&amp;");i_esc+=4;}
-		else
-		if (buffer[i] == '<') {buffer.replace(i,1, "&lt;");i_esc+=3;}
-		else
-		if (buffer[i] == '>') {buffer.replace(i,1, "&gt;");i_esc+=3;}
-		// escape from accidental HTML tags
+        // escape from HTML escapes
+        if (buffer[i] == '&') {
+            buffer.replace(i, 1, "&amp;");
+            i_esc += 4;
+        } else if (buffer[i] == '<') {
+            buffer.replace(i, 1, "&lt;");
+            i_esc += 3;
+        } else if (buffer[i] == '>') {
+            buffer.replace(i, 1, "&gt;");
+            i_esc += 3;
+        }
+        // escape from accidental HTML tags
 
-		if (opt_bigtab)
-		// convert tabs into spaces
-		if (buffer[i] == '\t') {
+        if (opt_bigtab)
+            // convert tabs into spaces
+            if (buffer[i] == '\t') {
 
-			int j;
-			buffer.erase(i,1);
+                int j;
+                buffer.erase(i, 1);
 
-			// factor in the number of escapes
-			if((i-i_esc) % tabwidth == 0) {
+                // factor in the number of escapes
+                if ((i - i_esc) % tabwidth == 0) {
 
-				for(j=0; j < tabwidth; j++) {
+                    for (j = 0; j < tabwidth; j++) {
 
-					buffer.insert(i," ");
-				}
-				i+=tabwidth-1;
-			}else{
-				int spaces = tabwidth - ((i-i_esc) % tabwidth);
+                        buffer.insert(i, " ");
+                    }
+                    i += tabwidth - 1;
+                } else {
+                    int spaces = tabwidth - ((i - i_esc) % tabwidth);
 
-				for(j=0; j < spaces; j++) {
+                    for (j = 0; j < spaces; j++) {
 
-					buffer.insert(i," ");
-				}
-				i+=spaces-1;
-			}
-		}
-		// for browsers that don't display tabs properly
-	}
+                        buffer.insert(i, " ");
+                    }
+                    i += spaces - 1;
+                }
+            }
+        // for browsers that don't display tabs properly
+    }
 }
 // erases tags (use for inside of inline comments) ----------------------------
 void Engine::eraseTags(int start, int fin) {
 
-	if(fin ==  0) {fin = buffer.size();}
-	if(fin == -1) {fin = buffer.size();}
+    if (fin == 0) {
+        fin = buffer.size();
+    }
+    if (fin == -1) {
+        fin = buffer.size();
+    }
 
-	int erase1, erase2;
-	int offset1, offset2;
-	string srchstr;
+    int erase1, erase2;
+    int offset1, offset2;
+    string srchstr;
 
-	srchstr = "<font CLASS=";
-	offset1 = 20;
-	offset2 = 7;
+    srchstr = "<font CLASS=";
+    offset1 = 20;
+    offset2 = 7;
 
-	// erase all the colours previously made
-	while(buffer.find(srchstr,start) != -1 &&
-	      buffer.find(srchstr,start) < fin) {
+    // erase all the colours previously made
+    while (buffer.find(srchstr, start) != -1 &&
+           buffer.find(srchstr, start) < fin) {
 
-		//erasing opening font tags
-		erase1 = buffer.find(srchstr,start);
-		if(erase1 != -1 && erase1 < fin) {
-			buffer.erase(erase1,offset1);
-		}
-		//erasing closing font tags
-		erase2 = buffer.find("</font>",start);
-		if(erase2 != -1 && erase2 < fin) {
-			buffer.erase(erase2,offset2);
-		}
-	}
-	inDblQuotes = false;
-	inSinQuotes = false;
-	inBckQuotes = false;
+        // erasing opening font tags
+        erase1 = buffer.find(srchstr, start);
+        if (erase1 != -1 && erase1 < fin) {
+            buffer.erase(erase1, offset1);
+        }
+        // erasing closing font tags
+        erase2 = buffer.find("</font>", start);
+        if (erase2 != -1 && erase2 < fin) {
+            buffer.erase(erase2, offset2);
+        }
+    }
+    inDblQuotes = false;
+    inSinQuotes = false;
+    inBckQuotes = false;
 }
 // anchors the line (for hyperlinking capabilities) ---------------------------
-void Engine::makeAnchor() {
-
-	*IO << "<a name=\"line" << lncount << "\"/>";
-}
+void Engine::makeAnchor() { *IO << "<a name=\"line" << lncount << "\"/>"; }
 // prints the line number in the margin ---------------------------------------
 void Engine::makeMargin() {
 
-	string space = "";
+    string space = "";
 
-	// setting margin alignment
-	if(lncount < 100000)	{space += " ";}
-	if(lncount < 10000)	{space += " ";}
-	if(lncount < 1000)	{space += " ";}
-	if(lncount < 100)	{space += " ";}
-	if(lncount < 10)	{space += " ";}
+    // setting margin alignment
+    if (lncount < 100000) {
+        space += " ";
+    }
+    if (lncount < 10000) {
+        space += " ";
+    }
+    if (lncount < 1000) {
+        space += " ";
+    }
+    if (lncount < 100) {
+        space += " ";
+    }
+    if (lncount < 10) {
+        space += " ";
+    }
 
-	*IO	<< space	<< "<font CLASS=comment>"
-		<< lncount	<< ":</font> ";
+    *IO << space << "<font CLASS=comment>" << lncount << ":</font> ";
 }
 //-----------------------------------------------------------------------------
 // check if parsing needs to be aborted ---------------------------------------
 bool Engine::abortParse() {
 
-//	if(doHtmlTags && inHtmTags)
-//			{return true;}
+    //	if(doHtmlTags && inHtmTags)
+    //			{return true;}
 
-	if(endMultiLine)	{return true;}
-	if(inDblQuotes)	{return true;}
-	if(!doAspComnt)	{
-	if(inSinQuotes)	{return true;}
-	}
-	if(inBckQuotes)	{return true;}
-	if(inComment)	{return true;}
-	if(inMultiStr)	{return true;}
+    if (endMultiLine) {
+        return true;
+    }
+    if (inDblQuotes) {
+        return true;
+    }
+    if (!doAspComnt) {
+        if (inSinQuotes) {
+            return true;
+        }
+    }
+    if (inBckQuotes) {
+        return true;
+    }
+    if (inComment) {
+        return true;
+    }
+    if (inMultiStr) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 // check if colouring needs to be aborted -------------------------------------
 bool Engine::abortColour(int index) {
 
-	if(doHtmComnt
-	&& ( isInsideIt(index,"&lt;","&gt;")
-	&&   isInsideIt(index,"&gt;","&lt;") ))	{return true;}
-	if(isInsideIt(index,"/*","*/",true))	{return true;}
-	if(isInsideIt(index,"(*","*)",true))	{return true;}
-	if(isInsideIt(index,"&lt;!","&gt;"))	{return true;}
-	if(isInsideIt(index,"\"","\""))		{return true;}
-	if(!doAspComnt) {
-		if(isInsideIt(index,"'","'"))	{return true;}
-	}
-	if(isInsideIt(index,"`","`"))		{return true;}
+    if (doHtmComnt && (isInsideIt(index, "&lt;", "&gt;") &&
+                       isInsideIt(index, "&gt;", "&lt;"))) {
+        return true;
+    }
+    if (isInsideIt(index, "/*", "*/", true)) {
+        return true;
+    }
+    if (isInsideIt(index, "(*", "*)", true)) {
+        return true;
+    }
+    if (isInsideIt(index, "&lt;!", "&gt;")) {
+        return true;
+    }
+    if (isInsideIt(index, "\"", "\"")) {
+        return true;
+    }
+    if (!doAspComnt) {
+        if (isInsideIt(index, "'", "'")) {
+            return true;
+        }
+    }
+    if (isInsideIt(index, "`", "`")) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 // check if the index is inside the specified boundaries ----------------------
 bool Engine::isInsideIt(int index, string start, string end, bool skipTagged) {
 
-	// count the number of starts and ends
-	// and return true for an odd number
+    // count the number of starts and ends
+    // and return true for an odd number
 
-	if(buffer.find(start,0) == string::npos) {return false;}
+    if (buffer.find(start, 0) == string::npos) {
+        return false;
+    }
 
-	int l = 0;
-	int r = 0;
-	int idx;
+    int l = 0;
+    int r = 0;
+    int idx;
 
-	idx = buffer.find(end,index);
-	while(idx != (int)string::npos && idx < (int)buffer.size()) {
-		if(idx > 0 && buffer[idx-1] != '\\'){
-			if(!skipTagged || !isInsideFontTag(buffer, idx)) r++;
-		}
-		else if(idx == 0){r++;}
-		idx = buffer.find(end,idx+1);
-	}
+    idx = buffer.find(end, index);
+    while (idx != (int)string::npos && idx < (int)buffer.size()) {
+        if (idx > 0 && buffer[idx - 1] != '\\') {
+            if (!skipTagged || !isInsideFontTag(buffer, idx))
+                r++;
+        } else if (idx == 0) {
+            r++;
+        }
+        idx = buffer.find(end, idx + 1);
+    }
 
-	idx = buffer.rfind(start,index);
-	while(idx >= 0 && idx < (int)buffer.size()) {
-		if(idx > 0 && buffer[idx-1] != '\\'){
-			if(!skipTagged || !isInsideFontTag(buffer, idx)) l++;
-		}
-		else if(idx == 0){l++;}
-		if(idx == 0) break;
-		idx = buffer.rfind(start,idx-1);
-	}
+    idx = buffer.rfind(start, index);
+    while (idx >= 0 && idx < (int)buffer.size()) {
+        if (idx > 0 && buffer[idx - 1] != '\\') {
+            if (!skipTagged || !isInsideFontTag(buffer, idx))
+                l++;
+        } else if (idx == 0) {
+            l++;
+        }
+        if (idx == 0)
+            break;
+        idx = buffer.rfind(start, idx - 1);
+    }
 
-	if(r % 2 == 1 && l % 2 == 1) {return true;}
+    if (r % 2 == 1 && l % 2 == 1) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 // number accuracy ------------------------------------------------------------
 bool Engine::isNotWord(int index) {
 
-	if(isalpha(buffer[index+1]))		{return false;}
+    if (isalpha(buffer[index + 1])) {
+        return false;
+    }
 
-	while(index > 0) {
+    while (index > 0) {
 
-		if(isalpha(buffer[index]))	{return false;}
-		if(buffer[index] == '_')	{return false;}
-		if(buffer[index] == '#')	{return false;}
+        if (isalpha(buffer[index])) {
+            return false;
+        }
+        if (buffer[index] == '_') {
+            return false;
+        }
+        if (buffer[index] == '#') {
+            return false;
+        }
 
-		if(ispunct(buffer[index]) ||
-		   isspace(buffer[index]))	{return true;}
-		index--;
-	}
-	return true;
+        if (ispunct(buffer[index]) || isspace(buffer[index])) {
+            return true;
+        }
+        index--;
+    }
+    return true;
 }
 // parse for preprocessor directives ------------------------------------------
 void Engine::parsePreProc() {
 
-	if(abortParse())     {return;}
-	if(buffer[0] != '#') {return;}
+    if (abortParse()) {
+        return;
+    }
+    if (buffer[0] != '#') {
+        return;
+    }
 
-	if(opt_hypinc) {
-		hyperIncludeMe();
-	}
+    if (opt_hypinc) {
+        hyperIncludeMe();
+    }
 
-	buffer += " ";
-	buffer.insert(0, "<font CLASS=preproc>");
+    buffer += " ";
+    buffer.insert(0, "<font CLASS=preproc>");
 
-	int end;
-	for(int i=8;i<buffer.size();i++) {
-		if(isspace(buffer[i])) {end = i;i=buffer.size();}
-	}
-	buffer.insert(end, "</font>");
+    int end;
+    for (int i = 8; i < buffer.size(); i++) {
+        if (isspace(buffer[i])) {
+            end = i;
+            i = buffer.size();
+        }
+    }
+    buffer.insert(end, "</font>");
 }
 // define symbol characters ---------------------------------------------------
 bool Engine::isSymbol(char c) {
 
-	// FIXME: make all symbols work
-	// without conflicting with the other parsing
-	// the current implementaion is also rather slow
-	switch(c) {
+    // FIXME: make all symbols work
+    // without conflicting with the other parsing
+    // the current implementaion is also rather slow
+    switch (c) {
 
-//			case '*':
-			case '!':
-			case '|':
-//			case '&':
-//			case '<':
-//			case '>':
-//			case '{':
-//			case '}':
-//			case '[':
-//			case ']':
-//			case '(':
-//			case ')':
-//			case ':':
-			case '-':
-			case '=':
-			case '+': return true;
-			default : return false;
-	}
+//    case '*':
+    case '!':
+    case '|':
+//    case '&':
+//    case '<':
+//    case '>':
+//    case '{':
+//    case '}':
+//    case '[':
+//    case ']':
+//    case '(':
+//    case ')':
+//    case ':':
+    case '-':
+    case '=':
+    case '+':
+        return true;
+    default:
+        return false;
+    }
 }
 // parse for symbols ----------------------------------------------------------
 void Engine::parseSymbol() {
 
-	// FIXME: make all symbols work
-	// without conflicting with the other parsing
-	// the current implementaion is also rather slow
-	if(abortParse()) {return;}
+    // FIXME: make all symbols work
+    // without conflicting with the other parsing
+    // the current implementaion is also rather slow
+    if (abortParse()) {
+        return;
+    }
 
-	int	end;
-	int	insert = 0;
+    int end;
+    int insert = 0;
 
-	for(int i=0; i < buffer.size(); i++) {
+    for (int i = 0; i < buffer.size(); i++) {
 
-		if(isSymbol(buffer[i])) {
+        if (isSymbol(buffer[i])) {
 
-			end = i;
-			while(isSymbol(buffer[end+1])) {end++;}
+            end = i;
+            while (isSymbol(buffer[end + 1])) {
+                end++;
+            }
 
-			// skip symbol spans that form comment markers
-			if(buffer[i] == '-') {
-				string span = buffer.substr(i, end - i + 1);
-				if(doAdaComnt && span.find("--") != string::npos) {i = end; continue;}
-				if(doHskComnt) {
-					if(i > 0 && buffer[i-1] == '{') {i = end; continue;}
-					if(end+1 < (int)buffer.size() && buffer[end+1] == '}') {i = end; continue;}
-				}
-			}
+            // skip symbol spans that form comment markers
+            if (buffer[i] == '-') {
+                string span = buffer.substr(i, end - i + 1);
+                if (doAdaComnt && span.find("--") != string::npos) {
+                    i = end;
+                    continue;
+                }
+                if (doHskComnt) {
+                    if (i > 0 && buffer[i - 1] == '{') {
+                        i = end;
+                        continue;
+                    }
+                    if (end + 1 < (int)buffer.size() &&
+                        buffer[end + 1] == '}') {
+                        i = end;
+                        continue;
+                    }
+                }
+            }
 
-			if(colourSymbol(i,end)) {
+            if (colourSymbol(i, end)) {
 
-				insert += 27;
-				i = end + insert;
-			}
-		}
-	}
-// currently enabled for:
-// C,C++,Cg,C#,Objective C,Java,Perl,PHP,Python,UScript
+                insert += 27;
+                i = end + insert;
+            }
+        }
+    }
+    // currently enabled for:
+    // C,C++,Cg,C#,Objective C,Java,Perl,PHP,Python,UScript
 }
 // colour the symbols ---------------------------------------------------------
 bool Engine::colourSymbol(int s, int f) {
 
-	if(abortColour(s)) {return false;}
-	if(!isNotWord(s))  {return false;}
+    if (abortColour(s)) {
+        return false;
+    }
+    if (!isNotWord(s)) {
+        return false;
+    }
 
-	buffer.insert(s,"<font CLASS=symbols>");
-	buffer.insert(f+21,"</font>");
+    buffer.insert(s, "<font CLASS=symbols>");
+    buffer.insert(f + 21, "</font>");
 
-	return true;
+    return true;
 }
 // parse labels ---------------------------------------------------------------
 void Engine::parseLabel() {
 
-	if(abortParse()) {return;}
-	if(buffer.empty()) {return;}
+    if (abortParse()) {
+        return;
+    }
+    if (buffer.empty()) {
+        return;
+    }
 
-	if(buffer.find("/*") != -1) {return;} //prevent comment loop
-	if(buffer.find("(*") != -1) {return;}
+    if (buffer.find("/*") != -1) {
+        return;
+    } // prevent comment loop
+    if (buffer.find("(*") != -1) {
+        return;
+    }
 
+    int end, beg;
 
-	int end, beg;
-	
-	end = buffer.size()-1;
-	beg = buffer.rfind(" ",end);
+    end = buffer.size() - 1;
+    beg = buffer.rfind(" ", end);
 
-	if(beg == -1) {beg = 0;}
-	if(buffer[end] == ':') {
-		colourLabel(beg,end);
-	}
+    if (beg == -1) {
+        beg = 0;
+    }
+    if (buffer[end] == ':') {
+        colourLabel(beg, end);
+    }
 }
 // colourize the labels -------------------------------------------------------
 void Engine::colourLabel(int beg, int end) {
 
-	if(abortColour(beg)) {return;}
-	buffer.insert(beg,"<font CLASS=preproc>");
-	buffer.insert(end+21,"</font>");
+    if (abortColour(beg)) {
+        return;
+    }
+    buffer.insert(beg, "<font CLASS=preproc>");
+    buffer.insert(end + 21, "</font>");
 }
 //-----------------------------------------------------------------------------
 // parse the buffer for numbers -----------------------------------------------
-void Engine::parseNum()
-{
-	if(buffer[0] == '#') {return;}
-	if(abortParse())     {return;}
+void Engine::parseNum() {
+    if (buffer[0] == '#') {
+        return;
+    }
+    if (abortParse()) {
+        return;
+    }
 
-	vector<int>	nums;
-	vector<int>	ends;
-	int  end, insert;
+    vector<int> nums;
+    vector<int> ends;
+    int end, insert;
 
-	// grab indexes of all numbers into the vector
-	for(int i=0; i < buffer.size(); i++) {
+    // grab indexes of all numbers into the vector
+    for (int i = 0; i < buffer.size(); i++) {
 
-		if(isdigit(buffer[i]) && (i == 0 || !isalpha(buffer[i-1]))) {
-			end = i;
+        if (isdigit(buffer[i]) && (i == 0 || !isalpha(buffer[i - 1]))) {
+            end = i;
 
-			while(isdigit(buffer[end+1]) ||
-				  (buffer[end+1] == '.'  &&
-				  isdigit(buffer[end+2])))
-			{end++;}
+            while (isdigit(buffer[end + 1]) ||
+                   (buffer[end + 1] == '.' && isdigit(buffer[end + 2]))) {
+                end++;
+            }
 
-			nums.push_back(i);
-			ends.push_back(end);
-			i=end;
-		}
-	}
-	// now colour each number
-	for(int j=0; j < (int)ends.size(); j++) {
+            nums.push_back(i);
+            ends.push_back(end);
+            i = end;
+        }
+    }
+    // now colour each number
+    for (int j = 0; j < (int)ends.size(); j++) {
 
-		if(j == 0) {insert = 0;}
-		else       {insert += 27;}
+        if (j == 0) {
+            insert = 0;
+        } else {
+            insert += 27;
+        }
 
-		if(!colourNum(nums[j]+insert, ends[j]+insert)) {
-			insert -= 27;
-		}
-	}
-
+        if (!colourNum(nums[j] + insert, ends[j] + insert)) {
+            insert -= 27;
+        }
+    }
 }
 // insert number highlighting tags --------------------------------------------
 bool Engine::colourNum(int s, int f) {
 
-	if(abortColour(s)) {return false;}
-	if(!isNotWord(s))  {return false;}
+    if (abortColour(s)) {
+        return false;
+    }
+    if (!isNotWord(s)) {
+        return false;
+    }
 
-	string cssclass;
-	int fpt;
+    string cssclass;
+    int fpt;
 
-	fpt = buffer.find(".",s);
+    fpt = buffer.find(".", s);
 
-	if(fpt != -1 && fpt < f) {
+    if (fpt != -1 && fpt < f) {
 
- 		cssclass = "<font CLASS=floatpt>";
-	} else
-        	cssclass = "<font CLASS=integer>";
+        cssclass = "<font CLASS=floatpt>";
+    } else
+        cssclass = "<font CLASS=integer>";
 
+    // insert the font tags
+    buffer.insert(s, cssclass);
+    buffer.insert(f + 21, "</font>");
 
-	// insert the font tags
-	buffer.insert(s,	cssclass);
-	buffer.insert(f+21,	"</font>");
-	
-	return true;
+    return true;
 }
 //-----------------------------------------------------------------------------
 // parse the buffer for strings -----------------------------------------------
 void Engine::parseString(char quotetype, bool &inside) {
 
-	if(endMultiLine) {return;}
-	if(inMultiStr)   {return;}
-	if(doAdaComnt && !doRemComnt && quotetype == SIN_QUOTES) {return;}
-	if(doAspComnt && quotetype == SIN_QUOTES) {return;}
+    if (endMultiLine) {
+        return;
+    }
+    if (inMultiStr) {
+        return;
+    }
+    if (doAdaComnt && !doRemComnt && quotetype == SIN_QUOTES) {
+        return;
+    }
+    if (doAspComnt && quotetype == SIN_QUOTES) {
+        return;
+    }
 
-	string quote, escap1, escap2, cssclass;
-	int index,offset;
-	index = 0;
+    string quote, escap1, escap2, cssclass;
+    int index, offset;
+    index = 0;
 
-// Support for 3 different string types
-	if       (quotetype == DBL_QUOTES) {	
-		if(inSinQuotes || inBckQuotes) {return;}
+    // Support for 3 different string types
+    if (quotetype == DBL_QUOTES) {
+        if (inSinQuotes || inBckQuotes) {
+            return;
+        }
 
-		quote  = "\"";
-		
-		// Asp uses single ticks for comments and this
-		// screws up if a double-quoted line is commented out
-		if (!doAspComnt) {
-			escap1 = "'";
-		} else {
-			escap1 = "`";
-		}
-		escap2 = "`";
+        quote = "\"";
 
-		cssclass = "dblquot";
+        // Asp uses single ticks for comments and this
+        // screws up if a double-quoted line is commented out
+        if (!doAspComnt) {
+            escap1 = "'";
+        } else {
+            escap1 = "`";
+        }
+        escap2 = "`";
 
-	} else if(quotetype == SIN_QUOTES) {
-		if(inDblQuotes || inBckQuotes) {return;}
+        cssclass = "dblquot";
 
-		quote  = "'";
-		escap1 = "\"";
-		escap2 = "`";
+    } else if (quotetype == SIN_QUOTES) {
+        if (inDblQuotes || inBckQuotes) {
+            return;
+        }
 
-		cssclass = "sinquot";
+        quote = "'";
+        escap1 = "\"";
+        escap2 = "`";
 
-	} else if(quotetype == BCK_QUOTES) {
-		if(inDblQuotes || inSinQuotes) {return;}
+        cssclass = "sinquot";
 
-		quote  = "`";
-		escap1 = "\"";
-		escap2 = "'";
+    } else if (quotetype == BCK_QUOTES) {
+        if (inDblQuotes || inSinQuotes) {
+            return;
+        }
 
-		cssclass = "preproc";
-	}
-// Double, single, and back quoted ///
+        quote = "`";
+        escap1 = "\"";
+        escap2 = "'";
 
+        cssclass = "preproc";
+    }
+    // Double, single, and back quoted ///
 
-	index = buffer.find(quote,index);
-	if(index == -1) {return;}
+    index = buffer.find(quote, index);
+    if (index == -1) {
+        return;
+    }
 
-	while (index < string::npos) {
+    while (index < string::npos) {
 
-		if(index > 0 && buffer[index -1] == '\\') {
-			if(index > 1 && buffer[index -2] == '\'' && buffer[index +1] == '\'') {
-				index = buffer.find(quote,index+1);
-			}
-		}
-		if(index == -1) {return;}
+        if (index > 0 && buffer[index - 1] == '\\') {
+            if (index > 1 && buffer[index - 2] == '\'' &&
+                buffer[index + 1] == '\'') {
+                index = buffer.find(quote, index + 1);
+            }
+        }
+        if (index == -1) {
+            return;
+        }
 
-		while(isInsideIt(index,escap1,escap1)){
-			index = buffer.find(quote,index +1);
-			if(index == -1) {return;}
-		}
-		while(isInsideIt(index,escap2,escap2)){
-			index = buffer.find(quote,index +1);
-			if(index == -1) {return;}
-		}
+        while (isInsideIt(index, escap1, escap1)) {
+            index = buffer.find(quote, index + 1);
+            if (index == -1) {
+                return;
+            }
+        }
+        while (isInsideIt(index, escap2, escap2)) {
+            index = buffer.find(quote, index + 1);
+            if (index == -1) {
+                return;
+            }
+        }
 
-		while(doHtmComnt && isInsideIt(index,"&gt;","&lt;") ) {
-			index = buffer.find(quote,index +1);
-			if(index == -1) {return;}
-		}
+        while (doHtmComnt && isInsideIt(index, "&gt;", "&lt;")) {
+            index = buffer.find(quote, index + 1);
+            if (index == -1) {
+                return;
+            }
+        }
 
-		// keep escape characters in mind
-		while	(index > 3 &&
-			 buffer[index -1] == '\\' &&
-			(buffer[index -2] != '\\' ||
-			(buffer[index -3] == '\\' &&
-			 buffer[index -4] != '\\'))) {
+        // keep escape characters in mind
+        while (index > 3 && buffer[index - 1] == '\\' &&
+               (buffer[index - 2] != '\\' ||
+                (buffer[index - 3] == '\\' && buffer[index - 4] != '\\'))) {
 
-			index = buffer.find(quote,index +1);
-			if(index == -1) {return;}
-		}
+            index = buffer.find(quote, index + 1);
+            if (index == -1) {
+                return;
+            }
+        }
 
-		if(index != -1 	&& !inComment) {
+        if (index != -1 && !inComment) {
 
-			colourString(index, inside, cssclass);
-		}
+            colourString(index, inside, cssclass);
+        }
 
-		if(inside) {offset = index + 21;}
-		else       {offset = index +  7;}
+        if (inside) {
+            offset = index + 21;
+        } else {
+            offset = index + 7;
+        }
 
-		index = buffer.find(quote,offset);
-		if(index == -1)          {return;}
-		if(index > buffer.size()){return;}
-	}
+        index = buffer.find(quote, offset);
+        if (index == -1) {
+            return;
+        }
+        if (index > buffer.size()) {
+            return;
+        }
+    }
 }
 // insert string highlighting tags --------------------------------------------
 void Engine::colourString(int index, bool &inside, string cssclass) {
 
-	if(index > buffer.size()){return;}
+    if (index > buffer.size()) {
+        return;
+    }
 
-	string fntag = "<font CLASS=" + cssclass + ">";
+    string fntag = "<font CLASS=" + cssclass + ">";
 
-	// open tag
-	if(!inside) {
-		buffer.insert(index,   fntag);
-	} else {
-		buffer.insert(index+1, "</font>");
-	}
-	// or close tag
-	// depending on whether or not inside
+    // open tag
+    if (!inside) {
+        buffer.insert(index, fntag);
+    } else {
+        buffer.insert(index + 1, "</font>");
+    }
+    // or close tag
+    // depending on whether or not inside
 
-	inside = !inside;
+    inside = !inside;
 }
 // parse for multi-line strings -----------------------------------------------
 void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
 
-	// don't interfere when a heredoc owns the inMultiStr state
-	if(!heredocEnd.empty()) {return;}
+    // don't interfere when a heredoc owns the inMultiStr state
+    if (!heredocEnd.empty()) {
+        return;
+    }
 
-	string search;
-	int index, offset;
+    string search;
+    int index, offset;
 
-	index = 0;
+    index = 0;
 
-	if(inside) {search = end;}
-	else {search = start;}
+    if (inside) {
+        search = end;
+    } else {
+        search = start;
+    }
 
-	index = buffer.find(search,index);
-	if(index == -1) {return;}
+    index = buffer.find(search, index);
+    if (index == -1) {
+        return;
+    }
 
-	while (index < string::npos) {
+    while (index < string::npos) {
 
-		if(inside) {search = end;}
-		else {search = start;}
+        if (inside) {
+            search = end;
+        } else {
+            search = start;
+        }
 
-		index = buffer.find(search,index);
-		if(index == -1) {return;}
+        index = buffer.find(search, index);
+        if (index == -1) {
+            return;
+        }
 
-		if(index > 0 && buffer[index -1] == '\\') {
-			if(index > 1 && buffer[index -2] == '\'' && buffer[index +1] == '\'') {
-				index = buffer.find(search,index+1);
-			}
-		}
-		if(index == -1) {return;}
+        if (index > 0 && buffer[index - 1] == '\\') {
+            if (index > 1 && buffer[index - 2] == '\'' &&
+                buffer[index + 1] == '\'') {
+                index = buffer.find(search, index + 1);
+            }
+        }
+        if (index == -1) {
+            return;
+        }
 
-		// For brace-delimited strings (%Q{}, %q{}, etc.), skip nested
-		// braces so that interpolation like #{var} doesn't end the
-		// string prematurely.
-		if(inside && end == "}") {
-			int depth = 0;
-			// Find where the string content begins. If the opening
-			// delimiter (%Q{ or %q{) is on this line, start scanning
-			// after its {. Otherwise (continuation line), start at 0.
-			int scanStart = 0;
-			string startNoBrace = start.substr(0, start.size() - 1); // "%Q" or "%q"
-			int delimPos = buffer.rfind(startNoBrace, index);
-			if(delimPos != (int)string::npos) {
-				// Skip past the opening { of the delimiter
-				scanStart = delimPos + start.size();
-			}
-			for(int i = scanStart; i < index; i++) {
-				if(buffer[i] == '{' && !isInsideTag(i)) depth++;
-				if(buffer[i] == '}' && !isInsideTag(i)) depth--;
-			}
-			// If depth > 0, there are unclosed braces before this },
-			// so this } is a nested one — skip it.
-			if(depth > 0) {
-				index = buffer.find(search, index + 1);
-				continue;
-			}
-		}
+        // For brace-delimited strings (%Q{}, %q{}, etc.), skip nested
+        // braces so that interpolation like #{var} doesn't end the
+        // string prematurely.
+        if (inside && end == "}") {
+            int depth = 0;
+            // Find where the string content begins. If the opening
+            // delimiter (%Q{ or %q{) is on this line, start scanning
+            // after its {. Otherwise (continuation line), start at 0.
+            int scanStart = 0;
+            string startNoBrace =
+                start.substr(0, start.size() - 1); // "%Q" or "%q"
+            int delimPos = buffer.rfind(startNoBrace, index);
+            if (delimPos != (int)string::npos) {
+                // Skip past the opening { of the delimiter
+                scanStart = delimPos + start.size();
+            }
+            for (int i = scanStart; i < index; i++) {
+                if (buffer[i] == '{' && !isInsideTag(i))
+                    depth++;
+                if (buffer[i] == '}' && !isInsideTag(i))
+                    depth--;
+            }
+            // If depth > 0, there are unclosed braces before this },
+            // so this } is a nested one — skip it.
+            if (depth > 0) {
+                index = buffer.find(search, index + 1);
+                continue;
+            }
+        }
 
-		if(inside) {
-			index += end.size()-1;
-		}
-		else eraseTags(index,0);
-		colourString(index, inside, css);
+        if (inside) {
+            index += end.size() - 1;
+        } else
+            eraseTags(index, 0);
+        colourString(index, inside, css);
 
-		if(inside) {
-			offset = index + 21;
-			search = end;
-		}
-		else {
-			offset = index +  7;
-			search = start;
-		}
+        if (inside) {
+            offset = index + 21;
+            search = end;
+        } else {
+            offset = index + 7;
+            search = start;
+        }
 
-		index = buffer.find(search,offset);
-		if(index == -1) {
-			if(inside) {endMultiLine = true;}
-			return;
-		}
-		if(index > buffer.size()){
-			if(inside) {endMultiLine = true;}
-			return;
-		}
-	}
+        index = buffer.find(search, offset);
+        if (index == -1) {
+            if (inside) {
+                endMultiLine = true;
+            }
+            return;
+        }
+        if (index > buffer.size()) {
+            if (inside) {
+                endMultiLine = true;
+            }
+            return;
+        }
+    }
 }
 // parse for Ruby-style heredoc strings (<<TAG, <<-TAG, <<~TAG) ---------------
 void Engine::parseHeredoc(string marker) {
 
-	if(inMultiStr && !heredocEnd.empty()) {
-		// we are inside a heredoc — check if this line is the end marker
-		// the end marker must appear at the start of the line (after optional whitespace)
-		string trimmed = buffer;
-		int pos = 0;
-		while(pos < (int)trimmed.size() && (trimmed[pos] == ' ' || trimmed[pos] == '\t')) {pos++;}
-		string lineContent = trimmed.substr(pos);
+    if (inMultiStr && !heredocEnd.empty()) {
+        // we are inside a heredoc — check if this line is the end marker
+        // the end marker must appear at the start of the line (after optional
+        // whitespace)
+        string trimmed = buffer;
+        int pos = 0;
+        while (pos < (int)trimmed.size() &&
+               (trimmed[pos] == ' ' || trimmed[pos] == '\t')) {
+            pos++;
+        }
+        string lineContent = trimmed.substr(pos);
 
-		// strip trailing semicolon for languages like PHP where EOT; is valid
-		if(!lineContent.empty() && lineContent.back() == ';') {
-			lineContent = lineContent.substr(0, lineContent.size() - 1);
-		}
+        // strip trailing semicolon for languages like PHP where EOT; is valid
+        if (!lineContent.empty() && lineContent.back() == ';') {
+            lineContent = lineContent.substr(0, lineContent.size() - 1);
+        }
 
-		if(lineContent == heredocEnd) {
-			// this line closes the heredoc — colour it and end
-			// position index at end of the marker so </font> closes after it
-			int endIdx = pos + (int)heredocEnd.size() - 1;
-			eraseTags(0,0);
-			colourString(endIdx, inMultiStr, "dblquot");
-			// inMultiStr is now false after colourString toggles it
-			heredocEnd = "";
-			return;
-		}
-		// still inside heredoc — line is already coloured by endMultiLine mechanism
-		return;
-	}
+        if (lineContent == heredocEnd) {
+            // this line closes the heredoc — colour it and end
+            // position index at end of the marker so </font> closes after it
+            int endIdx = pos + (int)heredocEnd.size() - 1;
+            eraseTags(0, 0);
+            colourString(endIdx, inMultiStr, "dblquot");
+            // inMultiStr is now false after colourString toggles it
+            heredocEnd = "";
+            return;
+        }
+        // still inside heredoc — line is already coloured by endMultiLine
+        // mechanism
+        return;
+    }
 
-	// don't start a heredoc when a %Q{} string owns the inMultiStr state
-	if(inMultiStr) {return;}
+    // don't start a heredoc when a %Q{} string owns the inMultiStr state
+    if (inMultiStr) {
+        return;
+    }
 
-	// not inside a heredoc — look for a heredoc start on this line
-	// after pre_parse, << becomes &lt;&lt; (or <<< becomes &lt;&lt;&lt; for PHP)
-	int index = buffer.find(marker, 0);
-	if(index == -1) {return;}
+    // not inside a heredoc — look for a heredoc start on this line
+    // after pre_parse, << becomes &lt;&lt; (or <<< becomes &lt;&lt;&lt; for
+    // PHP)
+    int index = buffer.find(marker, 0);
+    if (index == -1) {
+        return;
+    }
 
-	while(index != -1 && index < (int)buffer.size()) {
-		int tagStart = index;
+    while (index != -1 && index < (int)buffer.size()) {
+        int tagStart = index;
 
-		// skip if the marker is inside a string literal
-		if(abortColour(tagStart)) {
-			index = buffer.find(marker, tagStart + marker.size());
-			continue;
-		}
+        // skip if the marker is inside a string literal
+        if (abortColour(tagStart)) {
+            index = buffer.find(marker, tagStart + marker.size());
+            continue;
+        }
 
-		// skip if the marker appears after a single-line comment start
-		// (single-line comments haven't been parsed yet at this point in doParsing)
-		if(doUnxComnt) {
-			int hashPos = buffer.find("#", 0);
-			if(hashPos != -1 && hashPos < tagStart) {
-				if(!isInsideIt(hashPos, "\"", "\"") &&
-				   !isInsideIt(hashPos, "'", "'")) {return;}
-			}
-		}
-		if(doCinComnt) {
-			int slashPos = buffer.find("//", 0);
-			if(slashPos != -1 && slashPos < tagStart) {
-				if(!isInsideIt(slashPos, "\"", "\"") &&
-				   !isInsideIt(slashPos, "'", "'")) {return;}
-			}
-		}
+        // skip if the marker appears after a single-line comment start
+        // (single-line comments haven't been parsed yet at this point in
+        // doParsing)
+        if (doUnxComnt) {
+            int hashPos = buffer.find("#", 0);
+            if (hashPos != -1 && hashPos < tagStart) {
+                if (!isInsideIt(hashPos, "\"", "\"") &&
+                    !isInsideIt(hashPos, "'", "'")) {
+                    return;
+                }
+            }
+        }
+        if (doCinComnt) {
+            int slashPos = buffer.find("//", 0);
+            if (slashPos != -1 && slashPos < tagStart) {
+                if (!isInsideIt(slashPos, "\"", "\"") &&
+                    !isInsideIt(slashPos, "'", "'")) {
+                    return;
+                }
+            }
+        }
 
-		int pos = index + marker.size(); // past "&lt;&lt;"
+        int pos = index + marker.size(); // past "&lt;&lt;"
 
-		// optional - or ~
-		if(pos < (int)buffer.size() && (buffer[pos] == '-' || buffer[pos] == '~')) {pos++;}
+        // optional - or ~
+        if (pos < (int)buffer.size() &&
+            (buffer[pos] == '-' || buffer[pos] == '~')) {
+            pos++;
+        }
 
-		// optional quote character around the tag name
-		char quoteChar = 0;
-		if(pos < (int)buffer.size() && (buffer[pos] == '\'' || buffer[pos] == '"')) {
-			quoteChar = buffer[pos];
-			pos++;
-		}
+        // optional quote character around the tag name
+        char quoteChar = 0;
+        if (pos < (int)buffer.size() &&
+            (buffer[pos] == '\'' || buffer[pos] == '"')) {
+            quoteChar = buffer[pos];
+            pos++;
+        }
 
-		// extract the tag name (must be a word: letters, digits, underscore)
-		int nameStart = pos;
-		while(pos < (int)buffer.size() && (isalnum(buffer[pos]) || buffer[pos] == '_')) {pos++;}
+        // extract the tag name (must be a word: letters, digits, underscore)
+        int nameStart = pos;
+        while (pos < (int)buffer.size() &&
+               (isalnum(buffer[pos]) || buffer[pos] == '_')) {
+            pos++;
+        }
 
-		if(pos == nameStart) {
-			// no valid tag name found, skip this match
-			index = buffer.find(marker, tagStart + marker.size());
-			continue;
-		}
+        if (pos == nameStart) {
+            // no valid tag name found, skip this match
+            index = buffer.find(marker, tagStart + marker.size());
+            continue;
+        }
 
-		string tagName = buffer.substr(nameStart, pos - nameStart);
+        string tagName = buffer.substr(nameStart, pos - nameStart);
 
-		// skip closing quote if present
-		if(quoteChar && pos < (int)buffer.size() && buffer[pos] == quoteChar) {pos++;}
+        // skip closing quote if present
+        if (quoteChar && pos < (int)buffer.size() && buffer[pos] == quoteChar) {
+            pos++;
+        }
 
-		// store the end marker and start the heredoc
-		heredocEnd = tagName;
-		eraseTags(tagStart, 0);
-		colourString(tagStart, inMultiStr, "dblquot");
-		// inMultiStr is now true after colourString toggles it
-		return;
-	}
+        // store the end marker and start the heredoc
+        heredocEnd = tagName;
+        eraseTags(tagStart, 0);
+        colourString(tagStart, inMultiStr, "dblquot");
+        // inMultiStr is now true after colourString toggles it
+        return;
+    }
 }
 // parse for multi-line comments ----------------------------------------------
 void Engine::parseBigComment(string start, string end, bool &inside) {
 
-	if(inMultiStr) {return;}
+    if (inMultiStr) {
+        return;
+    }
 
-	string search, escap, css;
-	int index,offset;
-	bool erase;
+    string search, escap, css;
+    int index, offset;
+    bool erase;
 
-	index = 0;
-	erase = true;
-	css = "comment";
+    index = 0;
+    erase = true;
+    css = "comment";
 
-	if(inside) {search = end;}
-	else {search = start;}
-	
-	index = buffer.find(search,index);
-	if(index == -1) {return;}
-	if(doCinComnt && start == "/*" && buffer.find("//") < index) {return;}
-	if(doUnxComnt && start == "/*" && buffer.find("#")  < index) {return;}
+    if (inside) {
+        search = end;
+    } else {
+        search = start;
+    }
 
-	if(start == "&lt;" && end == "&gt;" && doHtmlTags) {
+    index = buffer.find(search, index);
+    if (index == -1) {
+        return;
+    }
+    if (doCinComnt && start == "/*" && buffer.find("//") < index) {
+        return;
+    }
+    if (doUnxComnt && start == "/*" && buffer.find("#") < index) {
+        return;
+    }
 
-		if(buffer.find("&lt;!-") == index || inHtmTags)
-			if(!inside)
-				return;
-		erase = false;
-        	css = "preproc";
-	}
+    if (start == "&lt;" && end == "&gt;" && doHtmlTags) {
 
-	while (index < string::npos) {
+        if (buffer.find("&lt;!-") == index || inHtmTags)
+            if (!inside)
+                return;
+        erase = false;
+        css = "preproc";
+    }
 
-		if(inside) {search = end;}
-		else {search = start;}		
+    while (index < string::npos) {
 
-		index = buffer.find(search,index);
-		if(index == -1) {return;}
+        if (inside) {
+            search = end;
+        } else {
+            search = start;
+        }
 
-		if(index > 0 && buffer[index -1] == '\\') {
-			if(index > 1 && buffer[index -2] == '\'' && buffer[index +1] == '\'') {
-				index = buffer.find(search,index+1);
-			}
-		}
-		if(index == -1) {return;}
-		if(!isInsideIt(index, "\"", "\"") &&
-		   !isInsideIt(index, "'", "'")   &&
-		   !isInsideIt(index, "`", "`")) {
-			if(inside) {
-				index += end.size()-1;
-		                if(buffer.find(end) == -1) {endMultiLine = true;}
-			}
-			else if(erase)eraseTags(index,0);
-			colourString(index, inside, css);
-		}
+        index = buffer.find(search, index);
+        if (index == -1) {
+            return;
+        }
 
-		if(inside) {
-			offset = index + 21;
-			search = end;
-		}
-		else {
-			offset = index +  7;
-			search = start;
-		}
+        if (index > 0 && buffer[index - 1] == '\\') {
+            if (index > 1 && buffer[index - 2] == '\'' &&
+                buffer[index + 1] == '\'') {
+                index = buffer.find(search, index + 1);
+            }
+        }
+        if (index == -1) {
+            return;
+        }
+        if (!isInsideIt(index, "\"", "\"") && !isInsideIt(index, "'", "'") &&
+            !isInsideIt(index, "`", "`")) {
+            if (inside) {
+                index += end.size() - 1;
+                if (buffer.find(end) == -1) {
+                    endMultiLine = true;
+                }
+            } else if (erase)
+                eraseTags(index, 0);
+            colourString(index, inside, css);
+        }
 
-		index = buffer.find(search,offset);
-		if(index == -1)          {return;}
-		if(index > buffer.size()){return;}
-	}
+        if (inside) {
+            offset = index + 21;
+            search = end;
+        } else {
+            offset = index + 7;
+            search = start;
+        }
+
+        index = buffer.find(search, offset);
+        if (index == -1) {
+            return;
+        }
+        if (index > buffer.size()) {
+            return;
+        }
+    }
 }
 // parse for keywords ---------------------------------------------------------
 void Engine::parseKeys() {
 
-	if(buffer[0] == '#') {return;}
-	if(abortParse())     {return;}
+    if (buffer[0] == '#') {
+        return;
+    }
+    if (abortParse()) {
+        return;
+    }
 
-	int i, index, offset = 20;
-	string cmpkey;
+    int i, index, offset = 20;
+    string cmpkey;
 
-	for(i=0; i < (int)keys.size(); i++) {
+    for (i = 0; i < (int)keys.size(); i++) {
 
-		cmpkey	= keys[i];
-		index	= noCaseFind(cmpkey,0);
+        cmpkey = keys[i];
+        index = noCaseFind(cmpkey, 0);
 
-		while(index < buffer.size() && index != -1) {
+        while (index < buffer.size() && index != -1) {
 
-			bool inserted = false;
-			if(isKey(index-1, (index) + keys[i].size())) {
-				inserted = colourKeys(index, keys[i], "keyword");
-			}
-			int skip = inserted ? offset : 0;
-			index = noCaseFind(cmpkey,(index+cmpkey.size()+skip));
-		}
-	}
+            bool inserted = false;
+            if (isKey(index - 1, (index) + keys[i].size())) {
+                inserted = colourKeys(index, keys[i], "keyword");
+            }
+            int skip = inserted ? offset : 0;
+            index = noCaseFind(cmpkey, (index + cmpkey.size() + skip));
+        }
+    }
 
-	for(i=0; i < (int)types.size(); i++) {
+    for (i = 0; i < (int)types.size(); i++) {
 
-		cmpkey	= types[i];
-		index	= noCaseFind(cmpkey,0);
+        cmpkey = types[i];
+        index = noCaseFind(cmpkey, 0);
 
-		while(index < buffer.size() && index != -1) {
+        while (index < buffer.size() && index != -1) {
 
-			bool inserted = false;
-			if(isKey(index-1, (index) + types[i].size())) {
-				inserted = colourKeys(index, types[i], "keytype");
-			}
-			int skip = inserted ? offset : 0;
-			index = noCaseFind(cmpkey,(index+cmpkey.size()+skip));
-		}
-	}
+            bool inserted = false;
+            if (isKey(index - 1, (index) + types[i].size())) {
+                inserted = colourKeys(index, types[i], "keytype");
+            }
+            int skip = inserted ? offset : 0;
+            index = noCaseFind(cmpkey, (index + cmpkey.size() + skip));
+        }
+    }
 }
 // checks for case sensitive keys ---------------------------------------------
 int Engine::noCaseFind(string search, int index) {
 
-	if(doCaseKeys) {
-		return buffer.find(search,index);
-	}
-	if(search == "class") {
-		return buffer.find(search,index);
-	}
+    if (doCaseKeys) {
+        return buffer.find(search, index);
+    }
+    if (search == "class") {
+        return buffer.find(search, index);
+    }
 
-	string tmp;
-	tmp = buffer;
+    string tmp;
+    tmp = buffer;
 
-	for(int i=0; i < tmp.size(); i++) {
-		tmp[i] = toupper(tmp[i]);
-	}
-	for(int j=0; j < search.size(); j++) {
-		search[j] = toupper(search[j]);
-	}
+    for (int i = 0; i < tmp.size(); i++) {
+        tmp[i] = toupper(tmp[i]);
+    }
+    for (int j = 0; j < search.size(); j++) {
+        search[j] = toupper(search[j]);
+    }
 
-	return tmp.find(search,index);
+    return tmp.find(search, index);
 }
 // asserts word boundaries for keywords ---------------------------------------
 bool Engine::isKey(int before, int after) const {
 
-	bool validBefore = (before < 0);
-	bool validAfter  = (after < 0 || after >= (int)buffer.size());
+    bool validBefore = (before < 0);
+    bool validAfter = (after < 0 || after >= (int)buffer.size());
 
-	if(!validBefore) {
-		if(buffer[before] == '#')   {return false;}
-		if(buffer[before] == '_')   {return false;}
-		if(isalnum(buffer[before])) {return false;}
-	}
-	if(!validAfter) {
-		if(buffer[after]  == '_')   {return false;}
-		if(isalnum(buffer[after]))  {return false;}
-	}
+    if (!validBefore) {
+        if (buffer[before] == '#') {
+            return false;
+        }
+        if (buffer[before] == '_') {
+            return false;
+        }
+        if (isalnum(buffer[before])) {
+            return false;
+        }
+    }
+    if (!validAfter) {
+        if (buffer[after] == '_') {
+            return false;
+        }
+        if (isalnum(buffer[after])) {
+            return false;
+        }
+    }
 
-	if(validBefore || ispunct(buffer[before]) || isspace(buffer[before])) {
-		if(validAfter || ispunct(buffer[after]) || isspace(buffer[after])) {
-			return true;
-		}
-	}
-	return true;
+    if (validBefore || ispunct(buffer[before]) || isspace(buffer[before])) {
+        if (validAfter || ispunct(buffer[after]) || isspace(buffer[after])) {
+            return true;
+        }
+    }
+    return true;
 }
 // check if index is inside an HTML tag (<...>) ------------------------------
 bool Engine::isInsideTag(int index) {
 
-	// search backward for '<' or '>' from the index
-	for(int i = index - 1; i >= 0; i--) {
-		if(buffer[i] == '>') {return false;}
-		if(buffer[i] == '<') {return true;}
-	}
-	return false;
+    // search backward for '<' or '>' from the index
+    for (int i = index - 1; i >= 0; i--) {
+        if (buffer[i] == '>') {
+            return false;
+        }
+        if (buffer[i] == '<') {
+            return true;
+        }
+    }
+    return false;
 }
 // check if index is inside existing <font ...>...</font> content -----------
 static bool isInsideFontTag(const string &buffer, int index) {
 
-	// search backward for </font> or <font — if we find <font...> first,
-	// we are inside its content and should not wrap again
-	int i = index - 1;
-	while(i >= 0) {
-		if(buffer[i] == '>') {
-			// found a closing '>'; check if this is a <font tag
-			int tagStart = buffer.rfind('<', i);
-			if(tagStart != (int)string::npos && tagStart >= 0) {
-				string tag = buffer.substr(tagStart, i - tagStart + 1);
-				if(tag.find("<font ") == 0 || tag.find("<font>") == 0) {
-					return true;  // we are inside font content
-				}
-				if(tag.find("</font>") == 0) {
-					return false; // we are past a closed font tag
-				}
-			}
-			i = tagStart - 1;
-		} else {
-			i--;
-		}
-	}
-	return false;
+    // search backward for </font> or <font — if we find <font...> first,
+    // we are inside its content and should not wrap again
+    int i = index - 1;
+    while (i >= 0) {
+        if (buffer[i] == '>') {
+            // found a closing '>'; check if this is a <font tag
+            int tagStart = buffer.rfind('<', i);
+            if (tagStart != (int)string::npos && tagStart >= 0) {
+                string tag = buffer.substr(tagStart, i - tagStart + 1);
+                if (tag.find("<font ") == 0 || tag.find("<font>") == 0) {
+                    return true; // we are inside font content
+                }
+                if (tag.find("</font>") == 0) {
+                    return false; // we are past a closed font tag
+                }
+            }
+            i = tagStart - 1;
+        } else {
+            i--;
+        }
+    }
+    return false;
 }
 // colourize the keywords -----------------------------------------------------
 bool Engine::colourKeys(int index, string key, string cssclass) {
 
-	if(isInsideTag(index)) {
-		return false;
-	}
-	if(isInsideFontTag(buffer, index)) {
-		return false;
-	}
-	if(abortColour(index)) {
-		return false;
-	}
-	buffer.insert(index, "<font CLASS=" + cssclass + ">");
-	buffer.insert(index+key.size()+20, "</font>");
-	return true;
+    if (isInsideTag(index)) {
+        return false;
+    }
+    if (isInsideFontTag(buffer, index)) {
+        return false;
+    }
+    if (abortColour(index)) {
+        return false;
+    }
+    buffer.insert(index, "<font CLASS=" + cssclass + ">");
+    buffer.insert(index + key.size() + 20, "</font>");
+    return true;
 }
 //-----------------------------------------------------------------------------
 // parse for variables --------------------------------------------------------
 void Engine::parseVariable(string var) {
 
-	if(endMultiLine) {return;}
-	if(inMultiStr)   {return;}
-	if(inComment)    {return;}
+    if (endMultiLine) {
+        return;
+    }
+    if (inMultiStr) {
+        return;
+    }
+    if (inComment) {
+        return;
+    }
 
-	int index;
-	int test;
+    int index;
+    int test;
 
-	index = buffer.find(var,0);
-	test  = buffer.find("#",0);
-	if(test != -1 && test < index) {return;}
+    index = buffer.find(var, 0);
+    test = buffer.find("#", 0);
+    if (test != -1 && test < index) {
+        return;
+    }
 
-	while(index < string::npos) {
+    while (index < string::npos) {
 
-		if(index != -1) {colourVariable(index);}
-		index = buffer.find(var,index +22);
-	}
+        if (index != -1) {
+            colourVariable(index);
+        }
+        index = buffer.find(var, index + 22);
+    }
 }
 // colourize the variables ----------------------------------------------------
 void Engine::colourVariable(int index) {
 
-	int end = 0;
-	buffer.insert(index, "<font CLASS=preproc>");
+    int end = 0;
+    buffer.insert(index, "<font CLASS=preproc>");
 
-	int i = index+21;
+    int i = index + 21;
 
-	// search for a variable name delimiter
-	while(!end && i < buffer.size()) {
+    // search for a variable name delimiter
+    while (!end && i < buffer.size()) {
 
-		if(!isalnum(buffer[i])) {
-			if(buffer[i] == '_')   {i++;}
-			if(isspace(buffer[i])) {end = i;}
-			if(ispunct(buffer[i])) {end = i;}
-			if(buffer[i] ==  '=')  {end = i;}
-			if(buffer[i] ==  ',')  {end = i;}
-			if(buffer[i] ==  '{')  {end = i;}
-			if(buffer[i] ==  '[')  {end = i;}
-			if(buffer[i] ==  '(')  {end = i;}
-			if(buffer[i] == '\'')  {end = i;}
-			if(buffer[i] == '\n')  {end = i;}
-		}
-		if(i == buffer.size() -1)  {end = i+1;}
-		else i++;
-	}
+        if (!isalnum(buffer[i])) {
+            if (buffer[i] == '_') {
+                i++;
+            }
+            if (isspace(buffer[i])) {
+                end = i;
+            }
+            if (ispunct(buffer[i])) {
+                end = i;
+            }
+            if (buffer[i] == '=') {
+                end = i;
+            }
+            if (buffer[i] == ',') {
+                end = i;
+            }
+            if (buffer[i] == '{') {
+                end = i;
+            }
+            if (buffer[i] == '[') {
+                end = i;
+            }
+            if (buffer[i] == '(') {
+                end = i;
+            }
+            if (buffer[i] == '\'') {
+                end = i;
+            }
+            if (buffer[i] == '\n') {
+                end = i;
+            }
+        }
+        if (i == buffer.size() - 1) {
+            end = i + 1;
+        } else
+            i++;
+    }
 
-	// if the variable prefix is at the end of the buffer (no delimiter
-	// found because the search started at or past buffer.size()),
-	// close the tag at the end instead of at position 0
-	if(!end) {end = buffer.size();}
+    // if the variable prefix is at the end of the buffer (no delimiter
+    // found because the search started at or past buffer.size()),
+    // close the tag at the end instead of at position 0
+    if (!end) {
+        end = buffer.size();
+    }
 
-	if(end > 0 && buffer[end -1] == '\"')     {end--;}
-	if(end > 0 && buffer[end -1] == ')')      {end--;}
+    if (end > 0 && buffer[end - 1] == '\"') {
+        end--;
+    }
+    if (end > 0 && buffer[end - 1] == ')') {
+        end--;
+    }
 
-	buffer.insert(end, "</font>");
+    buffer.insert(end, "</font>");
 }
 //-----------------------------------------------------------------------------
 // check for comments ---------------------------------------------------------
 void Engine::parseComment(string cmnt) {
 
-  if(inComment)    {return;}
-  if(endMultiLine) {return;}
+    if (inComment) {
+        return;
+    }
+    if (endMultiLine) {
+        return;
+    }
 
-	int index = buffer.find(cmnt,0);
-	if(index == -1) {return;}
+    int index = buffer.find(cmnt, 0);
+    if (index == -1) {
+        return;
+    }
 
-// do not misktake HTML attributes for UNIX comments
-	if(cmnt == "#" && index != -1 && index > 0 && buffer[index -1] != '\\') {
-		if(index != 0) {
-			while(index > 0 && index < (int)buffer.size() && buffer[index -1] == '=') {
-				index = buffer.find("#",index+1);
-				if(index == -1) {return;}
-			}
-		}
-	}
-//-----------------------------------------------//
+    // do not misktake HTML attributes for UNIX comments
+    if (cmnt == "#" && index != -1 && index > 0 && buffer[index - 1] != '\\') {
+        if (index != 0) {
+            while (index > 0 && index < (int)buffer.size() &&
+                   buffer[index - 1] == '=') {
+                index = buffer.find("#", index + 1);
+                if (index == -1) {
+                    return;
+                }
+            }
+        }
+    }
+    //-----------------------------------------------//
 
-// do not mistake HTML entity terminators for assembly comments
-// (pre_parse converts > to &gt; and & to &amp; — the trailing ;
-//  of these entities is not a real semicolon in the source)
-	if(cmnt == ";") {
-		while(index != -1 && index > 0) {
-			bool isEntity = false;
-			// check if ; is the end of &gt; &lt; or &amp;
-			if(index >= 3 && buffer.substr(index-3, 4) == "&gt;") isEntity = true;
-			if(index >= 3 && buffer.substr(index-3, 4) == "&lt;") isEntity = true;
-			if(index >= 4 && buffer.substr(index-4, 5) == "&amp;") isEntity = true;
-			if(isEntity) {
-				index = buffer.find(cmnt, index + 1);
-				continue;
-			}
-			break;
-		}
-		if(index == -1) {return;}
-	}
-//-----------------------------------------------//
+    // do not mistake HTML entity terminators for assembly comments
+    // (pre_parse converts > to &gt; and & to &amp; — the trailing ;
+    //  of these entities is not a real semicolon in the source)
+    if (cmnt == ";") {
+        while (index != -1 && index > 0) {
+            bool isEntity = false;
+            // check if ; is the end of &gt; &lt; or &amp;
+            if (index >= 3 && buffer.substr(index - 3, 4) == "&gt;")
+                isEntity = true;
+            if (index >= 3 && buffer.substr(index - 3, 4) == "&lt;")
+                isEntity = true;
+            if (index >= 4 && buffer.substr(index - 4, 5) == "&amp;")
+                isEntity = true;
+            if (isEntity) {
+                index = buffer.find(cmnt, index + 1);
+                continue;
+            }
+            break;
+        }
+        if (index == -1) {
+            return;
+        }
+    }
+    //-----------------------------------------------//
 
-	if(index > 0 && buffer[index -1] == '$')  {return;}
-	if(index > 0 && buffer[index -1] == '\\') {return;}
+    if (index > 0 && buffer[index - 1] == '$') {
+        return;
+    }
+    if (index > 0 && buffer[index - 1] == '\\') {
+        return;
+    }
 
-	colourComment(index);
+    colourComment(index);
 }
 // colour an inline comment ---------------------------------------------------
 void Engine::colourComment(int index) {
 
-	if(abortColour(index)) {
-		return;
-	}
-	if(doCinComnt) {
-		if(index >= 5 && buffer.rfind("http:",index) == index -5)	{return;}
-		if(buffer.rfind("!DOCTYPE", index) != -1)	{return;}
-	}
+    if (abortColour(index)) {
+        return;
+    }
+    if (doCinComnt) {
+        if (index >= 5 && buffer.rfind("http:", index) == index - 5) {
+            return;
+        }
+        if (buffer.rfind("!DOCTYPE", index) != -1) {
+            return;
+        }
+    }
 
-	// no highlighting inside of comments
-	eraseTags(index,0);
+    // no highlighting inside of comments
+    eraseTags(index, 0);
 
-	// insert the font tags
-	buffer.insert(index, "<font CLASS=comment>");
-	buffer.insert(buffer.size(), "</font>");
+    // insert the font tags
+    buffer.insert(index, "<font CLASS=comment>");
+    buffer.insert(buffer.size(), "</font>");
 }
 //-----------------------------------------------------------------------------
 void Engine::parseCharZeroComment(char zchar) {
 
-	if(buffer[0] == zchar) {colourComment(0);}
+    if (buffer[0] == zchar) {
+        colourComment(0);
+    }
 }
 // here is where the parsing rules apply --------------------------------------
 void Engine::doParsing() {
 
-	if(opt_anchor) {
-		makeAnchor();
-	}
-	if(opt_number) {
-		makeMargin();
-	}
+    if (opt_anchor) {
+        makeAnchor();
+    }
+    if (opt_number) {
+        makeMargin();
+    }
 
-	IO->rline(buffer);
-	if(!IO->isIredir() && !IO->ifile) {return;}
-	if( IO->isIredir() && !cin)       {return;}
+    IO->rline(buffer);
+    if (!IO->isIredir() && !IO->ifile) {
+        return;
+    }
+    if (IO->isIredir() && !cin) {
+        return;
+    }
 
-	// preformat HTML escapes
-	PRE_PARSE_CODE;
+    // preformat HTML escapes
+    PRE_PARSE_CODE;
 
-	if(doSymbols) parseSymbol();
-
-#ifdef DEBUG_DO_PARSING
-PRINT_DEBUG(0);
-#endif
-
-	if(doLabels)   PARSE_LABELS;
-
-	if(doTplString) PARSE_TPL_DBL_STRING;
-	if(doRawString) PARSE_RAW_CPP_STRING;
-	if(doHeredoc)      PARSE_HEREDOC_STRING;
-	if(doPhpHeredoc)   PARSE_PHP_HEREDOC;
-	if(doPercentQ) {PARSE_PERCENT_QU_STR; PARSE_PERCENT_QL_STR;}
-
-	if(doStrings)
-	{
-		PARSE_DBL_QUO_STRING;
-		PARSE_SIN_QUO_STRING;
-		PARSE_BCK_QUO_STRING;
-	}
+    if (doSymbols)
+        parseSymbol();
 
 #ifdef DEBUG_DO_PARSING
-PRINT_DEBUG(1);
+    PRINT_DEBUG(0);
 #endif
 
-	if(doPreProc)  PARSE_PREPROCESSOR;
+    if (doLabels)
+        PARSE_LABELS;
 
-	if(doPasComnt) PARSE_PAS_MOD2_COMNT;
-	if(doHtmComnt) PARSE_A_MARKUP_COMNT;
-	if(doBigComnt) PARSE_CLASSICC_COMNT;
-	if(doHskComnt) PARSE_HASKL_98_COMNT;
-	if(doHtmlTags) PARSE_HTML_TAGS;
+    if (doTplString)
+        PARSE_TPL_DBL_STRING;
+    if (doRawString)
+        PARSE_RAW_CPP_STRING;
+    if (doHeredoc)
+        PARSE_HEREDOC_STRING;
+    if (doPhpHeredoc)
+        PARSE_PHP_HEREDOC;
+    if (doPercentQ) {
+        PARSE_PERCENT_QU_STR;
+        PARSE_PERCENT_QL_STR;
+    }
 
-	if(doKeywords) PARSE_KEYWORDS;
+    if (doStrings) {
+        PARSE_DBL_QUO_STRING;
+        PARSE_SIN_QUO_STRING;
+        PARSE_BCK_QUO_STRING;
+    }
 
 #ifdef DEBUG_DO_PARSING
-PRINT_DEBUG(2);
+    PRINT_DEBUG(1);
 #endif
 
-	if(doScalars)  PARSE_SCALAR_VARIABL;
-	if(doArrays)   PARSE_ARRAYS_VARIABL;
-	if(doHashes)   PARSE_HASHED_VARIABL;
+    if (doPreProc)
+        PARSE_PREPROCESSOR;
+
+    if (doPasComnt)
+        PARSE_PAS_MOD2_COMNT;
+    if (doHtmComnt)
+        PARSE_A_MARKUP_COMNT;
+    if (doBigComnt)
+        PARSE_CLASSICC_COMNT;
+    if (doHskComnt)
+        PARSE_HASKL_98_COMNT;
+    if (doHtmlTags)
+        PARSE_HTML_TAGS;
+
+    if (doKeywords)
+        PARSE_KEYWORDS;
 
 #ifdef DEBUG_DO_PARSING
-PRINT_DEBUG(3);
+    PRINT_DEBUG(2);
 #endif
 
-	if(doNumbers)  PARSE_NUMBERS;
+    if (doScalars)
+        PARSE_SCALAR_VARIABL;
+    if (doArrays)
+        PARSE_ARRAYS_VARIABL;
+    if (doHashes)
+        PARSE_HASHED_VARIABL;
 
 #ifdef DEBUG_DO_PARSING
-PRINT_DEBUG(4);
+    PRINT_DEBUG(3);
 #endif
 
-	if(doAdaComnt) {PARSE_A_ADA_95_COMNT;}
-	if(doAspComnt) {PARSE_A_MS_ASP_COMNT;}
-	if(doCinComnt) {PARSE_C_INLINE_COMNT;}
-	if(doUnxComnt) {PARSE_UNIXHASH_COMNT;}
-	if(doAsmComnt) {PARSE_ASSEMBLY_COMNT;}
-	if(doBatComnt) {PARSE_DBLCOLON_COMNT;}
-	if(doRemComnt) {PARSE_REMINDER_COMNT;}
-	if(doFtnComnt) {PARSE_ZFORTRAN_COMNT;}
- 	if(doTclComnt) {PARSE_ZEROHASH_COMNT;}
+    if (doNumbers)
+        PARSE_NUMBERS;
 
 #ifdef DEBUG_DO_PARSING
-PRINT_DEBUG(5);
+    PRINT_DEBUG(4);
 #endif
 
-	hyperTagMe();
-	hyperNameMe();
-	hyperLinkMe();
+    if (doAdaComnt) {
+        PARSE_A_ADA_95_COMNT;
+    }
+    if (doAspComnt) {
+        PARSE_A_MS_ASP_COMNT;
+    }
+    if (doCinComnt) {
+        PARSE_C_INLINE_COMNT;
+    }
+    if (doUnxComnt) {
+        PARSE_UNIXHASH_COMNT;
+    }
+    if (doAsmComnt) {
+        PARSE_ASSEMBLY_COMNT;
+    }
+    if (doBatComnt) {
+        PARSE_DBLCOLON_COMNT;
+    }
+    if (doRemComnt) {
+        PARSE_REMINDER_COMNT;
+    }
+    if (doFtnComnt) {
+        PARSE_ZFORTRAN_COMNT;
+    }
+    if (doTclComnt) {
+        PARSE_ZEROHASH_COMNT;
+    }
 
 #ifdef DEBUG_DO_PARSING
-PRINT_DEBUG(6);
+    PRINT_DEBUG(5);
 #endif
 
-	*IO << buffer << "\n";
-	if(!childLang) {parseChildLang();}
-	endMultiLine = inComment || inMultiStr;
+    hyperTagMe();
+    hyperNameMe();
+    hyperLinkMe();
 
-	lncount++;
+#ifdef DEBUG_DO_PARSING
+    PRINT_DEBUG(6);
+#endif
+
+    *IO << buffer << "\n";
+    if (!childLang) {
+        parseChildLang();
+    }
+    endMultiLine = inComment || inMultiStr;
+
+    lncount++;
 }
 //-----------------------------------------------------------------------------
 // write the initial HTML tags ------------------------------------------------
 void Engine::begHtml(string name) {
 
-	string gen;
-	string style;
-	string openht;
+    string gen;
+    string style;
+    string openht;
 
-	string ImgPath;
-	string CssFile;
-	string Path;
-	int dir_idx;
+    string ImgPath;
+    string CssFile;
+    string Path;
+    int dir_idx;
 
-
-	gen = "\
+    gen = "\
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\
 \n\n<!--\nSyntax highlighting generated by Web C Plus Plus software v0.9.0\n\
 Webcpp 0.8.4 and older Copyright (C)2001 - 2004 Jeffrey Bakker under the GNU GPL\n\
 Webcpp 0.9.0 and newer Copyright (C)2026 Jeffrey Bakker under the MIT License\n\
 Get webcpp at http://webcpp.sf.net\n-->\n\n";
 
+    if (Scs2.getImageFile() != "\0") {
 
-	if(Scs2.getImageFile() != "\0") {
+        string CopyCmd = COPY;
 
-		string CopyCmd = COPY;
+        ImgPath = Scs2.getImageFile();
+        dir_idx = IO->getStrOf().rfind(DIRECTORY_SLASH);
 
-		ImgPath = Scs2.getImageFile();
-		dir_idx = IO->getStrOf().rfind(DIRECTORY_SLASH);
+        if (dir_idx != -1) {
 
-		if(dir_idx != -1) {
+            Path = IO->getStrOf().substr(0, dir_idx + 1);
 
-			Path = IO->getStrOf().substr(0,dir_idx+1);
+            Scs2.setImageLeaf();
+            CopyCmd +=
+                " \"" + ImgPath + "\" \"" + Path + Scs2.getImageFile() + "\"";
+            system(CopyCmd.data());
+            //			IO->backup(ImgPath, Path + Scs2.getImageFile(), true);
+        }
+    }
 
-			Scs2.setImageLeaf();
-			CopyCmd += " \"" + ImgPath + "\" \"" + Path + Scs2.getImageFile() + "\"";
-			system(CopyCmd.data());
-//			IO->backup(ImgPath, Path + Scs2.getImageFile(), true);
-		}
-	}
+    // external or embedded stylesheet
+    if (opt_extcss) {
 
-	// external or embedded stylesheet
-	if(opt_extcss) {
+        CssFile = Scs2.getThemeName() + ".css";
 
-		CssFile = Scs2.getThemeName() + ".css";
+        dir_idx = IO->getStrOf().rfind(DIRECTORY_SLASH);
 
-		dir_idx = IO->getStrOf().rfind(DIRECTORY_SLASH);
+        if (dir_idx != -1) {
 
-		if(dir_idx != -1) {
+            Path = IO->getStrOf().substr(0, dir_idx + 1);
+            CssFile = Path + CssFile;
+        }
 
-			Path = IO->getStrOf().substr(0,dir_idx+1);
-			CssFile = Path + CssFile;
-		}
+        Scs2.writeCSS(CssFile);
+        //		cerr << endl << CssFile << endl;
 
-		Scs2.writeCSS(CssFile);
-//		cerr << endl << CssFile << endl;
+        style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" +
+                Scs2.getThemeName() + ".css\"/>\n";
+    } else {
+        style =
+            "<style type=\"text/css\">\n\n" + Scs2.getCSSdata() + "</style>\n";
+    }
 
-		style =
-		"<link rel=\"stylesheet\" type=\"text/css\" href=\""
-		+ Scs2.getThemeName() + ".css\"/>\n";
-	} else {
-		style =
-		"<style type=\"text/css\">\n\n"
-		+ Scs2.getCSSdata() + "</style>\n";
-	}
+    // html snippet or complete html tags
+    if (opt_htsnip) {
 
-	// html snippet or complete html tags
-	if(opt_htsnip) {
+        openht = style;
+    } else {
+        openht = "<html>\n<head>\n<title>" + name + "</title>\n" + style +
+                 "</head>\n<body>\n\n"; // bgcolor="
+        //		+ Scs2.getColourByID(BGCOLOR) + ">\n\n";
+    }
 
-		openht = style;
-	} else {
-		openht =
-		"<html>\n<head>\n<title>" + name + "</title>\n"
-		+ style + "</head>\n<body>\n\n"; // bgcolor="
-//		+ Scs2.getColourByID(BGCOLOR) + ">\n\n";
-	}
+    if (IO->isOredir()) {
 
-	if(IO->isOredir()) {
-
-		*IO << "Content-Type: text/html\n\n";  // cgi-ready
-	}
-	*IO << gen << openht << "<div class=\"webcpp\">\n<pre>\n\n";
+        *IO << "Content-Type: text/html\n\n"; // cgi-ready
+    }
+    *IO << gen << openht << "<div class=\"webcpp\">\n<pre>\n\n";
 }
 // write the closing HTML tags ------------------------------------------------
 void Engine::endHtml() {
 
-	*IO << "\n\n</pre>\n";
-	if(opt_webcpp) {
+    *IO << "\n\n</pre>\n";
+    if (opt_webcpp) {
 
-		string made;
-		made = "<center>\n<hr size=4 width=95%>\n<br>\n\
+        string made;
+        made = "<center>\n<hr size=4 width=95%>\n<br>\n\
 syntax highlighting by<br><br>\n\
 <table cellpadding=3 cellspacing=3 bgcolor=#000000><tr>\n\
 <td bgcolor=#ff0000><tt><font size=+2 color=#000000>w</font></tt></td>\n\
@@ -1300,178 +1624,209 @@ syntax highlighting by<br><br>\n\
 <font color=#ffffff>web c plus plus</font></b></center>\n\
 </a></td></tr>\n</table>\n<br>\n</center>";
 
-		*IO << made;
-	}
-	*IO << "\n</div>\n";
-	if(!opt_htsnip) {*IO << "\n\n</body>\n</html>\n";}
+        *IO << made;
+    }
+    *IO << "\n</div>\n";
+    if (!opt_htsnip) {
+        *IO << "\n\n</body>\n</html>\n";
+    }
 }
 // place HTML tags without being stripped -------------------------------------
 void Engine::hyperTagMe() {
 
-	int index;
-	index = buffer.find("TagMe:",0);
-	if(index == -1) {return;}
-	if(abortColour(index)) {
-		return;
-	}
-	buffer.erase(index,6);
+    int index;
+    index = buffer.find("TagMe:", 0);
+    if (index == -1) {
+        return;
+    }
+    if (abortColour(index)) {
+        return;
+    }
+    buffer.erase(index, 6);
 
-	for(int i=index; i < buffer.size(); i++) {
-		if	(buffer.substr(i,4) == "&lt;") buffer.replace(i,4, "<");
-		else if	(buffer.substr(i,4) == "&gt;") buffer.replace(i,4, ">");
-	}
+    for (int i = index; i < buffer.size(); i++) {
+        if (buffer.substr(i, 4) == "&lt;")
+            buffer.replace(i, 4, "<");
+        else if (buffer.substr(i, 4) == "&gt;")
+            buffer.replace(i, 4, ">");
+    }
 }
 // hyperlink a line of code ---------------------------------------------------
 void Engine::hyperLinkMe() {
 
-	int index;
-	index = buffer.find("LinkMe:",0);
-	if(index == -1) {return;}
-	if(abortColour(index)) {
-		return;
-	}
-	string link;
-	link = buffer.substr(index+7);
-	buffer.erase(index, buffer.size() - index);
+    int index;
+    index = buffer.find("LinkMe:", 0);
+    if (index == -1) {
+        return;
+    }
+    if (abortColour(index)) {
+        return;
+    }
+    string link;
+    link = buffer.substr(index + 7);
+    buffer.erase(index, buffer.size() - index);
 
-	buffer.insert(0, "<a href=\"" + link + "\">");
-	buffer += "</a>";
+    buffer.insert(0, "<a href=\"" + link + "\">");
+    buffer += "</a>";
 }
 // anchor a line of code ------------------------------------------------------
 void Engine::hyperNameMe() {
 
-	int index;
-	index = buffer.find("NameMe:",0);
-	if(index == -1) {return;}
-	if(abortColour(index)) {
-		return;
-	}
-	string name;
-	name = buffer.substr(index+7);
-	buffer.erase(index, buffer.size() - index);
+    int index;
+    index = buffer.find("NameMe:", 0);
+    if (index == -1) {
+        return;
+    }
+    if (abortColour(index)) {
+        return;
+    }
+    string name;
+    name = buffer.substr(index + 7);
+    buffer.erase(index, buffer.size() - index);
 
-	buffer.insert(0, "<a name=\"" + name + "\">");
-	buffer += "</a>";
+    buffer.insert(0, "<a name=\"" + name + "\">");
+    buffer += "</a>";
 }
 // automatically hyperlink included C/C++ files -------------------------------
 void Engine::hyperIncludeMe() {
 
-	int incl, insr;
+    int incl, insr;
 
-	incl = buffer.find("#include",0);
-	if(incl == -1) {return;}
+    incl = buffer.find("#include", 0);
+    if (incl == -1) {
+        return;
+    }
 
-	insr = buffer.find("\"",incl+1);
-	if(insr == -1) {return;}
+    insr = buffer.find("\"", incl + 1);
+    if (insr == -1) {
+        return;
+    }
 
-	string cmd;
-	string link;
-	link = buffer.substr(insr);
-	link = link.substr(0,link.find("\"</font>"));
+    string cmd;
+    string link;
+    link = buffer.substr(insr);
+    link = link.substr(0, link.find("\"</font>"));
 
-	if(opt_follow) {
-		// follow and process the include file
+    if (opt_follow) {
+        // follow and process the include file
 
-		string path;
+        string path;
 
-		int dir_idx = IO->getStrIf().rfind(DIRECTORY_SLASH);
+        int dir_idx = IO->getStrIf().rfind(DIRECTORY_SLASH);
 
-		if(dir_idx != -1) {
+        if (dir_idx != -1) {
 
-			path = IO->getStrIf().substr(0,dir_idx+1);
-			path = path + link.substr(1);
-		} else {
-			path = link.substr(1);
-		}
+            path = IO->getStrIf().substr(0, dir_idx + 1);
+            path = path + link.substr(1);
+        } else {
+            path = link.substr(1);
+        }
 
-		cmd = "webcpp " + path + " -A:f -H";
-		// retain switches from the current file
-		if(opt_bigtab) {
-			cmd += " -t";
-			if(tabwidth != 8) {
-				cmd += "=";
-				cmd += tw;
-			}
-		}
-		if(opt_webcpp) cmd += " -m";
-		if(opt_number) cmd += " -l";
-		if(opt_anchor) cmd += " -a";
-		if(opt_htsnip) cmd += " -s";
-		if(opt_extcss) cmd += " -X";
+        cmd = "webcpp " + path + " -A:f -H";
+        // retain switches from the current file
+        if (opt_bigtab) {
+            cmd += " -t";
+            if (tabwidth != 8) {
+                cmd += "=";
+                cmd += tw;
+            }
+        }
+        if (opt_webcpp)
+            cmd += " -m";
+        if (opt_number)
+            cmd += " -l";
+        if (opt_anchor)
+            cmd += " -a";
+        if (opt_htsnip)
+            cmd += " -s";
+        if (opt_extcss)
+            cmd += " -X";
 
-		if(Scs2.getThemeName() != "typical") {
-			cmd += " -c=" + Scs2.getThemeName();
-		}
-		if(Scs2.getImageFile() != "") {
-			cmd += " -i=" + Scs2.getImageFile();
-		}
-		cerr << "\nSuperInclude found " + path + "\n";
-		cerr << cmd << "\n";
-		system(cmd.data());
-	}
-	// make the hyperlink
-	link = "<a href=" + link + ".html\">";
-	buffer.insert(insr, link);
-	buffer.insert(buffer.size(),"</a>");
+        if (Scs2.getThemeName() != "typical") {
+            cmd += " -c=" + Scs2.getThemeName();
+        }
+        if (Scs2.getImageFile() != "") {
+            cmd += " -i=" + Scs2.getImageFile();
+        }
+        cerr << "\nSuperInclude found " + path + "\n";
+        cerr << cmd << "\n";
+        system(cmd.data());
+    }
+    // make the hyperlink
+    link = "<a href=" + link + ".html\">";
+    buffer.insert(insr, link);
+    buffer.insert(buffer.size(), "</a>");
 }
 //-----------------------------------------------------------------------------
 // parse for inline languages -------------------------------------------------
 void Engine::parseChildLang() {
 
-//	if(abortParse())     {return;}
-//	cerr << "\nNow in parseChildLang()\n";
+    //	if(abortParse())     {return;}
+    //	cerr << "\nNow in parseChildLang()\n";
 
-	switch(langext)
-	{
-		case CPP_FILE	: PARSE_INLINE_ASM;	break;
-		case HTM_FILE	: PARSE_INLINE_JS;
-				  PARSE_INLINE_CSS;	break;
-		default		: return;
-	}
+    switch (langext) {
+    case CPP_FILE:
+        PARSE_INLINE_ASM;
+        break;
+    case HTM_FILE:
+        PARSE_INLINE_JS;
+        PARSE_INLINE_CSS;
+        break;
+    default:
+        return;
+    }
 }
 // process an inline child language -------------------------------------------
 void Engine::colourChildLang(string beg, string end) {
 
-//	cerr << "\nNow in colourChildLang()\n";
+    //	cerr << "\nNow in colourChildLang()\n";
 
-	if(buffer.find(beg) != -1) {
+    if (buffer.find(beg) != -1) {
 
-//		cerr << "\nNow in if of colourChildLang()\n";
+        //		cerr << "\nNow in if of colourChildLang()\n";
 
-		Engine *Child;
+        Engine *Child;
 
-		switch(langext)
-		{
-			case CPP_FILE : CHILD(LangAssembler, ASM_FILE); break;
-			case HTM_FILE :
-				if(end == "/style") {
-					CHILD(LangCSS, CSS_FILE);
-				} else {
-					CHILD(LangJScript, JSC_FILE);
-				}
-				break;
-		}
-		Child->setupIO(IO);
-		Child->setChildLang(true);
-		Child->setLineCount(lncount +1);
-		if(opt_anchor) {Child->toggleAnchor();}
-		if(opt_number) {Child->toggleNumber();}	
+        switch (langext) {
+        case CPP_FILE:
+            CHILD(LangAssembler, ASM_FILE);
+            break;
+        case HTM_FILE:
+            if (end == "/style") {
+                CHILD(LangCSS, CSS_FILE);
+            } else {
+                CHILD(LangJScript, JSC_FILE);
+            }
+            break;
+        }
+        Child->setupIO(IO);
+        Child->setChildLang(true);
+        Child->setLineCount(lncount + 1);
+        if (opt_anchor) {
+            Child->toggleAnchor();
+        }
+        if (opt_number) {
+            Child->toggleNumber();
+        }
 
-		if(langext == CPP_FILE)
-			{Child->setInline();}
-		if(langext == HTM_FILE && inComment)
-			{*IO << "</font>";}
+        if (langext == CPP_FILE) {
+            Child->setInline();
+        }
+        if (langext == HTM_FILE && inComment) {
+            *IO << "</font>";
+        }
 
-		do {
-			Child->doParsing();
-//			cerr << endl << Child->getBuffer() << endl;
-		} while(Child->getBuffer().find(end) == -1 &&
-			(Child->IO->ifile && cin));
+        do {
+            Child->doParsing();
+            //			cerr << endl << Child->getBuffer() << endl;
+        } while (Child->getBuffer().find(end) == -1 &&
+                 (Child->IO->ifile && cin));
 
-		if(langext == HTM_FILE && inComment)
-			{*IO << "<font CLASS=comment>";}
+        if (langext == HTM_FILE && inComment) {
+            *IO << "<font CLASS=comment>";
+        }
 
-		setLineCount(Child->getLineCount() -1);	
-	}
+        setLineCount(Child->getLineCount() - 1);
+    }
 }
 //-----------------------------------------------------------------------------

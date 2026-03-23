@@ -11,103 +11,41 @@
 
 LangRuby ::LangRuby() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doSymbols  = Yes;
-	doScalars  = Yes;
-	doArrays   = Yes;
-	doHashes   = Yes;
-	doUnxComnt = Yes;
-	doHeredoc  = Yes;
-	doPercentQ = Yes;
+    doSymbols = Yes;
+    doScalars = Yes;
+    doArrays = Yes;
+    doHashes = Yes;
+    doUnxComnt = Yes;
+    doHeredoc = Yes;
+    doPercentQ = Yes;
 }
 
 void LangRuby ::fill() {
 
-	// Ruby 3.3 keywords
-	string K[] = {
-		"BEGIN",
-		"END",
-		"__ENCODING__",
-		"__FILE__",
-		"__LINE__",
-		"alias",
-		"and",
-		"begin",
-		"break",
-		"case",
-		"class",
-		"def",
-		"defined",
-		"do",
-		"else",
-		"elsif",
-		"end",
-		"ensure",
-		"false",
-		"for",
-		"if",
-		"in",
-		"module",
-		"next",
-		"nil",
-		"not",
-		"or",
-		"raise",
-		"redo",
-		"rescue",
-		"retry",
-		"return",
-		"self",
-		"super",
-		"then",
-		"true",
-		"undef",
-		"unless",
-		"until",
-		"when",
-		"while",
-		"yield",
-	};
+    // Ruby 3.3 keywords
+    string K[] = {
+        "BEGIN",   "END",    "__ENCODING__", "__FILE__", "__LINE__", "alias",
+        "and",     "begin",  "break",        "case",     "class",    "def",
+        "defined", "do",     "else",         "elsif",    "end",      "ensure",
+        "false",   "for",    "if",           "in",       "module",   "next",
+        "nil",     "not",    "or",           "raise",    "redo",     "rescue",
+        "retry",   "return", "self",         "super",    "then",     "true",
+        "undef",   "unless", "until",        "when",     "while",    "yield",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// Ruby 3.3 built-in types and core classes
-	string T[] = {
-		"Array",
-		"BasicObject",
-		"Comparable",
-		"Complex",
-		"Data",
-		"Enumerable",
-		"Enumerator",
-		"Fiber",
-		"Float",
-		"Hash",
-		"Integer",
-		"IO",
-		"Kernel",
-		"Method",
-		"Mutex",
-		"NilClass",
-		"Numeric",
-		"Object",
-		"Proc",
-		"Process",
-		"Queue",
-		"Ractor",
-		"Range",
-		"Rational",
-		"Regexp",
-		"Set",
-		"String",
-		"Struct",
-		"Symbol",
-		"Thread",
-		"Time",
-		"TrueClass",
-		"FalseClass",
-	};
+    // Ruby 3.3 built-in types and core classes
+    string T[] = {
+        "Array",      "BasicObject", "Comparable", "Complex",  "Data",
+        "Enumerable", "Enumerator",  "Fiber",      "Float",    "Hash",
+        "Integer",    "IO",          "Kernel",     "Method",   "Mutex",
+        "NilClass",   "Numeric",     "Object",     "Proc",     "Process",
+        "Queue",      "Ractor",      "Range",      "Rational", "Regexp",
+        "Set",        "String",      "Struct",     "Symbol",   "Thread",
+        "Time",       "TrueClass",   "FalseClass",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }
-

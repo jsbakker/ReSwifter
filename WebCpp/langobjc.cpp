@@ -10,99 +10,83 @@
 
 LangObjectiveC ::LangObjectiveC() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doSymbols  = Yes;
-	doLabels   = Yes;
-	doPreProc  = Yes;
-	doBigComnt = Yes;
-	doCinComnt = Yes;
+    doSymbols = Yes;
+    doLabels = Yes;
+    doPreProc = Yes;
+    doBigComnt = Yes;
+    doCinComnt = Yes;
 }
 
 void LangObjectiveC ::fill() {
 
-	// Objective-C keywords (modern, through Xcode 16 / Clang 18)
-	// Note: C keywords are inherited from LangC
-	string K[] = {
-        "__block",
-		"@autoreleasepool",
-		"@available",
-		"@catch",
-		"@class",
-		"@compatibility_alias",
-		"@defs",
-		"@dynamic",
-		"@encode",
-		"@end",
-		"@finally",
-		"@implementation",
-		"@import",
-		"@interface",
-		"@optional",
-		"@package",
-		"@private",
-		"@property",
-		"@protected",
-		"@protocol",
-		"@public",
-		"@required",
-		"@selector",
-		"@synchronized",
-		"@synthesize",
-		"@throw",
-		"@try",
-		"NO",
-		"Nil",
-		"YES",
-		"nil",
-		"self",
-		"super",
-	};
+    // Objective-C keywords (modern, through Xcode 16 / Clang 18)
+    // Note: C keywords are inherited from LangC
+    string K[] = {
+        "__block",     "@autoreleasepool",
+        "@available",  "@catch",
+        "@class",      "@compatibility_alias",
+        "@defs",       "@dynamic",
+        "@encode",     "@end",
+        "@finally",    "@implementation",
+        "@import",     "@interface",
+        "@optional",   "@package",
+        "@private",    "@property",
+        "@protected",  "@protocol",
+        "@public",     "@required",
+        "@selector",   "@synchronized",
+        "@synthesize", "@throw",
+        "@try",        "NO",
+        "Nil",         "YES",
+        "nil",         "self",
+        "super",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// Objective-C types
-	string T[] = {
-		"BOOL",
-		"CGFloat",
-		"CGPoint",
-		"CGRect",
-		"CGSize",
-		"Class",
-		"IMP",
-		"NSArray",
-		"NSBundle",
-		"NSData",
-		"NSDate",
-		"NSDictionary",
-		"NSError",
-		"NSInteger",
-		"NSMutableArray",
-		"NSMutableDictionary",
-		"NSMutableSet",
-		"NSMutableString",
-		"NSNotification",
-		"NSNotificationCenter",
-		"NSNumber",
-		"NSObject",
-		"NSSet",
-		"NSString",
-		"NSTimeInterval",
-		"NSUInteger",
-		"NSURL",
-		"SEL",
-		"bycopy",
-		"byref",
-		"id",
-		"in",
-		"inout",
-		"instancetype",
-		"nonnull",
-		"null_resettable",
-		"null_unspecified",
-		"nullable",
-		"oneway",
-		"out",
-	};
+    // Objective-C types
+    string T[] = {
+        "BOOL",
+        "CGFloat",
+        "CGPoint",
+        "CGRect",
+        "CGSize",
+        "Class",
+        "IMP",
+        "NSArray",
+        "NSBundle",
+        "NSData",
+        "NSDate",
+        "NSDictionary",
+        "NSError",
+        "NSInteger",
+        "NSMutableArray",
+        "NSMutableDictionary",
+        "NSMutableSet",
+        "NSMutableString",
+        "NSNotification",
+        "NSNotificationCenter",
+        "NSNumber",
+        "NSObject",
+        "NSSet",
+        "NSString",
+        "NSTimeInterval",
+        "NSUInteger",
+        "NSURL",
+        "SEL",
+        "bycopy",
+        "byref",
+        "id",
+        "in",
+        "inout",
+        "instancetype",
+        "nonnull",
+        "null_resettable",
+        "null_unspecified",
+        "nullable",
+        "oneway",
+        "out",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

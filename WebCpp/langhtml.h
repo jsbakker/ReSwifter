@@ -8,13 +8,13 @@
 
 #include "engine.h"
 
-class LangHtml: public Engine {
+class LangHtml : public Engine {
 
- public:
-	LangHtml();
-	virtual ~LangHtml() {IO->close();}
+  public:
+    LangHtml();
+    virtual ~LangHtml() { IO->close(); }
 
-	virtual void fill();
+    virtual void fill();
 };
 
-#endif  // LANG_HTML_DEF_H
+#endif // LANG_HTML_DEF_H

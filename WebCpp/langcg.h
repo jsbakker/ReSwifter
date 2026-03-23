@@ -11,11 +11,10 @@
 
 class LangCg : public Engine {
 
- public:
-	LangCg();
-	~LangCg() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangCg();
+    ~LangCg() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_NVIDIA_CG_SHADING_LANGUAGE
+#endif // LANG_DEF_NVIDIA_CG_SHADING_LANGUAGE

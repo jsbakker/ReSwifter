@@ -8,12 +8,12 @@
 
 #include "engine.h"
 
-class LangShell: public Engine {
+class LangShell : public Engine {
 
- public :
-	LangShell();
-	virtual ~LangShell() {IO->close();}
-	virtual void fill();
+  public:
+    LangShell();
+    virtual ~LangShell() { IO->close(); }
+    virtual void fill();
 };
 
-#endif  // LANG_SHELL_DEF_H
+#endif // LANG_SHELL_DEF_H

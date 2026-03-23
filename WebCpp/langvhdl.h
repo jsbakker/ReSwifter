@@ -11,11 +11,10 @@
 
 class LangVHDL : public Engine {
 
- public:
-	LangVHDL();
-	~LangVHDL() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangVHDL();
+    ~LangVHDL() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_VHDL
+#endif // LANG_DEF_VHDL

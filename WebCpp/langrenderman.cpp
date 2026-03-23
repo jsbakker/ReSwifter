@@ -11,66 +11,35 @@
 
 LangRenderMan ::LangRenderMan() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doPreProc  = Yes;  // #include, #define
-	doCinComnt = Yes;  // // line comments
-	doBigComnt = Yes;  // /* */ block comments
-	doSymbols  = Yes;
+    doPreProc = Yes;  // #include, #define
+    doCinComnt = Yes; // // line comments
+    doBigComnt = Yes; // /* */ block comments
+    doSymbols = Yes;
 }
 
 void LangRenderMan ::fill() {
 
-	// RSL and OSL keywords (combined for .sl file compatibility)
-	string K[] = {
-		"and",
-		"break",
-		"closure",
-		"continue",
-		"displacement",
-		"do",
-		"else",
-		"emit",
-		"environment",
-		"extern",
-		"for",
-		"if",
-		"illuminance",
-		"illuminate",
-		"imager",
-		"light",
-		"not",
-		"or",
-		"output",
-		"public",
-		"return",
-		"shader",
-		"shadow",
-		"solar",
-		"struct",
-		"surface",
-		"texture",
-		"transformation",
-		"uniform",
-		"varying",
-		"vertex",
-		"void",
-		"volume",
-		"while",
-	};
+    // RSL and OSL keywords (combined for .sl file compatibility)
+    string K[] = {
+        "and",          "break",      "closure", "continue",
+        "displacement", "do",         "else",    "emit",
+        "environment",  "extern",     "for",     "if",
+        "illuminance",  "illuminate", "imager",  "light",
+        "not",          "or",         "output",  "public",
+        "return",       "shader",     "shadow",  "solar",
+        "struct",       "surface",    "texture", "transformation",
+        "uniform",      "varying",    "vertex",  "void",
+        "volume",       "while",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// RSL and OSL data types
-	string T[] = {
-		"color",
-		"float",
-		"int",
-		"matrix",
-		"normal",
-		"point",
-		"string",
-		"vector",
-	};
+    // RSL and OSL data types
+    string T[] = {
+        "color",  "float", "int",    "matrix",
+        "normal", "point", "string", "vector",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

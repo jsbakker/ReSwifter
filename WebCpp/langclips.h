@@ -11,12 +11,10 @@
 
 class LangClips : public Engine {
 
- public:
-	LangClips();
-	~LangClips() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangClips();
+    ~LangClips() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_NASA_CLIPS
-
+#endif // LANG_DEF_NASA_CLIPS

@@ -8,10 +8,10 @@
 
 class LangVala : public Engine {
 
- public:
-	LangVala();
-	~LangVala() {IO->close();}
-	virtual void fill();
+  public:
+    LangVala();
+    ~LangVala() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_VALA
+#endif // LANG_DEF_VALA

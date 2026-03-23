@@ -8,10 +8,10 @@
 
 class LangHLSL : public Engine {
 
- public:
-	LangHLSL();
-	~LangHLSL() {IO->close();}
-	virtual void fill();
+  public:
+    LangHLSL();
+    ~LangHLSL() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_HLSL
+#endif // LANG_DEF_HLSL

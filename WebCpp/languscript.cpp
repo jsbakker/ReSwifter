@@ -10,32 +10,31 @@
 
 LangUScript::LangUScript() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doCaseKeys  = No;
-	doSymbols   = Yes;
-	doLabels    = Yes;
-	doPreProc   = Yes;
-	doBigComnt  = Yes;
-	doCinComnt  = Yes;
+    doCaseKeys = No;
+    doSymbols = Yes;
+    doLabels = Yes;
+    doPreProc = Yes;
+    doBigComnt = Yes;
+    doCinComnt = Yes;
 }
 
 void LangUScript::fill() {
 
-	string K[] = {
-"abstract","class","event","expands","extends","foreach","function","global",
-"local","None","Self","state","Super","until","var"
-	};
+    string K[] = {"abstract", "class",    "event",  "expands", "extends",
+                  "foreach",  "function", "global", "local",   "None",
+                  "Self",     "state",    "Super",  "until",   "var"};
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	string T[] = {
-"Vector","Plane","Rotation","Coords","Color","Region","Texture",
-"actor","bool","byte","name","string",
-"config","native","private","transient",
+    string T[] = {"Vector",    "Plane",      "Rotation",     "Coords",
+                  "Color",     "Region",     "Texture",      "actor",
+                  "bool",      "byte",       "name",         "string",
+                  "config",    "native",     "private",      "transient",
 
-"sound","shader","combiner","material","texpanner","finalblend",
-"SkeletalMesh","StaticMesh","Rotator"
-	};
+                  "sound",     "shader",     "combiner",     "material",
+                  "texpanner", "finalblend", "SkeletalMesh", "StaticMesh",
+                  "Rotator"};
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

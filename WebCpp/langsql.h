@@ -9,11 +9,10 @@
 
 class LangSQL : public Engine {
 
- public:
-	LangSQL();
-	~LangSQL() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangSQL();
+    ~LangSQL() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_SQL
+#endif // LANG_DEF_SQL

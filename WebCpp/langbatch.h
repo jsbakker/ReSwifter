@@ -10,11 +10,10 @@
 
 class LangBatch : public Engine {
 
- public:
-	LangBatch();
-	~LangBatch() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangBatch();
+    ~LangBatch() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_BATCH
+#endif // LANG_DEF_BATCH

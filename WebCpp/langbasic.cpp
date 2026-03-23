@@ -9,23 +9,24 @@
 
 LangBasic ::LangBasic() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doCaseKeys = No;
-	doLabels   = Yes;
-	doAsmComnt = Yes;
-	doRemComnt = Yes;
+    doCaseKeys = No;
+    doLabels = Yes;
+    doAsmComnt = Yes;
+    doRemComnt = Yes;
 }
 
 void LangBasic ::fill() {
 
-	string K[] = {
-	"ABS","AND","ASC","BYE","CHR","CLS","DATA","DEL","DIM","END","FOR","GOSUB",
-	"GOTO","IF","INPUT","LEN","LET","LIST","LOAD","LOCATE","LOG","MERGE","MID",
-	"MOD","NEW","NEXT","NOT","ON","OR","POKE","PRINT","RAND","READ","RENUM",
-	"RESTORE","RETURN","RND","RUN","SAVE","SGN","SIN","SQR","SQRT","STOP",
-	"STR","TO","VAL","WEND","WHILE","XOR"
-	};
+    string K[] = {
+        "ABS",   "AND",   "ASC",     "BYE",    "CHR",  "CLS",   "DATA",  "DEL",
+        "DIM",   "END",   "FOR",     "GOSUB",  "GOTO", "IF",    "INPUT", "LEN",
+        "LET",   "LIST",  "LOAD",    "LOCATE", "LOG",  "MERGE", "MID",   "MOD",
+        "NEW",   "NEXT",  "NOT",     "ON",     "OR",   "POKE",  "PRINT", "RAND",
+        "READ",  "RENUM", "RESTORE", "RETURN", "RND",  "RUN",   "SAVE",  "SGN",
+        "SIN",   "SQR",   "SQRT",    "STOP",   "STR",  "TO",    "VAL",   "WEND",
+        "WHILE", "XOR"};
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 }

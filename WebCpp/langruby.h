@@ -11,11 +11,10 @@
 
 class LangRuby : public Engine {
 
- public:
-	LangRuby();
-	~LangRuby() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangRuby();
+    ~LangRuby() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_RUBY
+#endif // LANG_DEF_RUBY

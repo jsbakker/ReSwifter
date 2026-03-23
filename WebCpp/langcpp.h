@@ -10,10 +10,10 @@
 
 class LangCPlusPlus : public virtual LangC {
 
- public:
-	LangCPlusPlus();
-	virtual ~LangCPlusPlus() {IO->close();}
+  public:
+    LangCPlusPlus();
+    virtual ~LangCPlusPlus() { IO->close(); }
     void fill() override;
 };
 
-#endif  // _LANG_CPP_DEF_H
+#endif // _LANG_CPP_DEF_H

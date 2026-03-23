@@ -11,11 +11,10 @@
 
 class LangRenderMan : public Engine {
 
- public:
-	LangRenderMan();
-	~LangRenderMan() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangRenderMan();
+    ~LangRenderMan() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_RENDERMAN_SHADING_LANGUAGE
+#endif // LANG_DEF_RENDERMAN_SHADING_LANGUAGE

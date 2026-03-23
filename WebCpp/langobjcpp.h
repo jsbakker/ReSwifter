@@ -9,10 +9,10 @@
 
 class LangObjectiveCpp : public LangCPlusPlus, public LangObjectiveC {
 
- public:
-	LangObjectiveCpp();
-	virtual ~LangObjectiveCpp() {IO->close();}
-	void fill() override;
+  public:
+    LangObjectiveCpp();
+    virtual ~LangObjectiveCpp() { IO->close(); }
+    void fill() override;
 };
 
-#endif //LANG_DEF_ObjectiveCPP
+#endif // LANG_DEF_ObjectiveCPP

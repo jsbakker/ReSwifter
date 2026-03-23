@@ -11,133 +11,45 @@
 
 LangTcl ::LangTcl() {
 
-	fill();
-	init_switches();
+    fill();
+    init_switches();
 
-	doScalars  = Yes;
-	doUnxComnt = Yes;
+    doScalars = Yes;
+    doUnxComnt = Yes;
 }
 
 void LangTcl ::fill() {
 
-	// Tcl 8.6/9.0 keywords and core commands
-	string K[] = {
-		"after",
-		"append",
-		"apply",
-		"array",
-		"break",
-		"catch",
-		"cd",
-		"chan",
-		"close",
-		"concat",
-		"continue",
-		"coroutine",
-		"dict",
-		"else",
-		"elseif",
-		"encoding",
-		"eof",
-		"error",
-		"eval",
-		"event",
-		"exec",
-		"exit",
-		"expr",
-		"file",
-		"fileevent",
-		"flush",
-		"for",
-		"foreach",
-		"format",
-		"gets",
-		"glob",
-		"global",
-		"history",
-		"if",
-		"incr",
-		"info",
-		"interp",
-		"join",
-		"lappend",
-		"lassign",
-		"lindex",
-		"linsert",
-		"list",
-		"llength",
-		"lmap",
-		"load",
-		"lrange",
-		"lrepeat",
-		"lreplace",
-		"lreverse",
-		"lsearch",
-		"lset",
-		"lsort",
-		"namespace",
-		"oo",
-		"open",
-		"package",
-		"pid",
-		"proc",
-		"puts",
-		"pwd",
-		"read",
-		"regexp",
-		"regsub",
-		"rename",
-		"return",
-		"scan",
-		"seek",
-		"set",
-		"socket",
-		"source",
-		"split",
-		"string",
-		"subst",
-		"switch",
-		"tailcall",
-		"tell",
-		"then",
-		"throw",
-		"time",
-		"trace",
-		"try",
-		"unknown",
-		"unset",
-		"uplevel",
-		"upvar",
-		"variable",
-		"vwait",
-		"while",
-		"yield",
-		"yieldto",
-		"zlib",
-	};
+    // Tcl 8.6/9.0 keywords and core commands
+    string K[] = {
+        "after",    "append",    "apply",   "array",     "break",
+        "catch",    "cd",        "chan",    "close",     "concat",
+        "continue", "coroutine", "dict",    "else",      "elseif",
+        "encoding", "eof",       "error",   "eval",      "event",
+        "exec",     "exit",      "expr",    "file",      "fileevent",
+        "flush",    "for",       "foreach", "format",    "gets",
+        "glob",     "global",    "history", "if",        "incr",
+        "info",     "interp",    "join",    "lappend",   "lassign",
+        "lindex",   "linsert",   "list",    "llength",   "lmap",
+        "load",     "lrange",    "lrepeat", "lreplace",  "lreverse",
+        "lsearch",  "lset",      "lsort",   "namespace", "oo",
+        "open",     "package",   "pid",     "proc",      "puts",
+        "pwd",      "read",      "regexp",  "regsub",    "rename",
+        "return",   "scan",      "seek",    "set",       "socket",
+        "source",   "split",     "string",  "subst",     "switch",
+        "tailcall", "tell",      "then",    "throw",     "time",
+        "trace",    "try",       "unknown", "unset",     "uplevel",
+        "upvar",    "variable",  "vwait",   "while",     "yield",
+        "yieldto",  "zlib",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// Tcl 8.6/9.0 OO and type-related commands
-	string T[] = {
-		"binary",
-		"boolean",
-		"class",
-		"clock",
-		"constructor",
-		"create",
-		"define",
-		"destroy",
-		"destructor",
-		"export",
-		"filter",
-		"forward",
-		"method",
-		"mixin",
-		"new",
-		"object",
-		"self",
-		"superclass",
-		"unexport",
-	};
+    // Tcl 8.6/9.0 OO and type-related commands
+    string T[] = {
+        "binary", "boolean", "class",      "clock",      "constructor",
+        "create", "define",  "destroy",    "destructor", "export",
+        "filter", "forward", "method",     "mixin",      "new",
+        "object", "self",    "superclass", "unexport",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

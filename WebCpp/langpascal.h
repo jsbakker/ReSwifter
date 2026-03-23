@@ -10,11 +10,10 @@
 
 class LangPascal : public Engine {
 
- public:
-	LangPascal();
-	~LangPascal() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangPascal();
+    ~LangPascal() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_Pascal
+#endif // LANG_DEF_Pascal

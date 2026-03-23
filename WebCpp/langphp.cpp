@@ -9,108 +9,44 @@
 #include <algorithm>
 #include <iterator>
 
-LangPhp::LangPhp()  {
-	
-	fill();
-	init_switches();
+LangPhp::LangPhp() {
 
-	doSymbols    = Yes;
-	doScalars    = Yes;
-	doBigComnt   = Yes;
-	doCinComnt   = Yes;
-	doUnxComnt   = Yes;
-	doPhpHeredoc = Yes;
+    fill();
+    init_switches();
+
+    doSymbols = Yes;
+    doScalars = Yes;
+    doBigComnt = Yes;
+    doCinComnt = Yes;
+    doUnxComnt = Yes;
+    doPhpHeredoc = Yes;
 }
 
-void LangPhp::fill(){
+void LangPhp::fill() {
 
-	// PHP 8.4 keywords
-	string K[] = {
-		"abstract",
-		"and",
-		"as",
-		"break",
-		"case",
-		"catch",
-		"class",
-		"clone",
-		"const",
-		"continue",
-		"declare",
-		"default",
-		"do",
-		"echo",
-		"else",
-		"elseif",
-		"empty",
-		"enddeclare",
-		"endfor",
-		"endforeach",
-		"endif",
-		"endswitch",
-		"endwhile",
-		"enum",
-		"extends",
-		"false",
-		"final",
-		"finally",
-		"fn",
-		"for",
-		"foreach",
-		"function",
-		"global",
-		"goto",
-		"if",
-		"implements",
-		"include",
-		"include_once",
-		"instanceof",
-		"insteadof",
-		"interface",
-		"list",
-		"match",
-		"namespace",
-		"new",
-		"null",
-		"or",
-		"print",
-		"private",
-		"protected",
-		"public",
-		"readonly",
-		"require",
-		"require_once",
-		"return",
-		"static",
-		"switch",
-		"throw",
-		"trait",
-		"true",
-		"try",
-		"unset",
-		"use",
-		"var",
-		"while",
-		"xor",
-		"yield",
-	};
+    // PHP 8.4 keywords
+    string K[] = {
+        "abstract",   "and",       "as",           "break",        "case",
+        "catch",      "class",     "clone",        "const",        "continue",
+        "declare",    "default",   "do",           "echo",         "else",
+        "elseif",     "empty",     "enddeclare",   "endfor",       "endforeach",
+        "endif",      "endswitch", "endwhile",     "enum",         "extends",
+        "false",      "final",     "finally",      "fn",           "for",
+        "foreach",    "function",  "global",       "goto",         "if",
+        "implements", "include",   "include_once", "instanceof",   "insteadof",
+        "interface",  "list",      "match",        "namespace",    "new",
+        "null",       "or",        "print",        "private",      "protected",
+        "public",     "readonly",  "require",      "require_once", "return",
+        "static",     "switch",    "throw",        "trait",        "true",
+        "try",        "unset",     "use",          "var",          "while",
+        "xor",        "yield",
+    };
     std::copy(std::cbegin(K), std::cend(K), std::back_inserter(keys));
 
-	// PHP 8.4 built-in types
-	string T[] = {
-		"array",
-		"bool",
-		"callable",
-		"float",
-		"int",
-		"iterable",
-		"mixed",
-		"never",
-		"null",
-		"object",
-		"self",
-		"string",
-		"void",
-	};
+    // PHP 8.4 built-in types
+    string T[] = {
+        "array", "bool", "callable", "float", "int",    "iterable", "mixed",
+        "never", "null", "object",   "self",  "string", "void",
+    };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -8,10 +8,10 @@
 
 class LangGo : public Engine {
 
- public:
-	LangGo();
-	~LangGo() {IO->close();}
-	virtual void fill();
+  public:
+    LangGo();
+    ~LangGo() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_GO
+#endif // LANG_DEF_GO

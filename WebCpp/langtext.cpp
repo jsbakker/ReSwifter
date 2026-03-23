@@ -4,15 +4,15 @@
 
 LangText::LangText() {
 
-	init_switches();
+    init_switches();
 
-	doStrings   = No;
-	doNumbers   = No;
-	doKeywords  = No;
-//	doCaseKeys  = No;
-	doRemComnt  = No;
+    doStrings = No;
+    doNumbers = No;
+    doKeywords = No;
+    //	doCaseKeys  = No;
+    doRemComnt = No;
 }
 
 void LangText::fill() {
-	// no keywords
+    // no keywords
 }

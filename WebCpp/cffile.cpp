@@ -55,7 +55,7 @@
  *  Modified on: April 30th, 2002
  *
  *             - Add code in constructors and the openX() methods to interact
- *               with iopen and oopen, to verify open file streams. 
+ *               with iopen and oopen, to verify open file streams.
  *
  *  ===========================================================================
  *  ===========================================================================
@@ -274,175 +274,184 @@
  * _______. ..
  */
 
-
-#include "cffile.h" 
-#include <iostream> 
-#include <cctype> 
+#include "cffile.h"
+#include <cctype>
+#include <iostream>
 using namespace std;
 
 // constructors ---------------------------------------------------------------
 CFfile::CFfile() {
- init_switches();
+    init_switches();
 } //---------------------------------------------------------------------------
 CFfile::CFfile(string filename, char io) {
- init_switches();
- open(filename,io);
+    init_switches();
+    open(filename, io);
 } //---------------------------------------------------------------------------
 CFfile::CFfile(string in, string out) {
- init_switches();
- openR(in);
- openW(out);
+    init_switches();
+    openR(in);
+    openW(out);
 }
 // destructor -----------------------------------------------------------------
-CFfile::~CFfile() {
- close();
-}
+CFfile::~CFfile() { close(); }
 // bool member initialization -------------------------------------------------
 void CFfile::init_switches() {
- iredir = false;
- oredir = false;
- iopen  = false;
- oopen  = false;
- 
- str_if = "\0";
- str_of = "\0";
+    iredir = false;
+    oredir = false;
+    iopen = false;
+    oopen = false;
+
+    str_if = "\0";
+    str_of = "\0";
 }
 // open methods ---------------------------------------------------------------
-bool CFfile::open(string filename, char io)  {
+bool CFfile::open(string filename, char io) {
 
- io = tolower(io);
- switch (io) {
-  case 'i':
-  case 'r': return openR(filename);
-  case 'o':
-  case 'w': return openW(filename);
-  case 'f': return openW(filename,true);
-  case 'k': return openW(filename,false);
-  default : cerr << "\nInvalid I/O mode.\n"; return false;
- }
+    io = tolower(io);
+    switch (io) {
+    case 'i':
+    case 'r':
+        return openR(filename);
+    case 'o':
+    case 'w':
+        return openW(filename);
+    case 'f':
+        return openW(filename, true);
+    case 'k':
+        return openW(filename, false);
+    default:
+        cerr << "\nInvalid I/O mode.\n";
+        return false;
+    }
 
- return true;
+    return true;
 } // --------------------------------------------------------------------------
-bool CFfile::openR(string INfile)  {
+bool CFfile::openR(string INfile) {
 
- if (exists(INfile)) {
-  ifile.open(INfile.data());
-  str_if = INfile;
-  iopen = true;
-  return true;
- } else {
-  cerr << ENDL << INfile << " cannot be opened.\n";
-  return false;
- }
+    if (exists(INfile)) {
+        ifile.open(INfile.data());
+        str_if = INfile;
+        iopen = true;
+        return true;
+    } else {
+        cerr << ENDL << INfile << " cannot be opened.\n";
+        return false;
+    }
 } // --------------------------------------------------------------------------
 bool CFfile::openW(string OUTfile) {
 
- if (exists(OUTfile)) {
-  char write;
-  do {
-   cerr << ENDL << OUTfile << " already exists. Overwrite? (Y/N) ";
-   cin  >> write;
-   if (write == 'N' || write == 'n') {return false;}
-  } while (!(write == 'Y' || write == 'y'));
- }
- ofile.open(OUTfile.data());
- str_of = OUTfile;
- oopen = true;
- return true;
+    if (exists(OUTfile)) {
+        char write;
+        do {
+            cerr << ENDL << OUTfile << " already exists. Overwrite? (Y/N) ";
+            cin >> write;
+            if (write == 'N' || write == 'n') {
+                return false;
+            }
+        } while (!(write == 'Y' || write == 'y'));
+    }
+    ofile.open(OUTfile.data());
+    str_of = OUTfile;
+    oopen = true;
+    return true;
 } // --------------------------------------------------------------------------
 bool CFfile::openW(string OUTfile, bool overwrite) {
 
- if (exists(OUTfile)) {
-  if(!overwrite) {return false;}
- }
- ofile.open(OUTfile.data());
- str_of = OUTfile;
- oopen = true;
- return true;
+    if (exists(OUTfile)) {
+        if (!overwrite) {
+            return false;
+        }
+    }
+    ofile.open(OUTfile.data());
+    str_of = OUTfile;
+    oopen = true;
+    return true;
 }
 // ----------------------------------------------------------------------------
 // close methods --------------------------------------------------------------
-void CFfile::closeR() {  // safely close the stream
- if(ifile){
-  ifile.close();
-  iopen = false;
- }
+void CFfile::closeR() { // safely close the stream
+    if (ifile) {
+        ifile.close();
+        iopen = false;
+    }
 }
-void CFfile::closeW() {  // safely close the stream
- if(ofile){
-  ofile.close();
-  oopen = false;
- }
+void CFfile::closeW() { // safely close the stream
+    if (ofile) {
+        ofile.close();
+        oopen = false;
+    }
 }
-void CFfile::close()  {  // safely close all streams
- closeR();
- closeW();
+void CFfile::close() { // safely close all streams
+    closeR();
+    closeW();
 }
 // ----------------------------------------------------------------------------
 // checks if a file exists ----------------------------------------------------
 bool CFfile::exists(string fname) {
 
- ifstream chk;
- chk.open(fname.data());
+    ifstream chk;
+    chk.open(fname.data());
 
- if(!chk) {
-  chk.close();
-  return false;
- }
- chk.close();
- return true;
+    if (!chk) {
+        chk.close();
+        return false;
+    }
+    chk.close();
+    return true;
 } //---------------------------------------------------------------------------
 // check input/output modes for redirection -----------------------------------
-bool CFfile::isIredir() const {return iredir;}    // is Input redirected?
-bool CFfile::isOredir() const {return oredir;}    // is Output redirected?
+bool CFfile::isIredir() const { return iredir; } // is Input redirected?
+bool CFfile::isOredir() const { return oredir; } // is Output redirected?
 // toggle input/output modes for redirection ----------------------------------
-void CFfile::toggleImode() {iredir = !iredir;}
-void CFfile::toggleOmode() {oredir = !oredir;}
+void CFfile::toggleImode() { iredir = !iredir; }
+void CFfile::toggleOmode() { oredir = !oredir; }
 
 // return the location of the pointer in the file -----------------------------
-long CFfile::getIFptr() {return ifile.tellg();}
-long CFfile::getOFptr() {return ofile.tellp();}
+long CFfile::getIFptr() { return ifile.tellg(); }
+long CFfile::getOFptr() { return ofile.tellp(); }
 // set the location of the ponter in the file ---------------------------------
-void CFfile::setIFptr(long location) {ifile.seekg(location);}
-void CFfile::setOFptr(long location) {ofile.seekp(location);}
+void CFfile::setIFptr(long location) { ifile.seekg(location); }
+void CFfile::setOFptr(long location) { ofile.seekp(location); }
 
 // readline to string ---------------------------------------------------------
-void CFfile::rline(string &buffer)  {
- if(!iredir) {getline(ifile,buffer);}
- else getline(cin,buffer);
+void CFfile::rline(string &buffer) {
+    if (!iredir) {
+        getline(ifile, buffer);
+    } else
+        getline(cin, buffer);
 }
 // readfile to string ---------------------------------------------------------
-void CFfile::rfile(string &buffer)  {
+void CFfile::rfile(string &buffer) {
 
- long save_pos = getIFptr(); // save current position in file
- setIFptr(0);                // set position to the start of the file
+    long save_pos = getIFptr(); // save current position in file
+    setIFptr(0);                // set position to the start of the file
 
- string line;
- while(ifile) {
-  rline(line);
-  buffer += line + ENDL;  
- }
+    string line;
+    while (ifile) {
+        rline(line);
+        buffer += line + ENDL;
+    }
 
- setIFptr(save_pos);         // restore previous position in file
+    setIFptr(save_pos); // restore previous position in file
 } //---------------------------------------------------------------------------
 // backup a file --------------------------------------------------------------
 void CFfile::backup(string fname, string bname) {
 
- ifstream bin;
- ofstream bout;
- string linebuf;
+    ifstream bin;
+    ofstream bout;
+    string linebuf;
 
- bin.open(fname.data());
- bout.open(bname.data());
+    bin.open(fname.data());
+    bout.open(bname.data());
 
- getline(bin,linebuf);
- while (bin) {
-  bout << linebuf;
-  getline(bin,linebuf);
-  if (bin) bout << ENDL;
- }
- bin.close();
- bout.close();
+    getline(bin, linebuf);
+    while (bin) {
+        bout << linebuf;
+        getline(bin, linebuf);
+        if (bin)
+            bout << ENDL;
+    }
+    bin.close();
+    bout.close();
 } // --------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-

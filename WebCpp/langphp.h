@@ -8,11 +8,11 @@
 
 #include "engine.h"
 
-class LangPhp :public Engine {
- public:
-	LangPhp();
-	~LangPhp() {IO->close();}
-	virtual void fill();
+class LangPhp : public Engine {
+  public:
+    LangPhp();
+    ~LangPhp() { IO->close(); }
+    virtual void fill();
 };
 
-#endif  // LANG_PHP_DEF_H
+#endif // LANG_PHP_DEF_H

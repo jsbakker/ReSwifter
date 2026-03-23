@@ -11,11 +11,10 @@
 
 class LangJScript : public Engine {
 
- public:
-	LangJScript();
-	~LangJScript() {IO->close();}
-	virtual void fill();
-
+  public:
+    LangJScript();
+    ~LangJScript() { IO->close(); }
+    virtual void fill();
 };
 
-#endif //LANG_DEF_JSCRIPT
+#endif // LANG_DEF_JSCRIPT
