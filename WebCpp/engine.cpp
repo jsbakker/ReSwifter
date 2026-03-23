@@ -594,14 +594,14 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
 
 	if(inside) {search = end;}
 	else {search = start;}
-	
+
 	index = buffer.find(search,index);
 	if(index == -1) {return;}
 
 	while (index < string::npos) {
 
 		if(inside) {search = end;}
-		else {search = start;}		
+		else {search = start;}
 
 		index = buffer.find(search,index);
 		if(index == -1) {return;}
@@ -612,6 +612,34 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
 			}
 		}
 		if(index == -1) {return;}
+
+		// For brace-delimited strings (%Q{}, %q{}, etc.), skip nested
+		// braces so that interpolation like #{var} doesn't end the
+		// string prematurely.
+		if(inside && end == "}") {
+			int depth = 0;
+			// Find where the string content begins. If the opening
+			// delimiter (%Q{ or %q{) is on this line, start scanning
+			// after its {. Otherwise (continuation line), start at 0.
+			int scanStart = 0;
+			string startNoBrace = start.substr(0, start.size() - 1); // "%Q" or "%q"
+			int delimPos = buffer.rfind(startNoBrace, index);
+			if(delimPos != (int)string::npos) {
+				// Skip past the opening { of the delimiter
+				scanStart = delimPos + start.size();
+			}
+			for(int i = scanStart; i < index; i++) {
+				if(buffer[i] == '{' && !isInsideTag(i)) depth++;
+				if(buffer[i] == '}' && !isInsideTag(i)) depth--;
+			}
+			// If depth > 0, there are unclosed braces before this },
+			// so this } is a nested one — skip it.
+			if(depth > 0) {
+				index = buffer.find(search, index + 1);
+				continue;
+			}
+		}
+
 		if(inside) {
 			index += end.size()-1;
 		}

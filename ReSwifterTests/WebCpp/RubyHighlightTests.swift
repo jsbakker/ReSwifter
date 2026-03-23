@@ -85,6 +85,36 @@ struct RubyHighlightTests {
         #expect(html.contains("<font CLASS=keyword>yield</font>"))
     }
 
+    // MARK: - Multiline string delimiters
+
+    /// Bug: %Q{...} strings containing #{interpolation} would end prematurely
+    /// at the } inside the interpolation block, leaving the actual closing }
+    /// unhighlighted. The fix tracks nested brace depth so interpolation
+    /// braces are properly skipped.
+    @Test func percentQBracesWithInterpolationHighlightsClosingBrace() {
+        // %Q{...#{status}...} — the } inside #{status} must not end the string
+        let source = "%Q{HTTP \\#{status} response}"
+        let html = highlight(source)
+
+        // The entire string including the closing } must be wrapped in dblquot
+        #expect(html.contains("<font CLASS=dblquot>"))
+
+        // The closing } should be inside the font tag, not left as plain text.
+        // If the bug is present, the font tag closes before "response}".
+        // Check that "response}" is inside the highlighted region.
+        // The } at the end should NOT appear as unhighlighted plain text after </font>
+        let afterLastClose = html.components(separatedBy: "</font>").last ?? ""
+        #expect(!afterLastClose.contains("response}"),
+                "Closing } should be inside the string highlight, not after it")
+    }
+
+    /// %q{} (lowercase) should also handle nested braces correctly.
+    @Test func percentQLowercaseWithNestedBraces() {
+        let source = "%q{a {nested} value}"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=sinquot>"))
+    }
+
     // MARK: Comments
 
 
