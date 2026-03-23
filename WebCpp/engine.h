@@ -56,6 +56,9 @@ class Engine {
 
     void parseString(char quotetype, bool &inside);
     void colourString(int index, bool &inside, string cssclass);
+    void markInterpolations();
+    bool isInInterpolation(int index);
+    bool isInsideSpanOfClass(int index, const string &cssClass);
 
     void parseBigComment(string start, string end, bool &inside);
     void parseMultiStr(string start, string end, bool &inside, string css);
@@ -151,6 +154,10 @@ class Engine {
     bool doHeredoc;
     bool doPercentQ;
     bool doPhpHeredoc;
+    bool doInterpolate;
+    string interpolStart;    // e.g. "#{" for Ruby, "${" for JS, "\\(" for Swift
+    char   interpolEnd;      // e.g. '}' or ')'
+    string interpolCssClass; // CSS class of the string type that interpolates
 
     // theme file I/O engine
   public:

@@ -183,6 +183,126 @@ struct RubyHighlightTests {
         #expect(!html.contains("<font CLASS=comment>"))
     }
 
+    // MARK: - String Interpolation
+
+    @Test func interpolationDoesNotBreakStringHighlighting() {
+        // The non-interpolated parts of the string retain dblquot highlighting
+        let html = highlight("\"Hello, #{name}!\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    @Test func integerInsideInterpolationIsHighlighted() {
+        let html = highlight("\"Age: #{42}\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+    }
+
+    @Test func floatInsideInterpolationIsHighlighted() {
+        let html = highlight("\"Pi: #{3.14}\"")
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+    }
+
+    @Test func symbolInsideInterpolationIsHighlighted() {
+        let html = highlight("\"Sum: #{a + b}\"")
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+    }
+
+    @Test func keywordInsideInterpolationIsHighlighted() {
+        let html = highlight("\"Val: #{nil}\"")
+        #expect(html.contains("<font CLASS=keyword>nil</font>"))
+    }
+
+    @Test func typeInsideInterpolationIsHighlighted() {
+        let html = highlight("\"Size: #{Array.new.size}\"")
+        #expect(html.contains("<font CLASS=keytype>Array</font>"))
+    }
+
+    @Test func multipleInterpolationBlocksAreHighlighted() {
+        // Each interpolation block is independently highlighted
+        let html = highlight("\"#{42} and #{3.14}\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
+    }
+
+    @Test func nestedBracesInsideInterpolationAreHandled() {
+        // #{arr.select{|x| x > 0}.size} — inner {} must not prematurely end interpolation
+        let html = highlight("\"#{arr.select{|x| x > 0}.size}\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(html.contains("<font CLASS=integer>0</font>"))
+    }
+
+    @Test func escapedInterpolationIsNotProcessed() {
+        // \#{ is escaped — the whole string should remain as one dblquot span
+        let html = highlight("\"literal \\#{expr}\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        // The 'expr' text is NOT highlighted as a keyword (it's inside the string)
+        #expect(!html.contains("<font CLASS=keyword>expr</font>"))
+    }
+
+    @Test func singleQuotedStringDoesNotInterpolate() {
+        // Single-quoted strings never interpolate in Ruby
+        let html = highlight("'not #{interpolated}'")
+        #expect(html.contains("<font CLASS=sinquot>"))
+        // The content inside '...' is plain — no keyword or integer tag
+        #expect(!html.contains("<font CLASS=integer>"))
+    }
+
+    @Test func integerInStringWithoutInterpolationIsNotHighlighted() {
+        // A bare number inside a plain string is NOT highlighted as integer
+        let html = highlight("\"count is 42\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=integer>42</font>"))
+    }
+
+    @Test func symbolInStringWithoutInterpolationIsNotHighlighted() {
+        // A symbol inside a plain string is NOT highlighted separately
+        let html = highlight("\"a + b\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=symbols>+</font>"))
+    }
+
+    @Test func interpolationWithTypecast() {
+        // Integer() cast inside interpolation — keyword and integer highlighted
+        let html = highlight("\"val: #{Integer(x) + 1}\"")
+        #expect(html.contains("<font CLASS=keytype>Integer</font>"))
+        #expect(html.contains("<font CLASS=integer>1</font>"))
+    }
+
+    @Test func multipleInterpolatedExpressionsOnOneLine() {
+        // Two interpolation blocks on the same line; each can contain highlights
+        let source = "greeting = \"Hello, #{name}! You have #{count + 2} messages.\""
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(html.contains("<font CLASS=integer>2</font>"))
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+    }
+
+    @Test func multilineStringInterpolationHighlightsContentOnContinuationLine() {
+        // On a multi-line string continuation line, content inside #{...} is highlighted
+        // but content outside (plain string body) is not.
+        let source = "\"first line\n  value is #{42 + 1} here\""
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+        // Integer and symbol inside interpolation should be highlighted
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+        #expect(html.contains("<font CLASS=integer>1</font>"))
+        // 'here' after the interpolation is plain string body — no keyword highlight
+        #expect(!html.contains("<font CLASS=keyword>here</font>"))
+    }
+
+    @Test func multilineStringBodyOutsideInterpolationIsNotHighlighted() {
+        // Content on a continuation line that is plain string body (no interpolation)
+        // should not be highlighted as keywords or numbers.
+        let source = "\"first line\n  nil and 42 inside string\""
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+        // nil and 42 are inside a plain string body — must not be highlighted
+        #expect(!html.contains("<font CLASS=keyword>nil</font>"))
+        #expect(!html.contains("<font CLASS=integer>42</font>"))
+    }
+
     // MARK: Comments
 
 

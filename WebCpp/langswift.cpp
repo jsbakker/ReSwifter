@@ -16,6 +16,10 @@ LangSwift::LangSwift() {
     doBigComnt = Yes;
     doCinComnt = Yes;
     doTplString = Yes;
+    // Swift string interpolation: "text \(expr)"
+    doInterpolate = true;
+    interpolStart = "\\(";
+    interpolEnd = ')';
 }
 
 void LangSwift::fill() {

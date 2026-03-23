@@ -17,6 +17,10 @@ LangKotlin::LangKotlin() {
     doBigComnt = Yes;  // /* */
     doCinComnt = Yes;  // //
     doTplString = Yes; // """...""" triple-quoted strings
+    // Kotlin string interpolation: "text ${expr}" or "text $name"
+    doInterpolate = true;
+    interpolStart = "${";
+    interpolEnd = '}';
 }
 
 void LangKotlin::fill() {

@@ -98,6 +98,48 @@ struct PythonHighlightTests {
         #expect(html.contains("<font CLASS=dblquot>"))
     }
 
+    // MARK: - String Interpolation
+
+    @Test func interpolationDoesNotBreakStringHighlighting() {
+        let html = highlight("f\"Hello, {name}!\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    @Test func integerInsideInterpolationIsHighlighted() {
+        let html = highlight("f\"Value: {42}\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+    }
+
+    @Test func symbolInsideInterpolationIsHighlighted() {
+        let html = highlight("f\"Sum: {a + b}\"")
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+    }
+
+    @Test func keywordInsideInterpolationIsHighlighted() {
+        let html = highlight("f\"Val: {None}\"")
+        #expect(html.contains("<font CLASS=keyword>None</font>"))
+    }
+
+    @Test func typeInsideInterpolationIsHighlighted() {
+        let html = highlight("f\"Cast: {int(x)}\"")
+        #expect(html.contains("<font CLASS=keytype>int</font>"))
+    }
+
+    @Test func integerInStringWithoutInterpolationIsNotHighlighted() {
+        let html = highlight("\"count is 42\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=integer>42</font>"))
+    }
+
+    @Test func multilineTripleQuotedStringInterpolation() {
+        let source = "\"\"\"\\nvalue is {42 + 1}\\n\"\"\""
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+    }
+
     // MARK: - Comprehensive Snippet
 
     @Test func comprehensiveSnippetHighlightsAllRules() {

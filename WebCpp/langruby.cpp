@@ -23,6 +23,9 @@ LangRuby ::LangRuby() {
     doUnxComnt = Yes;
     doHeredoc = Yes;
     doPercentQ = Yes;
+    doInterpolate = true;
+    interpolStart = "#{";
+    interpolEnd = '}';
 }
 
 void LangRuby ::fill() {

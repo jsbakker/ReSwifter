@@ -96,6 +96,46 @@ struct TypeScriptHighlightTests {
         #expect(html.contains("<font CLASS=comment>// comment</font>"))
     }
 
+    // MARK: - String Interpolation
+
+    @Test func interpolationDoesNotBreakBacktickStringHighlighting() {
+        let html = highlight("`Hello, ${name}!`")
+        #expect(html.contains("<font CLASS=preproc>"))
+    }
+
+    @Test func integerInsideInterpolationIsHighlighted() {
+        let html = highlight("`Value: ${42}`")
+        #expect(html.contains("<font CLASS=preproc>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+    }
+
+    @Test func symbolInsideInterpolationIsHighlighted() {
+        let html = highlight("`Sum: ${a + b}`")
+        #expect(html.contains("<font CLASS=symbols>+</font>"))
+    }
+
+    @Test func keywordInsideInterpolationIsHighlighted() {
+        let html = highlight("`Val: ${null}`")
+        #expect(html.contains("<font CLASS=keyword>null</font>"))
+    }
+
+    @Test func typeInsideInterpolationIsHighlighted() {
+        let html = highlight("`Cast: ${Boolean(x)}`")
+        #expect(html.contains("<font CLASS=keytype>Boolean</font>"))
+    }
+
+    @Test func integerInBacktickStringWithoutInterpolationIsNotHighlighted() {
+        let html = highlight("`count is 42`")
+        #expect(html.contains("<font CLASS=preproc>"))
+        #expect(!html.contains("<font CLASS=integer>42</font>"))
+    }
+
+    @Test func doubleQuotedStringDoesNotInterpolate() {
+        let html = highlight("\"${42}\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=integer>42</font>"))
+    }
+
     // MARK: - Comprehensive Snippet
 
     @Test func comprehensiveSnippetHighlightsAllRules() {

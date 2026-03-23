@@ -16,6 +16,7 @@
 #include "deflangs.h"
 #include "defparse.h"
 #include "defsys.h"
+#include <algorithm>
 #include <cctype>
 #include <cstdlib>
 using namespace std;
@@ -80,6 +81,10 @@ void Engine::init_switches() {
     doHeredoc = false;
     doPercentQ = false;
     doPhpHeredoc = false;
+    doInterpolate = false;
+    interpolStart = "";
+    interpolEnd = '\0';
+    interpolCssClass = "dblquot";
 
     lncount = 1;
     tabwidth = 8;
@@ -214,6 +219,12 @@ bool Engine::abortParse() {
     //	if(doHtmlTags && inHtmTags)
     //			{return true;}
 
+    // If interpolation blocks are present on this line, allow content parsing.
+    // Individual colour functions use isInInterpolation() to gate access.
+    if (buffer.find('\x01') != string::npos) {
+        return false;
+    }
+
     if (endMultiLine) {
         return true;
     }
@@ -239,6 +250,22 @@ bool Engine::abortParse() {
 }
 // check if colouring needs to be aborted -------------------------------------
 bool Engine::abortColour(int index) {
+
+    // Content inside an interpolation block is always highlightable
+    if (isInInterpolation(index))
+        return false;
+
+    // If the position is inside a string/comment font tag (including the
+    // opening tag inserted at position 0 for continuation lines), don't
+    // highlight it — the content is part of a string literal.
+    if (isInsideFontTag(buffer, index))
+        return true;
+
+    // On multi-line string continuation lines where no font tag was inserted
+    // (e.g. triple-quoted strings, comment continuations), block coloring
+    // outside interpolation zones.
+    if (endMultiLine || inMultiStr)
+        return true;
 
     if (doHtmComnt && (isInsideIt(index, "&lt;", "&gt;") &&
                        isInsideIt(index, "&gt;", "&lt;"))) {
@@ -629,6 +656,16 @@ void Engine::parseString(char quotetype, bool &inside) {
     }
     // Double, single, and back quoted ///
 
+    // On a string-continuation line (inside=true), the opening font tag is on
+    // the previous line.  Insert it at position 0 so that isInsideSpanOfClass
+    // and isInsideFontTag can correctly identify the string body and gate
+    // interpolation detection and content highlighting.  Only do this when the
+    // closing delimiter also exists on this line; otherwise we would emit an
+    // unclosed font tag.
+    if (inside && buffer.find(quote) != string::npos) {
+        buffer.insert(0, "<font CLASS=" + cssclass + ">");
+    }
+
     index = buffer.find(quote, index);
     if (index == -1) {
         return;
@@ -723,6 +760,132 @@ void Engine::colourString(int index, bool &inside, string cssclass) {
     // depending on whether or not inside
 
     inside = !inside;
+}
+//-----------------------------------------------------------------------------
+// returns true if buffer[index] is inside a <font CLASS=cssClass>...</font> span
+bool Engine::isInsideSpanOfClass(int index, const string &cssClass) {
+
+    string openTag = "<font CLASS=" + cssClass + ">";
+    int i = index - 1;
+    while (i >= 0) {
+        if (buffer[i] == '>') {
+            int ts = buffer.rfind('<', i);
+            if (ts != (int)string::npos) {
+                string tag = buffer.substr(ts, i - ts + 1);
+                if (tag == "</font>")
+                    return false;
+                if (tag == openTag)
+                    return true;
+                if (tag.size() >= 6 && tag.substr(0, 6) == "<font ")
+                    return false; // inside a different class — not this one
+                i = ts - 1;
+                continue;
+            }
+        }
+        i--;
+    }
+    return false;
+}
+//-----------------------------------------------------------------------------
+// returns true if buffer[index] is between interpolation boundary markers
+// \x01 = interpolation open, \x02 = interpolation close
+bool Engine::isInInterpolation(int index) {
+
+    for (int i = index - 1; i >= 0; i--) {
+        if (buffer[i] == '\x01')
+            return true;
+        if (buffer[i] == '\x02')
+            return false;
+    }
+    return false;
+}
+//-----------------------------------------------------------------------------
+// insert \x01/\x02 interpolation boundary markers around each interpolation
+// block found inside string-highlighted spans. Runs as a post-pass after
+// parseString, before other highlight passes.
+void Engine::markInterpolations() {
+
+    if (!doInterpolate || interpolStart.empty() || interpolEnd == '\0')
+        return;
+
+    const string openMark  = "</font>\x01"; // close string tag, open interp
+    const string closeMark = "\x02<font CLASS=" + interpolCssClass + ">";
+    int pos = 0;
+
+    // When inside a multi-line string continuation the whole buffer is
+    // implicitly inside the string, even though this line has no opening
+    // font tag of its own.
+    bool wholeLineIsString = inMultiStr && interpolCssClass == "dblquot";
+
+    while (pos < (int)buffer.size()) {
+        int ipos = buffer.find(interpolStart, pos);
+        if (ipos == (int)string::npos)
+            break;
+
+        // Must be inside the appropriate string span, or on a multi-line
+        // string continuation line where the whole buffer is implicitly
+        // string-coloured.
+        if (!isInsideSpanOfClass(ipos, interpolCssClass) && !wholeLineIsString) {
+            pos = ipos + 1;
+            continue;
+        }
+
+        // Skip escaped interpolation markers.
+        // Count consecutive backslashes immediately before ipos;
+        // an odd count means the # is escaped.
+        int bsCount = 0;
+        int bsPos   = ipos - 1;
+        while (bsPos >= 0 && buffer[bsPos] == '\\') {
+            bsCount++;
+            bsPos--;
+        }
+        if (bsCount % 2 != 0) {
+            pos = ipos + 1;
+            continue;
+        }
+
+        // Insert </font>\x01 before the interpolation marker
+        buffer.insert(ipos, openMark);
+        int shift1 = (int)openMark.size(); // 8
+
+        // Depth-track from just after interpolStart to find the matching end
+        int scanPos = ipos + shift1 + (int)interpolStart.size();
+        int depth   = 1;
+
+        while (scanPos < (int)buffer.size() && depth > 0) {
+            char c = buffer[scanPos];
+            // Skip over any HTML tags inserted by earlier passes
+            if (c == '<' && scanPos + 1 < (int)buffer.size() &&
+                buffer[scanPos + 1] == 'f') {
+                int gt = buffer.find('>', scanPos);
+                if (gt != (int)string::npos) {
+                    scanPos = gt + 1;
+                    continue;
+                }
+            }
+            if (interpolEnd == '}' && c == '{')
+                depth++;
+            else if (interpolEnd == ')' && c == '(')
+                depth++;
+            if (c == interpolEnd) {
+                depth--;
+                if (depth == 0)
+                    break;
+            }
+            scanPos++;
+        }
+
+        if (depth != 0) {
+            // Unbalanced — revert and skip past this marker
+            buffer.erase(ipos, shift1);
+            pos = ipos + 1;
+            continue;
+        }
+
+        // Insert \x02<font CLASS=dblquot> after the closing marker
+        buffer.insert(scanPos + 1, closeMark);
+        pos = scanPos + 1 + (int)closeMark.size();
+    }
 }
 // parse for multi-line strings -----------------------------------------------
 void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
@@ -1364,6 +1527,13 @@ void Engine::parseComment(string cmnt) {
 // colour an inline comment ---------------------------------------------------
 void Engine::colourComment(int index) {
 
+    // Never colour a comment that starts inside an existing highlighted span
+    // or inside an interpolation block (comments don't parse there, and
+    // eraseTags would damage the interpolation markers).
+    if (isInsideFontTag(buffer, index))
+        return;
+    if (isInInterpolation(index))
+        return;
     if (abortColour(index)) {
         return;
     }
@@ -1411,9 +1581,6 @@ void Engine::doParsing() {
     // preformat HTML escapes
     PRE_PARSE_CODE;
 
-    if (doSymbols)
-        parseSymbol();
-
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(0);
 #endif
@@ -1445,6 +1612,12 @@ void Engine::doParsing() {
     if (doStringsBackTick) {
         PARSE_BCK_QUO_STRING;
     }
+
+    // Post-pass: insert interpolation boundary markers inside string spans.
+    // Symbols are also parsed here so they can see the interpolation boundaries.
+    markInterpolations();
+    if (doSymbols)
+        parseSymbol();
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(1);
@@ -1528,6 +1701,10 @@ void Engine::doParsing() {
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(6);
 #endif
+
+    // Strip internal interpolation boundary markers before output
+    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x01'), buffer.end());
+    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x02'), buffer.end());
 
     *IO << buffer << "\n";
     if (!childLang) {
