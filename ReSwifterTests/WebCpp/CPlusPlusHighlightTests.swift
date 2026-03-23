@@ -91,6 +91,66 @@ struct CPlusPlusHighlightTests {
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
 
+    // MARK: - String escape edge cases
+
+    /// Escaped quote inside a string should not terminate the string.
+    @Test func escapedQuoteInStringDoesNotTerminate() {
+        let source = "\"hello \\\"world\\\" end\" + x"
+        let html = highlight(source)
+        // The entire string including escaped quotes should be one token
+        #expect(html.contains("<font CLASS=dblquot>"))
+        // x after the closing quote should not be inside the string
+        #expect(html.contains("</font> <font CLASS=symbols>+</font>"))
+    }
+
+    /// Backtick-quoted strings should be highlighted (used in shell-embedded contexts).
+    @Test func backtickStringsAreHighlighted() {
+        let source = "`command`"
+        let html = highlight(source)
+        // Backtick strings get preproc class
+        #expect(html.contains("<font CLASS=preproc>"))
+    }
+
+    /// A comment delimiter inside a string should not start a comment.
+    @Test func commentDelimiterInsideStringIsIgnored() {
+        let source = "\"has // inside\""
+        let html = highlight(source)
+        // The entire thing should be a string, no comment tag
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=comment>"))
+    }
+
+    // MARK: - Tab handling (pre_parse)
+
+    /// With tab expansion enabled (-t), tabs in source code should be
+    /// converted to spaces without breaking syntax highlighting.
+    @Test func tabExpansionDoesNotBreakHighlighting() {
+        let source = "\tint\tx\t=\t42;"
+        let html = HighlightTestHelper.highlight(source, language: "cpp", options: ["-t"])
+        #expect(html.contains("<font CLASS=keytype>int</font>"))
+        #expect(html.contains("<font CLASS=integer>42</font>"))
+        // Verify tabs were converted inside the <pre> block
+        if let preRange = html.range(of: "<pre>"),
+           let endRange = html.range(of: "</pre>") {
+            let content = String(html[preRange.upperBound..<endRange.lowerBound])
+            #expect(!content.contains("\t"), "Tabs should be converted to spaces")
+        }
+    }
+
+    /// Tab expansion with non-aligned positions should produce correct
+    /// spacing (tabstops at multiples of the tab width).
+    @Test func tabExpansionAlignsTabs() {
+        let source = "a\tb"
+        let html = HighlightTestHelper.highlight(source, language: "cpp", options: ["-t"])
+        // After tab expansion, there should be spaces between a and b
+        if let preRange = html.range(of: "<pre>"),
+           let endRange = html.range(of: "</pre>") {
+            let content = String(html[preRange.upperBound..<endRange.lowerBound])
+            #expect(content.contains("a "), "Tab should be expanded to spaces")
+            #expect(!content.contains("\t"))
+        }
+    }
+
     // MARK: - Block comment regression
 
     /// Bug: when two block comments appear on the same line (e.g. commenting

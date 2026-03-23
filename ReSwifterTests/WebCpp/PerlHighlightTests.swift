@@ -85,6 +85,30 @@ struct PerlHighlightTests {
         #expect(html.contains("<font CLASS=keyword>bless</font>"))
     }
 
+    // MARK: - Heredoc strings
+
+    /// Perl heredoc (<<TAG...TAG) should highlight as a string.
+    @Test func heredocStringIsHighlighted() {
+        let source = "my $text = <<HEREDOC;\nhello world\nHEREDOC"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// Heredoc with quoted marker (<<'EOF') suppresses interpolation.
+    @Test func heredocQuotedMarkerIsHighlighted() {
+        let source = "my $t = <<'EOF';\nraw text\nEOF"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// Heredoc should not start inside a string literal.
+    @Test func heredocInsideStringIsNotTriggered() {
+        let source = "my $s = \"use <<EOF for heredocs\";"
+        let html = highlight(source)
+        // The entire thing should be a double-quoted string, not a heredoc
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
     // MARK: Comments
 
 

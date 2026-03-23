@@ -115,6 +115,54 @@ struct RubyHighlightTests {
         #expect(html.contains("<font CLASS=sinquot>"))
     }
 
+    // MARK: - Heredoc strings
+
+    /// Heredoc strings (<<TAG...TAG) should highlight the content as a string.
+    @Test func heredocStringIsHighlighted() {
+        let source = "text = <<HEREDOC\nhello world\nHEREDOC"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// Heredoc with indented closing marker (<<~TAG).
+    @Test func heredocIndentedMarkerIsHighlighted() {
+        let source = "text = <<~END\n  hello\n  END"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// Heredoc with dash (<<-TAG) for stripping leading whitespace from marker.
+    @Test func heredocDashMarkerIsHighlighted() {
+        let source = "text = <<-TAG\nhello\n  TAG"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// Heredoc with quoted marker (<<'TAG') suppresses interpolation.
+    @Test func heredocQuotedMarkerIsHighlighted() {
+        let source = "x = <<'EOF'\nhello\nEOF"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    // MARK: - Comment edge cases
+
+    /// A # inside a string literal should not start a comment.
+    @Test func hashInsideStringIsNotComment() {
+        let source = "x = \"has # inside\""
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+        // The # is inside the string, so no comment tag should appear
+        #expect(!html.contains("<font CLASS=comment>"))
+    }
+
+    /// A # preceded by a backslash should not start a comment.
+    @Test func escapedHashIsNotComment() {
+        let source = "\\# not a comment"
+        let html = highlight(source)
+        #expect(!html.contains("<font CLASS=comment>"))
+    }
+
     // MARK: Comments
 
 

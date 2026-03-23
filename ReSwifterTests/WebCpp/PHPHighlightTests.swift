@@ -74,6 +74,22 @@ struct PHPHighlightTests {
         #expect(html.contains("<font CLASS=keyword>function</font>"))
     }
 
+    // MARK: - Heredoc strings
+
+    /// PHP heredoc (<<<TAG...TAG;) should highlight as a string.
+    @Test func heredocStringIsHighlighted() {
+        let source = "$text = <<<EOT\nhello world\nEOT;"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// PHP heredoc with quoted marker (<<<'EOT'...EOT;).
+    @Test func heredocQuotedMarkerIsHighlighted() {
+        let source = "$text = <<<'EOT'\nraw text\nEOT;"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
     // MARK: Comments
 
     @Test func blockCommentsAreHighlighted() {

@@ -67,6 +67,39 @@ struct ShellHighlightTests {
         #expect(html.contains("<font CLASS=keyword>while</font>"))
     }
 
+    // MARK: - Backtick strings
+
+    /// Backtick command substitution should be highlighted.
+    @Test func backtickCommandSubstitutionIsHighlighted() {
+        let source = "result=`echo hello`"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=preproc>"))
+    }
+
+    // MARK: - Heredoc strings
+
+    /// Shell heredoc (<<TAG...TAG) should highlight as a string.
+    @Test func heredocStringIsHighlighted() {
+        let source = "cat <<EOF\nhello world\nEOF"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// Heredoc with quoted marker (<<'EOF') prevents variable expansion.
+    @Test func heredocQuotedMarkerIsHighlighted() {
+        let source = "cat <<'DONE'\nraw $text\nDONE"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    /// Heredoc marker after a # comment should not start a heredoc.
+    @Test func heredocAfterCommentIsNotTriggered() {
+        let source = "# use <<EOF for heredocs"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=comment>"))
+        #expect(!html.contains("<font CLASS=dblquot>"))
+    }
+
     // MARK: Comments
 
 

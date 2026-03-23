@@ -65,6 +65,24 @@ struct HTMLHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    // MARK: - String edge cases
+
+    /// Quoted attributes inside HTML tags should be highlighted as strings,
+    /// not confused by the surrounding angle brackets.
+    @Test func quotedAttributeInsideTagIsHighlighted() {
+        let source = "<div class=\"main\">"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(html.contains("<font CLASS=preproc>")) // tag itself
+    }
+
+    /// Single-quoted attribute inside an HTML tag.
+    @Test func singleQuotedAttributeInsideTagIsHighlighted() {
+        let source = "<div id='content'>"
+        let html = highlight(source)
+        #expect(html.contains("<font CLASS=sinquot>"))
+    }
+
     // MARK: - Comprehensive Snippet
 
     @Test func comprehensiveSnippetHighlightsAllRules() {
