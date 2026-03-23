@@ -58,6 +58,17 @@ struct BatchHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    /// Regression: %KEYWORD% is standard Batch env-var syntax (e.g. %PATH%).
+    /// When the body matches a keyword, the keyword parser tags it first,
+    /// isolating the trailing % at end-of-buffer. colourVariable() must
+    /// close its </font> at buffer end — not position 0 — or it loops forever.
+    @Test func percentKeywordPercentDoesNotHang() {
+        let html = highlight("echo %PATH% & set x=1")
+        #expect(html.contains("<font CLASS=preproc>"))
+        // Highlighting must continue past %PATH% — "set" should still be tagged
+        #expect(html.contains("<font CLASS=keyword>set</font>"))
+    }
+
     // MARK: Comments
 
 
@@ -76,9 +87,7 @@ struct BatchHighlightTests {
         set x=42
         set y=3.14
         echo "Hello"
-        echo %PATH
-        REM NOTE: %PATH% (with trailing %) causes an infinite loop in
-        REM parseVariable(). Using %PATH (no trailing %) to avoid the hang.
+        echo %PATH%
         echo 'done'
         """
         let html = highlight(source)

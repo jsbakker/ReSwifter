@@ -75,6 +75,16 @@ struct PerlHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    /// Robustness: Perl variables ($scalar, @array, %hash) don't use a
+    /// closing sigil, but the engine must not infinite-loop on malformed
+    /// input where a keyword appears between matching sigils.
+    @Test func duplicateSigilsDoNotHang() {
+        let html = highlight("%for% $die$ @keys@ bless")
+        #expect(html.contains("<font CLASS=preproc>"))
+        // Highlighting must continue past the malformed sigils
+        #expect(html.contains("<font CLASS=keyword>bless</font>"))
+    }
+
     // MARK: Comments
 
 

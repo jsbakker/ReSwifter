@@ -58,6 +58,15 @@ struct ShellHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    /// Robustness: Shell variables ($VAR, ${VAR}) don't use a closing $,
+    /// but the engine must not infinite-loop on malformed input.
+    @Test func dollarKeywordDollarDoesNotHang() {
+        let html = highlight("$if$ while")
+        #expect(html.contains("<font CLASS=preproc>"))
+        // Highlighting must continue past the malformed $if$
+        #expect(html.contains("<font CLASS=keyword>while</font>"))
+    }
+
     // MARK: Comments
 
 

@@ -58,6 +58,15 @@ struct TclHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    /// Robustness: Tcl variables ($var, ${var}) don't use a closing $,
+    /// but the engine must not infinite-loop on malformed input.
+    @Test func dollarKeywordDollarDoesNotHang() {
+        let html = highlight("$proc$ while")
+        #expect(html.contains("<font CLASS=preproc>"))
+        // Highlighting must continue past the malformed $proc$
+        #expect(html.contains("<font CLASS=keyword>while</font>"))
+    }
+
     // MARK: Comments
 
 

@@ -75,6 +75,16 @@ struct RubyHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    /// Robustness: Ruby variables ($global, @instance, %w{}) don't use a
+    /// closing sigil, but the engine must not infinite-loop on malformed
+    /// input where a keyword appears between matching sigils.
+    @Test func duplicateSigilsDoNotHang() {
+        let html = highlight("%class% $if$ @end@ yield")
+        #expect(html.contains("<font CLASS=preproc>"))
+        // Highlighting must continue past the malformed sigils
+        #expect(html.contains("<font CLASS=keyword>yield</font>"))
+    }
+
     // MARK: Comments
 
 

@@ -58,6 +58,17 @@ struct PascalHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    /// Robustness: %keyword% is not valid Pascal, but the engine must not
+    /// infinite-loop on any input. When the body matches a keyword, the
+    /// trailing % is isolated at end-of-buffer — colourVariable() must
+    /// handle this without hanging.
+    @Test func percentKeywordPercentDoesNotHang() {
+        let html = highlight("%begin% end")
+        #expect(html.contains("<font CLASS=preproc>"))
+        // Highlighting must continue past %begin% — "end" should still be tagged
+        #expect(html.contains("<font CLASS=keyword>end</font>"))
+    }
+
     // MARK: Comments
 
     @Test func blockCommentsAreHighlighted() {

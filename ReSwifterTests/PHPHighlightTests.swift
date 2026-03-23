@@ -65,6 +65,15 @@ struct PHPHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    /// Robustness: PHP variables ($var) don't use a closing $, but the
+    /// engine must not infinite-loop on malformed input.
+    @Test func dollarKeywordDollarDoesNotHang() {
+        let html = highlight("$echo$ function")
+        #expect(html.contains("<font CLASS=preproc>"))
+        // Highlighting must continue past the malformed $echo$
+        #expect(html.contains("<font CLASS=keyword>function</font>"))
+    }
+
     // MARK: Comments
 
     @Test func blockCommentsAreHighlighted() {

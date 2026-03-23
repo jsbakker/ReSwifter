@@ -980,6 +980,11 @@ void Engine::colourVariable(int index) {
 		else i++;
 	}
 
+	// if the variable prefix is at the end of the buffer (no delimiter
+	// found because the search started at or past buffer.size()),
+	// close the tag at the end instead of at position 0
+	if(!end) {end = buffer.size();}
+
 	if(end > 0 && buffer[end -1] == '\"')     {end--;}
 	if(end > 0 && buffer[end -1] == ')')      {end--;}
 
