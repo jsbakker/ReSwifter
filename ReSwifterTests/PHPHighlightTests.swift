@@ -85,6 +85,7 @@ struct PHPHighlightTests {
         // Line comment
         # Hash comment
         <?php
+        $arr = array();
         abstract class Example {
             public $name;
             function run() {

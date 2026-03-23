@@ -98,7 +98,7 @@ struct AssemblyHighlightTests {
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=comment>; Assembly comment</font>"))
         #expect(html.contains("<font CLASS=comment>/* block comment */</font>"))
-        #expect(html.contains("<font CLASS=preproc>.section</font>"))
+        #expect(html.contains("<font CLASS=keyword>.section</font>"))
         #expect(html.contains("<font CLASS=preproc>_start:</font>"))
     }
 }

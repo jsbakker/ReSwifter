@@ -99,6 +99,7 @@ struct PerlHighlightTests {
         my $scalar = 42;
         my @array = (3.14, "hello");
         my %hash = ('key' => 'value');
+        binmode STDOUT;
         sub example {
             bless {}, 'Example';
             $scalar = $scalar + 1;

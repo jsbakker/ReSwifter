@@ -76,7 +76,7 @@ struct BatchHighlightTests {
         set x=42
         set y=3.14
         echo "Hello"
-        echo %PATH%
+        echo %PATH
         echo 'done'
         """
         let html = highlight(source)

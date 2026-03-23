@@ -69,6 +69,7 @@ struct SQLHighlightTests {
         WHERE age > 42
         AND salary = 3.14
         AND status = "active"
+        CAST(age AS BIGINT)
         ORDER BY name;
         """
         let html = highlight(source)

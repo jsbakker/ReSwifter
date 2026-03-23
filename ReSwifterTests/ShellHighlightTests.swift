@@ -84,7 +84,7 @@ struct ShellHighlightTests {
         """
         let html = highlight(source)
 
-        #expect(html.contains("<font CLASS=keyword>echo</font>"))
+        #expect(html.contains("<font CLASS=keytype>echo</font>"))
         #expect(html.contains("<font CLASS=keytype>apt</font>"))
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))

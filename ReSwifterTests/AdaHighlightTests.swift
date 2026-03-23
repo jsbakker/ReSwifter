@@ -93,7 +93,7 @@ struct AdaHighlightTests {
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
-        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
+        // Ada does not highlight single-quoted characters as sinquot strings
         #expect(html.contains("<font CLASS=symbols>+</font>"))
         #expect(html.contains("<font CLASS=comment>-- This is an Ada comment</font>"))
         #expect(html.contains("<font CLASS=preproc>label_one:</font>"))

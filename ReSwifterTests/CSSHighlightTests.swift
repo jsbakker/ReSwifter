@@ -73,7 +73,7 @@ struct CSSHighlightTests {
         """
         let html = highlight(source)
 
-        #expect(html.contains("<font CLASS=keyword>import</font>"))
+        #expect(html.contains("<font CLASS=keyword>@import</font>"))
         #expect(html.contains("<font CLASS=keytype>color</font>"))
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))

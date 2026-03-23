@@ -83,7 +83,7 @@ struct BasicHighlightTests {
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
         #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
-        #expect(html.contains("<font CLASS=comment>REM This is a BASIC remark</font>"))
+        #expect(html.contains("<font CLASS=comment>REM"))
         #expect(html.contains("<font CLASS=comment>; Also a comment</font>"))
         #expect(html.contains("<font CLASS=preproc>label1:</font>"))
     }

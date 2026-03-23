@@ -71,11 +71,17 @@ void webcpp_driver_drive(WebCppDriverRef driver) {
 char *webcpp_driver_highlight_string(const char *source,
                                      const char *filename,
                                      const char **options) {
-    // Write source to a temporary input file
+    // Write source to a uniquely-named temporary file so that
+    // concurrent callers (e.g. parallel unit tests) don't collide.
     const char *tmpDir = getenv("TMPDIR");
     if (!tmpDir) tmpDir = "/tmp";
-    string tmpIn  = string(tmpDir) + "/webcpp_in.tmp";
-    string tmpOut = string(tmpDir) + "/webcpp_out.tmp";
+
+    // Build a per-call suffix from the thread ID and a counter
+    static _Atomic unsigned long long counter = 0;
+    unsigned long long seq = counter++;
+    string suffix = to_string(seq);
+    string tmpIn  = string(tmpDir) + "/webcpp_in_"  + suffix + ".tmp";
+    string tmpOut = string(tmpDir) + "/webcpp_out_" + suffix + ".tmp";
 
     {
         ofstream ofs(tmpIn.c_str());

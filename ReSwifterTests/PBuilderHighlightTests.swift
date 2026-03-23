@@ -70,7 +70,7 @@ struct PBuilderHighlightTests {
         s = "hello"
         string t
         t = 'world'
-        if x > 0 then
+        if x > 0 and y > 0 then
             messagebox(s, t)
         end if
         """

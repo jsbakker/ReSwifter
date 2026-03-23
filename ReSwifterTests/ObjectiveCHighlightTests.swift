@@ -96,6 +96,7 @@ struct ObjectiveCHighlightTests {
         @end
         @implementation Example
         - (void)run {
+            self.flag = YES;
             CGFloat pi = 3.14;
             NSInteger x = 42;
             NSString *s = @"hello";

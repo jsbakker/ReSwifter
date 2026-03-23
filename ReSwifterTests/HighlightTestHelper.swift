@@ -12,15 +12,10 @@ import WebCpp
 
 enum HighlightTestHelper {
 
-    /// WebCpp uses fixed temp filenames internally, so all highlight
-    /// calls must be serialized across test suites.
-    private static let lock = NSLock()
-
-    /// Thread-safe wrapper around webcpp_driver_highlight_string.
+    /// Wrapper around webcpp_driver_highlight_string.
+    /// Each call uses a unique temp file (via an atomic counter in the
+    /// C bridge), so concurrent calls from parallel tests are safe.
     static func highlight(_ source: String, language ext: String) -> String {
-        lock.lock()
-        defer { lock.unlock() }
-
         let filename = "snippet.\(ext)"
         guard let cStr = webcpp_driver_highlight_string(source, filename, nil) else {
             return ""

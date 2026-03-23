@@ -102,7 +102,7 @@ struct RustHighlightTests {
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
         #expect(html.contains("<font CLASS=sinquot>")) // single-quoted char highlighted
         #expect(html.contains("<font CLASS=symbols>+</font>"))
-        #expect(html.contains("<font CLASS=preproc>#[</font>"))
+        #expect(html.contains("<font CLASS=preproc>#[derive(Debug)]</font>"))
         #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
         #expect(html.contains("<font CLASS=comment>// Line comment</font>"))
     }
