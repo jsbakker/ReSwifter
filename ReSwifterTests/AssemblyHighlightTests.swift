@@ -88,6 +88,7 @@ struct AssemblyHighlightTests {
             mov eax, 42
             add eax, 3
             int 0x80
+        ; check if eax > 0 before exit
         /* block comment */
         """
         let html = highlight(source)
@@ -100,5 +101,7 @@ struct AssemblyHighlightTests {
         #expect(html.contains("<font CLASS=comment>/* block comment */</font>"))
         #expect(html.contains("<font CLASS=keyword>.section</font>"))
         #expect(html.contains("<font CLASS=preproc>_start:</font>"))
+        // The > in the comment must not break doAsmComnt parsing (&gt; contains ;)
+        #expect(html.contains("<font CLASS=comment>; check if eax &gt; 0 before exit</font>"))
     }
 }

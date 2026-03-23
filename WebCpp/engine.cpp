@@ -1003,7 +1003,27 @@ void Engine::parseComment(string cmnt) {
 				if(index == -1) {return;}
 			}
 		}
-	}	
+	}
+//-----------------------------------------------//
+
+// do not mistake HTML entity terminators for assembly comments
+// (pre_parse converts > to &gt; and & to &amp; — the trailing ;
+//  of these entities is not a real semicolon in the source)
+	if(cmnt == ";") {
+		while(index != -1 && index > 0) {
+			bool isEntity = false;
+			// check if ; is the end of &gt; &lt; or &amp;
+			if(index >= 3 && buffer.substr(index-3, 4) == "&gt;") isEntity = true;
+			if(index >= 3 && buffer.substr(index-3, 4) == "&lt;") isEntity = true;
+			if(index >= 4 && buffer.substr(index-4, 5) == "&amp;") isEntity = true;
+			if(isEntity) {
+				index = buffer.find(cmnt, index + 1);
+				continue;
+			}
+			break;
+		}
+		if(index == -1) {return;}
+	}
 //-----------------------------------------------//
 
 	if(index > 0 && buffer[index -1] == '$')  {return;}

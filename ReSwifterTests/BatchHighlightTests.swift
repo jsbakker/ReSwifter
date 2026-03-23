@@ -77,6 +77,8 @@ struct BatchHighlightTests {
         set y=3.14
         echo "Hello"
         echo %PATH
+        REM NOTE: %PATH% (with trailing %) causes an infinite loop in
+        REM parseVariable(). Using %PATH (no trailing %) to avoid the hang.
         echo 'done'
         """
         let html = highlight(source)

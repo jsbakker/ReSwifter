@@ -86,5 +86,8 @@ struct BasicHighlightTests {
         #expect(html.contains("<font CLASS=comment>REM"))
         #expect(html.contains("<font CLASS=comment>; Also a comment</font>"))
         #expect(html.contains("<font CLASS=preproc>label1:</font>"))
+        // The > in "IF x > 0 THEN" must not trigger doAsmComnt (&gt; contains ;)
+        // THEN is not a keyword in webcpp's Basic definition, but 0 after > must not become a comment
+        #expect(!html.contains("<font CLASS=comment>&gt;"))
     }
 }

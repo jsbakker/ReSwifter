@@ -80,7 +80,9 @@ struct XMLHighlightTests {
         let html = highlight(source)
 
         #expect(html.contains("<font CLASS=keytype>encoding</font>"))
-        // XML does not highlight numbers inside tag attributes or element content
+        // Numbers in attributes/content are not highlighted in XML
+        #expect(!html.contains("<font CLASS=integer>"))
+        #expect(!html.contains("<font CLASS=floatpt>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted attribute highlighted
         #expect(html.contains("<font CLASS=sinquot>")) // single-quoted attribute highlighted
         #expect(html.contains("<font CLASS=preproc>")) // XML tag highlighted

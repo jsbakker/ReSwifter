@@ -85,7 +85,9 @@ struct CLIPSHighlightTests {
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
         #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
-        // > is HTML-escaped to &gt; which contains ; triggering CLIPS comment parser
         #expect(html.contains("<font CLASS=comment>; CLIPS comment</font>"))
+        // The &gt; in => must not trigger doAsmComnt (the ; inside &gt; is not a comment)
+        #expect(html.contains("&gt;"))
+        #expect(!html.contains("<font CLASS=comment>&gt;"))
     }
 }

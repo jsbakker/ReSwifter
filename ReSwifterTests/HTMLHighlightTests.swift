@@ -82,7 +82,9 @@ struct HTMLHighlightTests {
         """
         let html = highlight(source)
 
-        // HTML does not highlight numbers inside element content
+        // Numbers inside element content are not highlighted in HTML
+        #expect(!html.contains("<font CLASS=integer>42</font>"))
+        #expect(!html.contains("<font CLASS=floatpt>3.14</font>"))
         // HTML does not highlight floats inside element content
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted attribute highlighted
         #expect(html.contains("<font CLASS=sinquot>")) // single-quoted attribute highlighted

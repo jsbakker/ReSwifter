@@ -73,6 +73,7 @@ struct EmfHighlightTests {
         $scalar = "hello"
         @array = 'world'
         %hash
+        ; check $scalar > 0
         label1:
             !bell
         """
@@ -84,5 +85,7 @@ struct EmfHighlightTests {
         #expect(html.contains("<font CLASS=comment>; Emf comment</font>"))
         #expect(html.contains("<font CLASS=preproc>")) // scalar/array/hash variable highlighted
         #expect(html.contains("<font CLASS=preproc>label1:</font>"))
+        // The > in the comment must not break doAsmComnt parsing (&gt; contains ;)
+        #expect(html.contains("<font CLASS=comment>; check $scalar &gt; 0</font>"))
     }
 }

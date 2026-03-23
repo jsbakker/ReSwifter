@@ -99,7 +99,10 @@ struct GLSLHighlightTests {
         #expect(html.contains("<font CLASS=keytype>bool</font>"))
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
-        // GLSL does not highlight double-quoted strings
+        // GLSL does not use string literals; doStrings is default-on but
+        // the language simply never uses quoted strings in valid code.
+        // Verify the engine does NOT produce dblquot tags for this shader snippet.
+        #expect(!html.contains("<font CLASS=dblquot>"))
         #expect(html.contains("<font CLASS=symbols>+</font>"))
         #expect(html.contains("<font CLASS=preproc>#version</font>"))
         #expect(html.contains("<font CLASS=comment>/* Block comment */</font>"))
