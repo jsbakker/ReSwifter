@@ -13,6 +13,7 @@ LangUScript::LangUScript() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doCaseKeys = No;
     doSymbols = Yes;
     doLabels = Yes;

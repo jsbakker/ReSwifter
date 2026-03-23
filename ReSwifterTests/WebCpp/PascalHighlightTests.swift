@@ -41,14 +41,32 @@ struct PascalHighlightTests {
 
     // MARK: Strings
 
-    @Test func doubleQuotedStringsAreHighlighted() {
+    @Test func doubleQuotedStringsAreNotHighlighted() {
         let html = highlight("\"hello\"")
-        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=dblquot>"))
     }
 
     @Test func singleQuotedStringsAreHighlighted() {
         let html = highlight("'hello'")
         #expect(html.contains("<font CLASS=sinquot>"))
+    }
+
+    @Test func backtickStringsAreNotHighlighted() {
+        let html = highlight("`hello`")
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    @Test func doubleQuoteInsideSingleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("'say \"hi\"'")
+        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=dblquot>"))
+    }
+
+    @Test func singleQuoteInsideDoubleQuoteIsNotHighlighted() {
+        // Double quotes are not supported in Pascal; neither tag should appear.
+        let html = highlight("\"it's\"")
+        #expect(!html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
     }
 
     // MARK: Variables
@@ -96,7 +114,7 @@ struct PascalHighlightTests {
         begin
             x := 42;
             y := 3.14;
-            s := "hello";
+            s := 'hello';
             c := 'x';
         end.
         """
@@ -106,7 +124,7 @@ struct PascalHighlightTests {
         #expect(html.contains("<font CLASS=keytype>AnsiString</font>"))
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
-        #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
+        #expect(!html.contains("<font CLASS=dblquot>")) // double quotes not supported in Pascal
         #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
         #expect(html.contains("<font CLASS=comment>(* Block comment *)</font>"))
         #expect(html.contains("<font CLASS=comment>// Line comment</font>"))

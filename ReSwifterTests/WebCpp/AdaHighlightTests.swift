@@ -93,8 +93,9 @@ struct AdaHighlightTests {
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
-        // Ada disables sinquot parsing (engine.cpp line 464) because single
-        // quotes are ambiguous with attribute syntax like T'First.
+        // Ada uses ' for both character literals ('x') and attribute access
+        // (Integer'Range, T'First). The engine cannot distinguish them, so
+        // langada.cpp sets doStringsSinQuote = false.
         #expect(!html.contains("<font CLASS=sinquot>"))
         #expect(html.contains("<font CLASS=symbols>+</font>"))
         #expect(html.contains("<font CLASS=comment>-- This is an Ada comment</font>"))

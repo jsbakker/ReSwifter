@@ -14,6 +14,7 @@ LangAssembler::LangAssembler() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doCaseKeys = No;
     doLabels = Yes;
     doPreProc = Yes;

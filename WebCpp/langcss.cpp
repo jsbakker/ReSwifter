@@ -13,6 +13,7 @@ LangCSS::LangCSS() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doCaseKeys = No;
     doBigComnt = Yes;
     doNumbers = Yes;

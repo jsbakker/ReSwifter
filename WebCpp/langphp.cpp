@@ -14,6 +14,8 @@ LangPhp::LangPhp() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doSymbols = Yes;
     doScalars = Yes;
     doBigComnt = Yes;

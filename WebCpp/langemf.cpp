@@ -13,6 +13,8 @@ LangEmf ::LangEmf() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doNumbers = No;
     doLabels = Yes;
     doScalars = Yes;

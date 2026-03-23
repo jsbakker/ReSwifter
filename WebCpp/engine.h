@@ -119,7 +119,9 @@ class Engine {
 
     // parsing rules
   protected:
-    bool doStrings;
+    bool doStringsDblQuote;
+    bool doStringsSinQuote;
+    bool doStringsBackTick;
     bool doSymbols;
     bool doNumbers;
     bool doKeywords;

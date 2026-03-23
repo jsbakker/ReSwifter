@@ -14,6 +14,8 @@ LangShell::LangShell() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doScalars = Yes;
     doUnxComnt = Yes;
     doHeredoc = Yes;

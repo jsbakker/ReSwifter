@@ -16,6 +16,7 @@ LangVHDL ::LangVHDL() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doCaseKeys = No; // VHDL is case-insensitive
     doLabels = Yes;
     doAdaComnt = Yes; // -- line comments

@@ -51,6 +51,26 @@ struct PythonHighlightTests {
         #expect(html.contains("<font CLASS=sinquot>"))
     }
 
+    @Test func backtickStringsAreNotHighlighted() {
+        // Python does not use backtick strings
+        let html = highlight("`hello`")
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    // MARK: - Quote Combination Tests
+
+    @Test func apostropheInsideDoubleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("\"it's fine\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
+    }
+
+    @Test func doubleQuoteInsideSingleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("'say \"hi\"'")
+        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=dblquot>"))
+    }
+
     // MARK: Symbols
 
     @Test func symbolsAreHighlighted() {

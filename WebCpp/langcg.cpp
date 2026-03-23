@@ -13,6 +13,7 @@ LangCg ::LangCg() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doPreProc = Yes;
     doCinComnt = Yes;

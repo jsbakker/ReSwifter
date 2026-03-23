@@ -14,6 +14,8 @@ LangPerl::LangPerl() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doSymbols = Yes;
     doLabels = Yes;
     doScalars = Yes;

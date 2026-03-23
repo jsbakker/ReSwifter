@@ -14,6 +14,7 @@ LangJava::LangJava() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doLabels = Yes;
     doBigComnt = Yes;

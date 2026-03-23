@@ -14,6 +14,7 @@ LangFortran ::LangFortran() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doCaseKeys = No;
     doPreProc = Yes;
     doFtnComnt = Yes;

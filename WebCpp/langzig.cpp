@@ -11,6 +11,7 @@ LangZig::LangZig() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doCinComnt = Yes; // // only — Zig has no block comments
 }

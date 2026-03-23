@@ -6,7 +6,7 @@ LangText::LangText() {
 
     init_switches();
 
-    doStrings = No;
+    doStringsDblQuote = No;
     doNumbers = No;
     doKeywords = No;
     //	doCaseKeys  = No;

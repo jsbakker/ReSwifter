@@ -103,12 +103,25 @@ struct CPlusPlusHighlightTests {
         #expect(html.contains("</font> <font CLASS=symbols>+</font>"))
     }
 
-    /// Backtick-quoted strings should be highlighted (used in shell-embedded contexts).
-    @Test func backtickStringsAreHighlighted() {
+    /// C++ does not support backtick-quoted strings.
+    @Test func backtickStringsAreNotHighlighted() {
         let source = "`command`"
         let html = highlight(source)
-        // Backtick strings get preproc class
-        #expect(html.contains("<font CLASS=preproc>"))
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    /// An apostrophe inside a double-quoted string must not start a new sinquot token.
+    @Test func apostropheInsideDoubleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("\"it's fine\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
+    }
+
+    /// A double-quote inside a single-quoted string must not start a new dblquot token.
+    @Test func doubleQuoteInsideSingleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("'say \"hi\"'")
+        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=dblquot>"))
     }
 
     /// A comment delimiter inside a string should not start a comment.

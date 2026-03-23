@@ -27,9 +27,20 @@ struct GherkinHighlightTests {
         #expect(html.contains("<font CLASS=dblquot>"))
     }
 
-    @Test func singleQuotedStringsAreHighlighted() {
+    @Test func singleQuotedStringsAreNotHighlighted() {
         let html = highlight("'hello'")
-        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
+    }
+
+    @Test func backtickStringsAreNotHighlighted() {
+        let html = highlight("`hello`")
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    @Test func apostropheInsideDoubleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("\"it's fine\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
     }
 
     // MARK: Variables
@@ -65,7 +76,7 @@ struct GherkinHighlightTests {
         #expect(html.contains("<font CLASS=keyword>Given</font>"))
         #expect(html.contains("<font CLASS=keyword>Feature</font>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
-        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(!html.contains("<font CLASS=sinquot>")) // single quotes not supported in Gherkin
         #expect(html.contains("<font CLASS=preproc>")) // scalar variable highlighted
         #expect(html.contains("<font CLASS=comment># Gherkin comment</font>"))
     }

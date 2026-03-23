@@ -39,9 +39,20 @@ struct BasicHighlightTests {
         #expect(html.contains("<font CLASS=dblquot>"))
     }
 
-    @Test func singleQuotedStringsAreHighlighted() {
+    @Test func singleQuotedStringsAreNotHighlighted() {
         let html = highlight("'hello'")
-        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
+    }
+
+    @Test func backtickStringsAreNotHighlighted() {
+        let html = highlight("`hello`")
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    @Test func apostropheInsideDoubleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("\"it's fine\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
     }
 
     // MARK: Comments
@@ -82,7 +93,7 @@ struct BasicHighlightTests {
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=floatpt>3.14</font>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
-        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(!html.contains("<font CLASS=sinquot>")) // single quotes not supported in Basic
         #expect(html.contains("<font CLASS=comment>REM"))
         #expect(html.contains("<font CLASS=comment>; Also a comment</font>"))
         #expect(html.contains("<font CLASS=preproc>label1:</font>"))

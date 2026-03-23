@@ -14,6 +14,10 @@ LangAda ::LangAda() {
     fill();
     init_switches();
 
+    // Ada uses ' for both character literals ('x') and attribute access
+    // (Integer'Range, T'First), which the engine cannot distinguish.
+    // Single-quote string highlighting is therefore disabled.
+    doStringsSinQuote = false;
     doCaseKeys = No; // Ada is case-insensitive
     doLabels = Yes;
     doAdaComnt = Yes; // -- line comments

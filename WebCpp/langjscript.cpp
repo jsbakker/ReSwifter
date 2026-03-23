@@ -14,6 +14,8 @@ LangJScript ::LangJScript() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doSymbols = Yes;
     doCinComnt = Yes;
     doBigComnt = Yes;

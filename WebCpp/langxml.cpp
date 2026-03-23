@@ -13,6 +13,7 @@ LangXML::LangXML() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doNumbers = Yes;
     doCaseKeys = Yes;
     doHtmlTags = Yes;

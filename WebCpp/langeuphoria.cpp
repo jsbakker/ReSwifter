@@ -13,6 +13,7 @@ LangEuphoria ::LangEuphoria() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doAdaComnt = Yes;
 }
 

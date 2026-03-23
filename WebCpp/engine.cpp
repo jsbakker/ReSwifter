@@ -49,7 +49,9 @@ void Engine::init_switches() {
     endMultiLine = false;
 
     // common language
-    doStrings = true;
+    doStringsDblQuote = true;
+    doStringsSinQuote = false;
+    doStringsBackTick = false;
     doNumbers = true;
     doKeywords = true;
     doCaseKeys = true;
@@ -576,9 +578,6 @@ void Engine::parseString(char quotetype, bool &inside) {
     if (inMultiStr) {
         return;
     }
-    if (doAdaComnt && !doRemComnt && quotetype == SIN_QUOTES) {
-        return;
-    }
     if (doAspComnt && quotetype == SIN_QUOTES) {
         return;
     }
@@ -654,6 +653,13 @@ void Engine::parseString(char quotetype, bool &inside) {
             }
         }
         while (isInsideIt(index, escap2, escap2)) {
+            index = buffer.find(quote, index + 1);
+            if (index == -1) {
+                return;
+            }
+        }
+
+        while (doAdaComnt && isInsideIt(index, "--", "\n")) {
             index = buffer.find(quote, index + 1);
             if (index == -1) {
                 return;
@@ -1428,9 +1434,15 @@ void Engine::doParsing() {
         PARSE_PERCENT_QL_STR;
     }
 
-    if (doStrings) {
+    if (doStringsDblQuote) {
         PARSE_DBL_QUO_STRING;
+    }
+
+    if (doStringsSinQuote) {
         PARSE_SIN_QUO_STRING;
+    }
+
+    if (doStringsBackTick) {
         PARSE_BCK_QUO_STRING;
     }
 

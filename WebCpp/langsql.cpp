@@ -13,6 +13,8 @@ LangSQL ::LangSQL() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doCaseKeys = No;
     doAdaComnt = Yes;
     doBigComnt = Yes;

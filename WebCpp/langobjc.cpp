@@ -13,6 +13,7 @@ LangObjectiveC ::LangObjectiveC() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doLabels = Yes;
     doPreProc = Yes;

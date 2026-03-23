@@ -9,6 +9,7 @@ LangObjectiveCpp::LangObjectiveCpp() {
     // their own fill() and init_switches() during construction, accumulating
     // all keywords and types into the shared vectors. We only need to set the
     // flags.
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doLabels = Yes;
     doPreProc = Yes;

@@ -13,6 +13,8 @@ LangHaskell ::LangHaskell() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doAdaComnt = Yes; // -- line comments
     doHskComnt = Yes; // {- -} block comments
     doSymbols = Yes;  // Haskell operators

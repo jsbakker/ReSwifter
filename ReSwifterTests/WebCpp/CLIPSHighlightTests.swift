@@ -46,9 +46,20 @@ struct CLIPSHighlightTests {
         #expect(html.contains("<font CLASS=dblquot>"))
     }
 
-    @Test func singleQuotedStringsAreHighlighted() {
+    @Test func singleQuotedStringsAreNotHighlighted() {
         let html = highlight("'hello'")
-        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
+    }
+
+    @Test func backtickStringsAreNotHighlighted() {
+        let html = highlight("`hello`")
+        #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    @Test func apostropheInsideDoubleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("\"it's fine\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
     }
 
     // MARK: Symbols
@@ -84,7 +95,7 @@ struct CLIPSHighlightTests {
         #expect(html.contains("<font CLASS=keyword>TRUE</font>"))
         #expect(html.contains("<font CLASS=integer>42</font>"))
         #expect(html.contains("<font CLASS=dblquot>")) // double-quoted string highlighted
-        #expect(html.contains("<font CLASS=sinquot>")) // single-quoted string highlighted
+        #expect(!html.contains("<font CLASS=sinquot>")) // single quotes not supported in CLIPS
         #expect(html.contains("<font CLASS=comment>; CLIPS comment</font>"))
         // The &gt; in => must not trigger doAsmComnt (the ; inside &gt; is not a comment)
         #expect(html.contains("&gt;"))

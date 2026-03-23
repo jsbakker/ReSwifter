@@ -14,6 +14,7 @@ LangModula2 ::LangModula2() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doPasComnt = Yes;
 }
 

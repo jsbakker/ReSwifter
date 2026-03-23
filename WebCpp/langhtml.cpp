@@ -14,6 +14,7 @@ LangHtml::LangHtml() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doNumbers = Yes;
     doCaseKeys = No;
     doHtmlTags = Yes;

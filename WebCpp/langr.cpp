@@ -11,6 +11,8 @@ LangR::LangR() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = false;
     doSymbols = Yes;
     doUnxComnt = Yes; // # comments
 }

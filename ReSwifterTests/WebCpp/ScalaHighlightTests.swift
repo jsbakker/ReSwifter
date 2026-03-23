@@ -51,6 +51,32 @@ struct ScalaHighlightTests {
         #expect(html.contains("<font CLASS=sinquot>"))
     }
 
+    @Test func backtickStringsAreHighlighted() {
+        // Scala uses backtick-escaped identifiers
+        let html = highlight("`type`")
+        #expect(html.contains("<font CLASS=preproc>"))
+    }
+
+    // MARK: - Quote Combination Tests
+
+    @Test func apostropheInsideDoubleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("\"it's fine\"")
+        #expect(html.contains("<font CLASS=dblquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
+    }
+
+    @Test func doubleQuoteInsideSingleQuoteIsNotSeparatelyHighlighted() {
+        let html = highlight("'say \"hi\"'")
+        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=dblquot>"))
+    }
+
+    @Test func singleQuoteInsideBacktickIsNotSeparatelyHighlighted() {
+        let html = highlight("`it's fine`")
+        #expect(html.contains("<font CLASS=preproc>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
+    }
+
     // MARK: Symbols
 
     @Test func symbolsAreHighlighted() {

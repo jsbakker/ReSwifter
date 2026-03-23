@@ -14,6 +14,7 @@ LangPython::LangPython() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doUnxComnt = Yes;
     doTplString = Yes;

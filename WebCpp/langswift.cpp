@@ -11,6 +11,7 @@ LangSwift::LangSwift() {
     fill();
     init_switches();
 
+    doStringsBackTick = true;
     doSymbols = Yes;
     doBigComnt = Yes;
     doCinComnt = Yes;

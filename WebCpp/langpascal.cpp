@@ -14,6 +14,8 @@ LangPascal ::LangPascal() {
     fill();
     init_switches();
 
+    doStringsDblQuote = false;
+    doStringsSinQuote = true;
     doCaseKeys = No;
     doHashes = Yes;
     doPasComnt = Yes;

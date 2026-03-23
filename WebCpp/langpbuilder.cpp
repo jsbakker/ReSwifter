@@ -14,6 +14,7 @@ LangPBuilder::LangPBuilder() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doCaseKeys = No;
     doCinComnt = Yes;
     doBigComnt = Yes;

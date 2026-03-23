@@ -11,6 +11,8 @@ LangGo::LangGo() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doSymbols = Yes;
     doBigComnt = Yes; // /* */
     doCinComnt = Yes; // //

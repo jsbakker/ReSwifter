@@ -11,6 +11,7 @@ LangOCaml::LangOCaml() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doPasComnt =
         Yes; // (* *) block comments (best approximation; OCaml allows nesting)

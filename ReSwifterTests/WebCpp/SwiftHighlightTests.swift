@@ -46,9 +46,9 @@ struct SwiftHighlightTests {
         #expect(html.contains("<font CLASS=dblquot>"))
     }
 
-    @Test func singleQuotedStringsAreHighlighted() {
+    @Test func singleQuotedStringsAreNotHighlighted() {
         let html = highlight("'hello'")
-        #expect(html.contains("<font CLASS=sinquot>"))
+        #expect(!html.contains("<font CLASS=sinquot>"))
     }
 
     // MARK: Symbols

@@ -11,6 +11,8 @@ LangFSharp::LangFSharp() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
+    doStringsBackTick = true;
     doSymbols = Yes;
     doCinComnt = Yes;  // // line comments
     doPasComnt = Yes;  // (* *) block comments

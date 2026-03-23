@@ -11,6 +11,7 @@ LangVala::LangVala() {
     fill();
     init_switches();
 
+    doStringsSinQuote = true;
     doSymbols = Yes;
     doBigComnt = Yes;  // /* */
     doCinComnt = Yes;  // //
