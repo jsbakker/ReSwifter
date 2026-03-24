@@ -164,225 +164,74 @@ Zig\t\t*.zig\n";
          << ((mode == HELP_LANGUAGES) ? Langs : Usage);
 }
 // determines the filetype for syntax highlighting ----------------------------
-char Driver::getExt(string filename) {
-    int dot;
-    char ext;
+uint8_t Driver::getExt(string filename) {
 
-    string extension = "";
-    dot = static_cast<int>(filename.rfind("."));
+    static const std::unordered_map<std::string, uint8_t> extensionMap = {
+        {"adb", lang::ADA_FILE},     {"ads", lang::ADA_FILE},
+        {"ali", lang::ADA_FILE},     {"asm", lang::ASM_FILE},
+        {"s", lang::ASM_FILE},       {"asp", lang::ASP_FILE},
+        {"asa", lang::ASP_FILE},     {"bas", lang::BAS_FILE},
+        {"bat", lang::DOS_FILE},     {"cmd", lang::DOS_FILE},
+        {"c", lang::C99_FILE},       {"rc", lang::C99_FILE},
+        {"cc", lang::CPP_FILE},      {"cpp", lang::CPP_FILE},
+        {"coo", lang::CPP_FILE},     {"c++", lang::CPP_FILE},
+        {"cxx", lang::CPP_FILE},     {"h", lang::CPP_FILE},
+        {"hh", lang::CPP_FILE},      {"hpp", lang::CPP_FILE},
+        {"hxx", lang::CPP_FILE},     {"cg", lang::C4G_FILE},
+        {"clp", lang::CLP_FILE},     {"cs", lang::CSP_FILE},
+        {"m", lang::OBC_FILE},       {"mm", lang::OCP_FILE},
+        {"emf", lang::EMF_FILE},     {"e", lang::EU4_FILE},
+        {"eu", lang::EU4_FILE},      {"ex", lang::EU4_FILE},
+        {"f", lang::FTN_FILE},       {"for", lang::FTN_FILE},
+        {"ftn", lang::FTN_FILE},     {"f77", lang::FTN_FILE},
+        {"f90", lang::FTN_FILE},     {"hs", lang::HSK_FILE},
+        {"lhs", lang::HSK_FILE},     {"shtm", lang::HTM_FILE},
+        {"html", lang::HTM_FILE},    {"htm", lang::HTM_FILE},
+        {"sgml", lang::HTM_FILE},    {"xml", lang::XML_FILE},
+        {"java", lang::JAV_FILE},    {"js", lang::JSC_FILE},
+        {"def", lang::MOD_FILE},     {"mod", lang::MOD_FILE},
+        {"pas", lang::PAS_FILE},     {"cgi", lang::PRL_FILE},
+        {"plex", lang::PRL_FILE},    {"plx", lang::PRL_FILE},
+        {"pl", lang::PRL_FILE},      {"pm", lang::PRL_FILE},
+        {"inc", lang::PHP_FILE},     {"php4", lang::PHP_FILE},
+        {"php3", lang::PHP_FILE},    {"php", lang::PHP_FILE},
+        {"pbl", lang::PB6_FILE},     {"pbr", lang::PB6_FILE},
+        {"pyw", lang::PYT_FILE},     {"py", lang::PYT_FILE},
+        {"sl", lang::RND_FILE},      {"rib", lang::RND_FILE},
+        {"rb", lang::RUB_FILE},      {"sql", lang::SQL_FILE},
+        {"sh", lang::UNX_FILE},      {"swift", lang::SWF_FILE},
+        {"tcl", lang::TCL_FILE},     {"tk", lang::TCL_FILE},
+        {"uc", lang::UNR_FILE},      {"v", lang::VHD_FILE},
+        {"vhdl", lang::VHD_FILE},    {"vhd", lang::VHD_FILE},
+        {"css", lang::CSS_FILE},     {"rs", lang::RST_FILE},
+        {"go", lang::GOL_FILE},      {"ts", lang::TSC_FILE},
+        {"tsx", lang::TSC_FILE},     {"kt", lang::KOT_FILE},
+        {"kts", lang::KOT_FILE},     {"vala", lang::VLA_FILE},
+        {"vapi", lang::VLA_FILE},    {"zig", lang::ZIG_FILE},
+        {"glsl", lang::GLS_FILE},    {"vert", lang::GLS_FILE},
+        {"frag", lang::GLS_FILE},    {"geom", lang::GLS_FILE},
+        {"tesc", lang::GLS_FILE},    {"tese", lang::GLS_FILE},
+        {"comp", lang::GLS_FILE},    {"hlsl", lang::HLS_FILE},
+        {"hlsli", lang::HLS_FILE},   {"r", lang::R_FILE},
+        {"feature", lang::GHK_FILE}, {"fs", lang::FSH_FILE},
+        {"fsi", lang::FSH_FILE},     {"fsx", lang::FSH_FILE},
+        {"scala", lang::SCA_FILE},   {"sc", lang::SCA_FILE},
+        {"ml", lang::OML_FILE},      {"mli", lang::OML_FILE}};
 
-    if (dot != -1) {
-        extension = filename.substr(dot + 1, filename.size() - dot);
-    }
-    for (int i = 0; i < static_cast<int>(extension.size()); i++) {
-        extension[i] = tolower(extension[i]);
-    }
+    // Extract extension
+    size_t dotPos = filename.find_last_of('.');
+    if (dotPos == std::string::npos)
+        return lang::TXT_FILE;
 
-    if (extension == "adb") {
-        ext = ADA_FILE;
-    } else if (extension == "ads") {
-        ext = ADA_FILE;
-    } else if (extension == "ali") {
-        ext = ADA_FILE;
-    } else if (extension == "asm") {
-        ext = ASM_FILE;
-    } else if (extension == "asp") {
-        ext = ASP_FILE;
-    } else if (extension == "asa") {
-        ext = ASP_FILE;
-    } else if (extension == "s") {
-        ext = ASM_FILE;
-    } else if (extension == "bas") {
-        ext = BAS_FILE;
-    } else if (extension == "bat") {
-        ext = DOS_FILE;
-    } else if (extension == "cmd") {
-        ext = DOS_FILE;
-    } else if (extension == "c") {
-        ext = C99_FILE;
-    } else if (extension == "rc") {
-        ext = C99_FILE;
-    } else if (extension == "cc") {
-        ext = CPP_FILE;
-    } else if (extension == "cpp") {
-        ext = CPP_FILE;
-    } else if (extension == "coo") {
-        ext = CPP_FILE;
-    } else if (extension == "c++") {
-        ext = CPP_FILE;
-    } else if (extension == "cxx") {
-        ext = CPP_FILE;
-    } else if (extension == "h") {
-        ext = CPP_FILE;
-    } else if (extension == "hh") {
-        ext = CPP_FILE;
-    } else if (extension == "hpp") {
-        ext = CPP_FILE;
-    } else if (extension == "hxx") {
-        ext = CPP_FILE;
-    } else if (extension == "cg") {
-        ext = C4G_FILE;
-    } else if (extension == "clp") {
-        ext = CLP_FILE;
-    } else if (extension == "cs") {
-        ext = CSP_FILE;
-    } else if (extension == "m") {
-        ext = OBC_FILE;
-    } else if (extension == "mm") {
-        ext = OCP_FILE;
-    } else if (extension == "emf") {
-        ext = EMF_FILE;
-    } else if (extension == "e") {
-        ext = EU4_FILE;
-    } else if (extension == "eu") {
-        ext = EU4_FILE;
-    } else if (extension == "ex") {
-        ext = EU4_FILE;
-    } else if (extension == "f") {
-        ext = FTN_FILE;
-    } else if (extension == "for") {
-        ext = FTN_FILE;
-    } else if (extension == "ftn") {
-        ext = FTN_FILE;
-    } else if (extension == "f77") {
-        ext = FTN_FILE;
-    } else if (extension == "f90") {
-        ext = FTN_FILE;
-    } else if (extension == "hs") {
-        ext = HSK_FILE;
-    } else if (extension == "lhs") {
-        ext = HSK_FILE;
-    } else if (extension == "shtm") {
-        ext = HTM_FILE;
-    } else if (extension == "html") {
-        ext = HTM_FILE;
-    } else if (extension == "htm") {
-        ext = HTM_FILE;
-    } else if (extension == "xml") {
-        ext = XML_FILE;
-    } else if (extension == "sgml") {
-        ext = HTM_FILE;
-    } else if (extension == "java") {
-        ext = JAV_FILE;
-    } else if (extension == "js") {
-        ext = JSC_FILE;
-    } else if (extension == "def") {
-        ext = MOD_FILE;
-    } else if (extension == "mod") {
-        ext = MOD_FILE;
-    } else if (extension == "pas") {
-        ext = PAS_FILE;
-    } else if (extension == "cgi") {
-        ext = PRL_FILE;
-    } else if (extension == "plex") {
-        ext = PRL_FILE;
-    } else if (extension == "plx") {
-        ext = PRL_FILE;
-    } else if (extension == "pl") {
-        ext = PRL_FILE;
-    } else if (extension == "pm") {
-        ext = PRL_FILE;
-    } else if (extension == "inc") {
-        ext = PHP_FILE;
-    } else if (extension == "php4") {
-        ext = PHP_FILE;
-    } else if (extension == "php3") {
-        ext = PHP_FILE;
-    } else if (extension == "php") {
-        ext = PHP_FILE;
-    } else if (extension == "pbl") {
-        ext = PB6_FILE;
-    } else if (extension == "pbr") {
-        ext = PB6_FILE;
-    } else if (extension == "pyw") {
-        ext = PYT_FILE;
-    } else if (extension == "py") {
-        ext = PYT_FILE;
-    } else if (extension == "sl") {
-        ext = RND_FILE;
-    } else if (extension == "rib") {
-        ext = RND_FILE;
-    } else if (extension == "rb") {
-        ext = RUB_FILE;
-    } else if (extension == "sql") {
-        ext = SQL_FILE;
-    } else if (extension == "sh") {
-        ext = UNX_FILE;
-    } else if (extension == "swift") {
-        ext = SWF_FILE;
-    } else if (extension == "tcl") {
-        ext = TCL_FILE;
-    } else if (extension == "tk") {
-        ext = TCL_FILE;
-    } else if (extension == "uc") {
-        ext = UNR_FILE;
-    } else if (extension == "v") {
-        ext = VHD_FILE;
-    } else if (extension == "vhdl") {
-        ext = VHD_FILE;
-    } else if (extension == "vhd") {
-        ext = VHD_FILE;
-    } else if (extension == "css") {
-        ext = CSS_FILE;
-    } else if (extension == "rs") {
-        ext = RST_FILE;
-    } else if (extension == "go") {
-        ext = GOL_FILE;
-    } else if (extension == "ts") {
-        ext = TSC_FILE;
-    } else if (extension == "tsx") {
-        ext = TSC_FILE;
-    } else if (extension == "kt") {
-        ext = KOT_FILE;
-    } else if (extension == "kts") {
-        ext = KOT_FILE;
-    } else if (extension == "vala") {
-        ext = VLA_FILE;
-    } else if (extension == "vapi") {
-        ext = VLA_FILE;
-    } else if (extension == "zig") {
-        ext = ZIG_FILE;
-    } else if (extension == "glsl") {
-        ext = GLS_FILE;
-    } else if (extension == "vert") {
-        ext = GLS_FILE;
-    } else if (extension == "frag") {
-        ext = GLS_FILE;
-    } else if (extension == "geom") {
-        ext = GLS_FILE;
-    } else if (extension == "tesc") {
-        ext = GLS_FILE;
-    } else if (extension == "tese") {
-        ext = GLS_FILE;
-    } else if (extension == "comp") {
-        ext = GLS_FILE;
-    } else if (extension == "hlsl") {
-        ext = HLS_FILE;
-    } else if (extension == "hlsli") {
-        ext = HLS_FILE;
-    } else if (extension == "r") {
-        ext = R_FILE;
-    } else if (extension == "feature") {
-        ext = GHK_FILE;
-    } else if (extension == "fs") {
-        ext = FSH_FILE;
-    } else if (extension == "fsi") {
-        ext = FSH_FILE;
-    } else if (extension == "fsx") {
-        ext = FSH_FILE;
-    } else if (extension == "scala") {
-        ext = SCA_FILE;
-    } else if (extension == "sc") {
-        ext = SCA_FILE;
-    } else if (extension == "ml") {
-        ext = OML_FILE;
-    } else if (extension == "mli") {
-        ext = OML_FILE;
-    }
+    std::string extension = filename.substr(dotPos + 1);
 
-    else
-        ext = TXT_FILE;
-    return ext;
+    // Convert to lowercase
+    std::transform(extension.begin(), extension.end(), extension.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+
+    // Lookup
+    auto it = extensionMap.find(extension);
+    return (it != extensionMap.end()) ? it->second : lang::TXT_FILE;
 }
 // determines the language for syntax highlighting ----------------------------
 string Driver::checkExt(string filename) {
@@ -392,101 +241,101 @@ string Driver::checkExt(string filename) {
     char filetype = getExt(filename);
 
     switch (filetype) {
-    case (ADA_FILE):
+    case (lang::ADA_FILE):
         return setLanguage<LangAda>(filetype, "Ada file");
-    case (ASM_FILE):
+    case (lang::ASM_FILE):
         return setLanguage<LangAssembler>(filetype, "Assembly file");
-    case (ASP_FILE):
+    case (lang::ASP_FILE):
         return setLanguage<LangAsp>(filetype, "ASP file");
-    case (BAS_FILE):
+    case (lang::BAS_FILE):
         return setLanguage<LangBasic>(filetype, "Basic file");
-    case (DOS_FILE):
+    case (lang::DOS_FILE):
         return setLanguage<LangBatch>(filetype, "DOS Batch file");
-    case (C99_FILE):
+    case (lang::C99_FILE):
         return setLanguage<LangC>(filetype, "'C' file");
-    case (CPP_FILE):
+    case (lang::CPP_FILE):
         return setLanguage<LangCPlusPlus>(filetype, "C++ file");
-    case (C4G_FILE):
+    case (lang::C4G_FILE):
         return setLanguage<LangCg>(filetype, "NVIDIA Cg file");
-    case (CLP_FILE):
+    case (lang::CLP_FILE):
         return setLanguage<LangClips>(filetype, "NASA CLIPS file");
-    case (CSS_FILE):
+    case (lang::CSS_FILE):
         return setLanguage<LangCSS>(filetype, "CSS file");
-    case (CSP_FILE):
+    case (lang::CSP_FILE):
         return setLanguage<LangCSharp>(filetype, "C-Sharp file");
-    case (OBC_FILE):
+    case (lang::OBC_FILE):
         return setLanguage<LangObjectiveC>(filetype, "Objective-C file");
-    case (OCP_FILE):
+    case (lang::OCP_FILE):
         return setLanguage<LangObjectiveCpp>(filetype, "Objective-C++ file");
-    case (EMF_FILE):
+    case (lang::EMF_FILE):
         return setLanguage<LangEmf>(filetype, "MicroEmacs macro file");
-    case (EU4_FILE):
+    case (lang::EU4_FILE):
         return setLanguage<LangEuphoria>(filetype, "Euphoria file");
-    case (FTN_FILE):
+    case (lang::FTN_FILE):
         return setLanguage<LangFortran>(filetype, "Fortran file");
-    case (HSK_FILE):
+    case (lang::HSK_FILE):
         return setLanguage<LangHaskell>(filetype, "Haskell file");
-    case (HTM_FILE):
+    case (lang::HTM_FILE):
         return setLanguage<LangHtml>(filetype, "Markup file");
-    case (JAV_FILE):
+    case (lang::JAV_FILE):
         return setLanguage<LangJava>(filetype, "Java file");
-    case (JSC_FILE):
+    case (lang::JSC_FILE):
         return setLanguage<LangJScript>(filetype, "JavaScript file");
-    case (MOD_FILE):
+    case (lang::MOD_FILE):
         return setLanguage<LangModula2>(filetype, "Modula file");
-    case (PAS_FILE):
+    case (lang::PAS_FILE):
         return setLanguage<LangPascal>(filetype, "Pascal file");
-    case (PRL_FILE):
+    case (lang::PRL_FILE):
         return setLanguage<LangPerl>(filetype, "Perl script");
-    case (PHP_FILE):
+    case (lang::PHP_FILE):
         return setLanguage<LangPhp>(filetype, "PHP script");
-    case (PB6_FILE):
+    case (lang::PB6_FILE):
         return setLanguage<LangPBuilder>(filetype, "Power Builder file");
-    case (PYT_FILE):
+    case (lang::PYT_FILE):
         return setLanguage<LangPython>(filetype, "Python script");
-    case (RUB_FILE):
+    case (lang::RUB_FILE):
         return setLanguage<LangRuby>(filetype, "Ruby script");
-    case (RND_FILE):
+    case (lang::RND_FILE):
         return setLanguage<LangRenderMan>(filetype, "RenderMan file");
-    case (SQL_FILE):
+    case (lang::SQL_FILE):
         return setLanguage<LangSQL>(filetype, "SQL script");
-    case (SWF_FILE):
+    case (lang::SWF_FILE):
         return setLanguage<LangSwift>(filetype, "Swift file");
-    case (UNX_FILE):
+    case (lang::UNX_FILE):
         return setLanguage<LangShell>(filetype, "UNIX shell script");
-    case (TCL_FILE):
+    case (lang::TCL_FILE):
         return setLanguage<LangTcl>(filetype, "Tcl script");
-    case (UNR_FILE):
+    case (lang::UNR_FILE):
         return setLanguage<LangUScript>(filetype, "UnrealScript file");
-    case (VHD_FILE):
+    case (lang::VHD_FILE):
         return setLanguage<LangVHDL>(filetype, "VHDL file");
-    case (XML_FILE):
+    case (lang::XML_FILE):
         return setLanguage<LangXML>(filetype, "XML file");
-    case (RST_FILE):
+    case (lang::RST_FILE):
         return setLanguage<LangRust>(filetype, "Rust file");
-    case (GOL_FILE):
+    case (lang::GOL_FILE):
         return setLanguage<LangGo>(filetype, "Go file");
-    case (TSC_FILE):
+    case (lang::TSC_FILE):
         return setLanguage<LangTypeScript>(filetype, "TypeScript file");
-    case (KOT_FILE):
+    case (lang::KOT_FILE):
         return setLanguage<LangKotlin>(filetype, "Kotlin file");
-    case (VLA_FILE):
+    case (lang::VLA_FILE):
         return setLanguage<LangVala>(filetype, "Vala file");
-    case (ZIG_FILE):
+    case (lang::ZIG_FILE):
         return setLanguage<LangZig>(filetype, "Zig file");
-    case (GLS_FILE):
+    case (lang::GLS_FILE):
         return setLanguage<LangGLSL>(filetype, "GLSL file");
-    case (HLS_FILE):
+    case (lang::HLS_FILE):
         return setLanguage<LangHLSL>(filetype, "HLSL file");
-    case (R_FILE):
+    case (lang::R_FILE):
         return setLanguage<LangR>(filetype, "R file");
-    case (GHK_FILE):
+    case (lang::GHK_FILE):
         return setLanguage<LangGherkin>(filetype, "Gherkin feature file");
-    case (FSH_FILE):
+    case (lang::FSH_FILE):
         return setLanguage<LangFSharp>(filetype, "F# file");
-    case (SCA_FILE):
+    case (lang::SCA_FILE):
         return setLanguage<LangScala>(filetype, "Scala file");
-    case (OML_FILE):
+    case (lang::OML_FILE):
         return setLanguage<LangOCaml>(filetype, "OCaml file");
     default:
         return setLanguage<LangText>(filetype, "Text file");

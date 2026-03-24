@@ -19,7 +19,8 @@ using namespace std;
 static bool isInsideFontTag(const string &buffer, int index);
 
 Engine::~Engine() {
-    if (!childLang) IO->close();
+    if (!childLang)
+        IO->close();
 }
 
 // initialize data members ----------------------------------------------------
@@ -397,19 +398,19 @@ bool Engine::isSymbol(char c) {
     // the current implementaion is also rather slow
     switch (c) {
 
-//    case '*':
+        //    case '*':
     case '!':
     case '|':
-//    case '&':
-//    case '<':
-//    case '>':
-//    case '{':
-//    case '}':
-//    case '[':
-//    case ']':
-//    case '(':
-//    case ')':
-//    case ':':
+        //    case '&':
+        //    case '<':
+        //    case '>':
+        //    case '{':
+        //    case '}':
+        //    case '[':
+        //    case ']':
+        //    case '(':
+        //    case ')':
+        //    case ':':
     case '-':
     case '=':
     case '+':
@@ -546,7 +547,8 @@ void Engine::parseNum() {
 
             while (isdigit(buffer[end + 1]) ||
                    (buffer[end + 1] == '.' && isdigit(buffer[end + 2])) ||
-                   (doUnderscoreNumbers && buffer[end + 1] == '_' && isdigit(buffer[end + 2]))) {
+                   (doUnderscoreNumbers && buffer[end + 1] == '_' &&
+                    isdigit(buffer[end + 2]))) {
                 end++;
             }
 
@@ -761,7 +763,8 @@ void Engine::colourString(int index, bool &inside, string cssclass) {
     inside = !inside;
 }
 //-----------------------------------------------------------------------------
-// returns true if buffer[index] is inside a <font CLASS=cssClass>...</font> span
+// returns true if buffer[index] is inside a <font CLASS=cssClass>...</font>
+// span
 bool Engine::isInsideSpanOfClass(int index, const string &cssClass) {
 
     string openTag = "<font CLASS=" + cssClass + ">";
@@ -807,7 +810,7 @@ void Engine::markInterpolations() {
     if (!doInterpolate || interpolStart.empty() || interpolEnd == '\0')
         return;
 
-    const string openMark  = "</font>\x01"; // close string tag, open interp
+    const string openMark = "</font>\x01"; // close string tag, open interp
     const string closeMark = "\x02<font CLASS=" + interpolCssClass + ">";
     int pos = 0;
 
@@ -824,7 +827,8 @@ void Engine::markInterpolations() {
         // Must be inside the appropriate string span, or on a multi-line
         // string continuation line where the whole buffer is implicitly
         // string-coloured.
-        if (!isInsideSpanOfClass(ipos, interpolCssClass) && !wholeLineIsString) {
+        if (!isInsideSpanOfClass(ipos, interpolCssClass) &&
+            !wholeLineIsString) {
             pos = ipos + 1;
             continue;
         }
@@ -833,7 +837,7 @@ void Engine::markInterpolations() {
         // Count consecutive backslashes immediately before ipos;
         // an odd count means the # is escaped.
         int bsCount = 0;
-        int bsPos   = ipos - 1;
+        int bsPos = ipos - 1;
         while (bsPos >= 0 && buffer[bsPos] == '\\') {
             bsCount++;
             bsPos--;
@@ -849,7 +853,7 @@ void Engine::markInterpolations() {
 
         // Depth-track from just after interpolStart to find the matching end
         int scanPos = ipos + shift1 + (int)interpolStart.size();
-        int depth   = 1;
+        int depth = 1;
 
         while (scanPos < (int)buffer.size() && depth > 0) {
             char c = buffer[scanPos];
@@ -1045,7 +1049,8 @@ void Engine::parseHeredoc(string marker) {
 
         // skip if the marker is inside a string literal
         if (abortColour(tagStart)) {
-            index = static_cast<int>(buffer.find(marker, tagStart + marker.size()));
+            index =
+                static_cast<int>(buffer.find(marker, tagStart + marker.size()));
             continue;
         }
 
@@ -1096,7 +1101,8 @@ void Engine::parseHeredoc(string marker) {
 
         if (pos == nameStart) {
             // no valid tag name found, skip this match
-            index = static_cast<int>(buffer.find(marker, tagStart + marker.size()));
+            index =
+                static_cast<int>(buffer.find(marker, tagStart + marker.size()));
             continue;
         }
 
@@ -1232,7 +1238,8 @@ void Engine::parseKeys() {
                 inserted = colourKeys(index, keys[i], "keyword");
             }
             int skip = inserted ? offset : 0;
-            index = noCaseFind(cmpkey, index + static_cast<int>(cmpkey.size()) + skip);
+            index = noCaseFind(cmpkey,
+                               index + static_cast<int>(cmpkey.size()) + skip);
         }
     }
 
@@ -1248,7 +1255,8 @@ void Engine::parseKeys() {
                 inserted = colourKeys(index, types[i], "keytype");
             }
             int skip = inserted ? offset : 0;
-            index = noCaseFind(cmpkey, index + static_cast<int>(cmpkey.size()) + skip);
+            index = noCaseFind(cmpkey,
+                               index + static_cast<int>(cmpkey.size()) + skip);
         }
     }
 }
@@ -1613,7 +1621,8 @@ void Engine::doParsing() {
     }
 
     // Post-pass: insert interpolation boundary markers inside string spans.
-    // Symbols are also parsed here so they can see the interpolation boundaries.
+    // Symbols are also parsed here so they can see the interpolation
+    // boundaries.
     markInterpolations();
     if (doSymbols)
         parseSymbol();
@@ -1702,8 +1711,10 @@ void Engine::doParsing() {
 #endif
 
     // Strip internal interpolation boundary markers before output
-    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x01'), buffer.end());
-    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x02'), buffer.end());
+    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x01'),
+                 buffer.end());
+    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x02'),
+                 buffer.end());
 
     *IO << buffer << "\n";
     if (!childLang) {
@@ -1949,14 +1960,14 @@ void Engine::hyperIncludeMe() {
 // parse for inline languages -------------------------------------------------
 void Engine::parseChildLang() {
 
-    //	if(abortParse())     {return;}
-    //	cerr << "\nNow in parseChildLang()\n";
+    // if(abortParse())     {return;}
+    // cerr << "\nNow in parseChildLang()\n";
 
     switch (langext) {
-    case CPP_FILE:
+    case lang::CPP_FILE:
         PARSE_INLINE_ASM;
         break;
-    case HTM_FILE:
+    case lang::HTM_FILE:
         PARSE_INLINE_JS;
         PARSE_INLINE_CSS;
         break;
@@ -1971,22 +1982,22 @@ void Engine::colourChildLang(string beg, string end) {
 
     if (buffer.find(beg) != -1) {
 
-//        cerr << "\nNow in if of colourChildLang()\n";
+        // cerr << "\nNow in if of colourChildLang()\n";
 
         std::unique_ptr<Engine> child = nullptr;
 
         switch (langext) {
-        case CPP_FILE:
-                child = make_unique<LangAssembler>();
-                child->setLangExt(ASM_FILE);
+        case lang::CPP_FILE:
+            child = make_unique<LangAssembler>();
+            child->setLangExt(lang::ASM_FILE);
             break;
-        case HTM_FILE:
+        case lang::HTM_FILE:
             if (end == "/style") {
                 child = make_unique<LangCSS>();
-                child->setLangExt(CSS_FILE);
+                child->setLangExt(lang::CSS_FILE);
             } else {
                 child = make_unique<LangJScript>();
-                child->setLangExt(JSC_FILE);
+                child->setLangExt(lang::JSC_FILE);
             }
             break;
         }
@@ -2000,20 +2011,20 @@ void Engine::colourChildLang(string beg, string end) {
             child->toggleNumber();
         }
 
-        if (langext == CPP_FILE) {
+        if (langext == lang::CPP_FILE) {
             child->setInline();
         }
-        if (langext == HTM_FILE && inComment) {
+        if (langext == lang::HTM_FILE && inComment) {
             *IO << "</font>";
         }
 
         do {
             child->doParsing();
-//            cerr << endl << Child->getBuffer() << endl;
+            // cerr << endl << Child->getBuffer() << endl;
         } while (child->getBuffer().find(end) == -1 &&
                  (child->IO->ifile && cin));
 
-        if (langext == HTM_FILE && inComment) {
+        if (langext == lang::HTM_FILE && inComment) {
             *IO << "<font CLASS=comment>";
         }
 

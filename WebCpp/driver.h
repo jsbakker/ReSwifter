@@ -21,7 +21,7 @@ class Driver {
     ~Driver();
     static void help(char mode);
     bool switch_parser(string arg);
-    char getExt(string filename);
+    uint8_t getExt(string filename);
     string checkExt(string filename);
     static void makeIndex(string prefix);
     bool prep_files(string ifile, string ofile, char over);
@@ -32,7 +32,7 @@ class Driver {
 
   private:
     template <typename T>
-    inline std::string setLanguage(char filetype, std::string val) {
+    inline std::string setLanguage(uint8_t filetype, std::string val) {
         lang = std::make_unique<T>();
         lang->setLangExt(filetype);
         return val;
