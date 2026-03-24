@@ -8,17 +8,19 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
-LangModula2 ::LangModula2() {
+using std::string;
 
-    fill();
-    init_switches();
+LangModula2::LangModula2() {
+
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doPasComnt = Yes;
+    doPasComnt = true;
 }
 
-void LangModula2 ::fill() {
+void LangModula2::initReservedWords() {
 
     // Modula-2 keywords (ISO 10514 and R10)
     string K[] = {

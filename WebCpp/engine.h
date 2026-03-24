@@ -10,11 +10,10 @@
 #define SIN_QUOTES 0x27
 #define BCK_QUOTES 0x60
 
-#define Yes true
-#define No false
-
 #include "cffile.h"
+#include "lang_rules.h"
 #include "theme.h"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -23,6 +22,7 @@ using namespace std;
 class Engine {
 
   public:
+    explicit Engine(unique_ptr<LanguageRules> rules);
     virtual ~Engine();
 
     void init_switches();
@@ -91,8 +91,8 @@ class Engine {
     int getLineCount() { return lncount; }
     string getBuffer() { return buffer; }
 
-    virtual void setInline() { ; }
-    virtual void fill() = 0;
+//    virtual void setInline() { ; }
+//    virtual void initReservedWords() = 0;
 
     inline void setLangExt(int e) { langext = e; }
     inline void setupIO(std::shared_ptr<CFfile> p) { IO = p; }
@@ -110,6 +110,8 @@ class Engine {
 
     void setTabWidth(string width);
 
+    void setLanguageRules(unique_ptr<LanguageRules> rules) { this->rules = std::move(rules); }
+
     // options
   protected:
     bool opt_bigtab;
@@ -123,43 +125,44 @@ class Engine {
 
     // parsing rules
   protected:
-    bool doStringsDblQuote;
-    bool doStringsSinQuote;
-    bool doStringsBackTick;
-    bool doSymbols;
-    bool doNumbers;
-    bool doUnderscoreNumbers;
-    bool doKeywords;
-    bool doCaseKeys;
-    bool doLabels;
-    bool doPreProc;
-    bool doScalars;
-    bool doArrays;
-    bool doHashes;
-    bool doHtmlTags;
-    bool doCComnt;
-    bool doHskComnt;
-    bool doHtmComnt;
-    bool doPasComnt;
-    bool doBigComnt;
-    bool doCinComnt;
-    bool doAdaComnt;
-    bool doUnxComnt;
-    bool doAsmComnt;
-    bool doRemComnt;
-    bool doFtnComnt;
-    bool doTclComnt;
-    bool doAspComnt;
-    bool doBatComnt;
-    bool doTplString;
-    bool doRawString;
-    bool doHeredoc;
-    bool doPercentQ;
-    bool doPhpHeredoc;
-    bool doInterpolate;
-    string interpolStart;    // e.g. "#{" for Ruby, "${" for JS, "\\(" for Swift
-    char   interpolEnd;      // e.g. '}' or ')'
-    string interpolCssClass; // CSS class of the string type that interpolates
+    std::unique_ptr<LanguageRules> rules = nullptr;
+//    bool doStringsDblQuote;
+//    bool doStringsSinQuote;
+//    bool doStringsBackTick;
+//    bool doSymbols;
+//    bool doNumbers;
+//    bool doUnderscoreNumbers;
+//    bool doKeywords;
+//    bool doCaseKeys;
+//    bool doLabels;
+//    bool doPreProc;
+//    bool doScalars;
+//    bool doArrays;
+//    bool doHashes;
+//    bool doHtmlTags;
+//    bool doCComnt;
+//    bool doHskComnt;
+//    bool doHtmComnt;
+//    bool doPasComnt;
+//    bool doBigComnt;
+//    bool doCinComnt;
+//    bool doAdaComnt;
+//    bool doUnxComnt;
+//    bool doAsmComnt;
+//    bool doRemComnt;
+//    bool doFtnComnt;
+//    bool doTclComnt;
+//    bool doAspComnt;
+//    bool doBatComnt;
+//    bool doTplString;
+//    bool doRawString;
+//    bool doHeredoc;
+//    bool doPercentQ;
+//    bool doPhpHeredoc;
+//    bool doInterpolate;
+//    string interpolStart;    // e.g. "#{" for Ruby, "${" for JS, "\\(" for Swift
+//    char   interpolEnd;      // e.g. '}' or ')'
+//    string interpolCssClass; // CSS class of the string type that interpolates
 
     // theme file I/O engine
   public:
@@ -173,8 +176,7 @@ class Engine {
     int tabwidth;
     string tw;
     string buffer;
-    vector<string> keys;
-    vector<string> types;
+
     bool childLang;
     bool inDblQuotes;
     bool inSinQuotes;

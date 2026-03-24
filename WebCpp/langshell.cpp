@@ -8,20 +8,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangShell::LangShell() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doScalars = Yes;
-    doUnxComnt = Yes;
-    doHeredoc = Yes;
+    doScalars = true;
+    doUnxComnt = true;
+    doHeredoc = true;
 }
 
-void LangShell::fill() {
+void LangShell::initReservedWords() {
 
     // Bash and Zsh keywords
     string K[] = {
@@ -51,7 +53,7 @@ void LangShell::fill() {
         "split",  "ssh",   "stat",     "sudo",     "tail",   "tar",
         "tee",    "test",  "top",      "touch",    "tr",     "true",
         "umount", "uname", "uniq",     "unzip",    "wc",     "wget",
-        "which",  "who",   "whoami",   "xargs",    "yes",    "zip",
+        "which",  "who",   "whoami",   "xargs",    "true",    "zip",
     };
     std::copy(std::cbegin(T), std::cend(T), std::back_inserter(types));
 }

@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_HLSL
 #define LANG_DEF_HLSL
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangHLSL : public Engine {
+class LangHLSL : public LanguageRules {
 
   public:
     LangHLSL();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_HLSL

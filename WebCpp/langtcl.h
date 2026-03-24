@@ -6,13 +6,13 @@
 #ifndef LANG_DEF_Tcl
 #define LANG_DEF_Tcl
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangTcl : public Engine {
+class LangTcl : public LanguageRules {
 
   public:
     LangTcl();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_Tcl

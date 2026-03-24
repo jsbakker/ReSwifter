@@ -7,19 +7,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangCSS::LangCSS() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doCaseKeys = No;
-    doBigComnt = Yes;
-    doNumbers = Yes;
+    doCaseKeys = false;
+    doBigComnt = true;
+    doNumbers = true;
 }
 
-void LangCSS::fill() {
+void LangCSS::initReservedWords() {
 
     // CSS at-rules and selectors
     string K[] = {

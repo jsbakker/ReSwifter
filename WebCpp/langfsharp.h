@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_FSHARP
 #define LANG_DEF_FSHARP
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangFSharp : public Engine {
+class LangFSharp : public LanguageRules {
 
   public:
     LangFSharp();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_FSHARP

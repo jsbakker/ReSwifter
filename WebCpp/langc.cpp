@@ -7,21 +7,23 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangC::LangC() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doLabels = Yes;
-    doPreProc = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
+    doSymbols = true;
+    doLabels = true;
+    doPreProc = true;
+    doBigComnt = true;
+    doCinComnt = true;
 }
 
-void LangC::fill() {
+void LangC::initReservedWords() {
 
     string K[] = {"break",  "case",   "const",  "continue", "default", "do",
                   "else",   "enum",   "extern", "for",      "if",      "return",

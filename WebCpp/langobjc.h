@@ -12,7 +12,7 @@ class LangObjectiveC : public virtual LangC {
 
   public:
     LangObjectiveC();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_ObjectiveC

@@ -5,13 +5,13 @@
 #ifndef LANG_DEF_SQL
 #define LANG_DEF_SQL
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangSQL : public Engine {
+class LangSQL : public LanguageRules {
 
   public:
     LangSQL();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_SQL

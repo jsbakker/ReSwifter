@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_GO
 #define LANG_DEF_GO
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangGo : public Engine {
+class LangGo : public LanguageRules {
 
   public:
     LangGo();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_GO

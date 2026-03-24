@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_ZIG
 #define LANG_DEF_ZIG
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangZig : public Engine {
+class LangZig : public LanguageRules {
 
   public:
     LangZig();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_ZIG

@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_POWER_BUILDER
 #define LANG_DEF_POWER_BUILDER
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangPBuilder : public Engine {
+class LangPBuilder : public LanguageRules {
 
   public:
     LangPBuilder();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_POWER_BUILDER

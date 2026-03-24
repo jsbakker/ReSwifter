@@ -8,17 +8,19 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangTcl ::LangTcl() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    doScalars = Yes;
-    doUnxComnt = Yes;
+    doScalars = true;
+    doUnxComnt = true;
 }
 
-void LangTcl ::fill() {
+void LangTcl ::initReservedWords() {
 
     // Tcl 8.6/9.0 keywords and core commands
     string K[] = {

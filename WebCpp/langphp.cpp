@@ -8,24 +8,26 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangPhp::LangPhp() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doScalars = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
-    doUnxComnt = Yes;
-    doPhpHeredoc = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doScalars = true;
+    doBigComnt = true;
+    doCinComnt = true;
+    doUnxComnt = true;
+    doPhpHeredoc = true;
 }
 
-void LangPhp::fill() {
+void LangPhp::initReservedWords() {
 
     // PHP 8.4 keywords
     string K[] = {

@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_NVIDIA_CG_SHADING_LANGUAGE
 #define LANG_DEF_NVIDIA_CG_SHADING_LANGUAGE
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangCg : public Engine {
+class LangCg : public LanguageRules {
 
   public:
     LangCg();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_NVIDIA_CG_SHADING_LANGUAGE

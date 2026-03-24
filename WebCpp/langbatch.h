@@ -6,13 +6,13 @@
 #ifndef LANG_DEF_BATCH
 #define LANG_DEF_BATCH
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangBatch : public Engine {
+class LangBatch : public LanguageRules {
 
   public:
     LangBatch();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_BATCH

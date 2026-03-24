@@ -5,21 +5,23 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangRust::LangRust() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doBigComnt = Yes; // /* */
-    doCinComnt = Yes; // //
-    doPreProc = Yes;  // #[attributes] and #![crate-level attributes]
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doBigComnt = true; // /* */
+    doCinComnt = true; // //
+    doPreProc = true;  // #[attributes] and #![crate-level attributes]
 }
 
-void LangRust::fill() {
+void LangRust::initReservedWords() {
 
     // Rust keywords (Rust 2021 edition)
     string K[] = {

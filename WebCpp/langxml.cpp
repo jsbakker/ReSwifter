@@ -7,20 +7,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangXML::LangXML() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doNumbers = Yes;
-    doCaseKeys = Yes;
-    doHtmlTags = Yes;
-    doHtmComnt = Yes;
+    doNumbers = true;
+    doCaseKeys = true;
+    doHtmlTags = true;
+    doHtmComnt = true;
 }
 
-void LangXML::fill() {
+void LangXML::initReservedWords() {
 
     // XML declarations and processing instructions
     string K[] = {

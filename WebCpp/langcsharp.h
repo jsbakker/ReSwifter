@@ -6,13 +6,13 @@
 #ifndef LANG_DEF_CSharp
 #define LANG_DEF_CSharp
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangCSharp : public Engine {
+class LangCSharp : public LanguageRules {
 
   public:
     LangCSharp();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_CSharp

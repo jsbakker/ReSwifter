@@ -6,13 +6,13 @@
 #ifndef LANG_HTML_DEF_H
 #define LANG_HTML_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangHtml : public Engine {
+class LangHtml : public LanguageRules {
 
   public:
     LangHtml();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_HTML_DEF_H

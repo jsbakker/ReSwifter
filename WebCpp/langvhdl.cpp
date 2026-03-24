@@ -10,21 +10,23 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
-LangVHDL ::LangVHDL() {
+using std::string;
 
-    fill();
-    init_switches();
+LangVHDL::LangVHDL() {
+
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doCaseKeys = No; // VHDL is case-insensitive
-    doLabels = Yes;
-    doAdaComnt = Yes; // -- line comments
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
+    doCaseKeys = false; // VHDL is case-insensitive
+    doLabels = true;
+    doAdaComnt = true; // -- line comments
+    doSymbols = true;
+    doUnderscoreNumbers = true;
 }
 
-void LangVHDL ::fill() {
+void LangVHDL::initReservedWords() {
 
     // VHDL-2019 reserved words (IEEE 1076-2019)
     string K[] = {

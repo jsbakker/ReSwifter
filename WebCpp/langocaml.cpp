@@ -5,20 +5,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangOCaml::LangOCaml() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
     doPasComnt =
-        Yes; // (* *) block comments (best approximation; OCaml allows nesting)
+        true; // (* *) block comments (best approximation; OCaml allows nesting)
 }
 
-void LangOCaml::fill() {
+void LangOCaml::initReservedWords() {
 
     // OCaml reserved keywords (OCaml 5.x)
     string K[] = {

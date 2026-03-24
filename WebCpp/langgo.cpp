@@ -5,22 +5,24 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangGo::LangGo() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doBigComnt = Yes; // /* */
-    doCinComnt = Yes; // //
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doBigComnt = true; // /* */
+    doCinComnt = true; // //
     // doStrings = true by default; backtick raw strings handled automatically
 }
 
-void LangGo::fill() {
+void LangGo::initReservedWords() {
 
     // Go keywords
     string K[] = {

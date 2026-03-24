@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_Ada
 #define LANG_DEF_Ada
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangAda : public Engine {
+class LangAda : public LanguageRules {
 
   public:
     LangAda();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_Ada

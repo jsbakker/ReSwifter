@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_GHERKIN
 #define LANG_DEF_GHERKIN
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangGherkin : public Engine {
+class LangGherkin : public LanguageRules {
 
   public:
     LangGherkin();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_GHERKIN

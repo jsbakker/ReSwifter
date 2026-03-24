@@ -6,13 +6,13 @@
 #ifndef LANG_PYTHON_DEF_H
 #define LANG_PYTHON_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangPython : public Engine {
+class LangPython : public LanguageRules {
 
   public:
     LangPython();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_PYTHON_DEF_H

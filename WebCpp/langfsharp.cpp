@@ -5,26 +5,28 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangFSharp::LangFSharp() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doCinComnt = Yes;  // // line comments
-    doPasComnt = Yes;  // (* *) block comments
-    doTplString = Yes; // """...""" triple-quoted strings
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doCinComnt = true;  // // line comments
+    doPasComnt = true;  // (* *) block comments
+    doTplString = true; // """...""" triple-quoted strings
     // F# interpolated strings (F# 6+): $"text {expr}"
     doInterpolate = true;
     interpolStart = "{";
     interpolEnd = '}';
 }
 
-void LangFSharp::fill() {
+void LangFSharp::initReservedWords() {
 
     // F# reserved keywords
     string K[] = {

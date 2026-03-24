@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_KOTLIN
 #define LANG_DEF_KOTLIN
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangKotlin : public Engine {
+class LangKotlin : public LanguageRules {
 
   public:
     LangKotlin();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_KOTLIN

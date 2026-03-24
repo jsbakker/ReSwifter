@@ -8,18 +8,20 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
-LangJScript ::LangJScript() {
+using std::string;
 
-    fill();
-    init_switches();
+LangJScript::LangJScript() {
+
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doCinComnt = Yes;
-    doBigComnt = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doCinComnt = true;
+    doBigComnt = true;
     // JavaScript template literal interpolation: `text ${expr}`
     doInterpolate = true;
     interpolStart = "${";
@@ -27,7 +29,7 @@ LangJScript ::LangJScript() {
     interpolCssClass = "preproc"; // backtick strings use preproc class
 }
 
-void LangJScript ::fill() {
+void LangJScript::initReservedWords() {
 
     // JavaScript keywords (ES2025)
     string K[] = {

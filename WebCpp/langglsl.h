@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_GLSL
 #define LANG_DEF_GLSL
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangGLSL : public Engine {
+class LangGLSL : public LanguageRules {
 
   public:
     LangGLSL();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_GLSL

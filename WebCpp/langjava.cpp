@@ -8,22 +8,24 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangJava::LangJava() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doLabels = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
-    doTplString = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doLabels = true;
+    doBigComnt = true;
+    doCinComnt = true;
+    doTplString = true;
 }
 
-void LangJava::fill() {
+void LangJava::initReservedWords() {
 
     // Java keywords (Java SE 23)
     string K[] = {

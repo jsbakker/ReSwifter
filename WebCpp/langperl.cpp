@@ -8,25 +8,27 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangPerl::LangPerl() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doLabels = Yes;
-    doScalars = Yes;
-    doArrays = Yes;
-    doHashes = Yes;
-    doUnxComnt = Yes;
-    doHeredoc = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doLabels = true;
+    doScalars = true;
+    doArrays = true;
+    doHashes = true;
+    doUnxComnt = true;
+    doHeredoc = true;
 }
 
-void LangPerl::fill() {
+void LangPerl::initReservedWords() {
 
     // Perl 5.40 keywords
     string K[] = {

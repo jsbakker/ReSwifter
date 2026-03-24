@@ -5,13 +5,13 @@
 #ifndef LANG_DEF_Basic
 #define LANG_DEF_Basic
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangBasic : public Engine {
+class LangBasic : public LanguageRules {
 
   public:
     LangBasic();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_Basic

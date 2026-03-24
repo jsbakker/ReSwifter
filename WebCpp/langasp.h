@@ -9,7 +9,7 @@
 class LangAsp : public LangHtml {
   public:
     LangAsp();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_ASP

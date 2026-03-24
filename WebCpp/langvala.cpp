@@ -5,22 +5,24 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangVala::LangVala() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doBigComnt = Yes;  // /* */
-    doCinComnt = Yes;  // //
-    doTplString = Yes; // """...""" triple-quoted strings
-    doPreProc = Yes;   // #if, #elif, #else, #endif, #define
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doBigComnt = true;  // /* */
+    doCinComnt = true;  // //
+    doTplString = true; // """...""" triple-quoted strings
+    doPreProc = true;   // #if, #elif, #else, #endif, #define
 }
 
-void LangVala::fill() {
+void LangVala::initReservedWords() {
 
     // Vala keywords
     string K[] = {

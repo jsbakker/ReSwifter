@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_RUBY
 #define LANG_DEF_RUBY
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangRuby : public Engine {
+class LangRuby : public LanguageRules {
 
   public:
     LangRuby();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_RUBY

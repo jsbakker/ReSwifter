@@ -6,19 +6,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangBasic ::LangBasic() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    doCaseKeys = No;
-    doLabels = Yes;
-    doAsmComnt = Yes;
-    doRemComnt = Yes;
+    doCaseKeys = false;
+    doLabels = true;
+    doAsmComnt = true;
+    doRemComnt = true;
 }
 
-void LangBasic ::fill() {
+void LangBasic ::initReservedWords() {
 
     string K[] = {
         "ABS",   "AND",   "ASC",     "BYE",    "CHR",  "CLS",   "DATA",  "DEL",

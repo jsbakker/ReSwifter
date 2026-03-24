@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_VALA
 #define LANG_DEF_VALA
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangVala : public Engine {
+class LangVala : public LanguageRules {
 
   public:
     LangVala();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_VALA

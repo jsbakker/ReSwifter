@@ -5,19 +5,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangZig::LangZig() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doCinComnt = Yes; // // only — Zig has no block comments
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doCinComnt = true; // // only — Zig has no block comments
 }
 
-void LangZig::fill() {
+void LangZig::initReservedWords() {
 
     // Zig keywords
     string K[] = {

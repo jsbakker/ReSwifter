@@ -11,7 +11,7 @@ class LangObjectiveCpp : public LangCPlusPlus, public LangObjectiveC {
 
   public:
     LangObjectiveCpp();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_ObjectiveCPP

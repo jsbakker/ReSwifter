@@ -12,7 +12,7 @@ class LangCPlusPlus : public virtual LangC {
 
   public:
     LangCPlusPlus();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // _LANG_CPP_DEF_H

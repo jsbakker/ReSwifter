@@ -8,20 +8,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangFortran ::LangFortran() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doCaseKeys = No;
-    doPreProc = Yes;
-    doFtnComnt = Yes;
-    doBigComnt = Yes;
+    doCaseKeys = false;
+    doPreProc = true;
+    doFtnComnt = true;
+    doBigComnt = true;
 }
 
-void LangFortran ::fill() {
+void LangFortran ::initReservedWords() {
 
     // Fortran keywords (FORTRAN 77 through Fortran 2023)
     string K[] = {

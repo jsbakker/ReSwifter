@@ -5,26 +5,28 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangKotlin::LangKotlin() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doBigComnt = Yes;  // /* */
-    doCinComnt = Yes;  // //
-    doTplString = Yes; // """...""" triple-quoted strings
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doBigComnt = true;  // /* */
+    doCinComnt = true;  // //
+    doTplString = true; // """...""" triple-quoted strings
     // Kotlin string interpolation: "text ${expr}" or "text $name"
     doInterpolate = true;
     interpolStart = "${";
     interpolEnd = '}';
 }
 
-void LangKotlin::fill() {
+void LangKotlin::initReservedWords() {
 
     // Kotlin keywords
     string K[] = {

@@ -5,18 +5,20 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangTypeScript::LangTypeScript() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doBigComnt = Yes; // /* */
-    doCinComnt = Yes; // //
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doBigComnt = true; // /* */
+    doCinComnt = true; // //
     // TypeScript template literal interpolation: `text ${expr}`
     doInterpolate = true;
     interpolStart = "${";
@@ -24,7 +26,7 @@ LangTypeScript::LangTypeScript() {
     interpolCssClass = "preproc"; // backtick strings use preproc class
 }
 
-void LangTypeScript::fill() {
+void LangTypeScript::initReservedWords() {
 
     // TypeScript keywords (TypeScript 5.x)
     string K[] = {

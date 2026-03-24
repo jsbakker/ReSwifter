@@ -7,20 +7,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangCg ::LangCg() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doPreProc = Yes;
-    doCinComnt = Yes;
-    doBigComnt = Yes;
+    doSymbols = true;
+    doPreProc = true;
+    doCinComnt = true;
+    doBigComnt = true;
 }
 
-void LangCg ::fill() {
+void LangCg ::initReservedWords() {
 
     string K[] = {"break",   "case",   "const",    "continue", "default",
                   "discard", "do",     "else",     "enum",     "extern",

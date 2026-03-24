@@ -6,13 +6,13 @@
 #ifndef LANG_DEF_Modula2
 #define LANG_DEF_Modula2
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangModula2 : public Engine {
+class LangModula2 : public LanguageRules {
 
   public:
     LangModula2();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_Modula2

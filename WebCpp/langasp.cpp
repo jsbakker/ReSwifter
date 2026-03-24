@@ -5,19 +5,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangAsp::LangAsp() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    // doHtmTags  = Yes;
-    // doHtmComnt = Yes;
-    doAspComnt = Yes;
-    doCaseKeys = No;
+    // doHtmTags  = true;
+    // doHtmComnt = true;
+    doAspComnt = true;
+    doCaseKeys = false;
 }
 
-void LangAsp::fill() {
+void LangAsp::initReservedWords() {
 
     // ASP keywords
     string K[] = {"and",

@@ -7,22 +7,24 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangCPlusPlus::LangCPlusPlus() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doLabels = Yes;
-    doPreProc = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
-    doRawString = Yes;
+    doSymbols = true;
+    doLabels = true;
+    doPreProc = true;
+    doBigComnt = true;
+    doCinComnt = true;
+    doRawString = true;
 }
 
-void LangCPlusPlus::fill() {
+void LangCPlusPlus::initReservedWords() {
 
     // C++ keywords (C++98 through C++23)
     // Note: C keywords are inherited from LangC

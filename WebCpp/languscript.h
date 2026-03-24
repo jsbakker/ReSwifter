@@ -12,7 +12,7 @@ class LangUScript : public LangC {
 
   public:
     LangUScript();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // _LANG_UNREALSCRIPT_DEF_H

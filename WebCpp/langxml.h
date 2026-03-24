@@ -6,13 +6,13 @@
 #ifndef LANG_XML_DEF_H
 #define LANG_XML_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangXML : public Engine {
+class LangXML : public LanguageRules {
 
   public:
     LangXML();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_XML_DEF_H

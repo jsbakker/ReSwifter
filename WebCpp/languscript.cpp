@@ -7,22 +7,24 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangUScript::LangUScript() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doCaseKeys = No;
-    doSymbols = Yes;
-    doLabels = Yes;
-    doPreProc = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
+    doCaseKeys = false;
+    doSymbols = true;
+    doLabels = true;
+    doPreProc = true;
+    doBigComnt = true;
+    doCinComnt = true;
 }
 
-void LangUScript::fill() {
+void LangUScript::initReservedWords() {
 
     string K[] = {"abstract", "class",    "event",  "expands", "extends",
                   "foreach",  "function", "global", "local",   "None",

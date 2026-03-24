@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_R
 #define LANG_DEF_R
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangR : public Engine {
+class LangR : public LanguageRules {
 
   public:
     LangR();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_R

@@ -5,25 +5,27 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangSwift::LangSwift() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
-    doTplString = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doBigComnt = true;
+    doCinComnt = true;
+    doTplString = true;
     // Swift string interpolation: "text \(expr)"
     doInterpolate = true;
     interpolStart = "\\(";
     interpolEnd = ')';
 }
 
-void LangSwift::fill() {
+void LangSwift::initReservedWords() {
 
     // Swift keywords
     string K[] = {

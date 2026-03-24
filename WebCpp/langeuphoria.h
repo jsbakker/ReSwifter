@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_EUPHORIA
 #define LANG_DEF_EUPHORIA
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangEuphoria : public Engine {
+class LangEuphoria : public LanguageRules {
 
   public:
     LangEuphoria();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_EUPHORIA

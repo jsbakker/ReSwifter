@@ -33,7 +33,8 @@ class Driver {
   private:
     template <typename T>
     inline std::string setLanguage(uint8_t filetype, std::string val) {
-        lang = std::make_unique<T>();
+        std::unique_ptr<LanguageRules> rules = std::make_unique<T>();
+        lang = std::make_unique<Engine>(std::move(rules));
         lang->setLangExt(filetype);
         return val;
     }

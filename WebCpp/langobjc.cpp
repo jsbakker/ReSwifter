@@ -7,21 +7,23 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangObjectiveC ::LangObjectiveC() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doLabels = Yes;
-    doPreProc = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
+    doSymbols = true;
+    doLabels = true;
+    doPreProc = true;
+    doBigComnt = true;
+    doCinComnt = true;
 }
 
-void LangObjectiveC ::fill() {
+void LangObjectiveC ::initReservedWords() {
 
     // Objective-C keywords (modern, through Xcode 16 / Clang 18)
     // Note: C keywords are inherited from LangC
@@ -40,7 +42,7 @@ void LangObjectiveC ::fill() {
         "@selector",   "@synchronized",
         "@synthesize", "@throw",
         "@try",        "NO",
-        "Nil",         "YES",
+        "Nil",         "true",
         "nil",         "self",
         "super",
     };

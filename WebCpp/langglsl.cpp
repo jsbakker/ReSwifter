@@ -5,19 +5,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangGLSL::LangGLSL() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    doSymbols = Yes;
-    doBigComnt = Yes; // /* */
-    doCinComnt = Yes; // //
-    doPreProc = Yes;  // #version, #extension, #define, #ifdef, #ifndef, #endif
+    doSymbols = true;
+    doBigComnt = true; // /* */
+    doCinComnt = true; // //
+    doPreProc = true;  // #version, #extension, #define, #ifdef, #ifndef, #endif
 }
 
-void LangGLSL::fill() {
+void LangGLSL::initReservedWords() {
 
     // GLSL keywords (GLSL 4.60)
     string K[] = {

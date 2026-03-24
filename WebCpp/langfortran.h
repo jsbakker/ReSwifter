@@ -6,13 +6,13 @@
 #ifndef LANG_DEF_Fortran
 #define LANG_DEF_Fortran
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangFortran : public Engine {
+class LangFortran : public LanguageRules {
 
   public:
     LangFortran();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_Fortran

@@ -6,13 +6,13 @@
 #ifndef _LANG_C_DEF_H
 #define _LANG_C_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangC : public virtual Engine {
+class LangC : public virtual LanguageRules {
 
   public:
     LangC();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // _LANG_C_DEF_H

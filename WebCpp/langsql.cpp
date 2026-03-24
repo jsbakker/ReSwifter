@@ -7,20 +7,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
-LangSQL ::LangSQL() {
+using std::string;
 
-    fill();
-    init_switches();
+LangSQL::LangSQL() {
+
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doCaseKeys = No;
-    doAdaComnt = Yes;
-    doBigComnt = Yes;
+    doCaseKeys = false;
+    doAdaComnt = true;
+    doBigComnt = true;
 }
 
-void LangSQL ::fill() {
+void LangSQL::initReservedWords() {
 
     string K[] = {
         "ADD",         "ALL",        "ALTER",      "AND",      "ANY",

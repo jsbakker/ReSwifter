@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_SCALA
 #define LANG_DEF_SCALA
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangScala : public Engine {
+class LangScala : public LanguageRules {
 
   public:
     LangScala();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_SCALA

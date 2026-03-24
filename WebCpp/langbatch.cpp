@@ -6,20 +6,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangBatch::LangBatch() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    doCaseKeys = No;
+    doCaseKeys = false;
 
-    doHashes = Yes;
-    doRemComnt = Yes;
-    doBatComnt = Yes;
+    doHashes = true;
+    doRemComnt = true;
+    doBatComnt = true;
 }
 
-void LangBatch::fill() {
+void LangBatch::initReservedWords() {
     // Internal commands and batch-specific keywords
     string K[] = {
         "assoc",    "break", "call",     "cd",      "chdir",  "cls",

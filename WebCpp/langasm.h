@@ -7,13 +7,13 @@
 #ifndef LANG_ASM_DEF_H
 #define LANG_ASM_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangAssembler : public Engine {
+class LangAssembler : public LanguageRules {
 
   public:
     LangAssembler();
-    void fill() override;
+    void initReservedWords() override;
 
     void setInline() override {
         doCinComnt = true;

@@ -8,24 +8,26 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangPython::LangPython() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doUnxComnt = Yes;
-    doTplString = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doUnxComnt = true;
+    doTplString = true;
     // Python f-strings: f"text {expr}" — applied to all "..." strings
     doInterpolate = true;
     interpolStart = "{";
     interpolEnd = '}';
 }
 
-void LangPython::fill() {
+void LangPython::initReservedWords() {
 
     // Python 3.14 keywords
     string K[] = {

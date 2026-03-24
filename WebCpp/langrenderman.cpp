@@ -8,19 +8,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
-LangRenderMan ::LangRenderMan() {
+using std::string;
 
-    fill();
-    init_switches();
+LangRenderMan::LangRenderMan() {
 
-    doPreProc = Yes;  // #include, #define
-    doCinComnt = Yes; // // line comments
-    doBigComnt = Yes; // /* */ block comments
-    doSymbols = Yes;
+    initReservedWords();
+
+    doPreProc = true;  // #include, #define
+    doCinComnt = true; // // line comments
+    doBigComnt = true; // /* */ block comments
+    doSymbols = true;
 }
 
-void LangRenderMan ::fill() {
+void LangRenderMan::initReservedWords() {
 
     // RSL and OSL keywords (combined for .sl file compatibility)
     string K[] = {

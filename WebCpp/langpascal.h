@@ -6,13 +6,13 @@
 #ifndef LANG_DEF_Pascal
 #define LANG_DEF_Pascal
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangPascal : public Engine {
+class LangPascal : public LanguageRules {
 
   public:
     LangPascal();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_Pascal

@@ -5,19 +5,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangR::LangR() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = false;
-    doSymbols = Yes;
-    doUnxComnt = Yes; // # comments
+    doSymbols = true;
+    doUnxComnt = true; // # comments
 }
 
-void LangR::fill() {
+void LangR::initReservedWords() {
 
     // R language keywords and built-in constants
     string K[] = {

@@ -8,19 +8,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangPBuilder::LangPBuilder() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doCaseKeys = No;
-    doCinComnt = Yes;
-    doBigComnt = Yes;
+    doCaseKeys = false;
+    doCinComnt = true;
+    doBigComnt = true;
 }
 
-void LangPBuilder::fill() {
+void LangPBuilder::initReservedWords() {
 
     string K[] = {"_debug",
                   "alias",

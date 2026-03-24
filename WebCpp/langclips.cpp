@@ -8,17 +8,19 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangClips ::LangClips() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    doAsmComnt = Yes; // ; line comments
-    doSymbols = Yes;
+    doAsmComnt = true; // ; line comments
+    doSymbols = true;
 }
 
-void LangClips ::fill() {
+void LangClips::initReservedWords() {
 
     // CLIPS 6.4 constructs, control flow, functions, and commands
     string K[] = {

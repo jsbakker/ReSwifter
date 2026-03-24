@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_RENDERMAN_SHADING_LANGUAGE
 #define LANG_DEF_RENDERMAN_SHADING_LANGUAGE
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangRenderMan : public Engine {
+class LangRenderMan : public LanguageRules {
 
   public:
     LangRenderMan();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_RENDERMAN_SHADING_LANGUAGE

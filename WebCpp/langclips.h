@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_NASA_CLIPS
 #define LANG_DEF_NASA_CLIPS
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangClips : public Engine {
+class LangClips : public LanguageRules {
 
   public:
     LangClips();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_NASA_CLIPS

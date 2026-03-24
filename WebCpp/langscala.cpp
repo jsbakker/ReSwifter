@@ -6,26 +6,28 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangScala::LangScala() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doBigComnt = Yes;  // /* */
-    doCinComnt = Yes;  // //
-    doTplString = Yes; // """..."""
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doBigComnt = true;  // /* */
+    doCinComnt = true;  // //
+    doTplString = true; // """..."""
     // Scala string interpolation: s"text ${expr}" or s"text $name"
     doInterpolate = true;
     interpolStart = "${";
     interpolEnd = '}';
 }
 
-void LangScala::fill() {
+void LangScala::initReservedWords() {
 
     // Scala 2 + Scala 3 keywords
     string K[] = {

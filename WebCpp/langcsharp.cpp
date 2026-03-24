@@ -8,27 +8,29 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangCSharp ::LangCSharp() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doLabels = Yes;
-    doPreProc = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
-    doTplString = Yes;
-    doUnderscoreNumbers = Yes;
+    doSymbols = true;
+    doLabels = true;
+    doPreProc = true;
+    doBigComnt = true;
+    doCinComnt = true;
+    doTplString = true;
+    doUnderscoreNumbers = true;
     // C# interpolated strings: $"text {expr}" — applied to all "..." strings
     doInterpolate = true;
     interpolStart = "{";
     interpolEnd = '}';
 }
 
-void LangCSharp ::fill() {
+void LangCSharp ::initReservedWords() {
 
     // C# keywords (C# 13 / .NET 9)
     string K[] = {

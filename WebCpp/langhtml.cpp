@@ -8,20 +8,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangHtml::LangHtml() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doNumbers = Yes;
-    doCaseKeys = No;
-    doHtmlTags = Yes;
-    doHtmComnt = Yes;
+    doNumbers = true;
+    doCaseKeys = false;
+    doHtmlTags = true;
+    doHtmComnt = true;
 }
 
-void LangHtml::fill() {
+void LangHtml::initReservedWords() {
 
     // HTML element tags (Living Standard)
     string K[] = {

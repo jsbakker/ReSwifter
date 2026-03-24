@@ -18,6 +18,11 @@ using namespace std;
 // forward declaration (defined near colourKeys)
 static bool isInsideFontTag(const string &buffer, int index);
 
+Engine::Engine(unique_ptr<LanguageRules> rules) {
+    this->rules = std::move(rules);
+    init_switches();
+}
+
 Engine::~Engine() {
     if (!childLang)
         IO->close();
@@ -47,44 +52,6 @@ void Engine::init_switches() {
     inMultiStr = false;
     heredocEnd = "";
     endMultiLine = false;
-
-    // common language
-    doStringsDblQuote = true;
-    doStringsSinQuote = false;
-    doStringsBackTick = false;
-    doNumbers = true;
-    doUnderscoreNumbers = false;
-    doKeywords = true;
-    doCaseKeys = true;
-    doSymbols = false;
-    doLabels = false;
-    doPreProc = false;
-    doScalars = false;
-    doArrays = false;
-    doHashes = false;
-    doHtmlTags = false;
-    doHtmComnt = false;
-    doHskComnt = false;
-    doPasComnt = false;
-    doBigComnt = false;
-    doCinComnt = false;
-    doUnxComnt = false;
-    doAsmComnt = false;
-    doRemComnt = false;
-    doAdaComnt = false;
-    doFtnComnt = false;
-    doTclComnt = false;
-    doAspComnt = false;
-    doBatComnt = false;
-    doTplString = false;
-    doRawString = false;
-    doHeredoc = false;
-    doPercentQ = false;
-    doPhpHeredoc = false;
-    doInterpolate = false;
-    interpolStart = "";
-    interpolEnd = '\0';
-    interpolCssClass = "dblquot";
 
     lncount = 1;
     tabwidth = 8;
@@ -231,7 +198,7 @@ bool Engine::abortParse() {
     if (inDblQuotes) {
         return true;
     }
-    if (!doAspComnt) {
+    if (!rules->doAspComnt) {
         if (inSinQuotes) {
             return true;
         }
@@ -267,7 +234,7 @@ bool Engine::abortColour(int index) {
     if (endMultiLine || inMultiStr)
         return true;
 
-    if (doHtmComnt && (isInsideIt(index, "&lt;", "&gt;") &&
+    if (rules->doHtmComnt && (isInsideIt(index, "&lt;", "&gt;") &&
                        isInsideIt(index, "&gt;", "&lt;"))) {
         return true;
     }
@@ -283,7 +250,7 @@ bool Engine::abortColour(int index) {
     if (isInsideIt(index, "\"", "\"")) {
         return true;
     }
-    if (!doAspComnt) {
+    if (!rules->doAspComnt) {
         if (isInsideIt(index, "'", "'")) {
             return true;
         }
@@ -444,11 +411,11 @@ void Engine::parseSymbol() {
             // skip symbol spans that form comment markers
             if (buffer[i] == '-') {
                 string span = buffer.substr(i, end - i + 1);
-                if (doAdaComnt && span.find("--") != string::npos) {
+                if (rules->doAdaComnt && span.find("--") != string::npos) {
                     i = end;
                     continue;
                 }
-                if (doHskComnt) {
+                if (rules->doHskComnt) {
                     if (i > 0 && buffer[i - 1] == '{') {
                         i = end;
                         continue;
@@ -547,7 +514,7 @@ void Engine::parseNum() {
 
             while (isdigit(buffer[end + 1]) ||
                    (buffer[end + 1] == '.' && isdigit(buffer[end + 2])) ||
-                   (doUnderscoreNumbers && buffer[end + 1] == '_' &&
+                   (rules->doUnderscoreNumbers && buffer[end + 1] == '_' &&
                     isdigit(buffer[end + 2]))) {
                 end++;
             }
@@ -606,7 +573,7 @@ void Engine::parseString(char quotetype, bool &inside) {
     if (inMultiStr) {
         return;
     }
-    if (doAspComnt && quotetype == SIN_QUOTES) {
+    if (rules->doAspComnt && quotetype == SIN_QUOTES) {
         return;
     }
 
@@ -624,7 +591,7 @@ void Engine::parseString(char quotetype, bool &inside) {
 
         // Asp uses single ticks for comments and this
         // screws up if a double-quoted line is commented out
-        if (!doAspComnt) {
+        if (!rules->doAspComnt) {
             escap1 = "'";
         } else {
             escap1 = "`";
@@ -697,14 +664,14 @@ void Engine::parseString(char quotetype, bool &inside) {
             }
         }
 
-        while (doAdaComnt && isInsideIt(index, "--", "\n")) {
+        while (rules->doAdaComnt && isInsideIt(index, "--", "\n")) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 return;
             }
         }
 
-        while (doHtmComnt && isInsideIt(index, "&gt;", "&lt;")) {
+        while (rules->doHtmComnt && isInsideIt(index, "&gt;", "&lt;")) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 return;
@@ -807,27 +774,27 @@ bool Engine::isInInterpolation(int index) {
 // parseString, before other highlight passes.
 void Engine::markInterpolations() {
 
-    if (!doInterpolate || interpolStart.empty() || interpolEnd == '\0')
+    if (!rules->doInterpolate || rules->interpolStart.empty() || rules->interpolEnd == '\0')
         return;
 
     const string openMark = "</font>\x01"; // close string tag, open interp
-    const string closeMark = "\x02<font CLASS=" + interpolCssClass + ">";
+    const string closeMark = "\x02<font CLASS=" + rules->interpolCssClass + ">";
     int pos = 0;
 
     // When inside a multi-line string continuation the whole buffer is
     // implicitly inside the string, even though this line has no opening
     // font tag of its own.
-    bool wholeLineIsString = inMultiStr && interpolCssClass == "dblquot";
+    bool wholeLineIsString = inMultiStr && rules->interpolCssClass == "dblquot";
 
     while (pos < (int)buffer.size()) {
-        int ipos = static_cast<int>(buffer.find(interpolStart, pos));
+        int ipos = static_cast<int>(buffer.find(rules->interpolStart, pos));
         if (ipos == (int)string::npos)
             break;
 
         // Must be inside the appropriate string span, or on a multi-line
         // string continuation line where the whole buffer is implicitly
         // string-coloured.
-        if (!isInsideSpanOfClass(ipos, interpolCssClass) &&
+        if (!isInsideSpanOfClass(ipos, rules->interpolCssClass) &&
             !wholeLineIsString) {
             pos = ipos + 1;
             continue;
@@ -852,7 +819,7 @@ void Engine::markInterpolations() {
         int shift1 = (int)openMark.size(); // 8
 
         // Depth-track from just after interpolStart to find the matching end
-        int scanPos = ipos + shift1 + (int)interpolStart.size();
+        int scanPos = ipos + shift1 + (int)rules->interpolStart.size();
         int depth = 1;
 
         while (scanPos < (int)buffer.size() && depth > 0) {
@@ -866,11 +833,11 @@ void Engine::markInterpolations() {
                     continue;
                 }
             }
-            if (interpolEnd == '}' && c == '{')
+            if (rules->interpolEnd == '}' && c == '{')
                 depth++;
-            else if (interpolEnd == ')' && c == '(')
+            else if (rules->interpolEnd == ')' && c == '(')
                 depth++;
-            if (c == interpolEnd) {
+            if (c == rules->interpolEnd) {
                 depth--;
                 if (depth == 0)
                     break;
@@ -1057,7 +1024,7 @@ void Engine::parseHeredoc(string marker) {
         // skip if the marker appears after a single-line comment start
         // (single-line comments haven't been parsed yet at this point in
         // doParsing)
-        if (doUnxComnt) {
+        if (rules->doUnxComnt) {
             int hashPos = static_cast<int>(buffer.find("#", 0));
             if (hashPos != -1 && hashPos < tagStart) {
                 if (!isInsideIt(hashPos, "\"", "\"") &&
@@ -1066,7 +1033,7 @@ void Engine::parseHeredoc(string marker) {
                 }
             }
         }
-        if (doCinComnt) {
+        if (rules->doCinComnt) {
             int slashPos = static_cast<int>(buffer.find("//", 0));
             if (slashPos != -1 && slashPos < tagStart) {
                 if (!isInsideIt(slashPos, "\"", "\"") &&
@@ -1146,14 +1113,14 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
     if (index == -1) {
         return;
     }
-    if (doCinComnt && start == "/*" && buffer.find("//") < index) {
+    if (rules->doCinComnt && start == "/*" && buffer.find("//") < index) {
         return;
     }
-    if (doUnxComnt && start == "/*" && buffer.find("#") < index) {
+    if (rules->doUnxComnt && start == "/*" && buffer.find("#") < index) {
         return;
     }
 
-    if (start == "&lt;" && end == "&gt;" && doHtmlTags) {
+    if (start == "&lt;" && end == "&gt;" && rules->doHtmlTags) {
 
         if (buffer.find("&lt;!-") == index || inHtmTags)
             if (!inside)
@@ -1226,16 +1193,16 @@ void Engine::parseKeys() {
     int i, index, offset = 20;
     string cmpkey;
 
-    for (i = 0; i < (int)keys.size(); i++) {
+    for (i = 0; i < (int)rules->keys.size(); i++) {
 
-        cmpkey = keys[i];
+        cmpkey = rules->keys[i];
         index = noCaseFind(cmpkey, 0);
 
         while (index < static_cast<int>(buffer.size()) && index != -1) {
 
             bool inserted = false;
-            if (isKey(index - 1, index + static_cast<int>(keys[i].size()))) {
-                inserted = colourKeys(index, keys[i], "keyword");
+            if (isKey(index - 1, index + static_cast<int>(rules->keys[i].size()))) {
+                inserted = colourKeys(index, rules->keys[i], "keyword");
             }
             int skip = inserted ? offset : 0;
             index = noCaseFind(cmpkey,
@@ -1243,16 +1210,16 @@ void Engine::parseKeys() {
         }
     }
 
-    for (i = 0; i < (int)types.size(); i++) {
+    for (i = 0; i < (int)rules->types.size(); i++) {
 
-        cmpkey = types[i];
+        cmpkey = rules->types[i];
         index = noCaseFind(cmpkey, 0);
 
         while (index < static_cast<int>(buffer.size()) && index != -1) {
 
             bool inserted = false;
-            if (isKey(index - 1, index + static_cast<int>(types[i].size()))) {
-                inserted = colourKeys(index, types[i], "keytype");
+            if (isKey(index - 1, index + static_cast<int>(rules->types[i].size()))) {
+                inserted = colourKeys(index, rules->types[i], "keytype");
             }
             int skip = inserted ? offset : 0;
             index = noCaseFind(cmpkey,
@@ -1263,7 +1230,7 @@ void Engine::parseKeys() {
 // checks for case sensitive keys ---------------------------------------------
 int Engine::noCaseFind(string search, int index) {
 
-    if (doCaseKeys) {
+    if (rules->doCaseKeys) {
         return static_cast<int>(buffer.find(search, index));
     }
     if (search == "class") {
@@ -1544,7 +1511,7 @@ void Engine::colourComment(int index) {
     if (abortColour(index)) {
         return;
     }
-    if (doCinComnt) {
+    if (rules->doCinComnt) {
         if (index >= 5 && buffer.rfind("http:", index) == index - 5) {
             return;
         }
@@ -1592,31 +1559,31 @@ void Engine::doParsing() {
     PRINT_DEBUG(0);
 #endif
 
-    if (doLabels)
+    if (rules->doLabels)
         PARSE_LABELS;
 
-    if (doTplString)
+    if (rules->doTplString)
         PARSE_TPL_DBL_STRING;
-    if (doRawString)
+    if (rules->doRawString)
         PARSE_RAW_CPP_STRING;
-    if (doHeredoc)
+    if (rules->doHeredoc)
         PARSE_HEREDOC_STRING;
-    if (doPhpHeredoc)
+    if (rules->doPhpHeredoc)
         PARSE_PHP_HEREDOC;
-    if (doPercentQ) {
+    if (rules->doPercentQ) {
         PARSE_PERCENT_QU_STR;
         PARSE_PERCENT_QL_STR;
     }
 
-    if (doStringsDblQuote) {
+    if (rules->doStringsDblQuote) {
         PARSE_DBL_QUO_STRING;
     }
 
-    if (doStringsSinQuote) {
+    if (rules->doStringsSinQuote) {
         PARSE_SIN_QUO_STRING;
     }
 
-    if (doStringsBackTick) {
+    if (rules->doStringsBackTick) {
         PARSE_BCK_QUO_STRING;
     }
 
@@ -1624,77 +1591,77 @@ void Engine::doParsing() {
     // Symbols are also parsed here so they can see the interpolation
     // boundaries.
     markInterpolations();
-    if (doSymbols)
+    if (rules->doSymbols)
         parseSymbol();
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(1);
 #endif
 
-    if (doPreProc)
+    if (rules->doPreProc)
         PARSE_PREPROCESSOR;
 
-    if (doPasComnt)
+    if (rules->doPasComnt)
         PARSE_PAS_MOD2_COMNT;
-    if (doHtmComnt)
+    if (rules->doHtmComnt)
         PARSE_A_MARKUP_COMNT;
-    if (doBigComnt)
+    if (rules->doBigComnt)
         PARSE_CLASSICC_COMNT;
-    if (doHskComnt)
+    if (rules->doHskComnt)
         PARSE_HASKL_98_COMNT;
-    if (doHtmlTags)
+    if (rules->doHtmlTags)
         PARSE_HTML_TAGS;
 
-    if (doKeywords)
+    if (rules->doKeywords)
         PARSE_KEYWORDS;
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(2);
 #endif
 
-    if (doScalars)
+    if (rules->doScalars)
         PARSE_SCALAR_VARIABL;
-    if (doArrays)
+    if (rules->doArrays)
         PARSE_ARRAYS_VARIABL;
-    if (doHashes)
+    if (rules->doHashes)
         PARSE_HASHED_VARIABL;
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(3);
 #endif
 
-    if (doNumbers)
+    if (rules->doNumbers)
         PARSE_NUMBERS;
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(4);
 #endif
 
-    if (doAdaComnt) {
+    if (rules->doAdaComnt) {
         PARSE_A_ADA_95_COMNT;
     }
-    if (doAspComnt) {
+    if (rules->doAspComnt) {
         PARSE_A_MS_ASP_COMNT;
     }
-    if (doCinComnt) {
+    if (rules->doCinComnt) {
         PARSE_C_INLINE_COMNT;
     }
-    if (doUnxComnt) {
+    if (rules->doUnxComnt) {
         PARSE_UNIXHASH_COMNT;
     }
-    if (doAsmComnt) {
+    if (rules->doAsmComnt) {
         PARSE_ASSEMBLY_COMNT;
     }
-    if (doBatComnt) {
+    if (rules->doBatComnt) {
         PARSE_DBLCOLON_COMNT;
     }
-    if (doRemComnt) {
+    if (rules->doRemComnt) {
         PARSE_REMINDER_COMNT;
     }
-    if (doFtnComnt) {
+    if (rules->doFtnComnt) {
         PARSE_ZFORTRAN_COMNT;
     }
-    if (doTclComnt) {
+    if (rules->doTclComnt) {
         PARSE_ZEROHASH_COMNT;
     }
 
@@ -1984,51 +1951,53 @@ void Engine::colourChildLang(string beg, string end) {
 
         // cerr << "\nNow in if of colourChildLang()\n";
 
-        std::unique_ptr<Engine> child = nullptr;
+        std::unique_ptr<Engine> childEngine = nullptr;
+        std::unique_ptr<LanguageRules> childRules = nullptr;
 
         switch (langext) {
         case lang::CPP_FILE:
-            child = make_unique<LangAssembler>();
-            child->setLangExt(lang::ASM_FILE);
+            childRules = make_unique<LangAssembler>();
+            childRules->setInline();
+            childEngine = make_unique<Engine>(std::move(childRules));
+            childEngine->setLangExt(lang::ASM_FILE);
             break;
         case lang::HTM_FILE:
             if (end == "/style") {
-                child = make_unique<LangCSS>();
-                child->setLangExt(lang::CSS_FILE);
+                childRules = make_unique<LangCSS>();
+                childEngine = make_unique<Engine>(std::move(childRules));
+                childEngine->setLangExt(lang::CSS_FILE);
             } else {
-                child = make_unique<LangJScript>();
-                child->setLangExt(lang::JSC_FILE);
+                childRules = make_unique<LangJScript>();
+                childEngine = make_unique<Engine>(std::move(childRules));
+                childEngine->setLangExt(lang::JSC_FILE);
             }
             break;
         }
-        child->setupIO(IO);
-        child->setChildLang(true);
-        child->setLineCount(lncount + 1);
+        childEngine->setupIO(IO);
+        childEngine->setChildLang(true);
+        childEngine->setLineCount(lncount + 1);
         if (opt_anchor) {
-            child->toggleAnchor();
+            childEngine->toggleAnchor();
         }
         if (opt_number) {
-            child->toggleNumber();
+            childEngine->toggleNumber();
         }
 
-        if (langext == lang::CPP_FILE) {
-            child->setInline();
-        }
         if (langext == lang::HTM_FILE && inComment) {
             *IO << "</font>";
         }
 
         do {
-            child->doParsing();
+            childEngine->doParsing();
             // cerr << endl << Child->getBuffer() << endl;
-        } while (child->getBuffer().find(end) == -1 &&
-                 (child->IO->ifile && cin));
+        } while (childEngine->getBuffer().find(end) == -1 &&
+                 (childEngine->IO->ifile && cin));
 
         if (langext == lang::HTM_FILE && inComment) {
             *IO << "<font CLASS=comment>";
         }
 
-        setLineCount(child->getLineCount() - 1);
+        setLineCount(childEngine->getLineCount() - 1);
     }
 }
 //-----------------------------------------------------------------------------

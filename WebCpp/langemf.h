@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_EMF
 #define LANG_DEF_EMF
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangEmf : public Engine {
+class LangEmf : public LanguageRules {
 
   public:
     LangEmf();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_EMF

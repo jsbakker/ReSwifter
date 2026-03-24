@@ -6,13 +6,13 @@
 #ifndef LANG_JAVA_DEF_H
 #define LANG_JAVA_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangJava : public Engine {
+class LangJava : public LanguageRules {
 
   public:
     LangJava();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_JAVA_DEF_H

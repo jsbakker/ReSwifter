@@ -6,13 +6,13 @@
 #ifndef LANG_PERL_DEF_H
 #define LANG_PERL_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangPerl : public Engine {
+class LangPerl : public LanguageRules {
 
   public:
     LangPerl();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_PERL_DEF_H

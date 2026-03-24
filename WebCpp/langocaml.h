@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_OCAML
 #define LANG_DEF_OCAML
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangOCaml : public Engine {
+class LangOCaml : public LanguageRules {
 
   public:
     LangOCaml();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_OCAML

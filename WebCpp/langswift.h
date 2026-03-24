@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_SWIFT
 #define LANG_DEF_SWIFT
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangSwift : public Engine {
+class LangSwift : public LanguageRules {
 
   public:
     LangSwift();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_SWIFT

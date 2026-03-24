@@ -8,23 +8,24 @@
 #include <algorithm>
 #include <iterator>
 
+using std::string;
+
 LangEmf ::LangEmf() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doNumbers = No;
-    doUnderscoreNumbers = Yes;
-    doLabels = Yes;
-    doScalars = Yes;
-    doArrays = Yes;
-    doHashes = Yes;
-    doAsmComnt = Yes;
+    doNumbers = false;
+    doUnderscoreNumbers = true;
+    doLabels = true;
+    doScalars = true;
+    doArrays = true;
+    doHashes = true;
+    doAsmComnt = true;
 }
 
-void LangEmf ::fill() {
+void LangEmf ::initReservedWords() {
 
     string K[] = {"!abort",        "!bell",   "!continue",     "!done",
                   "!ehelp",        "!elif",   "!else",         "!emacro",

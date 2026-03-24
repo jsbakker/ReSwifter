@@ -8,22 +8,24 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
-LangPascal ::LangPascal() {
+using std::string;
 
-    fill();
-    init_switches();
+LangPascal::LangPascal() {
+
+    initReservedWords();
 
     doStringsDblQuote = false;
     doStringsSinQuote = true;
-    doCaseKeys = No;
-    doHashes = Yes;
-    doPasComnt = Yes;
-    doCinComnt = Yes;
-    doUnderscoreNumbers = Yes;
+    doCaseKeys = false;
+    doHashes = true;
+    doPasComnt = true;
+    doCinComnt = true;
+    doUnderscoreNumbers = true;
 }
 
-void LangPascal ::fill() {
+void LangPascal::initReservedWords() {
 
     // Object Pascal keywords (Free Pascal 3.2 / Delphi 12)
     string K[] = {

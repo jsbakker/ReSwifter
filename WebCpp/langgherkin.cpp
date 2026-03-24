@@ -6,18 +6,20 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangGherkin::LangGherkin() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    doNumbers = No;
-    doScalars = Yes;
-    doUnxComnt = Yes; // # comments
+    doNumbers = false;
+    doScalars = true;
+    doUnxComnt = true; // # comments
 }
 
-void LangGherkin::fill() {
+void LangGherkin::initReservedWords() {
 
     // Gherkin step and structural keywords (Cucumber/SpecFlow/Behave)
     string K[] = {

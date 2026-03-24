@@ -2,29 +2,32 @@
 // Copyright (C) 2026 Jeffrey Bakker
 
 #include "langobjcpp.h"
+#include <string>
+
+using std::string;
 
 LangObjectiveCpp::LangObjectiveCpp() {
 
     // Base class constructors (LangC, LangCPlusPlus, LangObjectiveC) each call
-    // their own fill() and init_switches() during construction, accumulating
+    // their own initReservedWords() and init_switches() during construction, accumulating
     // all keywords and types into the shared vectors. We only need to set the
     // flags.
     doStringsSinQuote = true;
-    doSymbols = Yes;
-    doLabels = Yes;
-    doPreProc = Yes;
-    doBigComnt = Yes;
-    doCinComnt = Yes;
-    doRawString = Yes;
+    doSymbols = true;
+    doLabels = true;
+    doPreProc = true;
+    doBigComnt = true;
+    doCinComnt = true;
+    doRawString = true;
 }
 
-void LangObjectiveCpp::fill() {
+void LangObjectiveCpp::initReservedWords() {
 
     // Resolve the multiple-inheritance ambiguity: both LangCPlusPlus and
-    // LangObjectiveC override fill(). This explicit delegation ensures all
+    // LangObjectiveC override initReservedWords(). This explicit delegation ensures all
     // keywords and types from the full C / C++ / Objective-C hierarchy are
-    // present when fill() is called directly on this class.
-    LangC::fill();
-    LangCPlusPlus::fill();
-    LangObjectiveC::fill();
+    // present when initReservedWords() is called directly on this class.
+    LangC::initReservedWords();
+    LangCPlusPlus::initReservedWords();
+    LangObjectiveC::initReservedWords();
 }

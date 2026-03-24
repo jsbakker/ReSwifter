@@ -7,21 +7,23 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangHaskell ::LangHaskell() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doAdaComnt = Yes; // -- line comments
-    doHskComnt = Yes; // {- -} block comments
-    doSymbols = Yes;  // Haskell operators
-    doUnderscoreNumbers = Yes;
+    doAdaComnt = true; // -- line comments
+    doHskComnt = true; // {- -} block comments
+    doSymbols = true;  // Haskell operators
+    doUnderscoreNumbers = true;
 }
 
-void LangHaskell ::fill() {
+void LangHaskell ::initReservedWords() {
 
     // Haskell 2010 reserved words + GHC extension keywords + pragma keywords
     string K[] = {"ANN",

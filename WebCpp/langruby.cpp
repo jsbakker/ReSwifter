@@ -8,28 +8,30 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
-LangRuby ::LangRuby() {
+using std::string;
 
-    fill();
-    init_switches();
+LangRuby::LangRuby() {
+
+    initReservedWords();
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
-    doScalars = Yes;
-    doArrays = Yes;
-    doHashes = Yes;
-    doUnxComnt = Yes;
-    doHeredoc = Yes;
-    doPercentQ = Yes;
+    doSymbols = true;
+    doUnderscoreNumbers = true;
+    doScalars = true;
+    doArrays = true;
+    doHashes = true;
+    doUnxComnt = true;
+    doHeredoc = true;
+    doPercentQ = true;
     doInterpolate = true;
     interpolStart = "#{";
     interpolEnd = '}';
 }
 
-void LangRuby ::fill() {
+void LangRuby::initReservedWords() {
 
     // Ruby 3.3 keywords
     string K[] = {

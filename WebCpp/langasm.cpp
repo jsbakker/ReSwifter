@@ -8,21 +8,23 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangAssembler::LangAssembler() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doCaseKeys = No;
-    doLabels = Yes;
-    doPreProc = Yes;
-    doBigComnt = Yes;
-    doAsmComnt = Yes;
+    doCaseKeys = false;
+    doLabels = true;
+    doPreProc = true;
+    doBigComnt = true;
+    doAsmComnt = true;
 }
 
-void LangAssembler::fill() {
+void LangAssembler::initReservedWords() {
 
     // Instructions and assembler directives (1482 entries)
     // x86/x86-64, SSE/SSE2/SSE3/SSE4, AVX/AVX2, AVX-512,

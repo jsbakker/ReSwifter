@@ -8,24 +8,26 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangAda ::LangAda() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     // Ada uses ' for both character literals ('x') and attribute access
     // (Integer'Range, T'First), which the engine cannot distinguish.
     // Single-quote string highlighting is therefore disabled.
     doStringsSinQuote = false;
-    doCaseKeys = No; // Ada is case-insensitive
-    doLabels = Yes;
-    doAdaComnt = Yes; // -- line comments
-    doSymbols = Yes;
-    doUnderscoreNumbers = Yes;
+    doCaseKeys = false; // Ada is case-insensitive
+    doLabels = true;
+    doAdaComnt = true; // -- line comments
+    doSymbols = true;
+    doUnderscoreNumbers = true;
 }
 
-void LangAda ::fill() {
+void LangAda ::initReservedWords() {
 
     // Ada 2022 reserved words (Ada 95 + Ada 2005 + Ada 2012 + Ada 2022)
     string K[] = {

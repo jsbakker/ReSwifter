@@ -6,13 +6,13 @@
 #ifndef LANG_SHELL_DEF_H
 #define LANG_SHELL_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangShell : public Engine {
+class LangShell : public LanguageRules {
 
   public:
     LangShell();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_SHELL_DEF_H

@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_VHDL
 #define LANG_DEF_VHDL
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangVHDL : public Engine {
+class LangVHDL : public LanguageRules {
 
   public:
     LangVHDL();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_VHDL

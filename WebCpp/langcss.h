@@ -6,13 +6,13 @@
 #ifndef LANG_CSS_DEF_H
 #define LANG_CSS_DEF_H
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangCSS : public Engine {
+class LangCSS : public LanguageRules {
 
   public:
     LangCSS();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_CSS_DEF_H

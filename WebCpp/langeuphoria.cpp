@@ -7,18 +7,20 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangEuphoria ::LangEuphoria() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
     doStringsSinQuote = true;
-    doUnderscoreNumbers = Yes;
-    doAdaComnt = Yes;
+    doUnderscoreNumbers = true;
+    doAdaComnt = true;
 }
 
-void LangEuphoria ::fill() {
+void LangEuphoria ::initReservedWords() {
 
     string K[] = {"and",       "break",        "by",       "case",   "constant",
                   "continue",  "do",           "else",     "elsif",  "elsifdef",

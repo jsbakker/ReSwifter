@@ -5,20 +5,22 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
+
+using std::string;
 
 LangHLSL::LangHLSL() {
 
-    fill();
-    init_switches();
+    initReservedWords();
 
-    doSymbols = Yes;
-    doBigComnt = Yes; // /* */
-    doCinComnt = Yes; // //
+    doSymbols = true;
+    doBigComnt = true; // /* */
+    doCinComnt = true; // //
     doPreProc =
-        Yes; // #define, #if, #ifdef, #ifndef, #else, #elif, #endif, #include
+        true; // #define, #if, #ifdef, #ifndef, #else, #elif, #endif, #include
 }
 
-void LangHLSL::fill() {
+void LangHLSL::initReservedWords() {
 
     // HLSL keywords (Shader Model 6.x)
     string K[] = {

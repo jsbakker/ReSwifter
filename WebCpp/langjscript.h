@@ -7,13 +7,13 @@
 #ifndef LANG_DEF_JSCRIPT
 #define LANG_DEF_JSCRIPT
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangJScript : public Engine {
+class LangJScript : public LanguageRules {
 
   public:
     LangJScript();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_JSCRIPT

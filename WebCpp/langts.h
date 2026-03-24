@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_TS
 #define LANG_DEF_TS
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangTypeScript : public Engine {
+class LangTypeScript : public LanguageRules {
 
   public:
     LangTypeScript();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_TS

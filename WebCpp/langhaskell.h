@@ -6,13 +6,13 @@
 #ifndef LANG_DEF_Haskell
 #define LANG_DEF_Haskell
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangHaskell : public Engine {
+class LangHaskell : public LanguageRules {
 
   public:
     LangHaskell();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_Haskell

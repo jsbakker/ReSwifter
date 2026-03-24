@@ -4,13 +4,13 @@
 #ifndef LANG_DEF_RUST
 #define LANG_DEF_RUST
 
-#include "engine.h"
+#include "lang_rules.h"
 
-class LangRust : public Engine {
+class LangRust : public LanguageRules {
 
   public:
     LangRust();
-    void fill() override;
+    void initReservedWords() override;
 };
 
 #endif // LANG_DEF_RUST
