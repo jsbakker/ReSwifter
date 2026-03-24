@@ -11,7 +11,6 @@ class LangObjectiveCpp : public LangCPlusPlus, public LangObjectiveC {
 
   public:
     LangObjectiveCpp();
-    virtual ~LangObjectiveCpp() { IO->close(); }
     void fill() override;
 };
 

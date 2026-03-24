@@ -13,8 +13,7 @@ class LangAda : public Engine {
 
   public:
     LangAda();
-    ~LangAda() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_Ada

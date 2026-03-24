@@ -10,8 +10,7 @@ class LangOCaml : public Engine {
 
   public:
     LangOCaml();
-    ~LangOCaml() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_OCAML

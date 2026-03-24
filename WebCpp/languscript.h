@@ -12,8 +12,7 @@ class LangUScript : public LangC {
 
   public:
     LangUScript();
-    virtual ~LangUScript() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // _LANG_UNREALSCRIPT_DEF_H

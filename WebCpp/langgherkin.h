@@ -10,8 +10,7 @@ class LangGherkin : public Engine {
 
   public:
     LangGherkin();
-    ~LangGherkin() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_GHERKIN

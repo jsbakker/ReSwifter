@@ -12,8 +12,7 @@ class LangPerl : public Engine {
 
   public:
     LangPerl();
-    virtual ~LangPerl() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_PERL_DEF_H

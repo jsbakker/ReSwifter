@@ -12,7 +12,6 @@ class LangCPlusPlus : public virtual LangC {
 
   public:
     LangCPlusPlus();
-    virtual ~LangCPlusPlus() { IO->close(); }
     void fill() override;
 };
 

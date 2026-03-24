@@ -12,8 +12,7 @@ class LangJava : public Engine {
 
   public:
     LangJava();
-    virtual ~LangJava() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_JAVA_DEF_H

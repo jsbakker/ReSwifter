@@ -12,8 +12,7 @@ class LangShell : public Engine {
 
   public:
     LangShell();
-    virtual ~LangShell() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_SHELL_DEF_H

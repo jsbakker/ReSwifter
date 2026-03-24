@@ -12,8 +12,7 @@ class LangFortran : public Engine {
 
   public:
     LangFortran();
-    ~LangFortran() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_Fortran

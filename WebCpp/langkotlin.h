@@ -10,8 +10,7 @@ class LangKotlin : public Engine {
 
   public:
     LangKotlin();
-    ~LangKotlin() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_KOTLIN

@@ -11,8 +11,7 @@
 class LangPhp : public Engine {
   public:
     LangPhp();
-    ~LangPhp() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_PHP_DEF_H

@@ -15,6 +15,7 @@
 
 #include "cffile.h"
 #include "theme.h"
+#include <memory>
 #include <string>
 #include <vector>
 using namespace std;
@@ -22,7 +23,7 @@ using namespace std;
 class Engine {
 
   public:
-    virtual ~Engine() { IO->close(); }
+    virtual ~Engine();
 
     void init_switches();
 
@@ -94,7 +95,7 @@ class Engine {
     virtual void fill() = 0;
 
     inline void setLangExt(int e) { langext = e; }
-    inline void setupIO(CFfile *p) { IO = p; }
+    inline void setupIO(std::shared_ptr<CFfile> p) { IO = p; }
     inline void setLineCount(int c) { lncount = c; }
     inline void setChildLang(bool b) { childLang = b; }
 
@@ -162,9 +163,8 @@ class Engine {
 
     // theme file I/O engine
   public:
-    CFfile *IO;
+    std::shared_ptr<CFfile> IO;
     Theme Scs2;
-    //    vector<string> incref;
 
     // internal data
   protected:

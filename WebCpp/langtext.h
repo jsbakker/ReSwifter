@@ -8,8 +8,7 @@
 class LangText : public Engine {
   public:
     LangText();
-    ~LangText() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // _LANG_DEF_TEXT_H

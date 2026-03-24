@@ -12,8 +12,7 @@ class LangHaskell : public Engine {
 
   public:
     LangHaskell();
-    ~LangHaskell() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_Haskell

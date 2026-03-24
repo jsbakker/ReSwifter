@@ -11,8 +11,7 @@ class LangBasic : public Engine {
 
   public:
     LangBasic();
-    ~LangBasic() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_Basic

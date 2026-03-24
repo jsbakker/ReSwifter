@@ -10,8 +10,7 @@ class LangRust : public Engine {
 
   public:
     LangRust();
-    ~LangRust() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_RUST

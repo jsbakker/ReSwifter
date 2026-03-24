@@ -10,8 +10,7 @@ class LangSwift : public Engine {
 
   public:
     LangSwift();
-    ~LangSwift() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_SWIFT

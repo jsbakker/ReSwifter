@@ -12,8 +12,7 @@ class LangPascal : public Engine {
 
   public:
     LangPascal();
-    ~LangPascal() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_Pascal

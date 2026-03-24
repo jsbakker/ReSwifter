@@ -13,8 +13,7 @@ class LangVHDL : public Engine {
 
   public:
     LangVHDL();
-    ~LangVHDL() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_VHDL

@@ -13,10 +13,9 @@ class LangAssembler : public Engine {
 
   public:
     LangAssembler();
-    virtual ~LangAssembler() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 
-    virtual void setInline() {
+    void setInline() override {
         doCinComnt = true;
         doBigComnt = true;
     }

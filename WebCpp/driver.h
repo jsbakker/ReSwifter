@@ -12,6 +12,9 @@
 #include "defsys.h"
 #include "engine.h"
 
+#include <memory>
+#include <string>
+
 class Driver {
   public:
     Driver();
@@ -27,9 +30,17 @@ class Driver {
     void clean();
     void endio();
 
+  private:
+    template <typename T>
+    inline std::string setLanguage(char filetype, std::string val) {
+        lang = std::make_unique<T>();
+        lang->setLangExt(filetype);
+        return val;
+    }
+
   protected:
-    CFfile *ObjIO;
-    Engine *lang;
+    std::shared_ptr<CFfile> ObjIO;
+    std::unique_ptr<Engine> lang;
 
     string iFile;
     string oFile;

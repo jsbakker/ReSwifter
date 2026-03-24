@@ -12,8 +12,7 @@ class LangBatch : public Engine {
 
   public:
     LangBatch();
-    ~LangBatch() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_BATCH

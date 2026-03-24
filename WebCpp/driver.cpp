@@ -3,11 +3,6 @@
    ___________________________________ .. .
  */
 
-#define LANG(x, y)                                                             \
-    lang = new (x);                                                            \
-    lang->setLangExt(filetype);                                                \
-    return (y)
-
 #include "driver.h"
 #include "deflangs.h"
 
@@ -17,8 +12,8 @@ using namespace std;
 
 Driver::Driver() {
 
-    lang = NULL;
-    ObjIO = NULL;
+    lang = nullptr;
+    ObjIO = nullptr;
 }
 Driver::~Driver() {
 
@@ -398,103 +393,103 @@ string Driver::checkExt(string filename) {
 
     switch (filetype) {
     case (ADA_FILE):
-        LANG(LangAda, "Ada file");
+        return setLanguage<LangAda>(filetype, "Ada file");
     case (ASM_FILE):
-        LANG(LangAssembler, "Assembly file");
+        return setLanguage<LangAssembler>(filetype, "Assembly file");
     case (ASP_FILE):
-        LANG(LangAsp, "ASP file");
+        return setLanguage<LangAsp>(filetype, "ASP file");
     case (BAS_FILE):
-        LANG(LangBasic, "Basic file");
+        return setLanguage<LangBasic>(filetype, "Basic file");
     case (DOS_FILE):
-        LANG(LangBatch, "DOS Batch file");
+        return setLanguage<LangBatch>(filetype, "DOS Batch file");
     case (C99_FILE):
-        LANG(LangC, "'C' file");
+        return setLanguage<LangC>(filetype, "'C' file");
     case (CPP_FILE):
-        LANG(LangCPlusPlus, "C++ file");
+        return setLanguage<LangCPlusPlus>(filetype, "C++ file");
     case (C4G_FILE):
-        LANG(LangCg, "NVIDIA Cg file");
+        return setLanguage<LangCg>(filetype, "NVIDIA Cg file");
     case (CLP_FILE):
-        LANG(LangClips, "NASA CLIPS file");
+        return setLanguage<LangClips>(filetype, "NASA CLIPS file");
     case (CSS_FILE):
-        LANG(LangCSS, "CSS file");
+        return setLanguage<LangCSS>(filetype, "CSS file");
     case (CSP_FILE):
-        LANG(LangCSharp, "C-Sharp file");
+        return setLanguage<LangCSharp>(filetype, "C-Sharp file");
     case (OBC_FILE):
-        LANG(LangObjectiveC, "Objective-C file");
+        return setLanguage<LangObjectiveC>(filetype, "Objective-C file");
     case (OCP_FILE):
-        LANG(LangObjectiveCpp, "Objective-C++ file");
+        return setLanguage<LangObjectiveCpp>(filetype, "Objective-C++ file");
     case (EMF_FILE):
-        LANG(LangEmf, "MicroEmacs macro file");
+        return setLanguage<LangEmf>(filetype, "MicroEmacs macro file");
     case (EU4_FILE):
-        LANG(LangEuphoria, "Euphoria file");
+        return setLanguage<LangEuphoria>(filetype, "Euphoria file");
     case (FTN_FILE):
-        LANG(LangFortran, "Fortran file");
+        return setLanguage<LangFortran>(filetype, "Fortran file");
     case (HSK_FILE):
-        LANG(LangHaskell, "Haskell file");
+        return setLanguage<LangHaskell>(filetype, "Haskell file");
     case (HTM_FILE):
-        LANG(LangHtml, "Markup file");
+        return setLanguage<LangHtml>(filetype, "Markup file");
     case (JAV_FILE):
-        LANG(LangJava, "Java file");
+        return setLanguage<LangJava>(filetype, "Java file");
     case (JSC_FILE):
-        LANG(LangJScript, "Java script");
+        return setLanguage<LangJScript>(filetype, "JavaScript file");
     case (MOD_FILE):
-        LANG(LangModula2, "Modula file");
+        return setLanguage<LangModula2>(filetype, "Modula file");
     case (PAS_FILE):
-        LANG(LangPascal, "Pascal file");
+        return setLanguage<LangPascal>(filetype, "Pascal file");
     case (PRL_FILE):
-        LANG(LangPerl, "Perl script");
+        return setLanguage<LangPerl>(filetype, "Perl script");
     case (PHP_FILE):
-        LANG(LangPhp, "PHP script");
+        return setLanguage<LangPhp>(filetype, "PHP script");
     case (PB6_FILE):
-        LANG(LangPBuilder, "Power Builder file");
+        return setLanguage<LangPBuilder>(filetype, "Power Builder file");
     case (PYT_FILE):
-        LANG(LangPython, "Python script");
+        return setLanguage<LangPython>(filetype, "Python script");
     case (RUB_FILE):
-        LANG(LangRuby, "Ruby script");
+        return setLanguage<LangRuby>(filetype, "Ruby script");
     case (RND_FILE):
-        LANG(LangRenderMan, "RenderMan file");
+        return setLanguage<LangRenderMan>(filetype, "RenderMan file");
     case (SQL_FILE):
-        LANG(LangSQL, "SQL script");
+        return setLanguage<LangSQL>(filetype, "SQL script");
     case (SWF_FILE):
-        LANG(LangSwift, "Swift file");
+        return setLanguage<LangSwift>(filetype, "Swift file");
     case (UNX_FILE):
-        LANG(LangShell, "UNIX shell script");
+        return setLanguage<LangShell>(filetype, "UNIX shell script");
     case (TCL_FILE):
-        LANG(LangTcl, "Tcl script");
+        return setLanguage<LangTcl>(filetype, "Tcl script");
     case (UNR_FILE):
-        LANG(LangUScript, "UnrealScript");
+        return setLanguage<LangUScript>(filetype, "UnrealScript file");
     case (VHD_FILE):
-        LANG(LangVHDL, "VHDL file");
+        return setLanguage<LangVHDL>(filetype, "VHDL file");
     case (XML_FILE):
-        LANG(LangXML, "XML file");
+        return setLanguage<LangXML>(filetype, "XML file");
     case (RST_FILE):
-        LANG(LangRust, "Rust file");
+        return setLanguage<LangRust>(filetype, "Rust file");
     case (GOL_FILE):
-        LANG(LangGo, "Go file");
+        return setLanguage<LangGo>(filetype, "Go file");
     case (TSC_FILE):
-        LANG(LangTypeScript, "TypeScript file");
+        return setLanguage<LangTypeScript>(filetype, "TypeScript file");
     case (KOT_FILE):
-        LANG(LangKotlin, "Kotlin file");
+        return setLanguage<LangKotlin>(filetype, "Kotlin file");
     case (VLA_FILE):
-        LANG(LangVala, "Vala file");
+        return setLanguage<LangVala>(filetype, "Vala file");
     case (ZIG_FILE):
-        LANG(LangZig, "Zig file");
+        return setLanguage<LangZig>(filetype, "Zig file");
     case (GLS_FILE):
-        LANG(LangGLSL, "GLSL file");
+        return setLanguage<LangGLSL>(filetype, "GLSL file");
     case (HLS_FILE):
-        LANG(LangHLSL, "HLSL file");
+        return setLanguage<LangHLSL>(filetype, "HLSL file");
     case (R_FILE):
-        LANG(LangR, "R file");
+        return setLanguage<LangR>(filetype, "R file");
     case (GHK_FILE):
-        LANG(LangGherkin, "Gherkin feature file");
+        return setLanguage<LangGherkin>(filetype, "Gherkin feature file");
     case (FSH_FILE):
-        LANG(LangFSharp, "F# file");
+        return setLanguage<LangFSharp>(filetype, "F# file");
     case (SCA_FILE):
-        LANG(LangScala, "Scala file");
+        return setLanguage<LangScala>(filetype, "Scala file");
     case (OML_FILE):
-        LANG(LangOCaml, "OCaml file");
+        return setLanguage<LangOCaml>(filetype, "OCaml file");
     default:
-        LANG(LangText, "Text file");
+        return setLanguage<LangText>(filetype, "Text file");
     }
 }
 //-----------------------------------------------------------------------------
@@ -509,7 +504,7 @@ bool Driver::prep_files(string ifile, string ofile, char over) {
     oFile = ofile;
 
     endio();
-    ObjIO = new CFfile;
+    ObjIO = make_shared<CFfile>();
     //	ObjIO->init_switches();
 
     if (ifile == "-" || ifile == "--pipe") {
@@ -618,16 +613,14 @@ void Driver::makeIndex(string prefix) {
 //-----------------------------------------------------------------------------
 void Driver::clean() {
 
-    if (lang != NULL) {
-        delete lang;
-        lang = NULL;
+    if (lang != nullptr) {
+        lang = nullptr;
     }
 }
 void Driver::endio() {
 
-    if (ObjIO != NULL) {
-        delete ObjIO;
-        ObjIO = NULL;
+    if (ObjIO != nullptr) {
+        ObjIO = nullptr;
     }
 }
 //-----------------------------------------------------------------------------

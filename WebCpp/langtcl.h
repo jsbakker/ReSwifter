@@ -12,8 +12,7 @@ class LangTcl : public Engine {
 
   public:
     LangTcl();
-    ~LangTcl() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_Tcl

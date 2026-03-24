@@ -12,9 +12,7 @@ class LangCSS : public Engine {
 
   public:
     LangCSS();
-    virtual ~LangCSS() { IO->close(); }
-
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_CSS_DEF_H

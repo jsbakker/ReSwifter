@@ -12,8 +12,7 @@ class LangCSharp : public Engine {
 
   public:
     LangCSharp();
-    ~LangCSharp() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_CSharp

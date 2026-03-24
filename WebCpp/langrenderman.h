@@ -13,8 +13,7 @@ class LangRenderMan : public Engine {
 
   public:
     LangRenderMan();
-    ~LangRenderMan() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_RENDERMAN_SHADING_LANGUAGE

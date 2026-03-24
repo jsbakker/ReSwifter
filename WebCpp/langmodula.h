@@ -12,8 +12,7 @@ class LangModula2 : public Engine {
 
   public:
     LangModula2();
-    ~LangModula2() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_Modula2

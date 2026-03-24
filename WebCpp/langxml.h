@@ -12,9 +12,7 @@ class LangXML : public Engine {
 
   public:
     LangXML();
-    virtual ~LangXML() { IO->close(); }
-
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_XML_DEF_H

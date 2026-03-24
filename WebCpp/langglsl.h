@@ -10,8 +10,7 @@ class LangGLSL : public Engine {
 
   public:
     LangGLSL();
-    ~LangGLSL() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_GLSL

@@ -10,8 +10,7 @@ class LangGo : public Engine {
 
   public:
     LangGo();
-    ~LangGo() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_GO

@@ -13,8 +13,7 @@ class LangPBuilder : public Engine {
 
   public:
     LangPBuilder();
-    ~LangPBuilder() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_POWER_BUILDER

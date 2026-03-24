@@ -13,8 +13,7 @@ class LangRuby : public Engine {
 
   public:
     LangRuby();
-    ~LangRuby() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_RUBY

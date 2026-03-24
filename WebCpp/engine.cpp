@@ -3,12 +3,6 @@
    ___________________________________ .. .
  */
 
-//--build=i386-linux --host=i386-linux --target=i386-linux
-
-#define CHILD(x, y)                                                            \
-    Child = new (x);                                                           \
-    Child->setLangExt(y)
-
 // uncomment to debug
 // #include "defdebug.h"
 
@@ -23,6 +17,10 @@ using namespace std;
 
 // forward declaration (defined near colourKeys)
 static bool isInsideFontTag(const string &buffer, int index);
+
+Engine::~Engine() {
+    if (!childLang) IO->close();
+}
 
 // initialize data members ----------------------------------------------------
 void Engine::init_switches() {
@@ -1970,54 +1968,57 @@ void Engine::parseChildLang() {
 // process an inline child language -------------------------------------------
 void Engine::colourChildLang(string beg, string end) {
 
-    //	cerr << "\nNow in colourChildLang()\n";
+    // cerr << "\nNow in colourChildLang()\n";
 
     if (buffer.find(beg) != -1) {
 
-        //		cerr << "\nNow in if of colourChildLang()\n";
+//        cerr << "\nNow in if of colourChildLang()\n";
 
-        Engine *Child;
+        std::unique_ptr<Engine> child = nullptr;
 
         switch (langext) {
         case CPP_FILE:
-            CHILD(LangAssembler, ASM_FILE);
+                child = make_unique<LangAssembler>();
+                child->setLangExt(ASM_FILE);
             break;
         case HTM_FILE:
             if (end == "/style") {
-                CHILD(LangCSS, CSS_FILE);
+                child = make_unique<LangCSS>();
+                child->setLangExt(CSS_FILE);
             } else {
-                CHILD(LangJScript, JSC_FILE);
+                child = make_unique<LangJScript>();
+                child->setLangExt(JSC_FILE);
             }
             break;
         }
-        Child->setupIO(IO);
-        Child->setChildLang(true);
-        Child->setLineCount(lncount + 1);
+        child->setupIO(IO);
+        child->setChildLang(true);
+        child->setLineCount(lncount + 1);
         if (opt_anchor) {
-            Child->toggleAnchor();
+            child->toggleAnchor();
         }
         if (opt_number) {
-            Child->toggleNumber();
+            child->toggleNumber();
         }
 
         if (langext == CPP_FILE) {
-            Child->setInline();
+            child->setInline();
         }
         if (langext == HTM_FILE && inComment) {
             *IO << "</font>";
         }
 
         do {
-            Child->doParsing();
-            //			cerr << endl << Child->getBuffer() << endl;
-        } while (Child->getBuffer().find(end) == -1 &&
-                 (Child->IO->ifile && cin));
+            child->doParsing();
+//            cerr << endl << Child->getBuffer() << endl;
+        } while (child->getBuffer().find(end) == -1 &&
+                 (child->IO->ifile && cin));
 
         if (langext == HTM_FILE && inComment) {
             *IO << "<font CLASS=comment>";
         }
 
-        setLineCount(Child->getLineCount() - 1);
+        setLineCount(child->getLineCount() - 1);
     }
 }
 //-----------------------------------------------------------------------------

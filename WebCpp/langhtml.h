@@ -12,9 +12,7 @@ class LangHtml : public Engine {
 
   public:
     LangHtml();
-    virtual ~LangHtml() { IO->close(); }
-
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_HTML_DEF_H

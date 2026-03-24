@@ -12,7 +12,6 @@ class LangC : public virtual Engine {
 
   public:
     LangC();
-    virtual ~LangC() { IO->close(); }
     void fill() override;
 };
 

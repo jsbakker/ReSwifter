@@ -10,8 +10,7 @@ class LangTypeScript : public Engine {
 
   public:
     LangTypeScript();
-    ~LangTypeScript() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_TS

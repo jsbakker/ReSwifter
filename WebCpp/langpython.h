@@ -12,9 +12,7 @@ class LangPython : public Engine {
 
   public:
     LangPython();
-    ~LangPython() { IO->close(); }
-
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_PYTHON_DEF_H

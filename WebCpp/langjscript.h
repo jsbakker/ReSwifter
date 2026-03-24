@@ -13,8 +13,7 @@ class LangJScript : public Engine {
 
   public:
     LangJScript();
-    ~LangJScript() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_JSCRIPT

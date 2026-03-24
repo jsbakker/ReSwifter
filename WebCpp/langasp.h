@@ -9,8 +9,7 @@
 class LangAsp : public LangHtml {
   public:
     LangAsp();
-    ~LangAsp() { IO->close(); }
-    virtual void fill();
+    void fill() override;
 };
 
 #endif // LANG_DEF_ASP
