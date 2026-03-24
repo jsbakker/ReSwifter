@@ -13,6 +13,7 @@ LangSwift::LangSwift() {
 
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doBigComnt = Yes;
     doCinComnt = Yes;
     doTplString = Yes;

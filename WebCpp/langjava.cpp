@@ -16,6 +16,7 @@ LangJava::LangJava() {
 
     doStringsSinQuote = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doLabels = Yes;
     doBigComnt = Yes;
     doCinComnt = Yes;

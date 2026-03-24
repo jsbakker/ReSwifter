@@ -14,6 +14,7 @@ LangFSharp::LangFSharp() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doCinComnt = Yes;  // // line comments
     doPasComnt = Yes;  // (* *) block comments
     doTplString = Yes; // """...""" triple-quoted strings

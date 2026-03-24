@@ -14,6 +14,7 @@ LangTypeScript::LangTypeScript() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doBigComnt = Yes; // /* */
     doCinComnt = Yes; // //
     // TypeScript template literal interpolation: `text ${expr}`

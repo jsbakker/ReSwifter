@@ -21,6 +21,7 @@ LangVHDL ::LangVHDL() {
     doLabels = Yes;
     doAdaComnt = Yes; // -- line comments
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
 }
 
 void LangVHDL ::fill() {

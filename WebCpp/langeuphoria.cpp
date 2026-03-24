@@ -14,6 +14,7 @@ LangEuphoria ::LangEuphoria() {
     init_switches();
 
     doStringsSinQuote = true;
+    doUnderscoreNumbers = Yes;
     doAdaComnt = Yes;
 }
 

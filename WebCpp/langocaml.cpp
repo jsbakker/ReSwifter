@@ -13,6 +13,7 @@ LangOCaml::LangOCaml() {
 
     doStringsSinQuote = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doPasComnt =
         Yes; // (* *) block comments (best approximation; OCaml allows nesting)
 }

@@ -22,6 +22,7 @@ LangAda ::LangAda() {
     doLabels = Yes;
     doAdaComnt = Yes; // -- line comments
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
 }
 
 void LangAda ::fill() {

@@ -17,6 +17,7 @@ LangJScript ::LangJScript() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doCinComnt = Yes;
     doBigComnt = Yes;
     // JavaScript template literal interpolation: `text ${expr}`

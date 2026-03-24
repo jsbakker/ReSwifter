@@ -84,6 +84,13 @@ struct UScriptHighlightTests {
         #expect(html.contains("<font CLASS=preproc>label:</font>"))
     }
 
+    // MARK: - Underscore Numbers
+
+    @Test func underscoreNumbersAreNotFullyHighlighted() {
+        let html = highlight("1_000")
+        #expect(!html.contains("<font CLASS=integer>1_000</font>"))
+    }
+
     // MARK: - Comprehensive Snippet
 
     @Test func comprehensiveSnippetHighlightsAllRules() {

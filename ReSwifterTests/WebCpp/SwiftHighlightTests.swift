@@ -124,6 +124,18 @@ struct SwiftHighlightTests {
         #expect(html.contains("<font CLASS=symbols>+</font>"))
     }
 
+    // MARK: - Underscore Numbers
+
+    @Test func underscoreIntegersAreHighlighted() {
+        let html = highlight("1_000_000")
+        #expect(html.contains("<font CLASS=integer>1_000_000</font>"))
+    }
+
+    @Test func underscoreFloatsAreHighlighted() {
+        let html = highlight("1.123_456")
+        #expect(html.contains("<font CLASS=floatpt>1.123_456</font>"))
+    }
+
     // MARK: - Comprehensive Snippet
 
     @Test func comprehensiveSnippetHighlightsAllRules() {

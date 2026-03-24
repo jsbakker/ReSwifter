@@ -17,6 +17,7 @@ LangRuby ::LangRuby() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doScalars = Yes;
     doArrays = Yes;
     doHashes = Yes;

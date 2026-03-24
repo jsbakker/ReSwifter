@@ -14,6 +14,7 @@ LangGo::LangGo() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doBigComnt = Yes; // /* */
     doCinComnt = Yes; // //
     // doStrings = true by default; backtick raw strings handled automatically

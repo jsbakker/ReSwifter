@@ -128,6 +128,13 @@ struct ShellHighlightTests {
         #expect(html.contains("<font CLASS=comment># comment</font>"))
     }
 
+    // MARK: - Underscore Numbers
+
+    @Test func underscoreNumbersAreNotFullyHighlighted() {
+        let html = highlight("1_000")
+        #expect(!html.contains("<font CLASS=integer>1_000</font>"))
+    }
+
     // MARK: - Comprehensive Snippet
 
     @Test func comprehensiveSnippetHighlightsAllRules() {

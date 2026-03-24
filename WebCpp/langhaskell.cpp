@@ -18,6 +18,7 @@ LangHaskell ::LangHaskell() {
     doAdaComnt = Yes; // -- line comments
     doHskComnt = Yes; // {- -} block comments
     doSymbols = Yes;  // Haskell operators
+    doUnderscoreNumbers = Yes;
 }
 
 void LangHaskell ::fill() {

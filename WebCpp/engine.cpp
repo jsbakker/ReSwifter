@@ -54,6 +54,7 @@ void Engine::init_switches() {
     doStringsSinQuote = false;
     doStringsBackTick = false;
     doNumbers = true;
+    doUnderscoreNumbers = false;
     doKeywords = true;
     doCaseKeys = true;
     doSymbols = false;
@@ -545,7 +546,8 @@ void Engine::parseNum() {
             end = i;
 
             while (isdigit(buffer[end + 1]) ||
-                   (buffer[end + 1] == '.' && isdigit(buffer[end + 2]))) {
+                   (buffer[end + 1] == '.' && isdigit(buffer[end + 2])) ||
+                   (doUnderscoreNumbers && buffer[end + 1] == '_' && isdigit(buffer[end + 2]))) {
                 end++;
             }
 

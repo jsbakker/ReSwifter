@@ -21,6 +21,7 @@ LangCSharp ::LangCSharp() {
     doBigComnt = Yes;
     doCinComnt = Yes;
     doTplString = Yes;
+    doUnderscoreNumbers = Yes;
     // C# interpolated strings: $"text {expr}" — applied to all "..." strings
     doInterpolate = true;
     interpolStart = "{";

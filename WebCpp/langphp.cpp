@@ -17,6 +17,7 @@ LangPhp::LangPhp() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doScalars = Yes;
     doBigComnt = Yes;
     doCinComnt = Yes;

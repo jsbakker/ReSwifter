@@ -13,6 +13,7 @@ LangVala::LangVala() {
 
     doStringsSinQuote = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doBigComnt = Yes;  // /* */
     doCinComnt = Yes;  // //
     doTplString = Yes; // """...""" triple-quoted strings

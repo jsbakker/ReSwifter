@@ -13,6 +13,7 @@ LangZig::LangZig() {
 
     doStringsSinQuote = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doCinComnt = Yes; // // only — Zig has no block comments
 }
 

@@ -16,6 +16,7 @@ LangEmf ::LangEmf() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doNumbers = No;
+    doUnderscoreNumbers = Yes;
     doLabels = Yes;
     doScalars = Yes;
     doArrays = Yes;

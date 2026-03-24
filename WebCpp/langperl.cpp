@@ -17,6 +17,7 @@ LangPerl::LangPerl() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doLabels = Yes;
     doScalars = Yes;
     doArrays = Yes;

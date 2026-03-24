@@ -127,6 +127,7 @@ class Engine {
     bool doStringsBackTick;
     bool doSymbols;
     bool doNumbers;
+    bool doUnderscoreNumbers;
     bool doKeywords;
     bool doCaseKeys;
     bool doLabels;

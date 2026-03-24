@@ -13,6 +13,7 @@ LangRust::LangRust() {
 
     doStringsSinQuote = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doBigComnt = Yes; // /* */
     doCinComnt = Yes; // //
     doPreProc = Yes;  // #[attributes] and #![crate-level attributes]

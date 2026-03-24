@@ -20,6 +20,7 @@ LangPascal ::LangPascal() {
     doHashes = Yes;
     doPasComnt = Yes;
     doCinComnt = Yes;
+    doUnderscoreNumbers = Yes;
 }
 
 void LangPascal ::fill() {

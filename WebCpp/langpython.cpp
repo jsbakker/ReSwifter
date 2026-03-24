@@ -16,6 +16,7 @@ LangPython::LangPython() {
 
     doStringsSinQuote = true;
     doSymbols = Yes;
+    doUnderscoreNumbers = Yes;
     doUnxComnt = Yes;
     doTplString = Yes;
     // Python f-strings: f"text {expr}" — applied to all "..." strings
