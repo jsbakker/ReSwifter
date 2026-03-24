@@ -169,12 +169,12 @@ char Driver::getExt(string filename) {
     char ext;
 
     string extension = "";
-    dot = filename.rfind(".");
+    dot = static_cast<int>(filename.rfind("."));
 
     if (dot != -1) {
         extension = filename.substr(dot + 1, filename.size() - dot);
     }
-    for (int i = 0; i < extension.size(); i++) {
+    for (int i = 0; i < static_cast<int>(extension.size()); i++) {
         extension[i] = tolower(extension[i]);
     }
 
@@ -527,7 +527,7 @@ bool Driver::prep_files(string ifile, string ofile, char over) {
 // returns the filename without the full path ---------------------------------
 string Driver::getTitle() {
 
-    int slash = iFile.rfind(DIRECTORY_SLASH);
+    int slash = static_cast<int>(iFile.rfind(DIRECTORY_SLASH));
     if (slash == -1) {
         return iFile;
     }

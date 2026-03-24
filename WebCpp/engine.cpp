@@ -152,10 +152,10 @@ void Engine::pre_parse() {
 void Engine::eraseTags(int start, int fin) {
 
     if (fin == 0) {
-        fin = buffer.size();
+        fin = static_cast<int>(buffer.size());
     }
     if (fin == -1) {
-        fin = buffer.size();
+        fin = static_cast<int>(buffer.size());
     }
 
     int erase1, erase2;
@@ -167,16 +167,16 @@ void Engine::eraseTags(int start, int fin) {
     offset2 = 7;
 
     // erase all the colours previously made
-    while (buffer.find(srchstr, start) != -1 &&
-           buffer.find(srchstr, start) < fin) {
+    while (buffer.find(srchstr, start) != string::npos &&
+           static_cast<int>(buffer.find(srchstr, start)) < fin) {
 
         // erasing opening font tags
-        erase1 = buffer.find(srchstr, start);
+        erase1 = static_cast<int>(buffer.find(srchstr, start));
         if (erase1 != -1 && erase1 < fin) {
             buffer.erase(erase1, offset1);
         }
         // erasing closing font tags
-        erase2 = buffer.find("</font>", start);
+        erase2 = static_cast<int>(buffer.find("</font>", start));
         if (erase2 != -1 && erase2 < fin) {
             buffer.erase(erase2, offset2);
         }
@@ -307,7 +307,7 @@ bool Engine::isInsideIt(int index, string start, string end, bool skipTagged) {
     int r = 0;
     int idx;
 
-    idx = buffer.find(end, index);
+    idx = static_cast<int>(buffer.find(end, index));
     while (idx != (int)string::npos && idx < (int)buffer.size()) {
         if (idx > 0 && buffer[idx - 1] != '\\') {
             if (!skipTagged || !isInsideFontTag(buffer, idx))
@@ -315,10 +315,10 @@ bool Engine::isInsideIt(int index, string start, string end, bool skipTagged) {
         } else if (idx == 0) {
             r++;
         }
-        idx = buffer.find(end, idx + 1);
+        idx = static_cast<int>(buffer.find(end, idx + 1));
     }
 
-    idx = buffer.rfind(start, index);
+    idx = static_cast<int>(buffer.rfind(start, index));
     while (idx >= 0 && idx < (int)buffer.size()) {
         if (idx > 0 && buffer[idx - 1] != '\\') {
             if (!skipTagged || !isInsideFontTag(buffer, idx))
@@ -328,7 +328,7 @@ bool Engine::isInsideIt(int index, string start, string end, bool skipTagged) {
         }
         if (idx == 0)
             break;
-        idx = buffer.rfind(start, idx - 1);
+        idx = static_cast<int>(buffer.rfind(start, idx - 1));
     }
 
     if (r % 2 == 1 && l % 2 == 1) {
@@ -380,11 +380,11 @@ void Engine::parsePreProc() {
     buffer += " ";
     buffer.insert(0, "<font CLASS=preproc>");
 
-    int end;
-    for (int i = 8; i < buffer.size(); i++) {
+    int end = 0;
+    for (int i = 8; i < static_cast<int>(buffer.size()); i++) {
         if (isspace(buffer[i])) {
             end = i;
-            i = buffer.size();
+            i = static_cast<int>(buffer.size());
         }
     }
     buffer.insert(end, "</font>");
@@ -431,7 +431,7 @@ void Engine::parseSymbol() {
     int end;
     int insert = 0;
 
-    for (int i = 0; i < buffer.size(); i++) {
+    for (int i = 0; i < static_cast<int>(buffer.size()); i++) {
 
         if (isSymbol(buffer[i])) {
 
@@ -504,8 +504,8 @@ void Engine::parseLabel() {
 
     int end, beg;
 
-    end = buffer.size() - 1;
-    beg = buffer.rfind(" ", end);
+    end = static_cast<int>(buffer.size()) - 1;
+    beg = static_cast<int>(buffer.rfind(" ", end));
 
     if (beg == -1) {
         beg = 0;
@@ -535,10 +535,11 @@ void Engine::parseNum() {
 
     vector<int> nums;
     vector<int> ends;
-    int end, insert;
+    int end;
+    int insert = 0;
 
     // grab indexes of all numbers into the vector
-    for (int i = 0; i < buffer.size(); i++) {
+    for (int i = 0; i < static_cast<int>(buffer.size()); i++) {
 
         if (isdigit(buffer[i]) && (i == 0 || !isalpha(buffer[i - 1]))) {
             end = i;
@@ -557,9 +558,7 @@ void Engine::parseNum() {
     // now colour each number
     for (int j = 0; j < (int)ends.size(); j++) {
 
-        if (j == 0) {
-            insert = 0;
-        } else {
+        if (j > 0) {
             insert += 27;
         }
 
@@ -581,7 +580,7 @@ bool Engine::colourNum(int s, int f) {
     string cssclass;
     int fpt;
 
-    fpt = buffer.find(".", s);
+    fpt = static_cast<int>(buffer.find(".", s));
 
     if (fpt != -1 && fpt < f) {
 
@@ -666,17 +665,17 @@ void Engine::parseString(char quotetype, bool &inside) {
         buffer.insert(0, "<font CLASS=" + cssclass + ">");
     }
 
-    index = buffer.find(quote, index);
+    index = static_cast<int>(buffer.find(quote, index));
     if (index == -1) {
         return;
     }
 
-    while (index < string::npos) {
+    while (index >= 0) {
 
         if (index > 0 && buffer[index - 1] == '\\') {
             if (index > 1 && buffer[index - 2] == '\'' &&
                 buffer[index + 1] == '\'') {
-                index = buffer.find(quote, index + 1);
+                index = static_cast<int>(buffer.find(quote, index + 1));
             }
         }
         if (index == -1) {
@@ -684,27 +683,27 @@ void Engine::parseString(char quotetype, bool &inside) {
         }
 
         while (isInsideIt(index, escap1, escap1)) {
-            index = buffer.find(quote, index + 1);
+            index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 return;
             }
         }
         while (isInsideIt(index, escap2, escap2)) {
-            index = buffer.find(quote, index + 1);
+            index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 return;
             }
         }
 
         while (doAdaComnt && isInsideIt(index, "--", "\n")) {
-            index = buffer.find(quote, index + 1);
+            index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 return;
             }
         }
 
         while (doHtmComnt && isInsideIt(index, "&gt;", "&lt;")) {
-            index = buffer.find(quote, index + 1);
+            index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 return;
             }
@@ -715,7 +714,7 @@ void Engine::parseString(char quotetype, bool &inside) {
                (buffer[index - 2] != '\\' ||
                 (buffer[index - 3] == '\\' && buffer[index - 4] != '\\'))) {
 
-            index = buffer.find(quote, index + 1);
+            index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 return;
             }
@@ -732,11 +731,11 @@ void Engine::parseString(char quotetype, bool &inside) {
             offset = index + 7;
         }
 
-        index = buffer.find(quote, offset);
+        index = static_cast<int>(buffer.find(quote, offset));
         if (index == -1) {
             return;
         }
-        if (index > buffer.size()) {
+        if (index > static_cast<int>(buffer.size())) {
             return;
         }
     }
@@ -744,7 +743,7 @@ void Engine::parseString(char quotetype, bool &inside) {
 // insert string highlighting tags --------------------------------------------
 void Engine::colourString(int index, bool &inside, string cssclass) {
 
-    if (index > buffer.size()) {
+    if (index > static_cast<int>(buffer.size())) {
         return;
     }
 
@@ -769,7 +768,7 @@ bool Engine::isInsideSpanOfClass(int index, const string &cssClass) {
     int i = index - 1;
     while (i >= 0) {
         if (buffer[i] == '>') {
-            int ts = buffer.rfind('<', i);
+            int ts = static_cast<int>(buffer.rfind('<', i));
             if (ts != (int)string::npos) {
                 string tag = buffer.substr(ts, i - ts + 1);
                 if (tag == "</font>")
@@ -818,7 +817,7 @@ void Engine::markInterpolations() {
     bool wholeLineIsString = inMultiStr && interpolCssClass == "dblquot";
 
     while (pos < (int)buffer.size()) {
-        int ipos = buffer.find(interpolStart, pos);
+        int ipos = static_cast<int>(buffer.find(interpolStart, pos));
         if (ipos == (int)string::npos)
             break;
 
@@ -857,7 +856,7 @@ void Engine::markInterpolations() {
             // Skip over any HTML tags inserted by earlier passes
             if (c == '<' && scanPos + 1 < (int)buffer.size() &&
                 buffer[scanPos + 1] == 'f') {
-                int gt = buffer.find('>', scanPos);
+                int gt = static_cast<int>(buffer.find('>', scanPos));
                 if (gt != (int)string::npos) {
                     scanPos = gt + 1;
                     continue;
@@ -906,12 +905,12 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
         search = start;
     }
 
-    index = buffer.find(search, index);
+    index = static_cast<int>(buffer.find(search, index));
     if (index == -1) {
         return;
     }
 
-    while (index < string::npos) {
+    while (index >= 0) {
 
         if (inside) {
             search = end;
@@ -919,7 +918,7 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
             search = start;
         }
 
-        index = buffer.find(search, index);
+        index = static_cast<int>(buffer.find(search, index));
         if (index == -1) {
             return;
         }
@@ -927,7 +926,7 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
         if (index > 0 && buffer[index - 1] == '\\') {
             if (index > 1 && buffer[index - 2] == '\'' &&
                 buffer[index + 1] == '\'') {
-                index = buffer.find(search, index + 1);
+                index = static_cast<int>(buffer.find(search, index + 1));
             }
         }
         if (index == -1) {
@@ -945,10 +944,10 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
             int scanStart = 0;
             string startNoBrace =
                 start.substr(0, start.size() - 1); // "%Q" or "%q"
-            int delimPos = buffer.rfind(startNoBrace, index);
+            int delimPos = static_cast<int>(buffer.rfind(startNoBrace, index));
             if (delimPos != (int)string::npos) {
                 // Skip past the opening { of the delimiter
-                scanStart = delimPos + start.size();
+                scanStart = delimPos + static_cast<int>(start.size());
             }
             for (int i = scanStart; i < index; i++) {
                 if (buffer[i] == '{' && !isInsideTag(i))
@@ -959,13 +958,13 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
             // If depth > 0, there are unclosed braces before this },
             // so this } is a nested one — skip it.
             if (depth > 0) {
-                index = buffer.find(search, index + 1);
+                index = static_cast<int>(buffer.find(search, index + 1));
                 continue;
             }
         }
 
         if (inside) {
-            index += end.size() - 1;
+            index += static_cast<int>(end.size()) - 1;
         } else
             eraseTags(index, 0);
         colourString(index, inside, css);
@@ -978,7 +977,7 @@ void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
             search = start;
         }
 
-        index = buffer.find(search, offset);
+        index = static_cast<int>(buffer.find(search, offset));
         if (index == -1) {
             if (inside) {
                 endMultiLine = true;
@@ -1036,7 +1035,7 @@ void Engine::parseHeredoc(string marker) {
     // not inside a heredoc — look for a heredoc start on this line
     // after pre_parse, << becomes &lt;&lt; (or <<< becomes &lt;&lt;&lt; for
     // PHP)
-    int index = buffer.find(marker, 0);
+    int index = static_cast<int>(buffer.find(marker, 0));
     if (index == -1) {
         return;
     }
@@ -1046,7 +1045,7 @@ void Engine::parseHeredoc(string marker) {
 
         // skip if the marker is inside a string literal
         if (abortColour(tagStart)) {
-            index = buffer.find(marker, tagStart + marker.size());
+            index = static_cast<int>(buffer.find(marker, tagStart + marker.size()));
             continue;
         }
 
@@ -1054,7 +1053,7 @@ void Engine::parseHeredoc(string marker) {
         // (single-line comments haven't been parsed yet at this point in
         // doParsing)
         if (doUnxComnt) {
-            int hashPos = buffer.find("#", 0);
+            int hashPos = static_cast<int>(buffer.find("#", 0));
             if (hashPos != -1 && hashPos < tagStart) {
                 if (!isInsideIt(hashPos, "\"", "\"") &&
                     !isInsideIt(hashPos, "'", "'")) {
@@ -1063,7 +1062,7 @@ void Engine::parseHeredoc(string marker) {
             }
         }
         if (doCinComnt) {
-            int slashPos = buffer.find("//", 0);
+            int slashPos = static_cast<int>(buffer.find("//", 0));
             if (slashPos != -1 && slashPos < tagStart) {
                 if (!isInsideIt(slashPos, "\"", "\"") &&
                     !isInsideIt(slashPos, "'", "'")) {
@@ -1072,7 +1071,7 @@ void Engine::parseHeredoc(string marker) {
             }
         }
 
-        int pos = index + marker.size(); // past "&lt;&lt;"
+        int pos = index + static_cast<int>(marker.size()); // past "&lt;&lt;"
 
         // optional - or ~
         if (pos < (int)buffer.size() &&
@@ -1097,7 +1096,7 @@ void Engine::parseHeredoc(string marker) {
 
         if (pos == nameStart) {
             // no valid tag name found, skip this match
-            index = buffer.find(marker, tagStart + marker.size());
+            index = static_cast<int>(buffer.find(marker, tagStart + marker.size()));
             continue;
         }
 
@@ -1137,7 +1136,7 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
         search = start;
     }
 
-    index = buffer.find(search, index);
+    index = static_cast<int>(buffer.find(search, index));
     if (index == -1) {
         return;
     }
@@ -1157,7 +1156,7 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
         css = "preproc";
     }
 
-    while (index < string::npos) {
+    while (index >= 0) {
 
         if (inside) {
             search = end;
@@ -1165,7 +1164,7 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
             search = start;
         }
 
-        index = buffer.find(search, index);
+        index = static_cast<int>(buffer.find(search, index));
         if (index == -1) {
             return;
         }
@@ -1173,7 +1172,7 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
         if (index > 0 && buffer[index - 1] == '\\') {
             if (index > 1 && buffer[index - 2] == '\'' &&
                 buffer[index + 1] == '\'') {
-                index = buffer.find(search, index + 1);
+                index = static_cast<int>(buffer.find(search, index + 1));
             }
         }
         if (index == -1) {
@@ -1199,11 +1198,11 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
             search = start;
         }
 
-        index = buffer.find(search, offset);
+        index = static_cast<int>(buffer.find(search, offset));
         if (index == -1) {
             return;
         }
-        if (index > buffer.size()) {
+        if (index > static_cast<int>(buffer.size())) {
             return;
         }
     }
@@ -1226,14 +1225,14 @@ void Engine::parseKeys() {
         cmpkey = keys[i];
         index = noCaseFind(cmpkey, 0);
 
-        while (index < buffer.size() && index != -1) {
+        while (index < static_cast<int>(buffer.size()) && index != -1) {
 
             bool inserted = false;
-            if (isKey(index - 1, (index) + keys[i].size())) {
+            if (isKey(index - 1, index + static_cast<int>(keys[i].size()))) {
                 inserted = colourKeys(index, keys[i], "keyword");
             }
             int skip = inserted ? offset : 0;
-            index = noCaseFind(cmpkey, (index + cmpkey.size() + skip));
+            index = noCaseFind(cmpkey, index + static_cast<int>(cmpkey.size()) + skip);
         }
     }
 
@@ -1242,14 +1241,14 @@ void Engine::parseKeys() {
         cmpkey = types[i];
         index = noCaseFind(cmpkey, 0);
 
-        while (index < buffer.size() && index != -1) {
+        while (index < static_cast<int>(buffer.size()) && index != -1) {
 
             bool inserted = false;
-            if (isKey(index - 1, (index) + types[i].size())) {
+            if (isKey(index - 1, index + static_cast<int>(types[i].size()))) {
                 inserted = colourKeys(index, types[i], "keytype");
             }
             int skip = inserted ? offset : 0;
-            index = noCaseFind(cmpkey, (index + cmpkey.size() + skip));
+            index = noCaseFind(cmpkey, index + static_cast<int>(cmpkey.size()) + skip);
         }
     }
 }
@@ -1257,23 +1256,23 @@ void Engine::parseKeys() {
 int Engine::noCaseFind(string search, int index) {
 
     if (doCaseKeys) {
-        return buffer.find(search, index);
+        return static_cast<int>(buffer.find(search, index));
     }
     if (search == "class") {
-        return buffer.find(search, index);
+        return static_cast<int>(buffer.find(search, index));
     }
 
     string tmp;
     tmp = buffer;
 
-    for (int i = 0; i < tmp.size(); i++) {
+    for (int i = 0; i < static_cast<int>(tmp.size()); i++) {
         tmp[i] = toupper(tmp[i]);
     }
-    for (int j = 0; j < search.size(); j++) {
+    for (int j = 0; j < static_cast<int>(search.size()); j++) {
         search[j] = toupper(search[j]);
     }
 
-    return tmp.find(search, index);
+    return static_cast<int>(tmp.find(search, index));
 }
 // asserts word boundaries for keywords ---------------------------------------
 bool Engine::isKey(int before, int after) const {
@@ -1331,7 +1330,7 @@ static bool isInsideFontTag(const string &buffer, int index) {
     while (i >= 0) {
         if (buffer[i] == '>') {
             // found a closing '>'; check if this is a <font tag
-            int tagStart = buffer.rfind('<', i);
+            int tagStart = static_cast<int>(buffer.rfind('<', i));
             if (tagStart != (int)string::npos && tagStart >= 0) {
                 string tag = buffer.substr(tagStart, i - tagStart + 1);
                 if (tag.find("<font ") == 0 || tag.find("<font>") == 0) {
@@ -1381,18 +1380,18 @@ void Engine::parseVariable(string var) {
     int index;
     int test;
 
-    index = buffer.find(var, 0);
-    test = buffer.find("#", 0);
+    index = static_cast<int>(buffer.find(var, 0));
+    test = static_cast<int>(buffer.find("#", 0));
     if (test != -1 && test < index) {
         return;
     }
 
-    while (index < string::npos) {
+    while (index >= 0) {
 
         if (index != -1) {
             colourVariable(index);
         }
-        index = buffer.find(var, index + 22);
+        index = static_cast<int>(buffer.find(var, index + 22));
     }
 }
 // colourize the variables ----------------------------------------------------
@@ -1448,7 +1447,7 @@ void Engine::colourVariable(int index) {
     // found because the search started at or past buffer.size()),
     // close the tag at the end instead of at position 0
     if (!end) {
-        end = buffer.size();
+        end = static_cast<int>(buffer.size());
     }
 
     if (end > 0 && buffer[end - 1] == '\"') {
@@ -1471,7 +1470,7 @@ void Engine::parseComment(string cmnt) {
         return;
     }
 
-    int index = buffer.find(cmnt, 0);
+    int index = static_cast<int>(buffer.find(cmnt, 0));
     if (index == -1) {
         return;
     }
@@ -1481,7 +1480,7 @@ void Engine::parseComment(string cmnt) {
         if (index != 0) {
             while (index > 0 && index < (int)buffer.size() &&
                    buffer[index - 1] == '=') {
-                index = buffer.find("#", index + 1);
+                index = static_cast<int>(buffer.find("#", index + 1));
                 if (index == -1) {
                     return;
                 }
@@ -1504,7 +1503,7 @@ void Engine::parseComment(string cmnt) {
             if (index >= 4 && buffer.substr(index - 4, 5) == "&amp;")
                 isEntity = true;
             if (isEntity) {
-                index = buffer.find(cmnt, index + 1);
+                index = static_cast<int>(buffer.find(cmnt, index + 1));
                 continue;
             }
             break;
@@ -1739,7 +1738,7 @@ Get webcpp at http://webcpp.sf.net\n-->\n\n";
         string CopyCmd = COPY;
 
         ImgPath = Scs2.getImageFile();
-        dir_idx = IO->getStrOf().rfind(DIRECTORY_SLASH);
+        dir_idx = static_cast<int>(IO->getStrOf().rfind(DIRECTORY_SLASH));
 
         if (dir_idx != -1) {
 
@@ -1758,7 +1757,7 @@ Get webcpp at http://webcpp.sf.net\n-->\n\n";
 
         CssFile = Scs2.getThemeName() + ".css";
 
-        dir_idx = IO->getStrOf().rfind(DIRECTORY_SLASH);
+        dir_idx = static_cast<int>(IO->getStrOf().rfind(DIRECTORY_SLASH));
 
         if (dir_idx != -1) {
 
@@ -1824,7 +1823,7 @@ syntax highlighting by<br><br>\n\
 void Engine::hyperTagMe() {
 
     int index;
-    index = buffer.find("TagMe:", 0);
+    index = static_cast<int>(buffer.find("TagMe:", 0));
     if (index == -1) {
         return;
     }
@@ -1833,7 +1832,7 @@ void Engine::hyperTagMe() {
     }
     buffer.erase(index, 6);
 
-    for (int i = index; i < buffer.size(); i++) {
+    for (int i = index; i < static_cast<int>(buffer.size()); i++) {
         if (buffer.substr(i, 4) == "&lt;")
             buffer.replace(i, 4, "<");
         else if (buffer.substr(i, 4) == "&gt;")
@@ -1844,7 +1843,7 @@ void Engine::hyperTagMe() {
 void Engine::hyperLinkMe() {
 
     int index;
-    index = buffer.find("LinkMe:", 0);
+    index = static_cast<int>(buffer.find("LinkMe:", 0));
     if (index == -1) {
         return;
     }
@@ -1862,7 +1861,7 @@ void Engine::hyperLinkMe() {
 void Engine::hyperNameMe() {
 
     int index;
-    index = buffer.find("NameMe:", 0);
+    index = static_cast<int>(buffer.find("NameMe:", 0));
     if (index == -1) {
         return;
     }
@@ -1881,12 +1880,12 @@ void Engine::hyperIncludeMe() {
 
     int incl, insr;
 
-    incl = buffer.find("#include", 0);
+    incl = static_cast<int>(buffer.find("#include", 0));
     if (incl == -1) {
         return;
     }
 
-    insr = buffer.find("\"", incl + 1);
+    insr = static_cast<int>(buffer.find("\"", incl + 1));
     if (insr == -1) {
         return;
     }
@@ -1901,7 +1900,7 @@ void Engine::hyperIncludeMe() {
 
         string path;
 
-        int dir_idx = IO->getStrIf().rfind(DIRECTORY_SLASH);
+        int dir_idx = static_cast<int>(IO->getStrIf().rfind(DIRECTORY_SLASH));
 
         if (dir_idx != -1) {
 

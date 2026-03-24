@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     char over;
     over = (Arg1 == "-" || Arg1 == "--pipe") ? 0x66 : 0x77;
 
-    int fileflag = Arg2.rfind(":");
+    int fileflag = static_cast<int>(Arg2.rfind(":"));
     if (fileflag != -1 && fileflag != 1) {
         over = Arg2[fileflag + 1];
         Arg2.erase(fileflag, 2);

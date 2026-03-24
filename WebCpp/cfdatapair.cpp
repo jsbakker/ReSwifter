@@ -73,12 +73,12 @@ void CFdatapair::translateML(string mldata) {
     string ntmp, vtmp;
     int open, close;
 
-    open = mldata.find("<", 0);
-    close = mldata.find(">", open);
+    open = static_cast<int>(mldata.find("<", 0));
+    close = static_cast<int>(mldata.find(">", open));
     ntmp = mldata.substr(open + 1, (close - open) - 1);
     // ntmp  = mldata.substr(open+1,close-1);
 
-    open = mldata.find("</", close);
+    open = static_cast<int>(mldata.find("</", close));
     vtmp = mldata.substr(close + 1, (open - close - 1));
 
     name = ntmp;

@@ -42,9 +42,9 @@ bool Theme::setFile(string filename) {
 
     SCSfile = filename;
 
-    if (filename.rfind(".Scs2") == -1) {
+    if (filename.rfind(".Scs2") == string::npos) {
 
-        if (filename.rfind(".scs") != -1) {
+        if (filename.rfind(".scs") != string::npos) {
             format2 = false;
         } else
             filename += ".Scs2";
@@ -55,7 +55,7 @@ bool Theme::setFile(string filename) {
     } else {
         // cerr << "...searching default directory.";
         // search in default webcpp data dir
-        if (filename.rfind(DIRECTORY_SLASH) == -1) {
+        if (filename.rfind(DIRECTORY_SLASH) == string::npos) {
             filename = WEBCPP_DATA_DIR + filename;
 
             if (openR(filename)) {
@@ -73,13 +73,13 @@ string Theme::getThemeName() {
     string justTheName;
     int i_dir, i_ext;
 
-    i_dir = SCSfile.rfind(DIRECTORY_SLASH);
+    i_dir = static_cast<int>(SCSfile.rfind(DIRECTORY_SLASH));
     if (i_dir != -1) {
         justTheName = SCSfile.substr(i_dir + 1);
     } else {
         justTheName = SCSfile;
     }
-    i_ext = justTheName.rfind(".");
+    i_ext = static_cast<int>(justTheName.rfind("."));
     if (i_ext != -1) {
         justTheName = justTheName.substr(0, i_ext);
     }
@@ -93,7 +93,7 @@ void Theme::setImageLeaf() {
 
     string ImgLeaf, Path;
 
-    int dir_idx = Picture.rfind(DIRECTORY_SLASH);
+    int dir_idx = static_cast<int>(Picture.rfind(DIRECTORY_SLASH));
 
     if (dir_idx != -1) {
 
@@ -211,7 +211,7 @@ bool Theme::load() {
 
 string Theme::getColour(string Name) {
 
-    for (int i = 0; i < ScsVec.size(); i++) {
+    for (int i = 0; i < static_cast<int>(ScsVec.size()); i++) {
 
         if (ScsVec[i].getname() == Name)
             return ScsVec[i].getvalue();
