@@ -131,6 +131,7 @@ struct HighlightedEditorView: NSViewRepresentable {
             guard let textView else { return }
             currentLanguage = language
 
+            textView.scroll(.zero)
             // Replace text — this resets the selection to position 0.
             textView.string = text
             // Clear the undo stack so actions from the previous snippet
