@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "9A1B2C3D-4E5F-6789-ABCD-EF0123456789",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ReSwifter.xcodeproj",
+        "identifier" : "007A94622F52A18200730E7F",
+        "name" : "ReSwifterTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:ReSwifter.xcodeproj",
+        "identifier" : "007A946C2F52A18200730E7F",
+        "name" : "ReSwifterUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

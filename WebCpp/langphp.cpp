@@ -25,6 +25,7 @@ LangPhp::LangPhp() {
     doCinComnt = true;
     doUnxComnt = true;
     doPhpHeredoc = true;
+    doRequireBackslashContinuation = false; // PHP strings may span lines without backslash
 }
 
 void LangPhp::initReservedWords() {

@@ -18,6 +18,7 @@ LangTcl ::LangTcl() {
 
     doScalars = true;
     doUnxComnt = true;
+    doRequireBackslashContinuation = false; // Tcl strings may span lines without backslash
 }
 
 void LangTcl ::initReservedWords() {

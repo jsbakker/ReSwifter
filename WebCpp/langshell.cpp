@@ -21,6 +21,7 @@ LangShell::LangShell() {
     doScalars = true;
     doUnxComnt = true;
     doHeredoc = true;
+    doRequireBackslashContinuation = false; // Shell strings may span lines without backslash
 }
 
 void LangShell::initReservedWords() {

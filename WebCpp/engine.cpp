@@ -624,18 +624,22 @@ void Engine::parseString(char quotetype, bool &inside) {
     }
     // Double, single, and back quoted ///
 
-    // On a string-continuation line (inside=true), the opening font tag is on
-    // the previous line.  Insert it at position 0 so that isInsideSpanOfClass
-    // and isInsideFontTag can correctly identify the string body and gate
-    // interpolation detection and content highlighting.  Only do this when the
-    // closing delimiter also exists on this line; otherwise we would emit an
-    // unclosed font tag.
-    if (inside && buffer.find(quote) != string::npos) {
+    // On a string-continuation line (inside=true), always insert the opening
+    // font tag at position 0 so that isInsideSpanOfClass and isInsideFontTag
+    // can correctly identify the string body and gate interpolation detection
+    // and content highlighting.  If no unescaped closing delimiter is found,
+    // close the tag at end of buffer so that the line is fully coloured and
+    // the HTML stays balanced.
+    bool insertedContinuationTag = false;
+    if (inside) {
         buffer.insert(0, "<font CLASS=" + cssclass + ">");
+        insertedContinuationTag = true;
     }
 
     index = static_cast<int>(buffer.find(quote, index));
     if (index == -1) {
+        if (insertedContinuationTag && inside)
+            buffer += "</font>";
         return;
     }
 
@@ -648,18 +652,24 @@ void Engine::parseString(char quotetype, bool &inside) {
             }
         }
         if (index == -1) {
+            if (insertedContinuationTag && inside)
+                buffer += "</font>";
             return;
         }
 
         while (isInsideIt(index, escap1, escap1)) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
+                if (insertedContinuationTag && inside)
+                    buffer += "</font>";
                 return;
             }
         }
         while (isInsideIt(index, escap2, escap2)) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
+                if (insertedContinuationTag && inside)
+                    buffer += "</font>";
                 return;
             }
         }
@@ -667,6 +677,8 @@ void Engine::parseString(char quotetype, bool &inside) {
         while (rules->doAdaComnt && isInsideIt(index, "--", "\n")) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
+                if (insertedContinuationTag && inside)
+                    buffer += "</font>";
                 return;
             }
         }
@@ -674,6 +686,8 @@ void Engine::parseString(char quotetype, bool &inside) {
         while (rules->doHtmComnt && isInsideIt(index, "&gt;", "&lt;")) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
+                if (insertedContinuationTag && inside)
+                    buffer += "</font>";
                 return;
             }
         }
@@ -685,6 +699,8 @@ void Engine::parseString(char quotetype, bool &inside) {
 
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
+                if (insertedContinuationTag && inside)
+                    buffer += "</font>";
                 return;
             }
         }
@@ -702,9 +718,13 @@ void Engine::parseString(char quotetype, bool &inside) {
 
         index = static_cast<int>(buffer.find(quote, offset));
         if (index == -1) {
+            if (inside)
+                buffer += "</font>";
             return;
         }
         if (index > static_cast<int>(buffer.size())) {
+            if (inside)
+                buffer += "</font>";
             return;
         }
     }
@@ -1552,6 +1572,14 @@ void Engine::doParsing() {
         return;
     }
 
+    // Count trailing backslashes on the raw line before any modification.
+    // An odd count means the final \ is a genuine line-continuation marker;
+    // an even count means the trailing backslashes are all escaped pairs.
+    int trailingBackslashes = 0;
+    for (int i = (int)buffer.size() - 1; i >= 0 && buffer[i] == '\\'; i--)
+        trailingBackslashes++;
+    const bool lineHasContinuation = (trailingBackslashes % 2 == 1);
+
     // preformat HTML escapes
     PRE_PARSE_CODE;
 
@@ -1688,6 +1716,19 @@ void Engine::doParsing() {
         parseChildLang();
     }
     endMultiLine = inComment || inMultiStr;
+
+    // A regular "..." or '...' string opened on this line can only continue
+    // onto the next line if the line ends with an odd number of backslashes
+    // (i.e. a genuine continuation marker).  Without it the string is either
+    // complete or a syntax error and must not bleed into subsequent lines.
+    //
+    // Backtick strings are intentionally excluded: template literals in
+    // JavaScript/TypeScript and similar languages span lines naturally
+    // without any backslash, so inBckQuotes must persist across newlines.
+    if (!lineHasContinuation && rules->doRequireBackslashContinuation) {
+        inDblQuotes = false;
+        inSinQuotes = false;
+    }
 
     lncount++;
 }

@@ -50,6 +50,11 @@ class LanguageRules {
         doPercentQ = false;
         doPhpHeredoc = false;
         doInterpolate = false;
+        // Most languages treat an unclosed " or ' at end of line as a syntax
+        // error unless a \ immediately precedes the newline.  Set false only
+        // for languages where string literals may span lines without any
+        // continuation marker (e.g. Ruby, Perl, Shell, PHP, Tcl).
+        doRequireBackslashContinuation = true;
         interpolStart = "";
         interpolEnd = '\0';
         interpolCssClass = "dblquot";
@@ -95,6 +100,11 @@ class LanguageRules {
     bool doPercentQ;
     bool doPhpHeredoc;
     bool doInterpolate;
+    // Most languages treat an unclosed " or ' at end of line as a syntax
+    // error unless a \ immediately precedes the newline.  Set false only
+    // for languages where string literals may span lines without any
+    // continuation marker (e.g. Ruby, Perl, Shell, PHP, Tcl).
+    bool doRequireBackslashContinuation;
 
     std::string interpolCssClass; // CSS class of the string type that interpolates
     std::string interpolStart;    // e.g. "#{" for Ruby, "${" for JS, "\\(" for Swift

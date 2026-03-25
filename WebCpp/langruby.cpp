@@ -29,6 +29,7 @@ LangRuby::LangRuby() {
     doInterpolate = true;
     interpolStart = "#{";
     interpolEnd = '}';
+    doRequireBackslashContinuation = false; // Ruby strings may span lines without backslash
 }
 
 void LangRuby::initReservedWords() {

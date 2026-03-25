@@ -26,6 +26,7 @@ LangPerl::LangPerl() {
     doHashes = true;
     doUnxComnt = true;
     doHeredoc = true;
+    doRequireBackslashContinuation = false; // Perl strings may span lines without backslash
 }
 
 void LangPerl::initReservedWords() {
