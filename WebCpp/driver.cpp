@@ -7,6 +7,7 @@
 #include "cffile.h"
 #include "defsys.h"
 #include "engine.h"
+#include "html_writer.h"
 #include "lang_factory.h"
 #include "lang_rules.h"
 #include "theme.h"
@@ -41,49 +42,49 @@ bool Driver::switch_parser(const string &arg) {
     } else if (arg.substr(0, 3) == "-c=") {
         lang->Scs2.setFile(arg.substr(3));
     } else if (arg.substr(0, 3) == "-C=") {
-        lang->toggleExtcss();
+        lang->options.toggleExtcss();
         lang->Scs2.setFile(arg.substr(3));
     } else if (arg.substr(0, 3) == "-i=") {
         lang->Scs2.setPicture(arg.substr(3));
     } else if (arg.substr(0, 3) == "-t=") {
-        lang->toggleBigtab();
-        lang->setTabWidth(arg.substr(3));
+        lang->options.toggleBigtab();
+        lang->options.setTabWidth(arg.substr(3));
     } else if (arg.substr(0, 3) == "-w=") {
-        lang->toggleNumber();
-        lang->toggleAnchor();
-        lang->toggleHypinc();
-        lang->toggleWebcpp();
+        lang->options.toggleNumber();
+        lang->options.toggleAnchor();
+        lang->options.toggleHypinc();
+        lang->options.toggleWebcpp();
         lang->Scs2.setFile(arg.substr(3));
     } else if (arg.substr(0, 3) == "-W=") {
-        lang->toggleNumber();
-        lang->toggleAnchor();
-        lang->toggleHypinc();
-        lang->toggleWebcpp();
-        lang->toggleExtcss();
+        lang->options.toggleNumber();
+        lang->options.toggleAnchor();
+        lang->options.toggleHypinc();
+        lang->options.toggleWebcpp();
+        lang->options.toggleExtcss();
         lang->Scs2.setFile(arg.substr(3));
     } else if (arg == "--external-css" || arg == "-X") {
-        lang->toggleExtcss();
+        lang->options.toggleExtcss();
     } else if (arg == "--superinclude" || arg == "-H") {
-        lang->toggleHypinc();
-        lang->toggleFollow();
+        lang->options.toggleHypinc();
+        lang->options.toggleFollow();
     } else if (arg == "--hyperinclude" || arg == "-h") {
-        lang->toggleHypinc();
+        lang->options.toggleHypinc();
     } else if (arg == "--anchor-lines" || arg == "-a") {
-        lang->toggleAnchor();
+        lang->options.toggleAnchor();
     } else if (arg == "--line-numbers" || arg == "-l") {
-        lang->toggleNumber();
+        lang->options.toggleNumber();
     } else if (arg == "--tabs-spaces" || arg == "-t") {
-        lang->toggleBigtab();
+        lang->options.toggleBigtab();
     } else if (arg == "--made-with" || arg == "-m") {
-        lang->toggleWebcpp();
+        lang->options.toggleWebcpp();
     } else if (arg == "--snippet-only" || arg == "-s") {
-        lang->toggleHtSnip();
+        lang->options.toggleHtSnip();
         lang->Scs2.toggleSnippet();
     } else if (arg == "--the-works" || arg == "-w") {
-        lang->toggleNumber();
-        lang->toggleAnchor();
-        lang->toggleHypinc();
-        lang->toggleWebcpp();
+        lang->options.toggleNumber();
+        lang->options.toggleAnchor();
+        lang->options.toggleHypinc();
+        lang->options.toggleWebcpp();
     } else {
         help(HELP_DEFAULT);
         return false;
@@ -251,7 +252,7 @@ void Driver::drive() {
     Count.close();
     // to compare against progress
 
-    lang->begHtml(getTitle());
+    HtmlWriter::writeDocumentStart(lang->IO, lang->Scs2, lang->options, getTitle());
     lang->doParsing();
     while (lang->IO->ifile && cin) {
         lang->doParsing();
@@ -268,7 +269,7 @@ void Driver::drive() {
 //            cerr << "@ line " << lang->getLineCount()-1;
 //        }
     }
-    lang->endHtml();
+    HtmlWriter::writeDocumentEnd(lang->IO, lang->options);
 
     time_end = clock();
     time_dif = time_end - time_beg;

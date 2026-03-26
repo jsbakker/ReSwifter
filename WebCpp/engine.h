@@ -7,18 +7,29 @@
 #define _ENGINE_H
 
 #include "cffile.h"
+#include "engine_options.h"
 #include "theme.h"
 
 class LanguageRules;
 
 #include <memory>
 #include <string>
-#include <vector>
 
 enum class Quote : char {
     Double = 0x22, // '"'
     Single = 0x27, // '''
     Back = 0x60    // '`'
+};
+
+struct ParseState {
+    bool inDblQuotes  = false;
+    bool inSinQuotes  = false;
+    bool inBckQuotes  = false;
+    bool inHtmTags    = false;
+    bool inComment    = false;
+    bool inMultiStr   = false;
+    bool endMultiLine = false;
+    std::string heredocEnd;
 };
 
 class Engine {
@@ -30,8 +41,6 @@ class Engine {
     void init_switches();
 
     void pre_parse();
-    void makeMargin();
-    void makeAnchor();
 
     bool abortParse() const;
     bool abortColour(int index) const;
@@ -80,11 +89,7 @@ class Engine {
     void colourComment(int index);
     void parseCharZeroComment(char zchar);
 
-    void loadKeys();
     void doParsing();
-
-    void begHtml(const std::string &name);
-    void endHtml();
 
     void hyperTagMe();
     void hyperLinkMe();
@@ -100,44 +105,33 @@ class Engine {
     inline void setChildLang(bool b) { childLang = b; }
     inline void setupIO(std::shared_ptr<CFfile> p) { IO = p; }
 
-    inline void toggleBigtab() { opt_bigtab = !opt_bigtab; }
-    inline void toggleWebcpp() { opt_webcpp = !opt_webcpp; }
-    inline void toggleHypinc() { opt_hypinc = !opt_hypinc; }
-    inline void toggleFollow() { opt_follow = !opt_follow; }
-    inline void toggleAnchor() { opt_anchor = !opt_anchor; }
-    inline void toggleNumber() { opt_number = !opt_number; }
-    inline void toggleExtcss() { opt_extcss = !opt_extcss; }
-    inline void toggleHtSnip() { opt_htsnip = !opt_htsnip; }
-
-    void setTabWidth(const std::string &width);
-
     void setLanguageRules(std::unique_ptr<LanguageRules> rules) {
         this->rules = std::move(rules);
     }
 
     // String parsing
     inline void parseStringDoubleQuote() {
-        parseString(static_cast<char>(Quote::Double), inDblQuotes);
+        parseString(static_cast<char>(Quote::Double), state.inDblQuotes);
     }
     inline void parseStringSingleQuote() {
-        parseString(static_cast<char>(Quote::Single), inSinQuotes);
+        parseString(static_cast<char>(Quote::Single), state.inSinQuotes);
     }
     inline void parseStringBackQuote() {
-        parseString(static_cast<char>(Quote::Back), inBckQuotes);
+        parseString(static_cast<char>(Quote::Back), state.inBckQuotes);
     }
 
     // Multiline string parsing
     inline void parseMultilineStrTripleDblQuote() {
-        parseMultilineString("\"\"\"", "\"\"\"", inMultiStr, "dblquot");
+        parseMultilineString("\"\"\"", "\"\"\"", state.inMultiStr, "dblquot");
     }
     inline void parseMultilineStrRaw() {
-        parseMultilineString("R\"(", ")\"", inMultiStr, "dblquot");
+        parseMultilineString("R\"(", ")\"", state.inMultiStr, "dblquot");
     }
     inline void parseMultilineStrUpperQBlock() {
-        parseMultilineString("%Q{", "}", inMultiStr, "dblquot");
+        parseMultilineString("%Q{", "}", state.inMultiStr, "dblquot");
     }
     inline void parseMultilineStrLowerQBlock() {
-        parseMultilineString("%q{", "}", inMultiStr, "sinquot");
+        parseMultilineString("%q{", "}", state.inMultiStr, "sinquot");
     }
     inline void parseMultilineStrHeredocDblLt() { parseHeredoc("&lt;&lt;"); }
     inline void parseMultilineStrHeredocTplLt() {
@@ -167,19 +161,19 @@ class Engine {
 
     // Block comment parsing
     inline void parseBlockCommentMarkup() {
-        parseBlockComment("&lt;!-", "--&gt;", inComment);
+        parseBlockComment("&lt;!-", "--&gt;", state.inComment);
     }
     inline void parseBlockCommentPascal() {
-        parseBlockComment("(*", "*)", inComment);
+        parseBlockComment("(*", "*)", state.inComment);
     }
     inline void parseBlockCommentPLI() {
-        parseBlockComment("/*", "*/", inComment);
+        parseBlockComment("/*", "*/", state.inComment);
     }
     inline void parseBlockCommentHaskell() {
-        parseBlockComment("{-", "-}", inComment);
+        parseBlockComment("{-", "-}", state.inComment);
     }
     inline void parseHtmlTags() {
-        parseBlockComment("&lt;", "&gt;", inHtmTags);
+        parseBlockComment("&lt;", "&gt;", state.inHtmTags);
     }
 
     // Inline language parsing
@@ -189,18 +183,9 @@ class Engine {
     }
     inline void colourChildLangCSS() { colourChildLang("&lt;style", "/style"); }
 
-    // options
-  protected:
-    bool opt_bigtab;
-    bool opt_webcpp;
-    bool opt_hypinc;
-    bool opt_follow;
-    bool opt_number;
-    bool opt_extcss;
-    bool opt_anchor;
-    bool opt_htsnip;
+  public:
+    EngineOptions options;
 
-    // parsing rules
   protected:
     std::unique_ptr<LanguageRules> rules = nullptr;
 
@@ -212,19 +197,10 @@ class Engine {
   protected:
     int langext;
     int lncount;
-    int tabwidth;
-    std::string tw;
     std::string buffer;
 
     bool childLang;
-    bool inDblQuotes;
-    bool inSinQuotes;
-    bool inBckQuotes;
-    bool inHtmTags;
-    bool inComment;
-    bool inMultiStr;
-    std::string heredocEnd;
-    bool endMultiLine;
+    ParseState state;
 };
 
 #endif // _ENGINE_H

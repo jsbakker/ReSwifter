@@ -9,6 +9,7 @@
 #include "engine.h"
 #include "deflangs.h"
 #include "defsys.h"
+#include "html_writer.h"
 #include "lang_rules.h"
 
 #include <algorithm>
@@ -39,40 +40,10 @@ Engine::~Engine() {
 void Engine::init_switches() {
 
     childLang = false;
-
-    // command line options
-    opt_bigtab = false;
-    opt_webcpp = false;
-    opt_hypinc = false;
-    opt_follow = false;
-    opt_number = false;
-    opt_extcss = false;
-    opt_anchor = false;
-    opt_htsnip = false;
-
-    // abort switches
-    inHtmTags = false;
-    inDblQuotes = false;
-    inSinQuotes = false;
-    inBckQuotes = false;
-    inComment = false;
-    inMultiStr = false;
-    heredocEnd = "";
-    endMultiLine = false;
+    options = EngineOptions{};
+    state = ParseState{};
 
     lncount = 1;
-    tabwidth = 8;
-    tw = "8";
-}
-// set the width of the tabs --------------------------------------------------
-void Engine::setTabWidth(const string &width) {
-
-    tabwidth = atoi(width.data());
-    if (tabwidth == 0) {
-        tabwidth = 8;
-        tw = "8";
-    }
-    tw = width;
 }
 // format the plain text for proper display in HTML ---------------------------
 void Engine::pre_parse() {
@@ -95,7 +66,7 @@ void Engine::pre_parse() {
         }
         // escape from accidental HTML tags
 
-        if (opt_bigtab)
+        if (options.bigtab)
             // convert tabs into spaces
             if (buffer[i] == '\t') {
 
@@ -103,15 +74,15 @@ void Engine::pre_parse() {
                 buffer.erase(i, 1);
 
                 // factor in the number of escapes
-                if ((i - i_esc) % tabwidth == 0) {
+                if ((i - i_esc) % options.tabwidth == 0) {
 
-                    for (j = 0; j < tabwidth; j++) {
+                    for (j = 0; j < options.tabwidth; j++) {
 
                         buffer.insert(i, " ");
                     }
-                    i += tabwidth - 1;
+                    i += options.tabwidth - 1;
                 } else {
-                    int spaces = tabwidth - ((i - i_esc) % tabwidth);
+                    int spaces = options.tabwidth - ((i - i_esc) % options.tabwidth);
 
                     for (j = 0; j < spaces; j++) {
 
@@ -156,41 +127,16 @@ void Engine::eraseTags(int start, int fin) {
             buffer.erase(erase2, offset2);
         }
     }
-    inDblQuotes = false;
-    inSinQuotes = false;
-    inBckQuotes = false;
+    state.inDblQuotes = false;
+    state.inSinQuotes = false;
+    state.inBckQuotes = false;
 }
 // anchors the line (for hyperlinking capabilities) ---------------------------
-void Engine::makeAnchor() { *IO << "<a name=\"line" << lncount << "\"/>"; }
-// prints the line number in the margin ---------------------------------------
-void Engine::makeMargin() {
-
-    string space = "";
-
-    // setting margin alignment
-    if (lncount < 100000) {
-        space += " ";
-    }
-    if (lncount < 10000) {
-        space += " ";
-    }
-    if (lncount < 1000) {
-        space += " ";
-    }
-    if (lncount < 100) {
-        space += " ";
-    }
-    if (lncount < 10) {
-        space += " ";
-    }
-
-    *IO << space << "<font CLASS=comment>" << lncount << ":</font> ";
-}
 //-----------------------------------------------------------------------------
 // check if parsing needs to be aborted ---------------------------------------
 bool Engine::abortParse() const {
 
-    //	if(doHtmlTags && inHtmTags)
+    //	if(doHtmlTags && state.inHtmTags)
     //			{return true;}
 
     // If interpolation blocks are present on this line, allow content parsing.
@@ -199,24 +145,24 @@ bool Engine::abortParse() const {
         return false;
     }
 
-    if (endMultiLine) {
+    if (state.endMultiLine) {
         return true;
     }
-    if (inDblQuotes) {
+    if (state.inDblQuotes) {
         return true;
     }
     if (!rules->doAspComnt) {
-        if (inSinQuotes) {
+        if (state.inSinQuotes) {
             return true;
         }
     }
-    if (inBckQuotes) {
+    if (state.inBckQuotes) {
         return true;
     }
-    if (inComment) {
+    if (state.inComment) {
         return true;
     }
-    if (inMultiStr) {
+    if (state.inMultiStr) {
         return true;
     }
 
@@ -238,7 +184,7 @@ bool Engine::abortColour(int index) const {
     // On multi-line string continuation lines where no font tag was inserted
     // (e.g. triple-quoted strings, comment continuations), block coloring
     // outside interpolation zones.
-    if (endMultiLine || inMultiStr)
+    if (state.endMultiLine || state.inMultiStr)
         return true;
 
     if (rules->doHtmComnt && (isInsideIt(index, "&lt;", "&gt;") &&
@@ -348,7 +294,7 @@ void Engine::parsePreProc() {
         return;
     }
 
-    if (opt_hypinc) {
+    if (options.hypinc) {
         hyperIncludeMe();
     }
 
@@ -574,10 +520,10 @@ bool Engine::colourNum(int s, int f) {
 // parse the buffer for strings -----------------------------------------------
 void Engine::parseString(char quotetype, bool &inside) {
 
-    if (endMultiLine) {
+    if (state.endMultiLine) {
         return;
     }
-    if (inMultiStr) {
+    if (state.inMultiStr) {
         return;
     }
     if (rules->doAspComnt && quotetype == static_cast<char>(Quote::Single)) {
@@ -590,7 +536,7 @@ void Engine::parseString(char quotetype, bool &inside) {
 
     // Support for 3 different string types
     if (quotetype == static_cast<char>(Quote::Double)) {
-        if (inSinQuotes || inBckQuotes) {
+        if (state.inSinQuotes || state.inBckQuotes) {
             return;
         }
 
@@ -608,7 +554,7 @@ void Engine::parseString(char quotetype, bool &inside) {
         cssclass = "dblquot";
 
     } else if (quotetype == static_cast<char>(Quote::Single)) {
-        if (inDblQuotes || inBckQuotes) {
+        if (state.inDblQuotes || state.inBckQuotes) {
             return;
         }
 
@@ -619,7 +565,7 @@ void Engine::parseString(char quotetype, bool &inside) {
         cssclass = "sinquot";
 
     } else if (quotetype == static_cast<char>(Quote::Back)) {
-        if (inDblQuotes || inSinQuotes) {
+        if (state.inDblQuotes || state.inSinQuotes) {
             return;
         }
 
@@ -712,7 +658,7 @@ void Engine::parseString(char quotetype, bool &inside) {
             }
         }
 
-        if (index != -1 && !inComment) {
+        if (index != -1 && !state.inComment) {
 
             colourString(index, inside, cssclass);
         }
@@ -812,7 +758,7 @@ void Engine::markInterpolations() {
     // When inside a multi-line string continuation the whole buffer is
     // implicitly inside the string, even though this line has no opening
     // font tag of its own.
-    bool wholeLineIsString = inMultiStr && rules->interpolCssClass == "dblquot";
+    bool wholeLineIsString = state.inMultiStr && rules->interpolCssClass == "dblquot";
 
     while (pos < (int)buffer.size()) {
         int ipos = static_cast<int>(buffer.find(rules->interpolStart, pos));
@@ -889,8 +835,8 @@ void Engine::markInterpolations() {
 void Engine::parseMultilineString(const string &start, const string &end, bool &inside,
                                   const string &css) {
 
-    // don't interfere when a heredoc owns the inMultiStr state
-    if (!heredocEnd.empty()) {
+    // don't interfere when a heredoc owns the state.inMultiStr state
+    if (!state.heredocEnd.empty()) {
         return;
     }
 
@@ -980,13 +926,13 @@ void Engine::parseMultilineString(const string &start, const string &end, bool &
         index = static_cast<int>(buffer.find(search, offset));
         if (index == -1) {
             if (inside) {
-                endMultiLine = true;
+                state.endMultiLine = true;
             }
             return;
         }
         if (index > buffer.size()) {
             if (inside) {
-                endMultiLine = true;
+                state.endMultiLine = true;
             }
             return;
         }
@@ -995,7 +941,7 @@ void Engine::parseMultilineString(const string &start, const string &end, bool &
 // parse for Ruby-style heredoc strings (<<TAG, <<-TAG, <<~TAG) ---------------
 void Engine::parseHeredoc(const string &marker) {
 
-    if (inMultiStr && !heredocEnd.empty()) {
+    if (state.inMultiStr && !state.heredocEnd.empty()) {
         // we are inside a heredoc — check if this line is the end marker
         // the end marker must appear at the start of the line (after optional
         // whitespace)
@@ -1012,23 +958,23 @@ void Engine::parseHeredoc(const string &marker) {
             lineContent = lineContent.substr(0, lineContent.size() - 1);
         }
 
-        if (lineContent == heredocEnd) {
+        if (lineContent == state.heredocEnd) {
             // this line closes the heredoc — colour it and end
             // position index at end of the marker so </font> closes after it
-            int endIdx = pos + (int)heredocEnd.size() - 1;
+            int endIdx = pos + (int)state.heredocEnd.size() - 1;
             eraseTags(0, 0);
-            colourString(endIdx, inMultiStr, "dblquot");
-            // inMultiStr is now false after colourString toggles it
-            heredocEnd = "";
+            colourString(endIdx, state.inMultiStr, "dblquot");
+            // state.inMultiStr is now false after colourString toggles it
+            state.heredocEnd = "";
             return;
         }
-        // still inside heredoc — line is already coloured by endMultiLine
+        // still inside heredoc — line is already coloured by state.endMultiLine
         // mechanism
         return;
     }
 
-    // don't start a heredoc when a %Q{} string owns the inMultiStr state
-    if (inMultiStr) {
+    // don't start a heredoc when a %Q{} string owns the state.inMultiStr state
+    if (state.inMultiStr) {
         return;
     }
 
@@ -1110,17 +1056,17 @@ void Engine::parseHeredoc(const string &marker) {
         }
 
         // store the end marker and start the heredoc
-        heredocEnd = tagName;
+        state.heredocEnd = tagName;
         eraseTags(tagStart, 0);
-        colourString(tagStart, inMultiStr, "dblquot");
-        // inMultiStr is now true after colourString toggles it
+        colourString(tagStart, state.inMultiStr, "dblquot");
+        // state.inMultiStr is now true after colourString toggles it
         return;
     }
 }
 // parse for multi-line comments ----------------------------------------------
 void Engine::parseBlockComment(const string &start, const string &end, bool &inside) {
 
-    if (inMultiStr) {
+    if (state.inMultiStr) {
         return;
     }
 
@@ -1151,7 +1097,7 @@ void Engine::parseBlockComment(const string &start, const string &end, bool &ins
 
     if (start == "&lt;" && end == "&gt;" && rules->doHtmlTags) {
 
-        if (buffer.find("&lt;!-") == index || inHtmTags)
+        if (buffer.find("&lt;!-") == index || state.inHtmTags)
             if (!inside)
                 return;
         erase = false;
@@ -1185,7 +1131,7 @@ void Engine::parseBlockComment(const string &start, const string &end, bool &ins
             if (inside) {
                 index += end.size() - 1;
                 if (buffer.find(end) == -1) {
-                    endMultiLine = true;
+                    state.endMultiLine = true;
                 }
             } else if (erase)
                 eraseTags(index, 0);
@@ -1374,13 +1320,13 @@ bool Engine::colourKeys(int index, const string &key, const string &cssclass) {
 // parse for variables --------------------------------------------------------
 void Engine::parseVariable(const string &var) {
 
-    if (endMultiLine) {
+    if (state.endMultiLine) {
         return;
     }
-    if (inMultiStr) {
+    if (state.inMultiStr) {
         return;
     }
-    if (inComment) {
+    if (state.inComment) {
         return;
     }
 
@@ -1470,10 +1416,10 @@ void Engine::colourVariable(int index) {
 // check for comments ---------------------------------------------------------
 void Engine::parseInlineComment(const string &cmnt) {
 
-    if (inComment) {
+    if (state.inComment) {
         return;
     }
-    if (endMultiLine) {
+    if (state.endMultiLine) {
         return;
     }
 
@@ -1569,11 +1515,11 @@ void Engine::parseCharZeroComment(char zchar) {
 // here is where the parsing rules apply --------------------------------------
 void Engine::doParsing() {
 
-    if (opt_anchor) {
-        makeAnchor();
+    if (options.anchor) {
+        HtmlWriter::writeAnchor(IO, lncount);
     }
-    if (opt_number) {
-        makeMargin();
+    if (options.number) {
+        HtmlWriter::writeMargin(IO, lncount);
     }
 
     IO->rline(buffer);
@@ -1729,7 +1675,7 @@ void Engine::doParsing() {
     if (!childLang) {
         parseChildLang();
     }
-    endMultiLine = inComment || inMultiStr;
+    state.endMultiLine = state.inComment || state.inMultiStr;
 
     // A regular "..." or '...' string opened on this line can only continue
     // onto the next line if the line ends with an odd number of backslashes
@@ -1738,120 +1684,16 @@ void Engine::doParsing() {
     //
     // Backtick strings are intentionally excluded: template literals in
     // JavaScript/TypeScript and similar languages span lines naturally
-    // without any backslash, so inBckQuotes must persist across newlines.
+    // without any backslash, so state.inBckQuotes must persist across newlines.
     if (!lineHasContinuation && rules->doRequireBackslashContinuation) {
-        inDblQuotes = false;
-        inSinQuotes = false;
+        state.inDblQuotes = false;
+        state.inSinQuotes = false;
     }
 
     lncount++;
 }
 //-----------------------------------------------------------------------------
 // write the initial HTML tags ------------------------------------------------
-void Engine::begHtml(const string &name) {
-
-    string gen;
-    string style;
-    string openht;
-
-    string ImgPath;
-    string CssFile;
-    string Path;
-    int dir_idx;
-
-    gen = "\
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\
-\n\n<!--\nSyntax highlighting generated by Web C Plus Plus software v0.9.0\n\
-Webcpp 0.8.4 and older Copyright (C)2001 - 2004 Jeffrey Bakker under the GNU GPL\n\
-Webcpp 0.9.0 and newer Copyright (C)2026 Jeffrey Bakker under the MIT License\n\
-Get webcpp at http://webcpp.sf.net\n-->\n\n";
-
-    if (Scs2.getImageFile() != "\0") {
-
-        string CopyCmd = COPY;
-
-        ImgPath = Scs2.getImageFile();
-        dir_idx = static_cast<int>(IO->getStrOf().rfind(DIRECTORY_SLASH));
-
-        if (dir_idx != -1) {
-
-            Path = IO->getStrOf().substr(0, dir_idx + 1);
-
-            Scs2.setImageLeaf();
-            CopyCmd +=
-                " \"" + ImgPath + "\" \"" + Path + Scs2.getImageFile() + "\"";
-            system(CopyCmd.data());
-            //			IO->backup(ImgPath, Path + Scs2.getImageFile(), true);
-        }
-    }
-
-    // external or embedded stylesheet
-    if (opt_extcss) {
-
-        CssFile = Scs2.getThemeName() + ".css";
-
-        dir_idx = static_cast<int>(IO->getStrOf().rfind(DIRECTORY_SLASH));
-
-        if (dir_idx != -1) {
-
-            Path = IO->getStrOf().substr(0, dir_idx + 1);
-            CssFile = Path + CssFile;
-        }
-
-        Scs2.writeCSS(CssFile);
-        //		cerr << endl << CssFile << endl;
-
-        style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" +
-                Scs2.getThemeName() + ".css\"/>\n";
-    } else {
-        style =
-            "<style type=\"text/css\">\n\n" + Scs2.getCSSdata() + "</style>\n";
-    }
-
-    // html snippet or complete html tags
-    if (opt_htsnip) {
-
-        openht = style;
-    } else {
-        openht = "<html>\n<head>\n<title>" + name + "</title>\n" + style +
-                 "</head>\n<body>\n\n"; // bgcolor="
-        //		+ Scs2.getColourByID(BGCOLOR) + ">\n\n";
-    }
-
-    if (IO->isOredir()) {
-
-        *IO << "Content-Type: text/html\n\n"; // cgi-ready
-    }
-    *IO << gen << openht << "<div class=\"webcpp\">\n<pre>\n\n";
-}
-// write the closing HTML tags ------------------------------------------------
-void Engine::endHtml() {
-
-    *IO << "\n\n</pre>\n";
-    if (opt_webcpp) {
-
-        string made;
-        made = "<center>\n<hr size=4 width=95%>\n<br>\n\
-syntax highlighting by<br><br>\n\
-<table cellpadding=3 cellspacing=3 bgcolor=#000000><tr>\n\
-<td bgcolor=#ff0000><tt><font size=+2 color=#000000>w</font></tt></td>\n\
-<td bgcolor=#ffbb00><tt><font size=+2 color=#000000>e</font></tt></td>\n\
-<td bgcolor=#ffff00><tt><font size=+2 color=#000000>b</font></tt></td>\n\
-<td bgcolor=#00ff00><tt><font size=+2 color=#000000>c</font></tt></td>\n\
-<td bgcolor=#0000ff><tt><font size=+2 color=#000000>p</font></tt></td>\n\
-<td bgcolor=#bb00ff><tt><font size=+2 color=#000000>p</font></tt></td>\n\
-</tr><tr><td colspan=6>\n\
-<a href=\"http://webcpp.sf.net\"><center><b>\
-<font color=#ffffff>web c plus plus</font></b></center>\n\
-</a></td></tr>\n</table>\n<br>\n</center>";
-
-        *IO << made;
-    }
-    *IO << "\n</div>\n";
-    if (!opt_htsnip) {
-        *IO << "\n\n</body>\n</html>\n";
-    }
-}
 // place HTML tags without being stripped -------------------------------------
 void Engine::hyperTagMe() {
 
@@ -1928,7 +1770,7 @@ void Engine::hyperIncludeMe() {
     link = buffer.substr(insr);
     link = link.substr(0, link.find("\"</font>"));
 
-    if (opt_follow) {
+    if (options.follow) {
         // follow and process the include file
 
         string path;
@@ -1945,22 +1787,22 @@ void Engine::hyperIncludeMe() {
 
         cmd = "webcpp " + path + " -A:f -H";
         // retain switches from the current file
-        if (opt_bigtab) {
+        if (options.bigtab) {
             cmd += " -t";
-            if (tabwidth != 8) {
+            if (options.tabwidth != 8) {
                 cmd += "=";
-                cmd += tw;
+                cmd += options.tw;
             }
         }
-        if (opt_webcpp)
+        if (options.webcpp)
             cmd += " -m";
-        if (opt_number)
+        if (options.number)
             cmd += " -l";
-        if (opt_anchor)
+        if (options.anchor)
             cmd += " -a";
-        if (opt_htsnip)
+        if (options.htsnip)
             cmd += " -s";
-        if (opt_extcss)
+        if (options.extcss)
             cmd += " -X";
 
         if (Scs2.getThemeName() != "typical") {
@@ -2031,14 +1873,10 @@ void Engine::colourChildLang(const string &beg, const string &end) {
         childEngine->setupIO(IO);
         childEngine->setChildLang(true);
         childEngine->setLineCount(lncount + 1);
-        if (opt_anchor) {
-            childEngine->toggleAnchor();
-        }
-        if (opt_number) {
-            childEngine->toggleNumber();
-        }
+        childEngine->options.anchor = options.anchor;
+        childEngine->options.number = options.number;
 
-        if (langext == lang::HTM_FILE && inComment) {
+        if (langext == lang::HTM_FILE && state.inComment) {
             *IO << "</font>";
         }
 
@@ -2048,7 +1886,7 @@ void Engine::colourChildLang(const string &beg, const string &end) {
         } while (childEngine->getBuffer().find(end) == -1 &&
                  (childEngine->IO->ifile && cin));
 
-        if (langext == lang::HTM_FILE && inComment) {
+        if (langext == lang::HTM_FILE && state.inComment) {
             *IO << "<font CLASS=comment>";
         }
 
