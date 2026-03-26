@@ -19,6 +19,12 @@
 #include <vector>
 using namespace std;
 
+enum class Quote : char {
+    Double = 0x22, // '"'
+    Single = 0x27, // '''
+    Back = 0x60    // '`'
+};
+
 class Engine {
 
   public:
@@ -61,11 +67,12 @@ class Engine {
     bool isInInterpolation(int index);
     bool isInsideSpanOfClass(int index, const string &cssClass);
 
-    void parseBigComment(string start, string end, bool &inside);
-    void parseMultiStr(string start, string end, bool &inside, string css);
+    void parseBlockComment(string start, string end, bool &inside);
+    void parseMultilineString(string start, string end, bool &inside,
+                              string css);
     void parseHeredoc(string marker = "&lt;&lt;");
 
-    void parseKeys();
+    void parseKeywordsAndTypes();
     bool colourKeys(int index, string key, string cssclass);
     bool isKey(int start, int end) const;
     int noCaseFind(string search, int index);
@@ -73,7 +80,7 @@ class Engine {
     void parseVariable(string var);
     void colourVariable(int index);
 
-    void parseComment(string cmnt);
+    void parseInlineComment(string cmnt);
     void colourComment(int index);
     void parseCharZeroComment(char zchar);
 
@@ -91,13 +98,11 @@ class Engine {
     int getLineCount() { return lncount; }
     string getBuffer() { return buffer; }
 
-//    virtual void setInline() { ; }
-//    virtual void initReservedWords() = 0;
-
+    // option setting
     inline void setLangExt(int e) { langext = e; }
-    inline void setupIO(std::shared_ptr<CFfile> p) { IO = p; }
     inline void setLineCount(int c) { lncount = c; }
     inline void setChildLang(bool b) { childLang = b; }
+    inline void setupIO(std::shared_ptr<CFfile> p) { IO = p; }
 
     inline void toggleBigtab() { opt_bigtab = !opt_bigtab; }
     inline void toggleWebcpp() { opt_webcpp = !opt_webcpp; }
@@ -110,7 +115,83 @@ class Engine {
 
     void setTabWidth(string width);
 
-    void setLanguageRules(unique_ptr<LanguageRules> rules) { this->rules = std::move(rules); }
+    void setLanguageRules(unique_ptr<LanguageRules> rules) {
+        this->rules = std::move(rules);
+    }
+
+    // String parsing
+    inline void parseStringDoubleQuote() {
+        parseString(static_cast<char>(Quote::Double), inDblQuotes);
+    }
+    inline void parseStringSingleQuote() {
+        parseString(static_cast<char>(Quote::Single), inSinQuotes);
+    }
+    inline void parseStringBackQuote() {
+        parseString(static_cast<char>(Quote::Back), inBckQuotes);
+    }
+
+    // Multiline string parsing
+    inline void parseMultilineStrTripleDblQuote() {
+        parseMultilineString("\"\"\"", "\"\"\"", inMultiStr, "dblquot");
+    }
+    inline void parseMultilineStrRaw() {
+        parseMultilineString("R\"(", ")\"", inMultiStr, "dblquot");
+    }
+    inline void parseMultilineStrUpperQBlock() {
+        parseMultilineString("%Q{", "}", inMultiStr, "dblquot");
+    }
+    inline void parseMultilineStrLowerQBlock() {
+        parseMultilineString("%q{", "}", inMultiStr, "sinquot");
+    }
+    inline void parseMultilineStrHeredocDblLt() { parseHeredoc("&lt;&lt;"); }
+    inline void parseMultilineStrHeredocTplLt() {
+        parseHeredoc("&lt;&lt;&lt;");
+    }
+
+    // Inline comment parsing
+    inline void parseInlineCommentSingleQuote() { parseInlineComment("'"); }
+    inline void parseInlineCommentDblDash() { parseInlineComment("--"); }
+    inline void parseInlineCommentDblSlash() { parseInlineComment("//"); }
+    inline void parseInlineCommentHash() { parseInlineComment("#"); }
+    inline void parseInlineCommentSemiColon() { parseInlineComment(";"); }
+    inline void parseInlineCommentDblColon() { parseInlineComment("::"); }
+    inline void parseInlineCommentRem() {
+        parseInlineComment("REM");
+        parseInlineComment("rem");
+    }
+    inline void parseInlineCommentExclamation() { parseInlineComment("!"); }
+
+    // First-character line comments
+    inline void parseFirstCharCommentHash() { parseCharZeroComment('#'); }
+    inline void parseFirstCharCommentFortran() {
+        parseCharZeroComment('C');
+        parseCharZeroComment('c');
+        parseCharZeroComment('*');
+    }
+
+    // Block comment parsing
+    inline void parseBlockCommentMarkup() {
+        parseBlockComment("&lt;!-", "--&gt;", inComment);
+    }
+    inline void parseBlockCommentPascal() {
+        parseBlockComment("(*", "*)", inComment);
+    }
+    inline void parseBlockCommentPLI() {
+        parseBlockComment("/*", "*/", inComment);
+    }
+    inline void parseBlockCommentHaskell() {
+        parseBlockComment("{-", "-}", inComment);
+    }
+    inline void parseHtmlTags() {
+        parseBlockComment("&lt;", "&gt;", inHtmTags);
+    }
+
+    // Inline language parsing
+    inline void colourChildLangAsm() { colourChildLang("asm", "}"); }
+    inline void colourChildLangJS() {
+        colourChildLang("&lt;script", "/script");
+    }
+    inline void colourChildLangCSS() { colourChildLang("&lt;style", "/style"); }
 
     // options
   protected:
@@ -126,45 +207,7 @@ class Engine {
     // parsing rules
   protected:
     std::unique_ptr<LanguageRules> rules = nullptr;
-//    bool doStringsDblQuote;
-//    bool doStringsSinQuote;
-//    bool doStringsBackTick;
-//    bool doSymbols;
-//    bool doNumbers;
-//    bool doUnderscoreNumbers;
-//    bool doKeywords;
-//    bool doCaseKeys;
-//    bool doLabels;
-//    bool doPreProc;
-//    bool doScalars;
-//    bool doArrays;
-//    bool doHashes;
-//    bool doHtmlTags;
-//    bool doCComnt;
-//    bool doHskComnt;
-//    bool doHtmComnt;
-//    bool doPasComnt;
-//    bool doBigComnt;
-//    bool doCinComnt;
-//    bool doAdaComnt;
-//    bool doUnxComnt;
-//    bool doAsmComnt;
-//    bool doRemComnt;
-//    bool doFtnComnt;
-//    bool doTclComnt;
-//    bool doAspComnt;
-//    bool doBatComnt;
-//    bool doTplString;
-//    bool doRawString;
-//    bool doHeredoc;
-//    bool doPercentQ;
-//    bool doPhpHeredoc;
-//    bool doInterpolate;
-//    string interpolStart;    // e.g. "#{" for Ruby, "${" for JS, "\\(" for Swift
-//    char   interpolEnd;      // e.g. '}' or ')'
-//    string interpolCssClass; // CSS class of the string type that interpolates
 
-    // theme file I/O engine
   public:
     std::shared_ptr<CFfile> IO;
     Theme Scs2;

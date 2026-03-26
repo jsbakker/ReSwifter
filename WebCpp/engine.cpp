@@ -8,7 +8,6 @@
 
 #include "engine.h"
 #include "deflangs.h"
-#include "defparse.h"
 #include "defsys.h"
 #include <algorithm>
 #include <cctype>
@@ -235,7 +234,7 @@ bool Engine::abortColour(int index) {
         return true;
 
     if (rules->doHtmComnt && (isInsideIt(index, "&lt;", "&gt;") &&
-                       isInsideIt(index, "&gt;", "&lt;"))) {
+                              isInsideIt(index, "&gt;", "&lt;"))) {
         return true;
     }
     if (isInsideIt(index, "/*", "*/", true)) {
@@ -582,7 +581,7 @@ void Engine::parseString(char quotetype, bool &inside) {
     index = 0;
 
     // Support for 3 different string types
-    if (quotetype == DBL_QUOTES) {
+    if (quotetype == static_cast<char>(Quote::Double)) {
         if (inSinQuotes || inBckQuotes) {
             return;
         }
@@ -600,7 +599,7 @@ void Engine::parseString(char quotetype, bool &inside) {
 
         cssclass = "dblquot";
 
-    } else if (quotetype == SIN_QUOTES) {
+    } else if (quotetype == static_cast<char>(Quote::Single)) {
         if (inDblQuotes || inBckQuotes) {
             return;
         }
@@ -611,7 +610,7 @@ void Engine::parseString(char quotetype, bool &inside) {
 
         cssclass = "sinquot";
 
-    } else if (quotetype == BCK_QUOTES) {
+    } else if (quotetype == static_cast<char>(Quote::Back)) {
         if (inDblQuotes || inSinQuotes) {
             return;
         }
@@ -794,7 +793,8 @@ bool Engine::isInInterpolation(int index) {
 // parseString, before other highlight passes.
 void Engine::markInterpolations() {
 
-    if (!rules->doInterpolate || rules->interpolStart.empty() || rules->interpolEnd == '\0')
+    if (!rules->doInterpolate || rules->interpolStart.empty() ||
+        rules->interpolEnd == '\0')
         return;
 
     const string openMark = "</font>\x01"; // close string tag, open interp
@@ -878,7 +878,8 @@ void Engine::markInterpolations() {
     }
 }
 // parse for multi-line strings -----------------------------------------------
-void Engine::parseMultiStr(string start, string end, bool &inside, string css) {
+void Engine::parseMultilineString(string start, string end, bool &inside,
+                                  string css) {
 
     // don't interfere when a heredoc owns the inMultiStr state
     if (!heredocEnd.empty()) {
@@ -1109,7 +1110,7 @@ void Engine::parseHeredoc(string marker) {
     }
 }
 // parse for multi-line comments ----------------------------------------------
-void Engine::parseBigComment(string start, string end, bool &inside) {
+void Engine::parseBlockComment(string start, string end, bool &inside) {
 
     if (inMultiStr) {
         return;
@@ -1201,7 +1202,7 @@ void Engine::parseBigComment(string start, string end, bool &inside) {
     }
 }
 // parse for keywords ---------------------------------------------------------
-void Engine::parseKeys() {
+void Engine::parseKeywordsAndTypes() {
 
     if (buffer[0] == '#') {
         return;
@@ -1221,7 +1222,8 @@ void Engine::parseKeys() {
         while (index < static_cast<int>(buffer.size()) && index != -1) {
 
             bool inserted = false;
-            if (isKey(index - 1, index + static_cast<int>(rules->keys[i].size()))) {
+            if (isKey(index - 1,
+                      index + static_cast<int>(rules->keys[i].size()))) {
                 inserted = colourKeys(index, rules->keys[i], "keyword");
             }
             int skip = inserted ? offset : 0;
@@ -1238,7 +1240,8 @@ void Engine::parseKeys() {
         while (index < static_cast<int>(buffer.size()) && index != -1) {
 
             bool inserted = false;
-            if (isKey(index - 1, index + static_cast<int>(rules->types[i].size()))) {
+            if (isKey(index - 1,
+                      index + static_cast<int>(rules->types[i].size()))) {
                 inserted = colourKeys(index, rules->types[i], "keytype");
             }
             int skip = inserted ? offset : 0;
@@ -1456,7 +1459,7 @@ void Engine::colourVariable(int index) {
 }
 //-----------------------------------------------------------------------------
 // check for comments ---------------------------------------------------------
-void Engine::parseComment(string cmnt) {
+void Engine::parseInlineComment(string cmnt) {
 
     if (inComment) {
         return;
@@ -1581,38 +1584,38 @@ void Engine::doParsing() {
     const bool lineHasContinuation = (trailingBackslashes % 2 == 1);
 
     // preformat HTML escapes
-    PRE_PARSE_CODE;
+    pre_parse();
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(0);
 #endif
 
     if (rules->doLabels)
-        PARSE_LABELS;
+        parseLabel();
 
     if (rules->doTplString)
-        PARSE_TPL_DBL_STRING;
+        parseMultilineStrTripleDblQuote();
     if (rules->doRawString)
-        PARSE_RAW_CPP_STRING;
+        parseMultilineStrRaw();
     if (rules->doHeredoc)
-        PARSE_HEREDOC_STRING;
+        parseMultilineStrHeredocDblLt();
     if (rules->doPhpHeredoc)
-        PARSE_PHP_HEREDOC;
+        parseMultilineStrHeredocTplLt();
     if (rules->doPercentQ) {
-        PARSE_PERCENT_QU_STR;
-        PARSE_PERCENT_QL_STR;
+        parseMultilineStrUpperQBlock();
+        parseMultilineStrLowerQBlock();
     }
 
     if (rules->doStringsDblQuote) {
-        PARSE_DBL_QUO_STRING;
+        parseStringDoubleQuote();
     }
 
     if (rules->doStringsSinQuote) {
-        PARSE_SIN_QUO_STRING;
+        parseStringSingleQuote();
     }
 
     if (rules->doStringsBackTick) {
-        PARSE_BCK_QUO_STRING;
+        parseStringBackQuote();
     }
 
     // Post-pass: insert interpolation boundary markers inside string spans.
@@ -1627,70 +1630,72 @@ void Engine::doParsing() {
 #endif
 
     if (rules->doPreProc)
-        PARSE_PREPROCESSOR;
+        parsePreProc();
 
     if (rules->doPasComnt)
-        PARSE_PAS_MOD2_COMNT;
+        parseBlockCommentPascal();
     if (rules->doHtmComnt)
-        PARSE_A_MARKUP_COMNT;
+        parseBlockCommentMarkup();
     if (rules->doBigComnt)
-        PARSE_CLASSICC_COMNT;
+        parseBlockCommentPLI();
     if (rules->doHskComnt)
-        PARSE_HASKL_98_COMNT;
+        parseBlockCommentHaskell();
     if (rules->doHtmlTags)
-        PARSE_HTML_TAGS;
+        parseHtmlTags();
 
     if (rules->doKeywords)
-        PARSE_KEYWORDS;
+        parseKeywordsAndTypes();
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(2);
 #endif
 
+    // Scripting variables parsing
     if (rules->doScalars)
-        PARSE_SCALAR_VARIABL;
+        parseVariable("$");
     if (rules->doArrays)
-        PARSE_ARRAYS_VARIABL;
+        parseVariable("@");
     if (rules->doHashes)
-        PARSE_HASHED_VARIABL;
+        parseVariable("%");
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(3);
 #endif
 
     if (rules->doNumbers)
-        PARSE_NUMBERS;
+        parseNum();
 
 #ifdef DEBUG_DO_PARSING
     PRINT_DEBUG(4);
 #endif
 
     if (rules->doAdaComnt) {
-        PARSE_A_ADA_95_COMNT;
+        parseInlineCommentDblDash();
     }
     if (rules->doAspComnt) {
-        PARSE_A_MS_ASP_COMNT;
+        parseInlineCommentSingleQuote();
     }
     if (rules->doCinComnt) {
-        PARSE_C_INLINE_COMNT;
+        parseInlineCommentDblSlash();
     }
     if (rules->doUnxComnt) {
-        PARSE_UNIXHASH_COMNT;
+        parseInlineCommentHash();
     }
     if (rules->doAsmComnt) {
-        PARSE_ASSEMBLY_COMNT;
+        parseInlineCommentSemiColon();
     }
     if (rules->doBatComnt) {
-        PARSE_DBLCOLON_COMNT;
+        parseInlineCommentDblColon();
     }
     if (rules->doRemComnt) {
-        PARSE_REMINDER_COMNT;
+        parseInlineCommentRem();
     }
     if (rules->doFtnComnt) {
-        PARSE_ZFORTRAN_COMNT;
+        parseFirstCharCommentFortran();
+        parseInlineCommentExclamation();
     }
     if (rules->doTclComnt) {
-        PARSE_ZEROHASH_COMNT;
+        parseFirstCharCommentHash();
     }
 
 #ifdef DEBUG_DO_PARSING
@@ -1973,11 +1978,11 @@ void Engine::parseChildLang() {
 
     switch (langext) {
     case lang::CPP_FILE:
-        PARSE_INLINE_ASM;
+        colourChildLangAsm();
         break;
     case lang::HTM_FILE:
-        PARSE_INLINE_JS;
-        PARSE_INLINE_CSS;
+        colourChildLangJS();
+        colourChildLangCSS();
         break;
     default:
         return;
