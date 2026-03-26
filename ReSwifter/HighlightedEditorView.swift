@@ -166,6 +166,10 @@ struct HighlightedEditorView: NSViewRepresentable {
             let nortextColor = WebCppTheme.color(for: "nortext")
             let fullRange = NSRange(location: 0, length: storage.length)
 
+            // Capture scroll position before attribute changes trigger layout invalidation.
+            let scrollView = textView.enclosingScrollView
+            let savedScrollOrigin = scrollView?.contentView.bounds.origin
+
             storage.beginEditing()
 
             // Reset everything to nortext / regular monospace
@@ -188,6 +192,25 @@ struct HighlightedEditorView: NSViewRepresentable {
             }
 
             storage.endEditing()
+
+            // endEditing() marks layout as needing invalidation but defers
+            // actual computation.  Force it now so any frame/scroll
+            // adjustments happen before we restore the scroll position.
+            if let scrollView, let savedScrollOrigin {
+                if let layoutManager = textView.layoutManager,
+                   let textContainer = textView.textContainer {
+                    layoutManager.ensureLayout(for: textContainer)
+                }
+
+                let maxY = max(0, (scrollView.documentView?.frame.height ?? 0)
+                                - scrollView.contentView.bounds.height)
+                let clampedOrigin = NSPoint(
+                    x: savedScrollOrigin.x,
+                    y: min(savedScrollOrigin.y, maxY)
+                )
+                scrollView.contentView.setBoundsOrigin(clampedOrigin)
+                scrollView.reflectScrolledClipView(scrollView.contentView)
+            }
         }
 
         // MARK: NSTextViewDelegate
