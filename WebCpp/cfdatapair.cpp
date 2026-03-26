@@ -32,6 +32,8 @@
 
 #include "cfdatapair.h"
 
+using std::string;
+
 // overloaded stream operators ------------------------------------------------
 void CFdatapair::operator<<(string mldata) { translateML(mldata); }
 void CFdatapair::operator>>(string &mldata) { mldata = info_ml(); }

@@ -277,7 +277,12 @@
 #include "cffile.h"
 #include <cctype>
 #include <iostream>
-using namespace std;
+
+using std::cerr;
+using std::cin;
+using std::ifstream;
+using std::ofstream;
+using std::string;
 
 // constructors ---------------------------------------------------------------
 CFfile::CFfile() {

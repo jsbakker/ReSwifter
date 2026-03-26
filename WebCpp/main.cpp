@@ -8,8 +8,13 @@
 #endif
 
 #include "driver.h"
+
 #include <fstream>
-using namespace std;
+#include <string>
+
+using std::cerr;
+using std::ifstream;
+using std::string;
 
 int main(int argc, char **argv) {
 

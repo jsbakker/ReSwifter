@@ -6,24 +6,12 @@
 #ifndef _THEME_H_
 #define _THEME_H_
 
-#define BGCOLOR 0
-#define PREPROC 1
-#define NORTEXT 2
-#define SYMBOLS 3
-#define KEYWORD 4
-#define KEYTYPE 5
-#define INTEGER 6
-#define FLOATPT 7
-#define DBLQUOT 8
-#define SINQUOT 9
-#define COMMENT 10
-
 // use Cfour engines
 #include "cfdatapair.h"
 #include "cffile.h"
 
+#include <string>
 #include <vector>
-using namespace std;
 
 class Theme : public CFfile {
 
@@ -32,27 +20,27 @@ class Theme : public CFfile {
     ~Theme();
 
     void typical();
-    bool setFile(string filename);
-    void setPicture(string picture);
-    void setColour(string hexcode, int num);
-    bool verifyFormat(string data);
+    bool setFile(std::string filename);
+    void setPicture(std::string picture);
+    void setColour(std::string hexcode, int num);
+    bool verifyFormat(std::string data);
     void toggleSnippet() { snippet = !snippet; }
 
-    string getColourByID(int nColour) { return Colours2[nColour]; }
-    string getColour(string name);
-    string getThemeName();
-    string getImageFile();
-    string getCSSdata();
+    std::string getColourByID(int nColour) { return Colours2[nColour]; }
+    std::string getColour(std::string name);
+    std::string getThemeName();
+    std::string getImageFile();
+    std::string getCSSdata();
 
     void setImageLeaf();
-    bool writeCSS(string cssfile);
+    bool writeCSS(std::string cssfile);
     bool load();
 
   protected:
-    vector<CFdatapair> ScsVec;
-    string Colours2[11];
-    string SCSfile;
-    string Picture;
+    std::vector<CFdatapair> ScsVec;
+    std::string Colours2[11];
+    std::string SCSfile;
+    std::string Picture;
     bool format2;
     bool snippet;
 };

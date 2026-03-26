@@ -3,29 +3,26 @@
    ___________________________________ .. .
  */
 
-/*
-Finished
-
-Asm
-Asp
-C
-C#
-C++
-CG
-Fortran
-HTML
-Java
-Modula*
-Objective C
-Pascal
-Shell
-
-*/
-
 #include "theme.h"
 #include "defsys.h"
 #include <cctype>
-using namespace std;
+
+namespace {
+constexpr int BgColor = 0;
+constexpr int PreProc = 1;
+constexpr int NorText = 2;
+constexpr int Symbols = 3;
+constexpr int KeyWord = 4;
+constexpr int KeyType = 5;
+constexpr int Integer = 6;
+constexpr int FloatPt = 7;
+constexpr int DblQuot = 8;
+constexpr int SinQuot = 9;
+constexpr int Comment = 10;
+}
+
+using std::cerr;
+using std::string;
 
 // (de)construction -----------------------------------------------------------
 Theme::~Theme() { close(); }
@@ -145,22 +142,22 @@ bool Theme::load() {
         //		}
 
         // sort the Scs2 data
-        Colours2[BGCOLOR] = getColour("bgcolor");
-        Colours2[PREPROC] = getColour("preproc");
-        Colours2[NORTEXT] = getColour("nortext");
-        Colours2[SYMBOLS] = getColour("symbols");
-        Colours2[KEYWORD] = getColour("keyword");
-        Colours2[KEYTYPE] = getColour("keytype");
-        Colours2[INTEGER] = getColour("integer");
-        Colours2[FLOATPT] = getColour("floatpt");
-        Colours2[DBLQUOT] = getColour("dblquot");
-        Colours2[SINQUOT] = getColour("sinquot");
-        Colours2[COMMENT] = getColour("comment");
+        Colours2[BgColor] = getColour("bgcolor");
+        Colours2[PreProc] = getColour("preproc");
+        Colours2[NorText] = getColour("nortext");
+        Colours2[Symbols] = getColour("symbols");
+        Colours2[KeyWord] = getColour("keyword");
+        Colours2[KeyType] = getColour("keytype");
+        Colours2[Integer] = getColour("integer");
+        Colours2[FloatPt] = getColour("floatpt");
+        Colours2[DblQuot] = getColour("dblquot");
+        Colours2[SinQuot] = getColour("sinquot");
+        Colours2[Comment] = getColour("comment");
         // use a background image, if found
         Picture = getColour("background");
 
         // check the format of all the colours
-        for (int i = BGCOLOR; i <= COMMENT; i++) {
+        for (int i = BgColor; i <= Comment; i++) {
 
             if (Colours2[i] == "\0") {
                 typical();
@@ -181,22 +178,22 @@ bool Theme::load() {
         return true;
     }
     // load an original SCS-format file
-    for (int i = BGCOLOR; i <= COMMENT; i++) {
+    for (int i = BgColor; i <= Comment; i++) {
 
         ifile >> Colours2[i];
 
         // convert old Scs to Scs2 format
-        if (i == NORTEXT) {
-            Colours2[SYMBOLS] = Colours2[NORTEXT];
+        if (i == NorText) {
+            Colours2[Symbols] = Colours2[NorText];
             i++;
-        } else if (i == KEYWORD) {
-            Colours2[KEYTYPE] = Colours2[KEYWORD];
+        } else if (i == KeyWord) {
+            Colours2[KeyType] = Colours2[KeyWord];
             i++;
-        } else if (i == INTEGER) {
-            Colours2[FLOATPT] = Colours2[INTEGER];
+        } else if (i == Integer) {
+            Colours2[FloatPt] = Colours2[Integer];
             i++;
-        } else if (i == DBLQUOT) {
-            Colours2[SINQUOT] = Colours2[DBLQUOT];
+        } else if (i == DblQuot) {
+            Colours2[SinQuot] = Colours2[DblQuot];
             i++;
         }
         // they will look exactly the same as the old style
@@ -236,17 +233,17 @@ void Theme::typical() {
 
     SCSfile = "typical";
 
-    setColour("#ffffff", BGCOLOR);
-    setColour("#a900a9", PREPROC); // a900a9
-    setColour("#000000", NORTEXT);
-    setColour("#0077dd", SYMBOLS);
-    setColour("#224fff", KEYWORD);
-    setColour("#ff9933", KEYTYPE); // 224fff  //ff9933
-    setColour("#ff0032", INTEGER);
-    setColour("#ff23a6", FLOATPT);
-    setColour("#00b800", DBLQUOT);
-    setColour("#00b86b", SINQUOT);
-    setColour("#666666", COMMENT);
+    setColour("#ffffff", BgColor);
+    setColour("#a900a9", PreProc); // a900a9
+    setColour("#000000", NorText);
+    setColour("#0077dd", Symbols);
+    setColour("#224fff", KeyWord);
+    setColour("#ff9933", KeyType); // 224fff  //ff9933
+    setColour("#ff0032", Integer);
+    setColour("#ff23a6", FloatPt);
+    setColour("#00b800", DblQuot);
+    setColour("#00b86b", SinQuot);
+    setColour("#666666", Comment);
 }
 // enforces proper colour format ----------------------------------------------
 bool Theme::verifyFormat(string hexData) {
@@ -292,54 +289,54 @@ string Theme::getCSSdata() {
         "/*\nWebcpp v0.8.1 compatible StyleSheet\nhttp://webcpp.sf.net\n"
         "Theme: " +
         getThemeName() + "\n*/\n\n" + +((snippet) ? "div.webcpp" : "body") +
-        "\n{\nbackground-color: " + Colours2[BGCOLOR] +
+        "\n{\nbackground-color: " + Colours2[BgColor] +
         //";\nalign: center;\n"
         //"color: " + Colours2[COMMENT] + // ";\nborder: solid" +
         ((Picture == "\0") ? "\n}\n\n"
                            : ";\nbackground-image: url(\"" + Picture +
                                  "\");\nbackground-attachment: fixed\n}\n\n") +
 
-        ".webcpp a:link    {color:" + Colours2[DBLQUOT] +
+        ".webcpp a:link    {color:" + Colours2[DblQuot] +
         "}\n"
         ".webcpp a:visited {color:" +
-        Colours2[COMMENT] +
+        Colours2[Comment] +
         "}\n"
         ".webcpp a:active  {color:" +
-        Colours2[KEYWORD] +
+        Colours2[KeyWord] +
         "}\n"
         ".webcpp a:hover   {color:" +
-        Colours2[PREPROC] +
+        Colours2[PreProc] +
         "}\n\n"
         ".webcpp pre\n{\ncolor: " +
-        Colours2[NORTEXT] +
+        Colours2[NorText] +
         "\n}\n\n"
         ".webcpp font\n{\nfont-size:100%\n}\n\n"
         ".webcpp .symbols\n{\ncolor: " +
-        Colours2[SYMBOLS] +
+        Colours2[Symbols] +
         "\n}\n\n"
         ".webcpp .preproc\n{\ncolor: " +
-        Colours2[PREPROC] +
+        Colours2[PreProc] +
         "\n}\n\n"
         ".webcpp .integer\n{\ncolor: " +
-        Colours2[INTEGER] +
+        Colours2[Integer] +
         "\n}\n\n"
         ".webcpp .floatpt\n{\ncolor: " +
-        Colours2[FLOATPT] +
+        Colours2[FloatPt] +
         "\n}\n\n"
         ".webcpp .dblquot\n{\ncolor: " +
-        Colours2[DBLQUOT] +
+        Colours2[DblQuot] +
         "\n}\n\n"
         ".webcpp .sinquot\n{\ncolor: " +
-        Colours2[SINQUOT] +
+        Colours2[SinQuot] +
         "\n}\n\n"
         ".webcpp .keyword\n{\ncolor: " +
-        Colours2[KEYWORD] +
+        Colours2[KeyWord] +
         ";\nfont-weight: bold\n}\n\n"
         ".webcpp .keytype\n{\ncolor: " +
-        Colours2[KEYTYPE] +
+        Colours2[KeyType] +
         ";\nfont-weight: bold\n}\n\n"
         ".webcpp .comment\n{\ncolor: " +
-        Colours2[COMMENT] + ";\nfont-style: italic\n}\n\n";
+        Colours2[Comment] + ";\nfont-style: italic\n}\n\n";
 
     return CSS;
 }

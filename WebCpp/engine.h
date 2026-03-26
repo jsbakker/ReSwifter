@@ -6,10 +6,6 @@
 #ifndef _ENGINE_H
 #define _ENGINE_H
 
-#define DBL_QUOTES 0x22
-#define SIN_QUOTES 0x27
-#define BCK_QUOTES 0x60
-
 #include "cffile.h"
 #include "lang_rules.h"
 #include "theme.h"
@@ -17,7 +13,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-using namespace std;
 
 enum class Quote : char {
     Double = 0x22, // '"'
@@ -28,7 +23,7 @@ enum class Quote : char {
 class Engine {
 
   public:
-    explicit Engine(unique_ptr<LanguageRules> rules);
+    explicit Engine(std::unique_ptr<LanguageRules> rules);
     virtual ~Engine();
 
     void init_switches();
@@ -40,7 +35,7 @@ class Engine {
     bool abortParse();
     bool abortColour(int index);
 
-    bool isInsideIt(int index, string start, string end,
+    bool isInsideIt(int index, std::string start, std::string end,
                     bool skipTagged = false);
     bool isInsideTag(int index);
     bool isNotWord(int index);
@@ -49,7 +44,7 @@ class Engine {
     void parsePreProc();
 
     void parseChildLang();
-    void colourChildLang(string beg, string end);
+    void colourChildLang(std::string beg, std::string end);
 
     void parseSymbol();
     bool colourSymbol(int start, int end);
@@ -62,32 +57,32 @@ class Engine {
     bool colourNum(int start, int end);
 
     void parseString(char quotetype, bool &inside);
-    void colourString(int index, bool &inside, string cssclass);
+    void colourString(int index, bool &inside, std::string cssclass);
     void markInterpolations();
     bool isInInterpolation(int index);
-    bool isInsideSpanOfClass(int index, const string &cssClass);
+    bool isInsideSpanOfClass(int index, const std::string &cssClass);
 
-    void parseBlockComment(string start, string end, bool &inside);
-    void parseMultilineString(string start, string end, bool &inside,
-                              string css);
-    void parseHeredoc(string marker = "&lt;&lt;");
+    void parseBlockComment(std::string start, std::string end, bool &inside);
+    void parseMultilineString(std::string start, std::string end, bool &inside,
+                              std::string css);
+    void parseHeredoc(std::string marker = "&lt;&lt;");
 
     void parseKeywordsAndTypes();
-    bool colourKeys(int index, string key, string cssclass);
+    bool colourKeys(int index, std::string key, std::string cssclass);
     bool isKey(int start, int end) const;
-    int noCaseFind(string search, int index);
+    int noCaseFind(std::string search, int index);
 
-    void parseVariable(string var);
+    void parseVariable(std::string var);
     void colourVariable(int index);
 
-    void parseInlineComment(string cmnt);
+    void parseInlineComment(std::string cmnt);
     void colourComment(int index);
     void parseCharZeroComment(char zchar);
 
     void loadKeys();
     void doParsing();
 
-    void begHtml(string name);
+    void begHtml(std::string name);
     void endHtml();
 
     void hyperTagMe();
@@ -96,7 +91,7 @@ class Engine {
     void hyperIncludeMe();
 
     int getLineCount() { return lncount; }
-    string getBuffer() { return buffer; }
+    std::string getBuffer() { return buffer; }
 
     // option setting
     inline void setLangExt(int e) { langext = e; }
@@ -113,9 +108,9 @@ class Engine {
     inline void toggleExtcss() { opt_extcss = !opt_extcss; }
     inline void toggleHtSnip() { opt_htsnip = !opt_htsnip; }
 
-    void setTabWidth(string width);
+    void setTabWidth(std::string width);
 
-    void setLanguageRules(unique_ptr<LanguageRules> rules) {
+    void setLanguageRules(std::unique_ptr<LanguageRules> rules) {
         this->rules = std::move(rules);
     }
 
@@ -217,8 +212,8 @@ class Engine {
     int langext;
     int lncount;
     int tabwidth;
-    string tw;
-    string buffer;
+    std::string tw;
+    std::string buffer;
 
     bool childLang;
     bool inDblQuotes;
@@ -227,7 +222,7 @@ class Engine {
     bool inHtmTags;
     bool inComment;
     bool inMultiStr;
-    string heredocEnd;
+    std::string heredocEnd;
     bool endMultiLine;
 };
 

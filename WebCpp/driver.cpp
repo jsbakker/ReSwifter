@@ -8,7 +8,13 @@
 
 #include <ctime>
 #include <iomanip>
-using namespace std;
+
+using std::cerr;
+using std::cin;
+using std::ifstream;
+using std::make_shared;
+using std::setprecision;
+using std::string;
 
 Driver::Driver() {
 

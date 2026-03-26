@@ -34,32 +34,31 @@
 #define _C4_DATA_PAIR
 
 #include <string>
-using namespace std;
 
 class CFdatapair {
 
   public:
-    void operator<<(string mldata);  //{translateML(mldata);}
-    void operator>>(string &mldata); //{mldata = info_ml();}
+    void operator<<(std::string mldata);  //{translateML(mldata);}
+    void operator>>(std::string &mldata); //{mldata = info_ml();}
     //---------------------------------------------------------------------------
     CFdatapair();                   // default constructor
-    CFdatapair(string mldata);      // create datapair with markup data
-    CFdatapair(string n, string v); // create datapair with name and value
+    CFdatapair(std::string mldata);      // create datapair with markup data
+    CFdatapair(std::string n, std::string v); // create datapair with name and value
     //---------------------------------------------------------------------------
-    string getname() const;  // return the name
-    string getvalue() const; // return the value
-    void setname(string n);  // change the name
-    void setvalue(string v); // change the value
+    std::string getname() const;  // return the name
+    std::string getvalue() const; // return the value
+    void setname(std::string n);  // change the name
+    void setvalue(std::string v); // change the value
     //---------------------------------------------------------------------------
-    string info_nv() const; // return the name/value in printable format
-    string info_ml() const; // return the name/value in markup format
+    std::string info_nv() const; // return the name/value in printable format
+    std::string info_ml() const; // return the name/value in markup format
     //---------------------------------------------------------------------------
-    void translateML(string mldata); // change the name/value using markup data
+    void translateML(std::string mldata); // change the name/value using markup data
     void swap();                     // swap the name and value
     //---------------------------------------------------------------------------
   protected:
-    string name;
-    string value;
+    std::string name;
+    std::string value;
     //---------------------------------------------------------------------------
 };
 

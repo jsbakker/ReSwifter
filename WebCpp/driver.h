@@ -20,12 +20,12 @@ class Driver {
     Driver();
     ~Driver();
     static void help(char mode);
-    bool switch_parser(string arg);
-    uint8_t getExt(string filename);
-    string checkExt(string filename);
-    static void makeIndex(string prefix);
-    bool prep_files(string ifile, string ofile, char over);
-    string getTitle();
+    bool switch_parser(std::string arg);
+    uint8_t getExt(std::string filename);
+    std::string checkExt(std::string filename);
+    static void makeIndex(std::string prefix);
+    bool prep_files(std::string ifile, std::string ofile, char over);
+    std::string getTitle();
     void drive();
     void clean();
     void endio();
@@ -43,8 +43,8 @@ class Driver {
     std::shared_ptr<CFfile> ObjIO;
     std::unique_ptr<Engine> lang;
 
-    string iFile;
-    string oFile;
+    std::string iFile;
+    std::string oFile;
 };
 
 #endif // DRIVER_H

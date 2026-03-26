@@ -3,16 +3,23 @@
    ___________________________________ .. .
  */
 
-// uncomment to debug
+// uncomment for debug output
 // #include "defdebug.h"
 
 #include "engine.h"
 #include "deflangs.h"
 #include "defsys.h"
+
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
-using namespace std;
+
+using std::cerr;
+using std::cin;
+using std::make_unique;
+using std::string;
+using std::unique_ptr;
+using std::vector;
 
 // forward declaration (defined near colourKeys)
 static bool isInsideFontTag(const string &buffer, int index);
@@ -572,7 +579,7 @@ void Engine::parseString(char quotetype, bool &inside) {
     if (inMultiStr) {
         return;
     }
-    if (rules->doAspComnt && quotetype == SIN_QUOTES) {
+    if (rules->doAspComnt && quotetype == static_cast<char>(Quote::Single)) {
         return;
     }
 

@@ -124,7 +124,6 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-using namespace std;
 
 class CFfile {
 
@@ -132,8 +131,8 @@ class CFfile {
     // (Con/De)structors
     // ---------------------------------------------------------
     CFfile();
-    CFfile(string filename, char io);
-    CFfile(string filein, string fileout);
+    CFfile(std::string filename, char io);
+    CFfile(std::string filein, std::string fileout);
     ~CFfile();
     // Initialize bool data members
     // ----------------------------------------------
@@ -152,11 +151,11 @@ class CFfile {
     //----------------------------------------------------------------------------
     // File open methods
     // ---------------------------------------------------------
-    bool exists(string fname);      // check if a file exists
-    bool openR(string INfile);      // opens file for reading
-    bool openW(string OUTfile);     // opens file for writing
-    bool openW(string fn, bool ow); // open, specify overwrite
-    bool open(string fn, char io);  // open, specify mode
+    bool exists(std::string fname);      // check if a file exists
+    bool openR(std::string INfile);      // opens file for reading
+    bool openW(std::string OUTfile);     // opens file for writing
+    bool openW(std::string fn, bool ow); // open, specify overwrite
+    bool open(std::string fn, char io);  // open, specify mode
 
     bool isIopen() { return iopen; } // is infile open?
     bool isOopen() { return oopen; } // is outfile open?
@@ -169,8 +168,8 @@ class CFfile {
     long getOFptr();              // get the outfile pointer location
     // get the filenames
     // ---------------------------------------------------------
-    inline string getStrIf() { return str_if; }
-    inline string getStrOf() { return str_of; }
+    inline std::string getStrIf() { return str_if; }
+    inline std::string getStrOf() { return str_of; }
     //----------------------------------------------------------------------------
     // I/O redirection methods
     // ---------------------------------------------------
@@ -182,16 +181,16 @@ class CFfile {
     // Read/Write methods
     // --------------------------------------------------------
     template <class T> void read(T &buffer) {
-        (iredir ? cin : ifile) >> buffer;
+        (iredir ? std::cin : ifile) >> buffer;
     }
     template <class T> void write(T buffer) {
-        (oredir ? cout : ofile) << buffer;
+        (oredir ? std::cout : ofile) << buffer;
     }
     // Special purpose read methods
     // ----------------------------------------------
-    void rline(string &buffer);              // read a line to the string
-    void rfile(string &buffer);              // read a file to the string
-    void backup(string fname, string bname); // copy a file
+    void rline(std::string &buffer);              // read a line to the string
+    void rfile(std::string &buffer);              // read a file to the string
+    void backup(std::string fname, std::string bname); // copy a file
     // File close methods
     // --------------------------------------------------------
     void closeR(); // close the input file
@@ -200,8 +199,8 @@ class CFfile {
     //----------------------------------------------------------------------------
     // These are public, so you can still use them raw
     // ---------------------------
-    ifstream ifile; // input file stream
-    ofstream ofile; // output file stream
+    std::ifstream ifile; // input file stream
+    std::ofstream ofile; // output file stream
     //----------------------------------------------------------------------------
   protected:
     // I/O redirection switches
@@ -212,8 +211,8 @@ class CFfile {
     bool oopen;
     // filenames
     // -----------------------------------------------------------------
-    string str_if;
-    string str_of;
+    std::string str_if;
+    std::string str_of;
 };
 
 #endif // _C4_FILE_H

@@ -4,12 +4,18 @@
 
 #include "WebCppBridge.h"
 #include "driver.h"
+
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-using namespace std;
+
+using std::string;
+using std::ifstream;
+using std::ofstream;
+using std::ostringstream;
+using std::to_string;
 
 // Helper: duplicate a std::string as a C-allocated char*.
 static char *dup_string(const string &s) {
