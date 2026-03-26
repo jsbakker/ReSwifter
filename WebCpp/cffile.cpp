@@ -288,11 +288,11 @@ using std::string;
 CFfile::CFfile() {
     init_switches();
 } //---------------------------------------------------------------------------
-CFfile::CFfile(string filename, char io) {
+CFfile::CFfile(const string &filename, char io) {
     init_switches();
     open(filename, io);
 } //---------------------------------------------------------------------------
-CFfile::CFfile(string in, string out) {
+CFfile::CFfile(const string &in, const string &out) {
     init_switches();
     openR(in);
     openW(out);
@@ -310,7 +310,7 @@ void CFfile::init_switches() {
     str_of = "\0";
 }
 // open methods ---------------------------------------------------------------
-bool CFfile::open(string filename, char io) {
+bool CFfile::open(const string &filename, char io) {
 
     io = tolower(io);
     switch (io) {
@@ -331,7 +331,7 @@ bool CFfile::open(string filename, char io) {
 
     return true;
 } // --------------------------------------------------------------------------
-bool CFfile::openR(string INfile) {
+bool CFfile::openR(const string &INfile) {
 
     if (exists(INfile)) {
         ifile.open(INfile.data());
@@ -343,7 +343,7 @@ bool CFfile::openR(string INfile) {
         return false;
     }
 } // --------------------------------------------------------------------------
-bool CFfile::openW(string OUTfile) {
+bool CFfile::openW(const string &OUTfile) {
 
     if (exists(OUTfile)) {
         char write;
@@ -360,7 +360,7 @@ bool CFfile::openW(string OUTfile) {
     oopen = true;
     return true;
 } // --------------------------------------------------------------------------
-bool CFfile::openW(string OUTfile, bool overwrite) {
+bool CFfile::openW(const string &OUTfile, bool overwrite) {
 
     if (exists(OUTfile)) {
         if (!overwrite) {
@@ -392,7 +392,7 @@ void CFfile::close() { // safely close all streams
 }
 // ----------------------------------------------------------------------------
 // checks if a file exists ----------------------------------------------------
-bool CFfile::exists(string fname) {
+bool CFfile::exists(const string &fname) const {
 
     ifstream chk;
     chk.open(fname.data());
@@ -440,7 +440,7 @@ void CFfile::rfile(string &buffer) {
     setIFptr(save_pos); // restore previous position in file
 } //---------------------------------------------------------------------------
 // backup a file --------------------------------------------------------------
-void CFfile::backup(string fname, string bname) {
+void CFfile::backup(const string &fname, const string &bname) {
 
     ifstream bin;
     ofstream bout;

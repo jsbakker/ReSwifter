@@ -28,7 +28,7 @@ Driver::~Driver() {
 }
 
 // toggle/set an option --------------------------------------------------------
-bool Driver::switch_parser(string arg) {
+bool Driver::switch_parser(const string &arg) {
 
     if (arg.substr(0, 3) == "-x=") {
         cerr << checkExt("." + arg.substr(3)) << " type forced.\n";
@@ -170,7 +170,7 @@ Zig\t\t*.zig\n";
          << ((mode == HELP_LANGUAGES) ? Langs : Usage);
 }
 // determines the filetype for syntax highlighting ----------------------------
-uint8_t Driver::getExt(string filename) {
+uint8_t Driver::getExt(const string &filename) const {
 
     static const std::unordered_map<std::string, uint8_t> extensionMap = {
         {"adb", lang::ADA_FILE},     {"ads", lang::ADA_FILE},
@@ -240,7 +240,7 @@ uint8_t Driver::getExt(string filename) {
     return (it != extensionMap.end()) ? it->second : lang::TXT_FILE;
 }
 // determines the language for syntax highlighting ----------------------------
-string Driver::checkExt(string filename) {
+string Driver::checkExt(const string &filename) {
 
     clean();
 
@@ -349,14 +349,15 @@ string Driver::checkExt(string filename) {
 }
 //-----------------------------------------------------------------------------
 // prepare input and output files ---------------------------------------------
-bool Driver::prep_files(string ifile, string ofile, char over) {
+bool Driver::prep_files(const string &ifile, const string &ofile, char over) {
 
-    if (ofile == "--auto" || ofile == "-A") {
-        ofile = ifile + ".html";
+    string resolvedOutput = ofile;
+    if (resolvedOutput == "--auto" || resolvedOutput == "-A") {
+        resolvedOutput = ifile + ".html";
     }
 
     iFile = ifile;
-    oFile = ofile;
+    oFile = resolvedOutput;
 
     endio();
     ObjIO = make_shared<CFfile>();
@@ -368,9 +369,9 @@ bool Driver::prep_files(string ifile, string ofile, char over) {
         return false;
     }
 
-    if (ofile == "-" || ofile == "--pipe") {
+    if (resolvedOutput == "-" || resolvedOutput == "--pipe") {
         ObjIO->toggleOmode();
-    } else if (!ObjIO->open(ofile, over)) {
+    } else if (!ObjIO->open(resolvedOutput, over)) {
         return false;
     }
 
@@ -380,7 +381,7 @@ bool Driver::prep_files(string ifile, string ofile, char over) {
     return true;
 }
 // returns the filename without the full path ---------------------------------
-string Driver::getTitle() {
+string Driver::getTitle() const {
 
     int slash = static_cast<int>(iFile.rfind(DIRECTORY_SLASH));
     if (slash == -1) {
@@ -436,7 +437,7 @@ void Driver::drive() {
     lang->IO->close();
 }
 //-----------------------------------------------------------------------------
-void Driver::makeIndex(string prefix) {
+void Driver::makeIndex(const string &prefix) {
 
     CFfile Index;
     if (!Index.openR("webcppbatch.txt")) {

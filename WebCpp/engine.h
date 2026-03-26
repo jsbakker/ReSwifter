@@ -32,23 +32,23 @@ class Engine {
     void makeMargin();
     void makeAnchor();
 
-    bool abortParse();
-    bool abortColour(int index);
+    bool abortParse() const;
+    bool abortColour(int index) const;
 
-    bool isInsideIt(int index, std::string start, std::string end,
-                    bool skipTagged = false);
-    bool isInsideTag(int index);
-    bool isNotWord(int index);
+    bool isInsideIt(int index, const std::string &start, const std::string &end,
+                    bool skipTagged = false) const;
+    bool isInsideTag(int index) const;
+    bool isNotWord(int index) const;
     void eraseTags(int start, int fin);
 
     void parsePreProc();
 
     void parseChildLang();
-    void colourChildLang(std::string beg, std::string end);
+    void colourChildLang(const std::string &beg, const std::string &end);
 
     void parseSymbol();
     bool colourSymbol(int start, int end);
-    bool isSymbol(char c);
+    bool isSymbol(char c) const;
 
     void parseLabel();
     void colourLabel(int start, int end);
@@ -57,32 +57,32 @@ class Engine {
     bool colourNum(int start, int end);
 
     void parseString(char quotetype, bool &inside);
-    void colourString(int index, bool &inside, std::string cssclass);
+    void colourString(int index, bool &inside, const std::string &cssclass);
     void markInterpolations();
-    bool isInInterpolation(int index);
-    bool isInsideSpanOfClass(int index, const std::string &cssClass);
+    bool isInInterpolation(int index) const;
+    bool isInsideSpanOfClass(int index, const std::string &cssClass) const;
 
-    void parseBlockComment(std::string start, std::string end, bool &inside);
-    void parseMultilineString(std::string start, std::string end, bool &inside,
-                              std::string css);
-    void parseHeredoc(std::string marker = "&lt;&lt;");
+    void parseBlockComment(const std::string &start, const std::string &end, bool &inside);
+    void parseMultilineString(const std::string &start, const std::string &end, bool &inside,
+                              const std::string &css);
+    void parseHeredoc(const std::string &marker = "&lt;&lt;");
 
     void parseKeywordsAndTypes();
-    bool colourKeys(int index, std::string key, std::string cssclass);
+    bool colourKeys(int index, const std::string &key, const std::string &cssclass);
     bool isKey(int start, int end) const;
-    int noCaseFind(std::string search, int index);
+    int noCaseFind(const std::string &search, int index) const;
 
-    void parseVariable(std::string var);
+    void parseVariable(const std::string &var);
     void colourVariable(int index);
 
-    void parseInlineComment(std::string cmnt);
+    void parseInlineComment(const std::string &cmnt);
     void colourComment(int index);
     void parseCharZeroComment(char zchar);
 
     void loadKeys();
     void doParsing();
 
-    void begHtml(std::string name);
+    void begHtml(const std::string &name);
     void endHtml();
 
     void hyperTagMe();
@@ -90,8 +90,8 @@ class Engine {
     void hyperNameMe();
     void hyperIncludeMe();
 
-    int getLineCount() { return lncount; }
-    std::string getBuffer() { return buffer; }
+    int getLineCount() const { return lncount; }
+    std::string getBuffer() const { return buffer; }
 
     // option setting
     inline void setLangExt(int e) { langext = e; }
@@ -108,7 +108,7 @@ class Engine {
     inline void toggleExtcss() { opt_extcss = !opt_extcss; }
     inline void toggleHtSnip() { opt_htsnip = !opt_htsnip; }
 
-    void setTabWidth(std::string width);
+    void setTabWidth(const std::string &width);
 
     void setLanguageRules(std::unique_ptr<LanguageRules> rules) {
         this->rules = std::move(rules);

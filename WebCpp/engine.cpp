@@ -64,7 +64,7 @@ void Engine::init_switches() {
     tw = "8";
 }
 // set the width of the tabs --------------------------------------------------
-void Engine::setTabWidth(string width) {
+void Engine::setTabWidth(const string &width) {
 
     tabwidth = atoi(width.data());
     if (tabwidth == 0) {
@@ -187,7 +187,7 @@ void Engine::makeMargin() {
 }
 //-----------------------------------------------------------------------------
 // check if parsing needs to be aborted ---------------------------------------
-bool Engine::abortParse() {
+bool Engine::abortParse() const {
 
     //	if(doHtmlTags && inHtmTags)
     //			{return true;}
@@ -222,7 +222,7 @@ bool Engine::abortParse() {
     return false;
 }
 // check if colouring needs to be aborted -------------------------------------
-bool Engine::abortColour(int index) {
+bool Engine::abortColour(int index) const {
 
     // Content inside an interpolation block is always highlightable
     if (isInInterpolation(index))
@@ -268,7 +268,7 @@ bool Engine::abortColour(int index) {
     return false;
 }
 // check if the index is inside the specified boundaries ----------------------
-bool Engine::isInsideIt(int index, string start, string end, bool skipTagged) {
+bool Engine::isInsideIt(int index, const string &start, const string &end, bool skipTagged) const {
 
     // count the number of starts and ends
     // and return true for an odd number
@@ -312,7 +312,7 @@ bool Engine::isInsideIt(int index, string start, string end, bool skipTagged) {
     return false;
 }
 // number accuracy ------------------------------------------------------------
-bool Engine::isNotWord(int index) {
+bool Engine::isNotWord(int index) const {
 
     if (isalpha(buffer[index + 1])) {
         return false;
@@ -364,7 +364,7 @@ void Engine::parsePreProc() {
     buffer.insert(end, "</font>");
 }
 // define symbol characters ---------------------------------------------------
-bool Engine::isSymbol(char c) {
+bool Engine::isSymbol(char c) const {
 
     // FIXME: make all symbols work
     // without conflicting with the other parsing
@@ -736,7 +736,7 @@ void Engine::parseString(char quotetype, bool &inside) {
     }
 }
 // insert string highlighting tags --------------------------------------------
-void Engine::colourString(int index, bool &inside, string cssclass) {
+void Engine::colourString(int index, bool &inside, const string &cssclass) {
 
     if (index > static_cast<int>(buffer.size())) {
         return;
@@ -758,7 +758,7 @@ void Engine::colourString(int index, bool &inside, string cssclass) {
 //-----------------------------------------------------------------------------
 // returns true if buffer[index] is inside a <font CLASS=cssClass>...</font>
 // span
-bool Engine::isInsideSpanOfClass(int index, const string &cssClass) {
+bool Engine::isInsideSpanOfClass(int index, const string &cssClass) const {
 
     string openTag = "<font CLASS=" + cssClass + ">";
     int i = index - 1;
@@ -784,7 +784,7 @@ bool Engine::isInsideSpanOfClass(int index, const string &cssClass) {
 //-----------------------------------------------------------------------------
 // returns true if buffer[index] is between interpolation boundary markers
 // \x01 = interpolation open, \x02 = interpolation close
-bool Engine::isInInterpolation(int index) {
+bool Engine::isInInterpolation(int index) const {
 
     for (int i = index - 1; i >= 0; i--) {
         if (buffer[i] == '\x01')
@@ -885,8 +885,8 @@ void Engine::markInterpolations() {
     }
 }
 // parse for multi-line strings -----------------------------------------------
-void Engine::parseMultilineString(string start, string end, bool &inside,
-                                  string css) {
+void Engine::parseMultilineString(const string &start, const string &end, bool &inside,
+                                  const string &css) {
 
     // don't interfere when a heredoc owns the inMultiStr state
     if (!heredocEnd.empty()) {
@@ -992,7 +992,7 @@ void Engine::parseMultilineString(string start, string end, bool &inside,
     }
 }
 // parse for Ruby-style heredoc strings (<<TAG, <<-TAG, <<~TAG) ---------------
-void Engine::parseHeredoc(string marker) {
+void Engine::parseHeredoc(const string &marker) {
 
     if (inMultiStr && !heredocEnd.empty()) {
         // we are inside a heredoc — check if this line is the end marker
@@ -1117,7 +1117,7 @@ void Engine::parseHeredoc(string marker) {
     }
 }
 // parse for multi-line comments ----------------------------------------------
-void Engine::parseBlockComment(string start, string end, bool &inside) {
+void Engine::parseBlockComment(const string &start, const string &end, bool &inside) {
 
     if (inMultiStr) {
         return;
@@ -1258,7 +1258,7 @@ void Engine::parseKeywordsAndTypes() {
     }
 }
 // checks for case sensitive keys ---------------------------------------------
-int Engine::noCaseFind(string search, int index) {
+int Engine::noCaseFind(const string &search, int index) const {
 
     if (rules->doCaseKeys) {
         return static_cast<int>(buffer.find(search, index));
@@ -1267,17 +1267,18 @@ int Engine::noCaseFind(string search, int index) {
         return static_cast<int>(buffer.find(search, index));
     }
 
-    string tmp;
-    tmp = buffer;
+    string tmp = buffer;
 
     for (int i = 0; i < static_cast<int>(tmp.size()); i++) {
         tmp[i] = toupper(tmp[i]);
     }
-    for (int j = 0; j < static_cast<int>(search.size()); j++) {
-        search[j] = toupper(search[j]);
+
+    string searchUpper = search;
+    for (int j = 0; j < static_cast<int>(searchUpper.size()); j++) {
+        searchUpper[j] = toupper(searchUpper[j]);
     }
 
-    return static_cast<int>(tmp.find(search, index));
+    return static_cast<int>(tmp.find(searchUpper, index));
 }
 // asserts word boundaries for keywords ---------------------------------------
 bool Engine::isKey(int before, int after) const {
@@ -1313,7 +1314,7 @@ bool Engine::isKey(int before, int after) const {
     return true;
 }
 // check if index is inside an HTML tag (<...>) ------------------------------
-bool Engine::isInsideTag(int index) {
+bool Engine::isInsideTag(int index) const {
 
     // search backward for '<' or '>' from the index
     for (int i = index - 1; i >= 0; i--) {
@@ -1353,7 +1354,7 @@ static bool isInsideFontTag(const string &buffer, int index) {
     return false;
 }
 // colourize the keywords -----------------------------------------------------
-bool Engine::colourKeys(int index, string key, string cssclass) {
+bool Engine::colourKeys(int index, const string &key, const string &cssclass) {
 
     if (isInsideTag(index)) {
         return false;
@@ -1370,7 +1371,7 @@ bool Engine::colourKeys(int index, string key, string cssclass) {
 }
 //-----------------------------------------------------------------------------
 // parse for variables --------------------------------------------------------
-void Engine::parseVariable(string var) {
+void Engine::parseVariable(const string &var) {
 
     if (endMultiLine) {
         return;
@@ -1466,7 +1467,7 @@ void Engine::colourVariable(int index) {
 }
 //-----------------------------------------------------------------------------
 // check for comments ---------------------------------------------------------
-void Engine::parseInlineComment(string cmnt) {
+void Engine::parseInlineComment(const string &cmnt) {
 
     if (inComment) {
         return;
@@ -1746,7 +1747,7 @@ void Engine::doParsing() {
 }
 //-----------------------------------------------------------------------------
 // write the initial HTML tags ------------------------------------------------
-void Engine::begHtml(string name) {
+void Engine::begHtml(const string &name) {
 
     string gen;
     string style;
@@ -1996,7 +1997,7 @@ void Engine::parseChildLang() {
     }
 }
 // process an inline child language -------------------------------------------
-void Engine::colourChildLang(string beg, string end) {
+void Engine::colourChildLang(const string &beg, const string &end) {
 
     // cerr << "\nNow in colourChildLang()\n";
 

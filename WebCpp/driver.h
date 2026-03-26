@@ -20,19 +20,19 @@ class Driver {
     Driver();
     ~Driver();
     static void help(char mode);
-    bool switch_parser(std::string arg);
-    uint8_t getExt(std::string filename);
-    std::string checkExt(std::string filename);
-    static void makeIndex(std::string prefix);
-    bool prep_files(std::string ifile, std::string ofile, char over);
-    std::string getTitle();
+    bool switch_parser(const std::string &arg);
+    uint8_t getExt(const std::string &filename) const;
+    std::string checkExt(const std::string &filename);
+    static void makeIndex(const std::string &prefix);
+    bool prep_files(const std::string &ifile, const std::string &ofile, char over);
+    std::string getTitle() const;
     void drive();
     void clean();
     void endio();
 
   private:
     template <typename T>
-    inline std::string setLanguage(uint8_t filetype, std::string val) {
+    inline std::string setLanguage(uint8_t filetype, const std::string &val) {
         std::unique_ptr<LanguageRules> rules = std::make_unique<T>();
         lang = std::make_unique<Engine>(std::move(rules));
         lang->setLangExt(filetype);

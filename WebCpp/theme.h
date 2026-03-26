@@ -21,19 +21,19 @@ class Theme : public CFfile {
 
     void typical();
     bool setFile(std::string filename);
-    void setPicture(std::string picture);
-    void setColour(std::string hexcode, int num);
-    bool verifyFormat(std::string data);
+    void setPicture(const std::string &picture);
+    void setColour(const std::string &hexcode, int num);
+    bool verifyFormat(std::string data) const;
     void toggleSnippet() { snippet = !snippet; }
 
-    std::string getColourByID(int nColour) { return Colours2[nColour]; }
-    std::string getColour(std::string name);
-    std::string getThemeName();
-    std::string getImageFile();
-    std::string getCSSdata();
+    std::string getColourByID(int nColour) const { return Colours2[nColour]; }
+    std::string getColour(const std::string &name) const;
+    std::string getThemeName() const;
+    std::string getImageFile() const;
+    std::string getCSSdata() const;
 
     void setImageLeaf();
-    bool writeCSS(std::string cssfile);
+    bool writeCSS(const std::string &cssfile);
     bool load();
 
   protected:

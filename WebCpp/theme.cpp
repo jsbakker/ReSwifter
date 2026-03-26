@@ -63,9 +63,9 @@ bool Theme::setFile(string filename) {
     return false;
 }
 // set background picture -----------------------------------------------------
-void Theme::setPicture(string picture) { Picture = picture; }
+void Theme::setPicture(const string &picture) { Picture = picture; }
 // get the name of the theme --------------------------------------------------
-string Theme::getThemeName() {
+string Theme::getThemeName() const {
 
     string justTheName;
     int i_dir, i_ext;
@@ -84,7 +84,7 @@ string Theme::getThemeName() {
     return justTheName;
 }
 // get background picture -----------------------------------------------------
-string Theme::getImageFile() { return Picture; }
+string Theme::getImageFile() const { return Picture; }
 // strip pathname from image file for copying ---------------------------------
 void Theme::setImageLeaf() {
 
@@ -206,7 +206,7 @@ bool Theme::load() {
     return true;
 }
 
-string Theme::getColour(string Name) {
+string Theme::getColour(const string &Name) const {
 
     for (int i = 0; i < static_cast<int>(ScsVec.size()); i++) {
 
@@ -217,7 +217,7 @@ string Theme::getColour(string Name) {
     return "\0";
 }
 // write a stylesheet ---------------------------------------------------------
-bool Theme::writeCSS(string cssfile) {
+bool Theme::writeCSS(const string &cssfile) {
 
     if (!openW(cssfile, true)) {
         return false;
@@ -227,7 +227,7 @@ bool Theme::writeCSS(string cssfile) {
     return true;
 }
 // set a colour in the theme --------------------------------------------------
-void Theme::setColour(string colour, int num) { Colours2[num] = colour; }
+void Theme::setColour(const string &colour, int num) { Colours2[num] = colour; }
 // set default theme ----------------------------------------------------------
 void Theme::typical() {
 
@@ -246,7 +246,7 @@ void Theme::typical() {
     setColour("#666666", Comment);
 }
 // enforces proper colour format ----------------------------------------------
-bool Theme::verifyFormat(string hexData) {
+bool Theme::verifyFormat(string hexData) const {
 
     // make sure string is the right length
     if (hexData.size() != 7) {
@@ -280,7 +280,7 @@ bool Theme::verifyFormat(string hexData) {
 
     return true;
 } //---------------------------------------------------------------------------
-string Theme::getCSSdata() {
+string Theme::getCSSdata() const {
 
     string CSS;
 

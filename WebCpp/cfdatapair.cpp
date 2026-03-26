@@ -35,21 +35,21 @@
 using std::string;
 
 // overloaded stream operators ------------------------------------------------
-void CFdatapair::operator<<(string mldata) { translateML(mldata); }
+void CFdatapair::operator<<(const string &mldata) { translateML(mldata); }
 void CFdatapair::operator>>(string &mldata) { mldata = info_ml(); }
 // Constructors ---------------------------------------------------------------
 CFdatapair::CFdatapair() {
     name = "name";
     value = "value";
 }
-CFdatapair::CFdatapair(string mldata) { translateML(mldata); }
-CFdatapair::CFdatapair(string n, string v) {
+CFdatapair::CFdatapair(const string &mldata) { translateML(mldata); }
+CFdatapair::CFdatapair(const string &n, const string &v) {
     name = n;
     value = v;
 }
 // set methods ----------------------------------------------------------------
-void CFdatapair::setname(string n) { name = n; }   // changes the name
-void CFdatapair::setvalue(string v) { value = v; } // changes the value
+void CFdatapair::setname(const string &n) { name = n; }   // changes the name
+void CFdatapair::setvalue(const string &v) { value = v; } // changes the value
 // get methods ----------------------------------------------------------------
 string CFdatapair::getname() const { return name; }   // returns the name
 string CFdatapair::getvalue() const { return value; } // returns the value
@@ -70,7 +70,7 @@ void CFdatapair::swap() {
     value = temp;
 } //---------------------------------------------------------------------------
 // convert XML-Style string data into name/value pair -------------------------
-void CFdatapair::translateML(string mldata) {
+void CFdatapair::translateML(const string &mldata) {
 
     string ntmp, vtmp;
     int open, close;

@@ -131,8 +131,8 @@ class CFfile {
     // (Con/De)structors
     // ---------------------------------------------------------
     CFfile();
-    CFfile(std::string filename, char io);
-    CFfile(std::string filein, std::string fileout);
+    CFfile(const std::string &filename, char io);
+    CFfile(const std::string &filein, const std::string &fileout);
     ~CFfile();
     // Initialize bool data members
     // ----------------------------------------------
@@ -151,14 +151,14 @@ class CFfile {
     //----------------------------------------------------------------------------
     // File open methods
     // ---------------------------------------------------------
-    bool exists(std::string fname);      // check if a file exists
-    bool openR(std::string INfile);      // opens file for reading
-    bool openW(std::string OUTfile);     // opens file for writing
-    bool openW(std::string fn, bool ow); // open, specify overwrite
-    bool open(std::string fn, char io);  // open, specify mode
+    bool exists(const std::string &fname) const; // check if a file exists
+    bool openR(const std::string &INfile);       // opens file for reading
+    bool openW(const std::string &OUTfile);      // opens file for writing
+    bool openW(const std::string &fn, bool ow);  // open, specify overwrite
+    bool open(const std::string &fn, char io);   // open, specify mode
 
-    bool isIopen() { return iopen; } // is infile open?
-    bool isOopen() { return oopen; } // is outfile open?
+    bool isIopen() const { return iopen; } // is infile open?
+    bool isOopen() const { return oopen; } // is outfile open?
     //----------------------------------------------------------------------------
     // File pointer location methods
     // ---------------------------------------------
@@ -168,8 +168,8 @@ class CFfile {
     long getOFptr();              // get the outfile pointer location
     // get the filenames
     // ---------------------------------------------------------
-    inline std::string getStrIf() { return str_if; }
-    inline std::string getStrOf() { return str_of; }
+    inline std::string getStrIf() const { return str_if; }
+    inline std::string getStrOf() const { return str_of; }
     //----------------------------------------------------------------------------
     // I/O redirection methods
     // ---------------------------------------------------
@@ -190,7 +190,7 @@ class CFfile {
     // ----------------------------------------------
     void rline(std::string &buffer);              // read a line to the string
     void rfile(std::string &buffer);              // read a file to the string
-    void backup(std::string fname, std::string bname); // copy a file
+    void backup(const std::string &fname, const std::string &bname); // copy a file
     // File close methods
     // --------------------------------------------------------
     void closeR(); // close the input file
