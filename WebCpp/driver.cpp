@@ -4,7 +4,12 @@
  */
 
 #include "driver.h"
-#include "deflangs.h"
+#include "cffile.h"
+#include "defsys.h"
+#include "engine.h"
+#include "lang_factory.h"
+#include "lang_rules.h"
+#include "theme.h"
 
 #include <ctime>
 #include <iomanip>
@@ -172,180 +177,17 @@ Zig\t\t*.zig\n";
 // determines the filetype for syntax highlighting ----------------------------
 uint8_t Driver::getExt(const string &filename) const {
 
-    static const std::unordered_map<std::string, uint8_t> extensionMap = {
-        {"adb", lang::ADA_FILE},     {"ads", lang::ADA_FILE},
-        {"ali", lang::ADA_FILE},     {"asm", lang::ASM_FILE},
-        {"s", lang::ASM_FILE},       {"asp", lang::ASP_FILE},
-        {"asa", lang::ASP_FILE},     {"bas", lang::BAS_FILE},
-        {"bat", lang::DOS_FILE},     {"cmd", lang::DOS_FILE},
-        {"c", lang::C99_FILE},       {"rc", lang::C99_FILE},
-        {"cc", lang::CPP_FILE},      {"cpp", lang::CPP_FILE},
-        {"coo", lang::CPP_FILE},     {"c++", lang::CPP_FILE},
-        {"cxx", lang::CPP_FILE},     {"h", lang::CPP_FILE},
-        {"hh", lang::CPP_FILE},      {"hpp", lang::CPP_FILE},
-        {"hxx", lang::CPP_FILE},     {"cg", lang::C4G_FILE},
-        {"clp", lang::CLP_FILE},     {"cs", lang::CSP_FILE},
-        {"m", lang::OBC_FILE},       {"mm", lang::OCP_FILE},
-        {"emf", lang::EMF_FILE},     {"e", lang::EU4_FILE},
-        {"eu", lang::EU4_FILE},      {"ex", lang::EU4_FILE},
-        {"f", lang::FTN_FILE},       {"for", lang::FTN_FILE},
-        {"ftn", lang::FTN_FILE},     {"f77", lang::FTN_FILE},
-        {"f90", lang::FTN_FILE},     {"hs", lang::HSK_FILE},
-        {"lhs", lang::HSK_FILE},     {"shtm", lang::HTM_FILE},
-        {"html", lang::HTM_FILE},    {"htm", lang::HTM_FILE},
-        {"sgml", lang::HTM_FILE},    {"xml", lang::XML_FILE},
-        {"java", lang::JAV_FILE},    {"js", lang::JSC_FILE},
-        {"def", lang::MOD_FILE},     {"mod", lang::MOD_FILE},
-        {"pas", lang::PAS_FILE},     {"cgi", lang::PRL_FILE},
-        {"plex", lang::PRL_FILE},    {"plx", lang::PRL_FILE},
-        {"pl", lang::PRL_FILE},      {"pm", lang::PRL_FILE},
-        {"inc", lang::PHP_FILE},     {"php4", lang::PHP_FILE},
-        {"php3", lang::PHP_FILE},    {"php", lang::PHP_FILE},
-        {"pbl", lang::PB6_FILE},     {"pbr", lang::PB6_FILE},
-        {"pyw", lang::PYT_FILE},     {"py", lang::PYT_FILE},
-        {"sl", lang::RND_FILE},      {"rib", lang::RND_FILE},
-        {"rb", lang::RUB_FILE},      {"sql", lang::SQL_FILE},
-        {"sh", lang::UNX_FILE},      {"swift", lang::SWF_FILE},
-        {"tcl", lang::TCL_FILE},     {"tk", lang::TCL_FILE},
-        {"uc", lang::UNR_FILE},      {"v", lang::VHD_FILE},
-        {"vhdl", lang::VHD_FILE},    {"vhd", lang::VHD_FILE},
-        {"css", lang::CSS_FILE},     {"rs", lang::RST_FILE},
-        {"go", lang::GOL_FILE},      {"ts", lang::TSC_FILE},
-        {"tsx", lang::TSC_FILE},     {"kt", lang::KOT_FILE},
-        {"kts", lang::KOT_FILE},     {"vala", lang::VLA_FILE},
-        {"vapi", lang::VLA_FILE},    {"zig", lang::ZIG_FILE},
-        {"glsl", lang::GLS_FILE},    {"vert", lang::GLS_FILE},
-        {"frag", lang::GLS_FILE},    {"geom", lang::GLS_FILE},
-        {"tesc", lang::GLS_FILE},    {"tese", lang::GLS_FILE},
-        {"comp", lang::GLS_FILE},    {"hlsl", lang::HLS_FILE},
-        {"hlsli", lang::HLS_FILE},   {"r", lang::R_FILE},
-        {"feature", lang::GHK_FILE}, {"fs", lang::FSH_FILE},
-        {"fsi", lang::FSH_FILE},     {"fsx", lang::FSH_FILE},
-        {"scala", lang::SCA_FILE},   {"sc", lang::SCA_FILE},
-        {"ml", lang::OML_FILE},      {"mli", lang::OML_FILE}};
-
-    // Extract extension
-    size_t dotPos = filename.find_last_of('.');
-    if (dotPos == std::string::npos)
-        return lang::TXT_FILE;
-
-    std::string extension = filename.substr(dotPos + 1);
-
-    // Convert to lowercase
-    std::transform(extension.begin(), extension.end(), extension.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
-
-    // Lookup
-    auto it = extensionMap.find(extension);
-    return (it != extensionMap.end()) ? it->second : lang::TXT_FILE;
+    return LanguageFactory::getLanguageId(filename);
 }
 // determines the language for syntax highlighting ----------------------------
 string Driver::checkExt(const string &filename) {
 
     clean();
 
-    char filetype = getExt(filename);
-
-    switch (filetype) {
-    case (lang::ADA_FILE):
-        return setLanguage<LangAda>(filetype, "Ada file");
-    case (lang::ASM_FILE):
-        return setLanguage<LangAssembler>(filetype, "Assembly file");
-    case (lang::ASP_FILE):
-        return setLanguage<LangAsp>(filetype, "ASP file");
-    case (lang::BAS_FILE):
-        return setLanguage<LangBasic>(filetype, "Basic file");
-    case (lang::DOS_FILE):
-        return setLanguage<LangBatch>(filetype, "DOS Batch file");
-    case (lang::C99_FILE):
-        return setLanguage<LangC>(filetype, "'C' file");
-    case (lang::CPP_FILE):
-        return setLanguage<LangCPlusPlus>(filetype, "C++ file");
-    case (lang::C4G_FILE):
-        return setLanguage<LangCg>(filetype, "NVIDIA Cg file");
-    case (lang::CLP_FILE):
-        return setLanguage<LangClips>(filetype, "NASA CLIPS file");
-    case (lang::CSS_FILE):
-        return setLanguage<LangCSS>(filetype, "CSS file");
-    case (lang::CSP_FILE):
-        return setLanguage<LangCSharp>(filetype, "C-Sharp file");
-    case (lang::OBC_FILE):
-        return setLanguage<LangObjectiveC>(filetype, "Objective-C file");
-    case (lang::OCP_FILE):
-        return setLanguage<LangObjectiveCpp>(filetype, "Objective-C++ file");
-    case (lang::EMF_FILE):
-        return setLanguage<LangEmf>(filetype, "MicroEmacs macro file");
-    case (lang::EU4_FILE):
-        return setLanguage<LangEuphoria>(filetype, "Euphoria file");
-    case (lang::FTN_FILE):
-        return setLanguage<LangFortran>(filetype, "Fortran file");
-    case (lang::HSK_FILE):
-        return setLanguage<LangHaskell>(filetype, "Haskell file");
-    case (lang::HTM_FILE):
-        return setLanguage<LangHtml>(filetype, "Markup file");
-    case (lang::JAV_FILE):
-        return setLanguage<LangJava>(filetype, "Java file");
-    case (lang::JSC_FILE):
-        return setLanguage<LangJScript>(filetype, "JavaScript file");
-    case (lang::MOD_FILE):
-        return setLanguage<LangModula2>(filetype, "Modula file");
-    case (lang::PAS_FILE):
-        return setLanguage<LangPascal>(filetype, "Pascal file");
-    case (lang::PRL_FILE):
-        return setLanguage<LangPerl>(filetype, "Perl script");
-    case (lang::PHP_FILE):
-        return setLanguage<LangPhp>(filetype, "PHP script");
-    case (lang::PB6_FILE):
-        return setLanguage<LangPBuilder>(filetype, "Power Builder file");
-    case (lang::PYT_FILE):
-        return setLanguage<LangPython>(filetype, "Python script");
-    case (lang::RUB_FILE):
-        return setLanguage<LangRuby>(filetype, "Ruby script");
-    case (lang::RND_FILE):
-        return setLanguage<LangRenderMan>(filetype, "RenderMan file");
-    case (lang::SQL_FILE):
-        return setLanguage<LangSQL>(filetype, "SQL script");
-    case (lang::SWF_FILE):
-        return setLanguage<LangSwift>(filetype, "Swift file");
-    case (lang::UNX_FILE):
-        return setLanguage<LangShell>(filetype, "UNIX shell script");
-    case (lang::TCL_FILE):
-        return setLanguage<LangTcl>(filetype, "Tcl script");
-    case (lang::UNR_FILE):
-        return setLanguage<LangUScript>(filetype, "UnrealScript file");
-    case (lang::VHD_FILE):
-        return setLanguage<LangVHDL>(filetype, "VHDL file");
-    case (lang::XML_FILE):
-        return setLanguage<LangXML>(filetype, "XML file");
-    case (lang::RST_FILE):
-        return setLanguage<LangRust>(filetype, "Rust file");
-    case (lang::GOL_FILE):
-        return setLanguage<LangGo>(filetype, "Go file");
-    case (lang::TSC_FILE):
-        return setLanguage<LangTypeScript>(filetype, "TypeScript file");
-    case (lang::KOT_FILE):
-        return setLanguage<LangKotlin>(filetype, "Kotlin file");
-    case (lang::VLA_FILE):
-        return setLanguage<LangVala>(filetype, "Vala file");
-    case (lang::ZIG_FILE):
-        return setLanguage<LangZig>(filetype, "Zig file");
-    case (lang::GLS_FILE):
-        return setLanguage<LangGLSL>(filetype, "GLSL file");
-    case (lang::HLS_FILE):
-        return setLanguage<LangHLSL>(filetype, "HLSL file");
-    case (lang::R_FILE):
-        return setLanguage<LangR>(filetype, "R file");
-    case (lang::GHK_FILE):
-        return setLanguage<LangGherkin>(filetype, "Gherkin feature file");
-    case (lang::FSH_FILE):
-        return setLanguage<LangFSharp>(filetype, "F# file");
-    case (lang::SCA_FILE):
-        return setLanguage<LangScala>(filetype, "Scala file");
-    case (lang::OML_FILE):
-        return setLanguage<LangOCaml>(filetype, "OCaml file");
-    default:
-        return setLanguage<LangText>(filetype, "Text file");
-    }
+    auto info = LanguageFactory::createFromFilename(filename);
+    lang = std::make_unique<Engine>(std::move(info.rules));
+    lang->setLangExt(info.id);
+    return info.name;
 }
 //-----------------------------------------------------------------------------
 // prepare input and output files ---------------------------------------------

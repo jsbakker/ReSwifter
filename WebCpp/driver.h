@@ -9,11 +9,12 @@
 #define HELP_LANGUAGES 'L'
 #define HELP_DEFAULT 'D'
 
-#include "defsys.h"
-#include "engine.h"
-
+#include <cstdint>
 #include <memory>
 #include <string>
+
+class CFfile;
+class Engine;
 
 class Driver {
   public:
@@ -29,15 +30,6 @@ class Driver {
     void drive();
     void clean();
     void endio();
-
-  private:
-    template <typename T>
-    inline std::string setLanguage(uint8_t filetype, const std::string &val) {
-        std::unique_ptr<LanguageRules> rules = std::make_unique<T>();
-        lang = std::make_unique<Engine>(std::move(rules));
-        lang->setLangExt(filetype);
-        return val;
-    }
 
   protected:
     std::shared_ptr<CFfile> ObjIO;

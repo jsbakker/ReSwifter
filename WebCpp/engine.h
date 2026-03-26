@@ -7,8 +7,9 @@
 #define _ENGINE_H
 
 #include "cffile.h"
-#include "lang_rules.h"
 #include "theme.h"
+
+class LanguageRules;
 
 #include <memory>
 #include <string>

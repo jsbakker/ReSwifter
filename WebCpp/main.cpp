@@ -8,8 +8,10 @@
 #endif
 
 #include "driver.h"
+#include "defsys.h"
 
 #include <fstream>
+#include <iostream>
 #include <string>
 
 using std::cerr;

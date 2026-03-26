@@ -9,6 +9,7 @@
 #include "engine.h"
 #include "deflangs.h"
 #include "defsys.h"
+#include "lang_rules.h"
 
 #include <algorithm>
 #include <cctype>
