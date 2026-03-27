@@ -1295,30 +1295,34 @@ bool Engine::isInsideTag(int index) const {
     return false;
 }
 // check if index is inside existing <font ...>...</font> content -----------
+// Scans backward using rfind('<'/'>')  — no substr allocations.
 static bool isInsideFontTag(const string &buffer, int index) {
 
-    // search backward for </font> or <font — if we find <font...> first,
-    // we are inside its content and should not wrap again
-    int i = index - 1;
-    while (i >= 0) {
-        if (buffer[i] == '>') {
-            // found a closing '>'; check if this is a <font tag
-            int tagStart = static_cast<int>(buffer.rfind('<', i));
-            if (tagStart != (int)string::npos && tagStart >= 0) {
-                string tag = buffer.substr(tagStart, i - tagStart + 1);
-                if (tag.starts_with("<font ") || tag.starts_with("<font>")) {
-                    return true; // we are inside font content
-                }
-                if (tag.starts_with("</font>")) {
-                    return false; // we are past a closed font tag
-                }
-            }
-            i = tagStart - 1;
-        } else {
-            i--;
+    if (index <= 0) return false;
+
+    size_t i = static_cast<size_t>(index) - 1;
+    while (true) {
+        // Jump backward to the nearest '>'
+        auto gPos = buffer.rfind('>', i);
+        if (gPos == string::npos) return false;
+
+        // Find the matching '<' that opens this tag
+        auto lPos = buffer.rfind('<', gPos);
+        if (lPos == string::npos) return false;
+
+        // Classify the tag without allocating a substring
+        if (buffer.compare(lPos, 6, "<font ") == 0 ||
+            buffer.compare(lPos, 6, "<font>") == 0) {
+            return true;  // inside a font span
         }
+        if (buffer.compare(lPos, 7, "</font>") == 0) {
+            return false; // just past a closed font span
+        }
+
+        // Some other tag — keep scanning leftward
+        if (lPos == 0) return false;
+        i = lPos - 1;
     }
-    return false;
 }
 // colourize the keywords -----------------------------------------------------
 bool Engine::colourKeys(int index, string_view key, string_view cssclass) {
