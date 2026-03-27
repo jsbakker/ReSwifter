@@ -227,11 +227,11 @@ bool Driver::prep_files(const string &ifile, const string &ofile, char over) {
 // returns the filename without the full path ---------------------------------
 string Driver::getTitle() const {
 
-    int slash = static_cast<int>(iFile.rfind(DIRECTORY_SLASH));
-    if (slash == -1) {
+    auto slashPos = iFile.rfind(DIRECTORY_SLASH);
+    if (slashPos == string::npos) {
         return iFile;
     }
-    return iFile.substr(slash + 1);
+    return iFile.substr(slashPos + 1);
 }
 // run the webcpp engine ------------------------------------------------------
 void Driver::drive() {
