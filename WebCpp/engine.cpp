@@ -21,6 +21,7 @@ using std::cerr;
 using std::cin;
 using std::make_unique;
 using std::string;
+using std::string_view;
 using std::unique_ptr;
 using std::vector;
 
@@ -197,7 +198,7 @@ bool Engine::abortColour(int index) const {
     return false;
 }
 // check if the index is inside the specified boundaries ----------------------
-bool Engine::isInsideIt(int index, const string &start, const string &end, bool skipTagged) const {
+bool Engine::isInsideIt(int index, string_view start, string_view end, bool skipTagged) const {
 
     // count the number of starts and ends
     // and return true for an odd number
@@ -1238,13 +1239,13 @@ void Engine::parseKeywordsAndTypes() {
     }
 }
 // checks for case sensitive keys ---------------------------------------------
-int Engine::noCaseFind(const string &search, int index) const {
+int Engine::noCaseFind(string_view search, int index) const {
 
     if (rules->doCaseKeys) {
-        return static_cast<int>(buffer.find(search, index));
+        return static_cast<int>(buffer.find(search, static_cast<size_t>(index)));
     }
     if (search == "class") {
-        return static_cast<int>(buffer.find(search, index));
+        return static_cast<int>(buffer.find(search, static_cast<size_t>(index)));
     }
 
     string tmp = buffer;
@@ -1253,12 +1254,12 @@ int Engine::noCaseFind(const string &search, int index) const {
         tmp[i] = toupper(tmp[i]);
     }
 
-    string searchUpper = search;
+    string searchUpper(search); // construct std::string from string_view
     for (int j = 0; j < static_cast<int>(searchUpper.size()); j++) {
         searchUpper[j] = toupper(searchUpper[j]);
     }
 
-    return static_cast<int>(tmp.find(searchUpper, index));
+    return static_cast<int>(tmp.find(searchUpper, static_cast<size_t>(index)));
 }
 // asserts word boundaries for keywords ---------------------------------------
 bool Engine::isKey(int before, int after) const {
@@ -1334,7 +1335,7 @@ static bool isInsideFontTag(const string &buffer, int index) {
     return false;
 }
 // colourize the keywords -----------------------------------------------------
-bool Engine::colourKeys(int index, const string &key, const string &cssclass) {
+bool Engine::colourKeys(int index, string_view key, string_view cssclass) {
 
     if (isInsideTag(index)) {
         return false;
@@ -1345,7 +1346,7 @@ bool Engine::colourKeys(int index, const string &key, const string &cssclass) {
     if (abortColour(index)) {
         return false;
     }
-    buffer.insert(index, "<font CLASS=" + cssclass + ">");
+    buffer.insert(index, string("<font CLASS=").append(cssclass).append(">"));
     buffer.insert(index + key.size() + 20, "</font>");
     return true;
 }
@@ -1447,7 +1448,7 @@ void Engine::colourVariable(int index) {
 }
 //-----------------------------------------------------------------------------
 // check for comments ---------------------------------------------------------
-void Engine::parseInlineComment(const string &cmnt) {
+void Engine::parseInlineComment(string_view cmnt) {
 
     if (state.inComment) {
         return;

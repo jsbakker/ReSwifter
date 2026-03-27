@@ -13,6 +13,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 
 enum class Quote : char {
     Double = 0x22, // '"'
@@ -44,7 +45,7 @@ class Engine {
     bool abortParse() const;
     bool abortColour(int index) const;
 
-    bool isInsideIt(int index, const std::string &start, const std::string &end,
+    bool isInsideIt(int index, std::string_view start, std::string_view end,
                     bool skipTagged = false) const;
     bool isInsideTag(int index) const;
     bool isNotWord(int index) const;
@@ -77,14 +78,14 @@ class Engine {
     void parseHeredoc(const std::string &marker = "&lt;&lt;");
 
     void parseKeywordsAndTypes();
-    [[nodiscard]] bool colourKeys(int index, const std::string &key, const std::string &cssclass);
+    [[nodiscard]] bool colourKeys(int index, std::string_view key, std::string_view cssclass);
     bool isKey(int start, int end) const;
-    int noCaseFind(const std::string &search, int index) const;
+    int noCaseFind(std::string_view search, int index) const;
 
     void parseVariable(const std::string &var);
     void colourVariable(int index);
 
-    void parseInlineComment(const std::string &cmnt);
+    void parseInlineComment(std::string_view cmnt);
     void colourComment(int index);
     void parseCharZeroComment(char zchar);
 
