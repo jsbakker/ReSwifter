@@ -19,8 +19,8 @@ LangPython::LangPython() {
     doStringsSinQuote = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doUnxComnt = true;
-    doTplString = true;
+    doInlineCommentHash = true;
+    doMultilineStrTripleDblQuote = true;
     // Python f-strings: f"text {expr}" — applied to all "..." strings
     doInterpolate = true;
     interpolStart = "{";

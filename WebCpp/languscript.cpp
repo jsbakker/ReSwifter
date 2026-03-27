@@ -20,8 +20,8 @@ LangUScript::LangUScript() {
     doSymbols = true;
     doLabels = true;
     doPreProc = true;
-    doBigComnt = true;
-    doCinComnt = true;
+    doBlockCommentPLI = true;
+    doInlineCommentDblSlash = true;
 }
 
 void LangUScript::initReservedWords() {

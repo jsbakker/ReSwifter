@@ -20,8 +20,8 @@ LangAssembler::LangAssembler() {
     doCaseKeys = false;
     doLabels = true;
     doPreProc = true;
-    doBigComnt = true;
-    doAsmComnt = true;
+    doBlockCommentPLI = true;
+    doInlineCommentSemiColon = true;
 }
 
 void LangAssembler::initReservedWords() {

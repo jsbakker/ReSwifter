@@ -24,8 +24,8 @@ LangPerl::LangPerl() {
     doScalars = true;
     doArrays = true;
     doHashes = true;
-    doUnxComnt = true;
-    doHeredoc = true;
+    doInlineCommentHash = true;
+    doMultilineStrHeredoc = true;
     doRequireBackslashContinuation = false; // Perl strings may span lines without backslash
 }
 

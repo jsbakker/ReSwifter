@@ -18,9 +18,9 @@ LangScala::LangScala() {
     doStringsBackTick = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doBigComnt = true;  // /* */
-    doCinComnt = true;  // //
-    doTplString = true; // """..."""
+    doBlockCommentPLI = true;  // /* */
+    doInlineCommentDblSlash = true;  // //
+    doMultilineStrTripleDblQuote = true; // """..."""
     // Scala string interpolation: s"text ${expr}" or s"text $name"
     doInterpolate = true;
     interpolStart = "${";

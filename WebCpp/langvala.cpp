@@ -16,9 +16,9 @@ LangVala::LangVala() {
     doStringsSinQuote = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doBigComnt = true;  // /* */
-    doCinComnt = true;  // //
-    doTplString = true; // """...""" triple-quoted strings
+    doBlockCommentPLI = true;  // /* */
+    doInlineCommentDblSlash = true;  // //
+    doMultilineStrTripleDblQuote = true; // """...""" triple-quoted strings
     doPreProc = true;   // #if, #elif, #else, #endif, #define
 }
 

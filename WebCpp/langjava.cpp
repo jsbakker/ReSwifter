@@ -20,9 +20,9 @@ LangJava::LangJava() {
     doSymbols = true;
     doUnderscoreNumbers = true;
     doLabels = true;
-    doBigComnt = true;
-    doCinComnt = true;
-    doTplString = true;
+    doBlockCommentPLI = true;
+    doInlineCommentDblSlash = true;
+    doMultilineStrTripleDblQuote = true;
 }
 
 void LangJava::initReservedWords() {

@@ -19,9 +19,9 @@ LangCPlusPlus::LangCPlusPlus() {
     doSymbols = true;
     doLabels = true;
     doPreProc = true;
-    doBigComnt = true;
-    doCinComnt = true;
-    doRawString = true;
+    doBlockCommentPLI = true;
+    doInlineCommentDblSlash = true;
+    doMultilineStrRaw = true;
 }
 
 void LangCPlusPlus::initReservedWords() {

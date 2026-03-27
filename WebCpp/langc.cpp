@@ -19,8 +19,8 @@ LangC::LangC() {
     doSymbols = true;
     doLabels = true;
     doPreProc = true;
-    doBigComnt = true;
-    doCinComnt = true;
+    doBlockCommentPLI = true;
+    doInlineCommentDblSlash = true;
 }
 
 void LangC::initReservedWords() {

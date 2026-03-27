@@ -17,7 +17,6 @@
 
 using std::cerr;
 using std::cin;
-using std::ifstream;
 using std::make_shared;
 using std::setprecision;
 using std::string;
@@ -36,26 +35,26 @@ Driver::~Driver() {
 // toggle/set an option --------------------------------------------------------
 bool Driver::switch_parser(const string &arg) {
 
-    if (arg.substr(0, 3) == "-x=") {
+    if (arg.starts_with("-x=")) {
         cerr << checkExt("." + arg.substr(3)) << " type forced.\n";
         prep_files(iFile, oFile, 0x66);
-    } else if (arg.substr(0, 3) == "-c=") {
+    } else if (arg.starts_with("-c=")) {
         lang->Scs2.setFile(arg.substr(3));
-    } else if (arg.substr(0, 3) == "-C=") {
+    } else if (arg.starts_with("-C=")) {
         lang->options.toggleExtcss();
         lang->Scs2.setFile(arg.substr(3));
-    } else if (arg.substr(0, 3) == "-i=") {
+    } else if (arg.starts_with("-i=")) {
         lang->Scs2.setPicture(arg.substr(3));
-    } else if (arg.substr(0, 3) == "-t=") {
+    } else if (arg.starts_with("-t=")) {
         lang->options.toggleBigtab();
         lang->options.setTabWidth(arg.substr(3));
-    } else if (arg.substr(0, 3) == "-w=") {
+    } else if (arg.starts_with("-w=")) {
         lang->options.toggleNumber();
         lang->options.toggleAnchor();
         lang->options.toggleHypinc();
         lang->options.toggleWebcpp();
         lang->Scs2.setFile(arg.substr(3));
-    } else if (arg.substr(0, 3) == "-W=") {
+    } else if (arg.starts_with("-W=")) {
         lang->options.toggleNumber();
         lang->options.toggleAnchor();
         lang->options.toggleHypinc();
@@ -238,36 +237,10 @@ void Driver::drive() {
     clock_t time_beg, time_end, time_dif;
     time_beg = clock();
 
-    // get the filesize
-    ifstream Count;
-    string tmp;
-    int percent = 0;
-
-    Count.open(iFile.data());
-    while (Count) {
-        getline(Count, tmp);
-        percent++;
-    }
-    percent--;
-    Count.close();
-    // to compare against progress
-
     HtmlWriter::writeDocumentStart(lang->IO, lang->Scs2, lang->options, getTitle());
     lang->doParsing();
     while (lang->IO->ifile && cin) {
         lang->doParsing();
-
-//        if( ((lang->getLineCount()*100)/percent) < 101 ) {
-//
-//            cerr << '\r';
-//
-//            if(!lang->IO->isIredir()) {
-//
-//                cerr	<< ((lang->getLineCount() * 100) / percent)
-//                    << "% Complete ";
-//            }
-//            cerr << "@ line " << lang->getLineCount()-1;
-//        }
     }
     HtmlWriter::writeDocumentEnd(lang->IO, lang->options);
 

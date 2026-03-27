@@ -14,8 +14,8 @@ LangGLSL::LangGLSL() {
     initReservedWords();
 
     doSymbols = true;
-    doBigComnt = true; // /* */
-    doCinComnt = true; // //
+    doBlockCommentPLI = true; // /* */
+    doInlineCommentDblSlash = true; // //
     doPreProc = true;  // #version, #extension, #define, #ifdef, #ifndef, #endif
 }
 

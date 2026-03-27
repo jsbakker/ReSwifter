@@ -14,8 +14,8 @@ LangHLSL::LangHLSL() {
     initReservedWords();
 
     doSymbols = true;
-    doBigComnt = true; // /* */
-    doCinComnt = true; // //
+    doBlockCommentPLI = true; // /* */
+    doInlineCommentDblSlash = true; // //
     doPreProc =
         true; // #define, #if, #ifdef, #ifndef, #else, #elif, #endif, #include
 }

@@ -17,7 +17,7 @@ LangEuphoria ::LangEuphoria() {
 
     doStringsSinQuote = true;
     doUnderscoreNumbers = true;
-    doAdaComnt = true;
+    doInlineCommentDblDash = true;
 }
 
 void LangEuphoria ::initReservedWords() {

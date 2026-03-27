@@ -16,9 +16,9 @@ LangSwift::LangSwift() {
     doStringsBackTick = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doBigComnt = true;
-    doCinComnt = true;
-    doTplString = true;
+    doBlockCommentPLI = true;
+    doInlineCommentDblSlash = true;
+    doMultilineStrTripleDblQuote = true;
     // Swift string interpolation: "text \(expr)"
     doInterpolate = true;
     interpolStart = "\\(";

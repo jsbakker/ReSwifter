@@ -16,8 +16,8 @@ LangRust::LangRust() {
     doStringsSinQuote = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doBigComnt = true; // /* */
-    doCinComnt = true; // //
+    doBlockCommentPLI = true; // /* */
+    doInlineCommentDblSlash = true; // //
     doPreProc = true;  // #[attributes] and #![crate-level attributes]
 }
 

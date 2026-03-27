@@ -16,8 +16,8 @@ LangBasic ::LangBasic() {
 
     doCaseKeys = false;
     doLabels = true;
-    doAsmComnt = true;
-    doRemComnt = true;
+    doInlineCommentSemiColon = true;
+    doInlineCommentRem = true;
 }
 
 void LangBasic ::initReservedWords() {

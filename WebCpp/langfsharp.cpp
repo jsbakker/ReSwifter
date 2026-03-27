@@ -17,9 +17,9 @@ LangFSharp::LangFSharp() {
     doStringsBackTick = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doCinComnt = true;  // // line comments
-    doPasComnt = true;  // (* *) block comments
-    doTplString = true; // """...""" triple-quoted strings
+    doInlineCommentDblSlash = true;  // // line comments
+    doBlockCommentPascal = true;  // (* *) block comments
+    doMultilineStrTripleDblQuote = true; // """...""" triple-quoted strings
     // F# interpolated strings (F# 6+): $"text {expr}"
     doInterpolate = true;
     interpolStart = "{";

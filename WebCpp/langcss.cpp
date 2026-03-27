@@ -17,7 +17,7 @@ LangCSS::LangCSS() {
 
     doStringsSinQuote = true;
     doCaseKeys = false;
-    doBigComnt = true;
+    doBlockCommentPLI = true;
     doNumbers = true;
 }
 

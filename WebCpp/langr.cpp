@@ -16,7 +16,7 @@ LangR::LangR() {
     doStringsSinQuote = true;
     doStringsBackTick = false;
     doSymbols = true;
-    doUnxComnt = true; // # comments
+    doInlineCommentHash = true; // # comments
 }
 
 void LangR::initReservedWords() {

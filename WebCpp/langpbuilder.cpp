@@ -18,8 +18,8 @@ LangPBuilder::LangPBuilder() {
 
     doStringsSinQuote = true;
     doCaseKeys = false;
-    doCinComnt = true;
-    doBigComnt = true;
+    doInlineCommentDblSlash = true;
+    doBlockCommentPLI = true;
 }
 
 void LangPBuilder::initReservedWords() {

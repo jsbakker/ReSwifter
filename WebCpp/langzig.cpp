@@ -16,7 +16,7 @@ LangZig::LangZig() {
     doStringsSinQuote = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doCinComnt = true; // // only — Zig has no block comments
+    doInlineCommentDblSlash = true; // // only — Zig has no block comments
 }
 
 void LangZig::initReservedWords() {

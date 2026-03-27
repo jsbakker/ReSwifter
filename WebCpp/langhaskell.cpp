@@ -17,8 +17,8 @@ LangHaskell ::LangHaskell() {
 
     doStringsSinQuote = true;
     doStringsBackTick = true;
-    doAdaComnt = true; // -- line comments
-    doHskComnt = true; // {- -} block comments
+    doInlineCommentDblDash = true; // -- line comments
+    doBlockCommentHaskell = true; // {- -} block comments
     doSymbols = true;  // Haskell operators
     doUnderscoreNumbers = true;
 }

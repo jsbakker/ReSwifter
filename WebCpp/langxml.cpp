@@ -19,7 +19,7 @@ LangXML::LangXML() {
     doNumbers = true;
     doCaseKeys = true;
     doHtmlTags = true;
-    doHtmComnt = true;
+    doBlockCommentMarkup = true;
 }
 
 void LangXML::initReservedWords() {

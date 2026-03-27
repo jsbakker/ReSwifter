@@ -22,7 +22,7 @@ LangEmf ::LangEmf() {
     doScalars = true;
     doArrays = true;
     doHashes = true;
-    doAsmComnt = true;
+    doInlineCommentSemiColon = true;
 }
 
 void LangEmf ::initReservedWords() {

@@ -17,8 +17,8 @@ LangRenderMan::LangRenderMan() {
     initReservedWords();
 
     doPreProc = true;  // #include, #define
-    doCinComnt = true; // // line comments
-    doBigComnt = true; // /* */ block comments
+    doInlineCommentDblSlash = true; // // line comments
+    doBlockCommentPLI = true; // /* */ block comments
     doSymbols = true;
 }
 

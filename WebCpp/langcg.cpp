@@ -18,8 +18,8 @@ LangCg ::LangCg() {
     doStringsSinQuote = true;
     doSymbols = true;
     doPreProc = true;
-    doCinComnt = true;
-    doBigComnt = true;
+    doInlineCommentDblSlash = true;
+    doBlockCommentPLI = true;
 }
 
 void LangCg ::initReservedWords() {

@@ -14,8 +14,8 @@ LangAsp::LangAsp() {
     initReservedWords();
 
     // doHtmTags  = true;
-    // doHtmComnt = true;
-    doAspComnt = true;
+    // doBlockCommentMarkup = true;
+    doInlineCommentSingleQuote = true;
     doCaseKeys = false;
 }
 

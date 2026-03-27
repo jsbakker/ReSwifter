@@ -17,8 +17,8 @@ LangGo::LangGo() {
     doStringsBackTick = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doBigComnt = true; // /* */
-    doCinComnt = true; // //
+    doBlockCommentPLI = true; // /* */
+    doInlineCommentDblSlash = true; // //
     // doStrings = true by default; backtick raw strings handled automatically
 }
 

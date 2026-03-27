@@ -20,8 +20,8 @@ LangJScript::LangJScript() {
     doStringsBackTick = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doCinComnt = true;
-    doBigComnt = true;
+    doInlineCommentDblSlash = true;
+    doBlockCommentPLI = true;
     // JavaScript template literal interpolation: `text ${expr}`
     doInterpolate = true;
     interpolStart = "${";

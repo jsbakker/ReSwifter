@@ -18,8 +18,8 @@ LangSQL::LangSQL() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doCaseKeys = false;
-    doAdaComnt = true;
-    doBigComnt = true;
+    doInlineCommentDblDash = true;
+    doBlockCommentPLI = true;
 }
 
 void LangSQL::initReservedWords() {

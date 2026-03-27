@@ -10,7 +10,7 @@ LangText::LangText() {
     doNumbers = false;
     doKeywords = false;
     //	doCaseKeys  = false;
-    doRemComnt = false;
+    doInlineCommentRem = false;
 }
 
 void LangText::initReservedWords() {

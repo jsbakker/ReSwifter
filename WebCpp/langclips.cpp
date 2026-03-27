@@ -16,7 +16,7 @@ LangClips ::LangClips() {
 
     initReservedWords();
 
-    doAsmComnt = true; // ; line comments
+    doInlineCommentSemiColon = true; // ; line comments
     doSymbols = true;
 }
 

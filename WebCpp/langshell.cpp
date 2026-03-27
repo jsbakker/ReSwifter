@@ -19,8 +19,8 @@ LangShell::LangShell() {
     doStringsSinQuote = true;
     doStringsBackTick = true;
     doScalars = true;
-    doUnxComnt = true;
-    doHeredoc = true;
+    doInlineCommentHash = true;
+    doMultilineStrHeredoc = true;
     doRequireBackslashContinuation = false; // Shell strings may span lines without backslash
 }
 

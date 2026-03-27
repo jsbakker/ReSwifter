@@ -16,7 +16,7 @@ LangOCaml::LangOCaml() {
     doStringsSinQuote = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doPasComnt =
+    doBlockCommentPascal =
         true; // (* *) block comments (best approximation; OCaml allows nesting)
 }
 

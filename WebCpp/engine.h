@@ -8,9 +8,8 @@
 
 #include "cffile.h"
 #include "engine_options.h"
+#include "lang_rules.h"
 #include "theme.h"
-
-class LanguageRules;
 
 #include <memory>
 #include <string>
@@ -57,14 +56,14 @@ class Engine {
     void colourChildLang(const std::string &beg, const std::string &end);
 
     void parseSymbol();
-    bool colourSymbol(int start, int end);
+    [[nodiscard]] bool colourSymbol(int start, int end);
     bool isSymbol(char c) const;
 
     void parseLabel();
     void colourLabel(int start, int end);
 
     void parseNum();
-    bool colourNum(int start, int end);
+    [[nodiscard]] bool colourNum(int start, int end);
 
     void parseString(char quotetype, bool &inside);
     void colourString(int index, bool &inside, const std::string &cssclass);
@@ -78,7 +77,7 @@ class Engine {
     void parseHeredoc(const std::string &marker = "&lt;&lt;");
 
     void parseKeywordsAndTypes();
-    bool colourKeys(int index, const std::string &key, const std::string &cssclass);
+    [[nodiscard]] bool colourKeys(int index, const std::string &key, const std::string &cssclass);
     bool isKey(int start, int end) const;
     int noCaseFind(const std::string &search, int index) const;
 

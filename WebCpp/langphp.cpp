@@ -21,10 +21,10 @@ LangPhp::LangPhp() {
     doSymbols = true;
     doUnderscoreNumbers = true;
     doScalars = true;
-    doBigComnt = true;
-    doCinComnt = true;
-    doUnxComnt = true;
-    doPhpHeredoc = true;
+    doBlockCommentPLI = true;
+    doInlineCommentDblSlash = true;
+    doInlineCommentHash = true;
+    doMultilineStrHeredocTpl = true;
     doRequireBackslashContinuation = false; // PHP strings may span lines without backslash
 }
 

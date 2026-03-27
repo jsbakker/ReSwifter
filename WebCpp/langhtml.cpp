@@ -20,7 +20,7 @@ LangHtml::LangHtml() {
     doNumbers = true;
     doCaseKeys = false;
     doHtmlTags = true;
-    doHtmComnt = true;
+    doBlockCommentMarkup = true;
 }
 
 void LangHtml::initReservedWords() {

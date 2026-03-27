@@ -16,8 +16,8 @@ class LangAssembler : public LanguageRules {
     void initReservedWords() override;
 
     void setInline() override {
-        doCinComnt = true;
-        doBigComnt = true;
+        doInlineCommentDblSlash = true;
+        doBlockCommentPLI = true;
     }
 };
 

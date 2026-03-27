@@ -17,8 +17,8 @@ LangTypeScript::LangTypeScript() {
     doStringsBackTick = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doBigComnt = true; // /* */
-    doCinComnt = true; // //
+    doBlockCommentPLI = true; // /* */
+    doInlineCommentDblSlash = true; // //
     // TypeScript template literal interpolation: `text ${expr}`
     doInterpolate = true;
     interpolStart = "${";

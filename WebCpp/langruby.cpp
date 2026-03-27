@@ -23,9 +23,9 @@ LangRuby::LangRuby() {
     doScalars = true;
     doArrays = true;
     doHashes = true;
-    doUnxComnt = true;
-    doHeredoc = true;
-    doPercentQ = true;
+    doInlineCommentHash = true;
+    doMultilineStrHeredoc = true;
+    doMultilineStrPercentQ = true;
     doInterpolate = true;
     interpolStart = "#{";
     interpolEnd = '}';

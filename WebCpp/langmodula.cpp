@@ -17,7 +17,7 @@ LangModula2::LangModula2() {
     initReservedWords();
 
     doStringsSinQuote = true;
-    doPasComnt = true;
+    doBlockCommentPascal = true;
 }
 
 void LangModula2::initReservedWords() {

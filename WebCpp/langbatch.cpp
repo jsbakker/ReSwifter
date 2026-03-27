@@ -17,8 +17,8 @@ LangBatch::LangBatch() {
     doCaseKeys = false;
 
     doHashes = true;
-    doRemComnt = true;
-    doBatComnt = true;
+    doInlineCommentRem = true;
+    doInlineCommentDblColon = true;
 }
 
 void LangBatch::initReservedWords() {

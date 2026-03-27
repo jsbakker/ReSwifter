@@ -20,8 +20,8 @@ LangPascal::LangPascal() {
     doStringsSinQuote = true;
     doCaseKeys = false;
     doHashes = true;
-    doPasComnt = true;
-    doCinComnt = true;
+    doBlockCommentPascal = true;
+    doInlineCommentDblSlash = true;
     doUnderscoreNumbers = true;
 }
 

@@ -20,9 +20,9 @@ LangCSharp ::LangCSharp() {
     doSymbols = true;
     doLabels = true;
     doPreProc = true;
-    doBigComnt = true;
-    doCinComnt = true;
-    doTplString = true;
+    doBlockCommentPLI = true;
+    doInlineCommentDblSlash = true;
+    doMultilineStrTripleDblQuote = true;
     doUnderscoreNumbers = true;
     // C# interpolated strings: $"text {expr}" — applied to all "..." strings
     doInterpolate = true;

@@ -16,7 +16,7 @@ LangGherkin::LangGherkin() {
 
     doNumbers = false;
     doScalars = true;
-    doUnxComnt = true; // # comments
+    doInlineCommentHash = true; // # comments
 }
 
 void LangGherkin::initReservedWords() {

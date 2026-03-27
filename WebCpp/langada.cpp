@@ -22,7 +22,7 @@ LangAda ::LangAda() {
     doStringsSinQuote = false;
     doCaseKeys = false; // Ada is case-insensitive
     doLabels = true;
-    doAdaComnt = true; // -- line comments
+    doInlineCommentDblDash = true; // -- line comments
     doSymbols = true;
     doUnderscoreNumbers = true;
 }

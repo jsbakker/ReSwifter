@@ -19,8 +19,8 @@ LangFortran ::LangFortran() {
     doStringsSinQuote = true;
     doCaseKeys = false;
     doPreProc = true;
-    doFtnComnt = true;
-    doBigComnt = true;
+    doFirstCharCommentFortran = true;
+    doBlockCommentPLI = true;
 }
 
 void LangFortran ::initReservedWords() {

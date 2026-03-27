@@ -48,51 +48,32 @@ void Engine::init_switches() {
 // format the plain text for proper display in HTML ---------------------------
 void Engine::pre_parse() {
 
-    // the virtual Nth character factoring in for escapes
-    int i_esc = 0;
+    string out;
+    out.reserve(buffer.size() + buffer.size() / 4);
 
-    for (int i = 0; i < (int)buffer.size(); i++) {
+    int col = 0; // visual column for tab-stop arithmetic
 
-        // escape from HTML escapes
-        if (buffer[i] == '&') {
-            buffer.replace(i, 1, "&amp;");
-            i_esc += 4;
-        } else if (buffer[i] == '<') {
-            buffer.replace(i, 1, "&lt;");
-            i_esc += 3;
-        } else if (buffer[i] == '>') {
-            buffer.replace(i, 1, "&gt;");
-            i_esc += 3;
+    for (unsigned char c : buffer) {
+        if (c == '&') {
+            out += "&amp;";
+            col++;
+        } else if (c == '<') {
+            out += "&lt;";
+            col++;
+        } else if (c == '>') {
+            out += "&gt;";
+            col++;
+        } else if (options.bigtab && c == '\t') {
+            int spaces = options.tabwidth - (col % options.tabwidth);
+            out.append(spaces, ' ');
+            col += spaces;
+        } else {
+            out += c;
+            col++;
         }
-        // escape from accidental HTML tags
-
-        if (options.bigtab)
-            // convert tabs into spaces
-            if (buffer[i] == '\t') {
-
-                int j;
-                buffer.erase(i, 1);
-
-                // factor in the number of escapes
-                if ((i - i_esc) % options.tabwidth == 0) {
-
-                    for (j = 0; j < options.tabwidth; j++) {
-
-                        buffer.insert(i, " ");
-                    }
-                    i += options.tabwidth - 1;
-                } else {
-                    int spaces = options.tabwidth - ((i - i_esc) % options.tabwidth);
-
-                    for (j = 0; j < spaces; j++) {
-
-                        buffer.insert(i, " ");
-                    }
-                    i += spaces - 1;
-                }
-            }
-        // for browsers that don't display tabs properly
     }
+
+    buffer = std::move(out);
 }
 // erases tags (use for inside of inline comments) ----------------------------
 void Engine::eraseTags(int start, int fin) {
@@ -141,7 +122,7 @@ bool Engine::abortParse() const {
 
     // If interpolation blocks are present on this line, allow content parsing.
     // Individual colour functions use isInInterpolation() to gate access.
-    if (buffer.find('\x01') != string::npos) {
+    if (buffer.contains('\x01')) {
         return false;
     }
 
@@ -151,7 +132,7 @@ bool Engine::abortParse() const {
     if (state.inDblQuotes) {
         return true;
     }
-    if (!rules->doAspComnt) {
+    if (!rules->doInlineCommentSingleQuote) {
         if (state.inSinQuotes) {
             return true;
         }
@@ -187,7 +168,7 @@ bool Engine::abortColour(int index) const {
     if (state.endMultiLine || state.inMultiStr)
         return true;
 
-    if (rules->doHtmComnt && (isInsideIt(index, "&lt;", "&gt;") &&
+    if (rules->doBlockCommentMarkup && (isInsideIt(index, "&lt;", "&gt;") &&
                               isInsideIt(index, "&gt;", "&lt;"))) {
         return true;
     }
@@ -203,7 +184,7 @@ bool Engine::abortColour(int index) const {
     if (isInsideIt(index, "\"", "\"")) {
         return true;
     }
-    if (!rules->doAspComnt) {
+    if (!rules->doInlineCommentSingleQuote) {
         if (isInsideIt(index, "'", "'")) {
             return true;
         }
@@ -220,7 +201,7 @@ bool Engine::isInsideIt(int index, const string &start, const string &end, bool 
     // count the number of starts and ends
     // and return true for an odd number
 
-    if (buffer.find(start, 0) == string::npos) {
+    if (!buffer.contains(start)) {
         return false;
     }
 
@@ -364,11 +345,11 @@ void Engine::parseSymbol() {
             // skip symbol spans that form comment markers
             if (buffer[i] == '-') {
                 string span = buffer.substr(i, end - i + 1);
-                if (rules->doAdaComnt && span.find("--") != string::npos) {
+                if (rules->doInlineCommentDblDash && span.contains("--")) {
                     i = end;
                     continue;
                 }
-                if (rules->doHskComnt) {
+                if (rules->doBlockCommentHaskell) {
                     if (i > 0 && buffer[i - 1] == '{') {
                         i = end;
                         continue;
@@ -416,10 +397,10 @@ void Engine::parseLabel() {
         return;
     }
 
-    if (buffer.find("/*") != -1) {
+    if (buffer.contains("/*")) {
         return;
     } // prevent comment loop
-    if (buffer.find("(*") != -1) {
+    if (buffer.contains("(*")) {
         return;
     }
 
@@ -447,7 +428,7 @@ void Engine::colourLabel(int beg, int end) {
 //-----------------------------------------------------------------------------
 // parse the buffer for numbers -----------------------------------------------
 void Engine::parseNum() {
-    if (buffer[0] == '#') {
+    if (buffer.starts_with('#')) {
         return;
     }
     if (abortParse()) {
@@ -526,7 +507,7 @@ void Engine::parseString(char quotetype, bool &inside) {
     if (state.inMultiStr) {
         return;
     }
-    if (rules->doAspComnt && quotetype == static_cast<char>(Quote::Single)) {
+    if (rules->doInlineCommentSingleQuote && quotetype == static_cast<char>(Quote::Single)) {
         return;
     }
 
@@ -544,7 +525,7 @@ void Engine::parseString(char quotetype, bool &inside) {
 
         // Asp uses single ticks for comments and this
         // screws up if a double-quoted line is commented out
-        if (!rules->doAspComnt) {
+        if (!rules->doInlineCommentSingleQuote) {
             escap1 = "'";
         } else {
             escap1 = "`";
@@ -627,7 +608,7 @@ void Engine::parseString(char quotetype, bool &inside) {
             }
         }
 
-        while (rules->doAdaComnt && isInsideIt(index, "--", "\n")) {
+        while (rules->doInlineCommentDblDash && isInsideIt(index, "--", "\n")) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 if (insertedContinuationTag && inside)
@@ -636,7 +617,7 @@ void Engine::parseString(char quotetype, bool &inside) {
             }
         }
 
-        while (rules->doHtmComnt && isInsideIt(index, "&gt;", "&lt;")) {
+        while (rules->doBlockCommentMarkup && isInsideIt(index, "&gt;", "&lt;")) {
             index = static_cast<int>(buffer.find(quote, index + 1));
             if (index == -1) {
                 if (insertedContinuationTag && inside)
@@ -999,7 +980,7 @@ void Engine::parseHeredoc(const string &marker) {
         // skip if the marker appears after a single-line comment start
         // (single-line comments haven't been parsed yet at this point in
         // doParsing)
-        if (rules->doUnxComnt) {
+        if (rules->doInlineCommentHash) {
             int hashPos = static_cast<int>(buffer.find("#", 0));
             if (hashPos != -1 && hashPos < tagStart) {
                 if (!isInsideIt(hashPos, "\"", "\"") &&
@@ -1008,7 +989,7 @@ void Engine::parseHeredoc(const string &marker) {
                 }
             }
         }
-        if (rules->doCinComnt) {
+        if (rules->doInlineCommentDblSlash) {
             int slashPos = static_cast<int>(buffer.find("//", 0));
             if (slashPos != -1 && slashPos < tagStart) {
                 if (!isInsideIt(slashPos, "\"", "\"") &&
@@ -1088,10 +1069,10 @@ void Engine::parseBlockComment(const string &start, const string &end, bool &ins
     if (index == -1) {
         return;
     }
-    if (rules->doCinComnt && start == "/*" && buffer.find("//") < index) {
+    if (rules->doInlineCommentDblSlash && start == "/*" && buffer.find("//") < index) {
         return;
     }
-    if (rules->doUnxComnt && start == "/*" && buffer.find("#") < index) {
+    if (rules->doInlineCommentHash && start == "/*" && buffer.find("#") < index) {
         return;
     }
 
@@ -1130,7 +1111,7 @@ void Engine::parseBlockComment(const string &start, const string &end, bool &ins
             !isInsideIt(index, "`", "`")) {
             if (inside) {
                 index += end.size() - 1;
-                if (buffer.find(end) == -1) {
+                if (!buffer.contains(end)) {
                     state.endMultiLine = true;
                 }
             } else if (erase)
@@ -1158,7 +1139,7 @@ void Engine::parseBlockComment(const string &start, const string &end, bool &ins
 // parse for keywords ---------------------------------------------------------
 void Engine::parseKeywordsAndTypes() {
 
-    if (buffer[0] == '#') {
+    if (buffer.starts_with('#')) {
         return;
     }
     if (abortParse()) {
@@ -1286,10 +1267,10 @@ static bool isInsideFontTag(const string &buffer, int index) {
             int tagStart = static_cast<int>(buffer.rfind('<', i));
             if (tagStart != (int)string::npos && tagStart >= 0) {
                 string tag = buffer.substr(tagStart, i - tagStart + 1);
-                if (tag.find("<font ") == 0 || tag.find("<font>") == 0) {
+                if (tag.starts_with("<font ") || tag.starts_with("<font>")) {
                     return true; // we are inside font content
                 }
-                if (tag.find("</font>") == 0) {
+                if (tag.starts_with("</font>")) {
                     return false; // we are past a closed font tag
                 }
             }
@@ -1489,7 +1470,7 @@ void Engine::colourComment(int index) {
     if (abortColour(index)) {
         return;
     }
-    if (rules->doCinComnt) {
+    if (rules->doInlineCommentDblSlash) {
         if (index >= 5 && buffer.rfind("http:", index) == index - 5) {
             return;
         }
@@ -1508,7 +1489,7 @@ void Engine::colourComment(int index) {
 //-----------------------------------------------------------------------------
 void Engine::parseCharZeroComment(char zchar) {
 
-    if (buffer[0] == zchar) {
+    if (!buffer.empty() && buffer.front() == zchar) {
         colourComment(0);
     }
 }
@@ -1548,15 +1529,15 @@ void Engine::doParsing() {
     if (rules->doLabels)
         parseLabel();
 
-    if (rules->doTplString)
+    if (rules->doMultilineStrTripleDblQuote)
         parseMultilineStrTripleDblQuote();
-    if (rules->doRawString)
+    if (rules->doMultilineStrRaw)
         parseMultilineStrRaw();
-    if (rules->doHeredoc)
+    if (rules->doMultilineStrHeredoc)
         parseMultilineStrHeredocDblLt();
-    if (rules->doPhpHeredoc)
+    if (rules->doMultilineStrHeredocTpl)
         parseMultilineStrHeredocTplLt();
-    if (rules->doPercentQ) {
+    if (rules->doMultilineStrPercentQ) {
         parseMultilineStrUpperQBlock();
         parseMultilineStrLowerQBlock();
     }
@@ -1587,13 +1568,13 @@ void Engine::doParsing() {
     if (rules->doPreProc)
         parsePreProc();
 
-    if (rules->doPasComnt)
+    if (rules->doBlockCommentPascal)
         parseBlockCommentPascal();
-    if (rules->doHtmComnt)
+    if (rules->doBlockCommentMarkup)
         parseBlockCommentMarkup();
-    if (rules->doBigComnt)
+    if (rules->doBlockCommentPLI)
         parseBlockCommentPLI();
-    if (rules->doHskComnt)
+    if (rules->doBlockCommentHaskell)
         parseBlockCommentHaskell();
     if (rules->doHtmlTags)
         parseHtmlTags();
@@ -1624,32 +1605,32 @@ void Engine::doParsing() {
     PRINT_DEBUG(4);
 #endif
 
-    if (rules->doAdaComnt) {
+    if (rules->doInlineCommentDblDash) {
         parseInlineCommentDblDash();
     }
-    if (rules->doAspComnt) {
+    if (rules->doInlineCommentSingleQuote) {
         parseInlineCommentSingleQuote();
     }
-    if (rules->doCinComnt) {
+    if (rules->doInlineCommentDblSlash) {
         parseInlineCommentDblSlash();
     }
-    if (rules->doUnxComnt) {
+    if (rules->doInlineCommentHash) {
         parseInlineCommentHash();
     }
-    if (rules->doAsmComnt) {
+    if (rules->doInlineCommentSemiColon) {
         parseInlineCommentSemiColon();
     }
-    if (rules->doBatComnt) {
+    if (rules->doInlineCommentDblColon) {
         parseInlineCommentDblColon();
     }
-    if (rules->doRemComnt) {
+    if (rules->doInlineCommentRem) {
         parseInlineCommentRem();
     }
-    if (rules->doFtnComnt) {
+    if (rules->doFirstCharCommentFortran) {
         parseFirstCharCommentFortran();
         parseInlineCommentExclamation();
     }
-    if (rules->doTclComnt) {
+    if (rules->doFirstCharCommentHash) {
         parseFirstCharCommentHash();
     }
 
@@ -1666,10 +1647,8 @@ void Engine::doParsing() {
 #endif
 
     // Strip internal interpolation boundary markers before output
-    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x01'),
-                 buffer.end());
-    buffer.erase(std::remove(buffer.begin(), buffer.end(), '\x02'),
-                 buffer.end());
+    std::erase(buffer, '\x01');
+    std::erase(buffer, '\x02');
 
     *IO << buffer << "\n";
     if (!childLang) {
@@ -1844,7 +1823,7 @@ void Engine::colourChildLang(const string &beg, const string &end) {
 
     // cerr << "\nNow in colourChildLang()\n";
 
-    if (buffer.find(beg) != -1) {
+    if (buffer.contains(beg)) {
 
         // cerr << "\nNow in if of colourChildLang()\n";
 
@@ -1883,7 +1862,7 @@ void Engine::colourChildLang(const string &beg, const string &end) {
         do {
             childEngine->doParsing();
             // cerr << endl << Child->getBuffer() << endl;
-        } while (childEngine->getBuffer().find(end) == -1 &&
+        } while (!childEngine->getBuffer().contains(end) &&
                  (childEngine->IO->ifile && cin));
 
         if (langext == lang::HTM_FILE && state.inComment) {

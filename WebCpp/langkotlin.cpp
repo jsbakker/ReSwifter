@@ -17,9 +17,9 @@ LangKotlin::LangKotlin() {
     doStringsBackTick = true;
     doSymbols = true;
     doUnderscoreNumbers = true;
-    doBigComnt = true;  // /* */
-    doCinComnt = true;  // //
-    doTplString = true; // """...""" triple-quoted strings
+    doBlockCommentPLI = true;  // /* */
+    doInlineCommentDblSlash = true;  // //
+    doMultilineStrTripleDblQuote = true; // """...""" triple-quoted strings
     // Kotlin string interpolation: "text ${expr}" or "text $name"
     doInterpolate = true;
     interpolStart = "${";
