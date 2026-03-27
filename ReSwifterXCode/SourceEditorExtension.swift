@@ -20,13 +20,9 @@ class SourceEditorExtension: NSObject, XCSourceEditorExtension {
         // If your extension needs to return a collection of command definitions that differs from those in its Info.plist, implement this optional property getter.
         let namespace = Bundle(for: type(of: self)).bundleIdentifier!
         let resiwfter = ReSwifterCommand.className()
-        let obfuscate = ObfuscateCommand.className()
         return [[.identifierKey: "\(namespace)\(resiwfter)",
                  .classNameKey: resiwfter,
                  .nameKey: NSLocalizedString("ReSwifter", comment: "ReSwifter menu item")]
-//                [.identifierKey: "\(namespace)\(obfuscate)",
-//                 .classNameKey: obfuscate,
-//                 .nameKey: NSLocalizedString("Obfuscate", comment: "Obfuscate menu item")]
         ]
     }
 }
