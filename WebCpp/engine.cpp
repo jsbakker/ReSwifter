@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
+#include <unordered_map>
 
 using std::cerr;
 using std::cin;
@@ -1136,6 +1137,14 @@ void Engine::parseBlockComment(const string &start, const string &end, bool &ins
         }
     }
 }
+// helper: return uppercased copy of s ------------------------------------
+static std::string toUpperStr(const std::string &s) {
+    std::string r(s.size(), '\0');
+    std::transform(s.begin(), s.end(), r.begin(),
+                   [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+    return r;
+}
+
 // parse for keywords ---------------------------------------------------------
 void Engine::parseKeywordsAndTypes() {
 
@@ -1146,43 +1155,86 @@ void Engine::parseKeywordsAndTypes() {
         return;
     }
 
-    int i, index, offset = 20;
-    string cmpkey;
+    const bool caseInsens = !rules->doCaseKeys;
 
-    for (i = 0; i < (int)rules->keys.size(); i++) {
+    // ── B: build a single hash map from (case-normalised) keyword → css ──
+    // O(k) setup; avoids O(n×k) repeated buffer.find() calls.
+    struct KeyEntry { const char *css; };
+    std::unordered_map<std::string, KeyEntry> lookup;
+    lookup.reserve(rules->keys.size() + rules->types.size());
 
-        cmpkey = rules->keys[i];
-        index = noCaseFind(cmpkey, 0);
+    for (const auto &w : rules->keys)
+        lookup.try_emplace(caseInsens ? toUpperStr(w) : w, KeyEntry{"keyword"});
+    for (const auto &w : rules->types)
+        lookup.try_emplace(caseInsens ? toUpperStr(w) : w, KeyEntry{"keytype"});
 
-        while (index < static_cast<int>(buffer.size()) && index != -1) {
+    if (lookup.empty())
+        return;
 
-            bool inserted = false;
-            if (isKey(index - 1,
-                      index + static_cast<int>(rules->keys[i].size()))) {
-                inserted = colourKeys(index, rules->keys[i], "keyword");
+    // ── C: pre-compute one uppercase copy of the buffer (not one per keyword) ──
+    std::string upperBuf;
+    if (caseInsens) {
+        upperBuf.resize(buffer.size());
+        std::transform(buffer.begin(), buffer.end(), upperBuf.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+    }
+    const std::string &scanBuf = caseInsens ? upperBuf : buffer;
+
+    // ── B: single left-to-right pass to collect candidate matches ── O(n)
+    struct Match { int pos; int len; const char *css; };
+    std::vector<Match> matches;
+
+    int fontDepth = 0;           // tracks nesting inside <font…>…</font> spans
+    const int n = static_cast<int>(buffer.size());
+    int i = 0;
+
+    while (i < n) {
+        if (buffer[i] == '<') {
+            // Update font-tag depth so we skip already-coloured content
+            if (buffer.compare(i, 6, "<font ") == 0 ||
+                buffer.compare(i, 6, "<font>") == 0) {
+                ++fontDepth;
+            } else if (buffer.compare(i, 7, "</font>") == 0) {
+                if (fontDepth > 0) --fontDepth;
             }
-            int skip = inserted ? offset : 0;
-            index = noCaseFind(cmpkey,
-                               index + static_cast<int>(cmpkey.size()) + skip);
+            // Skip to the closing '>'
+            while (i < n && buffer[i] != '>') ++i;
+            if (i < n) ++i;
+            continue;
+        }
+
+        // Only inspect word tokens that are outside existing colour spans
+        if (fontDepth == 0 &&
+            (std::isalpha(static_cast<unsigned char>(buffer[i])) || buffer[i] == '_')) {
+
+            const int start = i;
+            while (i < n && (std::isalnum(static_cast<unsigned char>(buffer[i])) ||
+                              buffer[i] == '_')) {
+                ++i;
+            }
+            const int len = i - start;
+
+            // Build lookup key; "class" is always matched case-sensitively
+            std::string tok = scanBuf.substr(start, len);
+            if (caseInsens && buffer.compare(start, static_cast<std::size_t>(len), "class") == 0)
+                tok = "class";
+
+            auto it = lookup.find(tok);
+            if (it != lookup.end() &&
+                isKey(start - 1, start + len) &&
+                !abortColour(start)) {
+                matches.push_back({start, len, it->second.css});
+            }
+        } else {
+            ++i;
         }
     }
 
-    for (i = 0; i < (int)rules->types.size(); i++) {
-
-        cmpkey = rules->types[i];
-        index = noCaseFind(cmpkey, 0);
-
-        while (index < static_cast<int>(buffer.size()) && index != -1) {
-
-            bool inserted = false;
-            if (isKey(index - 1,
-                      index + static_cast<int>(rules->types[i].size()))) {
-                inserted = colourKeys(index, rules->types[i], "keytype");
-            }
-            int skip = inserted ? offset : 0;
-            index = noCaseFind(cmpkey,
-                               index + static_cast<int>(cmpkey.size()) + skip);
-        }
+    // Insert colour tags in reverse order so earlier buffer positions stay valid
+    for (int j = static_cast<int>(matches.size()) - 1; j >= 0; j--) {
+        const auto &[pos, len, css] = matches[j];
+        buffer.insert(pos + len, "</font>");
+        buffer.insert(pos, std::string("<font CLASS=") + css + ">");
     }
 }
 // checks for case sensitive keys ---------------------------------------------
