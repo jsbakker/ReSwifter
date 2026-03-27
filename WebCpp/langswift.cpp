@@ -54,6 +54,7 @@ void LangSwift::initReservedWords() {
         "@Sendable",
         "@State",
         "@StateObject",
+        "@Test",
         "@UIApplicationDelegateAdaptor",
         "@ViewBuilder",
         "@autoclosure",
