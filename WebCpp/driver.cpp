@@ -316,15 +316,9 @@ string Driver::highlight_from_string(const string &source,
 }
 //-----------------------------------------------------------------------------
 void Driver::clean() {
-
-    if (lang != nullptr) {
-        lang = nullptr;
-    }
+    lang = nullptr;
 }
 void Driver::endio() {
-
-    if (ObjIO != nullptr) {
-        ObjIO = nullptr;
-    }
+    ObjIO = nullptr;
 }
 //-----------------------------------------------------------------------------
