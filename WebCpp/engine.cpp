@@ -1504,10 +1504,7 @@ void Engine::doParsing() {
     }
 
     IO->rline(buffer);
-    if (!IO->isIredir() && !IO->ifile) {
-        return;
-    }
-    if (IO->isIredir() && !cin) {
+    if (!IO->isInputGood()) {
         return;
     }
 

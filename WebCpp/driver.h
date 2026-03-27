@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 class CFfile;
 class Engine;
@@ -30,6 +31,9 @@ class Driver {
     void drive();
     void clean();
     void endio();
+    std::string highlight_from_string(const std::string &source,
+                                      const std::string &filename,
+                                      const std::vector<std::string> &options = {});
 
   protected:
     std::shared_ptr<CFfile> ObjIO;

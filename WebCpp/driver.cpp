@@ -14,12 +14,14 @@
 
 #include <ctime>
 #include <iomanip>
+#include <vector>
 
 using std::cerr;
 using std::cin;
 using std::make_shared;
 using std::setprecision;
 using std::string;
+using std::vector;
 
 Driver::Driver() {
 
@@ -281,6 +283,36 @@ void Driver::makeIndex(const string &prefix) {
     }
 
     Index << "\n</body>\n</html>";
+}
+// highlight source code string in memory, returning HTML -----------------------
+string Driver::highlight_from_string(const string &source,
+                                     const string &filename,
+                                     const vector<string> &options) {
+    checkExt(filename);
+
+    // Snippet-only mode by default — no full HTML document wrapper
+    switch_parser("-s");
+
+    for (const auto &opt : options) {
+        switch_parser(opt);
+    }
+
+    auto io = make_shared<CFfile>();
+    io->openStringR(source);
+    io->openStringW();
+    lang->setupIO(io);
+
+    HtmlWriter::writeDocumentStart(lang->IO, lang->Scs2, lang->options, filename);
+
+    // Process all lines until the input stream is exhausted
+    lang->doParsing();
+    while (lang->IO->isInputGood()) {
+        lang->doParsing();
+    }
+
+    HtmlWriter::writeDocumentEnd(lang->IO, lang->options);
+
+    return io->getStringW();
 }
 //-----------------------------------------------------------------------------
 void Driver::clean() {

@@ -123,6 +123,8 @@
 
 #include <fstream>
 #include <iostream>
+#include <memory>
+#include <sstream>
 #include <string>
 
 class CFfile {
@@ -160,6 +162,13 @@ class CFfile {
     bool isIopen() const { return iopen; } // is infile open?
     bool isOopen() const { return oopen; } // is outfile open?
     //----------------------------------------------------------------------------
+    // In-memory (string-stream) I/O
+    // ---------------------------------------------
+    void openStringR(const std::string &data); // open an in-memory input stream
+    void openStringW();                         // open an in-memory output stream
+    std::string getStringW() const;             // retrieve accumulated output
+    bool isInputGood() const;                   // true if current input stream has more data
+    //----------------------------------------------------------------------------
     // File pointer location methods
     // ---------------------------------------------
     void setIFptr(long location); // set the infile pointer location
@@ -183,8 +192,10 @@ class CFfile {
     template <class T> void read(T &buffer) {
         (iredir ? std::cin : ifile) >> buffer;
     }
-    template <class T> void write(T buffer) {
-        (oredir ? std::cout : ofile) << buffer;
+    template <class T> void write(T data) {
+        if (smode && ostrm)  { *ostrm << data; }
+        else if (oredir)     { std::cout << data; }
+        else                 { ofile   << data; }
     }
     // Special purpose read methods
     // ----------------------------------------------
@@ -213,6 +224,11 @@ class CFfile {
     // -----------------------------------------------------------------
     std::string str_if;
     std::string str_of;
+    // In-memory string-stream mode
+    // -------------------------------------------------------
+    std::unique_ptr<std::istringstream> istrm;
+    std::unique_ptr<std::ostringstream> ostrm;
+    bool smode;
 };
 
 #endif // _C4_FILE_H

@@ -7,15 +7,10 @@
 
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
-#include <iostream>
-#include <sstream>
+#include <vector>
 
 using std::string;
-using std::ifstream;
-using std::ofstream;
-using std::ostringstream;
-using std::to_string;
+using std::vector;
 
 // Helper: duplicate a std::string as a C-allocated char*.
 static char *dup_string(const string &s) {
@@ -70,58 +65,15 @@ void webcpp_driver_drive(WebCppDriverRef driver) {
 
 char *webcpp_driver_highlight_string(const char *source, const char *filename,
                                      const char **options) {
-    // Write source to a uniquely-named temporary file so that
-    // concurrent callers (e.g. parallel unit tests) don't collide.
-    const char *tmpDir = getenv("TMPDIR");
-    if (!tmpDir)
-        tmpDir = "/tmp";
-
-    // Build a per-call suffix from the thread ID and a counter
-    static _Atomic unsigned long long counter = 0;
-    unsigned long long seq = counter++;
-    string suffix = to_string(seq);
-    string tmpIn = string(tmpDir) + "/webcpp_in_" + suffix + ".tmp";
-    string tmpOut = string(tmpDir) + "/webcpp_out_" + suffix + ".tmp";
-
-    {
-        ofstream ofs(tmpIn.c_str());
-        if (!ofs)
-            return nullptr;
-        ofs << source;
+    vector<string> opts;
+    if (options) {
+        for (int i = 0; options[i] != nullptr; i++)
+            opts.emplace_back(options[i]);
     }
 
     Driver drv;
-    // Detect the language based on the given filename
-    drv.checkExt(string(filename));
-
-    if (!drv.prep_files(tmpIn, tmpOut, 'f')) {
-        return nullptr;
-    }
-
-    // Apply snippet-only mode by default so we get just the highlighted HTML
-    drv.switch_parser(string("-s"));
-
-    // Apply any caller-supplied options
-    if (options) {
-        for (int i = 0; options[i] != nullptr; i++) {
-            drv.switch_parser(string(options[i]));
-        }
-    }
-
-    drv.drive();
-
-    // Read the output file into a string
-    ifstream ifs(tmpOut.c_str());
-    if (!ifs)
-        return nullptr;
-
-    ostringstream oss;
-    oss << ifs.rdbuf();
-    string html = oss.str();
-
-    // Clean up temp files
-    remove(tmpIn.c_str());
-    remove(tmpOut.c_str());
+    string html = drv.highlight_from_string(
+        string(source), string(filename), opts);
 
     return dup_string(html);
 }

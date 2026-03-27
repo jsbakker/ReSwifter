@@ -305,6 +305,7 @@ void CFfile::init_switches() {
     oredir = false;
     iopen = false;
     oopen = false;
+    smode = false;
 
     str_if = "\0";
     str_of = "\0";
@@ -420,10 +421,33 @@ void CFfile::setOFptr(long location) { ofile.seekp(location); }
 
 // readline to string ---------------------------------------------------------
 void CFfile::rline(string &buffer) {
-    if (!iredir) {
+    if (smode) {
+        getline(*istrm, buffer);
+    } else if (!iredir) {
         getline(ifile, buffer);
-    } else
+    } else {
         getline(cin, buffer);
+    }
+}
+// in-memory string-stream I/O ------------------------------------------------
+void CFfile::openStringR(const string &data) {
+    istrm = std::make_unique<std::istringstream>(data);
+    smode = true;
+}
+
+void CFfile::openStringW() {
+    ostrm = std::make_unique<std::ostringstream>();
+    smode = true;
+}
+
+string CFfile::getStringW() const {
+    return ostrm ? ostrm->str() : string{};
+}
+
+bool CFfile::isInputGood() const {
+    if (smode)  return istrm && static_cast<bool>(*istrm);
+    if (iredir) return static_cast<bool>(cin);
+    return static_cast<bool>(ifile);
 }
 // readfile to string ---------------------------------------------------------
 void CFfile::rfile(string &buffer) {
