@@ -1144,19 +1144,32 @@ void Engine::parseKeywordsAndTypes() {
 
     const bool caseInsens = !rules->doCaseKeys;
 
-    // ── B: build a single hash map from (case-normalised) keyword → css ──
-    // O(k) setup; avoids O(n×k) repeated buffer.find() calls.
+    // Categorise keywords into two buckets:
+    //   identMap   — starts with [A-Za-z_], may contain hyphens (CSS properties etc.)
+    //   specialKws — starts with a non-alpha/non-underscore char (@, !, ., ? …)
     struct KeyEntry { const char *css; };
-    std::unordered_map<std::string, KeyEntry> lookup;
-    lookup.reserve(rules->keys.size() + rules->types.size());
+    std::unordered_map<std::string, KeyEntry> identMap;
 
-    for (const auto &w : rules->keys)
-        lookup.try_emplace(caseInsens ? toUpperStr(w) : w, KeyEntry{"keyword"});
-    for (const auto &w : rules->types)
-        lookup.try_emplace(caseInsens ? toUpperStr(w) : w, KeyEntry{"keytype"});
+    struct SpecialKw { std::string word; const char *css; };
+    std::vector<SpecialKw> specialKws;
 
-    if (lookup.empty())
-        return;
+    auto classify = [&](const std::string &w, const char *css) {
+        if (w.empty()) return;
+        const unsigned char first = static_cast<unsigned char>(w[0]);
+        if (std::isalpha(first) || first == '_') {
+            // "class" is always stored and matched case-sensitively, even in
+            // case-insensitive languages (mirrors the noCaseFind special-case).
+            std::string key = (caseInsens && w != "class") ? toUpperStr(w) : w;
+            identMap.try_emplace(std::move(key), KeyEntry{css});
+        } else {
+            specialKws.push_back({caseInsens ? toUpperStr(w) : w, css});
+        }
+    };
+
+    for (const auto &w : rules->keys)  classify(w, "keyword");
+    for (const auto &w : rules->types) classify(w, "keytype");
+
+    if (identMap.empty() && specialKws.empty()) return;
 
     // ── C: pre-compute one uppercase copy of the buffer (not one per keyword) ──
     std::string upperBuf;
@@ -1166,60 +1179,109 @@ void Engine::parseKeywordsAndTypes() {
                        [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
     }
     const std::string &scanBuf = caseInsens ? upperBuf : buffer;
+    const int n = static_cast<int>(buffer.size());
 
-    // ── B: single left-to-right pass to collect candidate matches ── O(n)
     struct Match { int pos; int len; const char *css; };
     std::vector<Match> matches;
 
-    int fontDepth = 0;           // tracks nesting inside <font…>…</font> spans
-    const int n = static_cast<int>(buffer.size());
-    int i = 0;
-
-    while (i < n) {
-        if (buffer[i] == '<') {
-            // Update font-tag depth so we skip already-coloured content
-            if (buffer.compare(i, 6, "<font ") == 0 ||
-                buffer.compare(i, 6, "<font>") == 0) {
-                ++fontDepth;
-            } else if (buffer.compare(i, 7, "</font>") == 0) {
-                if (fontDepth > 0) --fontDepth;
+    // ── Pass 1: single scan for identifier-style and hyphenated keywords ──
+    if (!identMap.empty()) {
+        int i = 0;
+        while (i < n) {
+            if (buffer[i] == '<') {
+                // Skip engine-inserted HTML tag markup (<font …>, </font>, etc.)
+                // so we don't accidentally tokenise their attribute text.
+                while (i < n && buffer[i] != '>') ++i;
+                if (i < n) ++i;
+                continue;
             }
-            // Skip to the closing '>'
-            while (i < n && buffer[i] != '>') ++i;
-            if (i < n) ++i;
-            continue;
-        }
 
-        // Only inspect word tokens that are outside existing colour spans
-        if (fontDepth == 0 &&
-            (std::isalpha(static_cast<unsigned char>(buffer[i])) || buffer[i] == '_')) {
+            const unsigned char ch = static_cast<unsigned char>(buffer[i]);
+            if (std::isalpha(ch) || ch == '_') {
+                const int start = i;
+                // Collect [A-Za-z_][A-Za-z0-9_]* extended with interior hyphens.
+                // Hyphen is allowed only when followed by another word char, so
+                // CSS properties like text-align and background-color are captured
+                // as a single token rather than split at the hyphen.
+                while (i < n) {
+                    const unsigned char c = static_cast<unsigned char>(buffer[i]);
+                    if (std::isalnum(c) || c == '_') { ++i; continue; }
+                    if (c == '-' && i + 1 < n) {
+                        const unsigned char nc = static_cast<unsigned char>(buffer[i + 1]);
+                        if (std::isalnum(nc) || nc == '_') { ++i; continue; }
+                    }
+                    break;
+                }
+                const int len = i - start;
 
-            const int start = i;
-            while (i < n && (std::isalnum(static_cast<unsigned char>(buffer[i])) ||
-                              buffer[i] == '_')) {
+                // Build lookup key; "class" is always matched case-sensitively
+                std::string tok = scanBuf.substr(start, static_cast<std::size_t>(len));
+                if (caseInsens &&
+                    buffer.compare(start, static_cast<std::size_t>(len), "class") == 0)
+                    tok = "class";
+
+                auto it = identMap.find(tok);
+                if (it != identMap.end() &&
+                    isKey(start - 1, start + len) &&
+                    !abortColour(start)) {
+                    matches.push_back({start, len, it->second.css});
+                } else if (it == identMap.end()) {
+                    // Full token not found; if it contains a hyphen, try the
+                    // pure-identifier prefix (e.g. "font" in "font-unknown").
+                    const auto dashPos = tok.find('-');
+                    if (dashPos != std::string::npos) {
+                        const std::string pureTok = tok.substr(0, dashPos);
+                        const int pureLen = static_cast<int>(dashPos);
+                        auto it2 = identMap.find(pureTok);
+                        if (it2 != identMap.end() &&
+                            isKey(start - 1, start + pureLen) &&
+                            !abortColour(start)) {
+                            matches.push_back({start, pureLen, it2->second.css});
+                        }
+                    }
+                }
+            } else {
                 ++i;
             }
-            const int len = i - start;
+        }
+    }
 
-            // Build lookup key; "class" is always matched case-sensitively
-            std::string tok = scanBuf.substr(start, len);
-            if (caseInsens && buffer.compare(start, static_cast<std::size_t>(len), "class") == 0)
-                tok = "class";
-
-            auto it = lookup.find(tok);
-            if (it != lookup.end() &&
-                isKey(start - 1, start + len) &&
-                !abortColour(start)) {
-                matches.push_back({start, len, it->second.css});
+    // ── Pass 2: direct find for special-prefix keywords (@, !, ., ? etc.) ──
+    for (const auto &[word, css] : specialKws) {
+        int from = 0;
+        while (from < n) {
+            const auto found = scanBuf.find(word, static_cast<std::size_t>(from));
+            if (found == std::string::npos) break;
+            const int pos = static_cast<int>(found);
+            const int len = static_cast<int>(word.size());
+            if (isKey(pos - 1, pos + len) && !abortColour(pos)) {
+                matches.push_back({pos, len, css});
             }
-        } else {
-            ++i;
+            from = pos + 1;
+        }
+    }
+
+    if (matches.empty()) return;
+
+    // Sort by position so we can deduplicate overlapping matches, then
+    // insert colour tags in reverse order (preserving earlier positions).
+    std::sort(matches.begin(), matches.end(),
+              [](const Match &a, const Match &b) { return a.pos < b.pos; });
+
+    // Remove matches that overlap with an earlier kept match (earlier wins)
+    std::vector<Match> deduped;
+    deduped.reserve(matches.size());
+    int prevEnd = -1;
+    for (const auto &m : matches) {
+        if (m.pos >= prevEnd) {
+            deduped.push_back(m);
+            prevEnd = m.pos + m.len;
         }
     }
 
     // Insert colour tags in reverse order so earlier buffer positions stay valid
-    for (int j = static_cast<int>(matches.size()) - 1; j >= 0; j--) {
-        const auto &[pos, len, css] = matches[j];
+    for (int j = static_cast<int>(deduped.size()) - 1; j >= 0; j--) {
+        const auto &[pos, len, css] = deduped[j];
         buffer.insert(pos + len, "</font>");
         buffer.insert(pos, std::string("<font CLASS=") + css + ">");
     }
