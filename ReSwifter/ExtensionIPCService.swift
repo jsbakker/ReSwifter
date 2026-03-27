@@ -25,7 +25,7 @@ import Foundation
 import os.log
 
 @MainActor
-class ExtensionXPCService: ObservableObject {
+class ExtensionIPCService: ObservableObject {
 
     static let appGroupID = "group.com.JeffreyBakker.ReSwifter"
     static let requestNotification = Notification.Name("com.JeffreyBakker.ReSwifter.processRequest")
@@ -57,16 +57,16 @@ class ExtensionXPCService: ObservableObject {
 
     /// Starts listening for distributed notifications from the extension.
     func startListening() {
-        sharedDefaults = UserDefaults(suiteName: ExtensionXPCService.appGroupID)
+        sharedDefaults = UserDefaults(suiteName: ExtensionIPCService.appGroupID)
 
         if sharedDefaults == nil {
             os_log("Failed to open shared UserDefaults for suite: %{public}@",
-                   log: log, type: .fault, ExtensionXPCService.appGroupID)
+                   log: log, type: .fault, ExtensionIPCService.appGroupID)
             return
         }
 
         notificationObserver = DistributedNotificationCenter.default().addObserver(
-            forName: ExtensionXPCService.requestNotification,
+            forName: ExtensionIPCService.requestNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
@@ -99,12 +99,12 @@ class ExtensionXPCService: ObservableObject {
         // Re-read from disk to pick up the extension's writes
         defaults.synchronize()
 
-        guard let requestID = defaults.string(forKey: ExtensionXPCService.requestIDKey) else {
+        guard let requestID = defaults.string(forKey: ExtensionIPCService.requestIDKey) else {
             os_log("No request ID found", log: log, type: .error)
             return
         }
 
-        guard let text = defaults.string(forKey: ExtensionXPCService.requestTextKey) else {
+        guard let text = defaults.string(forKey: ExtensionIPCService.requestTextKey) else {
             os_log("No request text found", log: log, type: .error)
             postResponse(nil, error: "No request text found", requestID: requestID)
             return
@@ -158,13 +158,13 @@ class ExtensionXPCService: ObservableObject {
     private func postResponse(_ text: String?, error: String?, requestID: String) {
         guard let defaults = sharedDefaults else { return }
 
-        defaults.set(requestID, forKey: ExtensionXPCService.responseIDKey)
-        defaults.set(text, forKey: ExtensionXPCService.responseTextKey)
-        defaults.set(error, forKey: ExtensionXPCService.responseErrorKey)
+        defaults.set(requestID, forKey: ExtensionIPCService.responseIDKey)
+        defaults.set(text, forKey: ExtensionIPCService.responseTextKey)
+        defaults.set(error, forKey: ExtensionIPCService.responseErrorKey)
         defaults.synchronize()
 
         DistributedNotificationCenter.default().postNotificationName(
-            ExtensionXPCService.responseNotification,
+            ExtensionIPCService.responseNotification,
             object: nil,
             userInfo: nil,
             deliverImmediately: true

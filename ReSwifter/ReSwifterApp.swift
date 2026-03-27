@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct ReSwifterApp: App {
-    @StateObject private var extensionService = ExtensionXPCService()
+    @StateObject private var extensionService = ExtensionIPCService()
     @StateObject private var viewModel = SnippetViewModel()
 
     let modelContainer: ModelContainer = {

@@ -9,7 +9,7 @@ import SwiftUI
 import Textual
 
 struct SnippetDetailView: View {
-    @EnvironmentObject private var extensionService: ExtensionXPCService
+    @EnvironmentObject private var extensionService: ExtensionIPCService
     @ObservedObject var viewModel: SnippetViewModel
 
     @State private var language: WebCppLanguage = .swift

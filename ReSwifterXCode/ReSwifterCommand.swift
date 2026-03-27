@@ -11,7 +11,7 @@ import os.log
 
 class ReSwifterCommand: NSObject, XCSourceEditorCommand {
 
-    private let launcher = AppLauncherXPCService()
+    private let launcher = AppLauncherIPCService()
 
     func perform(with invocation: XCSourceEditorCommandInvocation, completionHandler: @escaping (Error?) -> Void ) -> Void {
         let buffer = invocation.buffer

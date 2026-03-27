@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @EnvironmentObject private var extensionService: ExtensionXPCService
+    @EnvironmentObject private var extensionService: ExtensionIPCService
     @EnvironmentObject private var viewModel: SnippetViewModel
 
     @Environment(\.modelContext) private var modelContext
@@ -142,7 +142,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(ExtensionXPCService())
+        .environmentObject(ExtensionIPCService())
         .environmentObject(SnippetViewModel())
         .modelContainer(for: [SnippetItem.self, FolderItem.self], inMemory: true)
 }

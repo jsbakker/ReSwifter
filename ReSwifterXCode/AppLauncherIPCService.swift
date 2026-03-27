@@ -33,7 +33,7 @@ private class ResponseState {
     }
 }
 
-class AppLauncherXPCService {
+class AppLauncherIPCService {
 
     private let appGroupID = "group.com.JeffreyBakker.ReSwifter"
     private let requestNotificationName = Notification.Name("com.JeffreyBakker.ReSwifter.processRequest")
