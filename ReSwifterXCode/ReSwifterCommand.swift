@@ -52,6 +52,10 @@ class ReSwifterCommand: NSObject, XCSourceEditorCommand {
         if sel.start.line == sel.end.line && sel.start.column == sel.end.column {
             return nil
         }
+        // Entire buffer selected
+        if sel.start.line == 0 && sel.end.line == buffer.lines.count && sel.start.column == 0 && sel.end.column == 0 {
+            return nil
+        }
         return sel
     }
 
