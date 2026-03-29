@@ -261,7 +261,14 @@ void Engine::parsePreProc() {
     if (abortParse()) {
         return;
     }
-    if (buffer[0] != '#') {
+
+    // Allow indented preprocessor directives: find the first non-whitespace
+    // character and require it to be '#'.
+    int indent = 0;
+    while (indent < static_cast<int>(buffer.size()) && isspace(buffer[indent])) {
+        indent++;
+    }
+    if (indent >= static_cast<int>(buffer.size()) || buffer[indent] != '#') {
         return;
     }
 
@@ -270,16 +277,138 @@ void Engine::parsePreProc() {
     }
 
     buffer += " ";
-    buffer.insert(0, "<font CLASS=preproc>");
+    buffer.insert(static_cast<size_t>(indent), "<font CLASS=preproc>");
+    // Opening tag is 20 chars starting at indent; start search at indent+8
+    // to skip the space inside "<font CLASS=" without treating it as the
+    // end of the directive keyword.
 
     int end = 0;
-    for (int i = 8; i < static_cast<int>(buffer.size()); i++) {
+    for (int i = indent + 8; i < static_cast<int>(buffer.size()); i++) {
         if (isspace(buffer[i])) {
             end = i;
             i = static_cast<int>(buffer.size());
         }
     }
     buffer.insert(end, "</font>");
+    // Buffer now: <font CLASS=preproc>#directive</font> ...
+
+    // Advance past </font> (7 chars) and skip whitespace.
+    int pos = end + 7;
+    while (pos < static_cast<int>(buffer.size()) && isspace(buffer[pos])) {
+        pos++;
+    }
+
+    if (pos >= static_cast<int>(buffer.size())) {
+        return;
+    }
+
+    // Case 1: already a highlighted token (string pass already wrapped it).
+    if (buffer.substr(pos, 12) == "<font CLASS=") {
+        return;
+    }
+
+    // Case 2: angle-bracket include — pre_parse() HTML-escaped '<' to '&lt;'.
+    if (buffer.substr(pos, 4) == "&lt;") {
+        auto gtpos = buffer.find("&gt;", static_cast<size_t>(pos + 4));
+        if (gtpos != string::npos) {
+            buffer.insert(static_cast<size_t>(pos), "<font CLASS=dblquot>");
+            buffer.insert(gtpos + 20 + 4, "</font>"); // +20 for inserted open tag
+        }
+        return;
+    }
+
+    // Case 3: plain identifier — highlight as preproc, then scan for further
+    // identifiers that follow || or && logical operators on the same line.
+    if (isalpha(buffer[pos]) || buffer[pos] == '_') {
+        int wend = pos;
+        while (wend + 1 < static_cast<int>(buffer.size()) &&
+               (isalnum(buffer[wend + 1]) || buffer[wend + 1] == '_')) {
+            wend++;
+        }
+        buffer.insert(static_cast<size_t>(pos), "<font CLASS=preproc>");
+        buffer.insert(static_cast<size_t>(wend + 1 + 20), "</font>"); // +20 for open tag
+        pos = wend + 1 + 20 + 7; // advance past </font>
+
+        // Scan for identifiers that follow || or && operators.
+        // After the symbol pass, | chars may be wrapped in <font CLASS=symbols>.
+        // After pre_parse, & is encoded as &amp;, so && becomes &amp;&amp;.
+        bool foundOp = false;
+        while (pos < static_cast<int>(buffer.size())) {
+            char c = buffer[pos];
+
+            // Skip font tags.
+            if (c == '<') {
+                auto close = buffer.find('>', static_cast<size_t>(pos));
+                if (close != string::npos) {
+                    pos = static_cast<int>(close) + 1;
+                } else {
+                    break;
+                }
+                continue;
+            }
+
+            // Detect | as part of ||; each | may be inside its own font tag.
+            if (c == '|') {
+                int next = pos + 1;
+                while (next < static_cast<int>(buffer.size()) && buffer[next] == '<') {
+                    auto close = buffer.find('>', static_cast<size_t>(next));
+                    if (close != string::npos) {
+                        next = static_cast<int>(close) + 1;
+                    } else {
+                        break;
+                    }
+                }
+                if (next < static_cast<int>(buffer.size()) && buffer[next] == '|') {
+                    foundOp = true;
+                    pos = next + 1;
+                } else {
+                    pos++;
+                }
+                continue;
+            }
+
+            // Detect && (encoded as &amp;&amp; after pre_parse).
+            if (buffer.substr(static_cast<size_t>(pos), 5) == "&amp;") {
+                int next = pos + 5;
+                if (buffer.substr(static_cast<size_t>(next), 5) == "&amp;") {
+                    foundOp = true;
+                    pos = next + 5;
+                } else {
+                    pos += 5;
+                }
+                continue;
+            }
+
+            // Found identifier after a logical operator: highlight as preproc.
+            if (foundOp && (isalpha(c) || c == '_')) {
+                int wend2 = pos;
+                while (wend2 + 1 < static_cast<int>(buffer.size()) &&
+                       (isalnum(buffer[wend2 + 1]) || buffer[wend2 + 1] == '_')) {
+                    wend2++;
+                }
+                buffer.insert(static_cast<size_t>(pos), "<font CLASS=preproc>");
+                buffer.insert(static_cast<size_t>(wend2 + 1 + 20), "</font>");
+                pos = wend2 + 1 + 20 + 7;
+                foundOp = false;
+                continue;
+            }
+
+            // Identifier without preceding operator — skip without highlighting.
+            if (isalpha(c) || c == '_') {
+                while (pos < static_cast<int>(buffer.size()) &&
+                       (isalnum(buffer[pos]) || buffer[pos] == '_')) {
+                    pos++;
+                }
+                continue;
+            }
+
+            // Whitespace, parentheses, numbers, other chars — advance.
+            pos++;
+        }
+        return;
+    }
+
+    // Case 4: digit, symbol, comment marker etc. — leave for other passes.
 }
 // define symbol characters ---------------------------------------------------
 bool Engine::isSymbol(char c) const {

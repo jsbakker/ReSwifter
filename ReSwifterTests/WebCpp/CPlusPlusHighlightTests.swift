@@ -65,6 +65,109 @@ struct CPlusPlusHighlightTests {
         #expect(html.contains("<font CLASS=preproc>"))
     }
 
+    // MARK: - Preprocessor Token Tests
+
+    @Test func preprocMacroNameIsHighlighted() {
+        let html = highlight("#define MACRO_NAME")
+        #expect(html.contains("<font CLASS=preproc>#define</font>"))
+        #expect(html.contains("<font CLASS=preproc>MACRO_NAME</font>"))
+    }
+
+    @Test func preprocMacroWithFloatValue() {
+        let html = highlight("#define NUMBER 0.076")
+        #expect(html.contains("<font CLASS=preproc>#define</font>"))
+        #expect(html.contains("<font CLASS=preproc>NUMBER</font>"))
+        #expect(html.contains("<font CLASS=floatpt>0.076</font>"))
+    }
+
+    @Test func preprocMacroBeforeEqualsIsHighlighted() {
+        let html = highlight("#define NUMBER = 0.076")
+        #expect(html.contains("<font CLASS=preproc>#define</font>"))
+        #expect(html.contains("<font CLASS=preproc>NUMBER</font>"))
+        #expect(!html.contains("<font CLASS=preproc>=</font>"))
+    }
+
+    @Test func preprocMacroWithFloatAndComment() {
+        let html = highlight("#define LITERAL 0.076 // comment")
+        #expect(html.contains("<font CLASS=preproc>#define</font>"))
+        #expect(html.contains("<font CLASS=preproc>LITERAL</font>"))
+        #expect(html.contains("<font CLASS=floatpt>0.076</font>"))
+        #expect(html.contains("<font CLASS=comment>// comment"))
+    }
+
+    @Test func preprocDoubleQuoteIncludeIsHighlighted() {
+        let html = highlight("#include \"myheader.h\"")
+        #expect(html.contains("<font CLASS=preproc>#include</font>"))
+        #expect(html.contains("<font CLASS=dblquot>"))
+    }
+
+    @Test func preprocAngleBracketIncludeIsHighlighted() {
+        let html = highlight("#include <another_header.h>")
+        #expect(html.contains("<font CLASS=preproc>#include</font>"))
+        #expect(html.contains("<font CLASS=dblquot>&lt;another_header.h&gt;</font>"))
+    }
+
+    @Test func preprocIfdefGuardIsHighlighted() {
+        let html = highlight("#ifdef GUARD")
+        #expect(html.contains("<font CLASS=preproc>#ifdef</font>"))
+        #expect(html.contains("<font CLASS=preproc>GUARD</font>"))
+    }
+
+    @Test func preprocEndifAloneHasNoSecondToken() {
+        let html = highlight("#endif")
+        #expect(html.contains("<font CLASS=preproc>#endif</font>"))
+        let count = html.components(separatedBy: "<font CLASS=preproc>").count - 1
+        #expect(count == 1)
+    }
+
+    @Test func preprocEndifWithCommentHasNoSecondPreprocToken() {
+        let html = highlight("#endif // comment")
+        #expect(html.contains("<font CLASS=preproc>#endif</font>"))
+        #expect(html.contains("<font CLASS=comment>// comment"))
+        let count = html.components(separatedBy: "<font CLASS=preproc>").count - 1
+        #expect(count == 1)
+    }
+
+    @Test func preprocIfOrOperatorHighlightsBothIdentifiers() {
+        let html = highlight("#if defined(__APPLE__) || defined(__linux__)")
+        #expect(html.contains("<font CLASS=preproc>#if</font>"))
+        let count = html.components(separatedBy: "<font CLASS=preproc>defined</font>").count - 1
+        #expect(count == 2)
+    }
+
+    @Test func preprocIfAndOperatorHighlightsBothIdentifiers() {
+        let html = highlight("#if defined(X) && defined(Y)")
+        #expect(html.contains("<font CLASS=preproc>#if</font>"))
+        let count = html.components(separatedBy: "<font CLASS=preproc>defined</font>").count - 1
+        #expect(count == 2)
+    }
+
+    @Test func preprocIfMultipleOperatorsHighlightAllIdentifiers() {
+        let html = highlight("#if defined(A) || defined(B) || defined(C)")
+        let count = html.components(separatedBy: "<font CLASS=preproc>defined</font>").count - 1
+        #expect(count == 3)
+    }
+
+    // MARK: - Indented Preprocessor Tests
+
+    @Test func preprocWithLeadingSpacesIsHighlighted() {
+        let html = highlight("    #define LOCAL_VAL 10")
+        #expect(html.contains("<font CLASS=preproc>#define</font>"))
+        #expect(html.contains("<font CLASS=preproc>LOCAL_VAL</font>"))
+    }
+
+    @Test func preprocWithLeadingSpacesIfdefIsHighlighted() {
+        let html = highlight("    #ifdef PLATFORM")
+        #expect(html.contains("<font CLASS=preproc>#ifdef</font>"))
+        #expect(html.contains("<font CLASS=preproc>PLATFORM</font>"))
+    }
+
+    @Test func preprocWithLeadingSpacesAngleBracketIncludeIsHighlighted() {
+        let html = highlight("    #include <stdlib.h>")
+        #expect(html.contains("<font CLASS=preproc>#include</font>"))
+        #expect(html.contains("<font CLASS=dblquot>&lt;stdlib.h&gt;</font>"))
+    }
+
     // MARK: Comments
 
     @Test func blockCommentsAreHighlighted() {
