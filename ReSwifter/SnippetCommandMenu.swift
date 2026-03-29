@@ -25,6 +25,11 @@ struct SnippetCommandMenu: View {
     }
 
     var body: some View {
+        Button("Create New Snippet", systemImage: "doc.badge.plus") {
+            viewModel.addNewSnippet(fullText: "", modelContext: modelContext, folders: folders)
+        }
+        .keyboardShortcut("N", modifiers: [.command])
+
         Button("Add Snippet From Clipboard", systemImage: "doc.on.clipboard") {
             viewModel.addFromClipboard(modelContext: modelContext, folders: folders)
         }

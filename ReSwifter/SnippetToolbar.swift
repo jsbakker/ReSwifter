@@ -37,6 +37,15 @@ struct SnippetToolbar: ToolbarContent {
 
         ToolbarItem(placement: .primaryAction) {
             Button {
+                viewModel.addNewSnippet(fullText: "", modelContext: modelContext, folders: folders)
+            } label: {
+                Label("Create New Snippet", systemImage: "doc.badge.plus")
+            }
+            .help("Create New Snippet")
+        }
+
+        ToolbarItem(placement: .primaryAction) {
+            Button {
                 viewModel.addFromClipboard(modelContext: modelContext, folders: folders)
             } label: {
                 Label("Add From Clipboard", systemImage: "doc.on.clipboard")

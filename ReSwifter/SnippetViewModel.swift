@@ -90,7 +90,15 @@ class SnippetViewModel: ObservableObject {
     func addNewSnippet(fullText: String, modelContext: ModelContext, folders: [FolderItem]) {
         let newItem = SnippetItem(fullText: fullText)
         newItem.folder = selectedFolderItem(from: folders)
-        pendingItemIds.insert(newItem.id)
+
+        // Queue up for AI summary generation
+        if !fullText.isEmpty {
+            pendingItemIds.insert(newItem.id)
+        } else {
+            newItem.fullText = "// Add some code here..."
+            newItem.summary = "Update this description with: More ⮕ Edit Summary..."
+        }
+
         modelContext.insert(newItem)
         selectedSnippetId = newItem.id
 
@@ -101,6 +109,10 @@ class SnippetViewModel: ObservableObject {
                 newItem.language = lang.rawValue
                 break
             }
+        }
+
+        if fullText.isEmpty {
+            return
         }
 
         Task {
