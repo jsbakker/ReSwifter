@@ -101,8 +101,8 @@
 		00312DDE2F66400F0099824D /* Exceptions for "WebCpp" folder in "WebCpp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
-				WebCpp.h,
-				WebCppBridge.h,
+				interop/WebCpp.h,
+				interop/WebCppBridge.h,
 			);
 			target = 00312DD52F66400F0099824D /* WebCpp */;
 		};
