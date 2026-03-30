@@ -1,7 +1,7 @@
-![C++](https://img.shields.io/badge/-C++-blue?logo=cplusplus)
+![C++](https://img.shields.io/badge/c++-23-blue.svg)
 ![Swift6](https://img.shields.io/badge/swift-6-blue.svg)
-![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow)
+![macOS](https://img.shields.io/badge/os-macOS-green.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 # ReSwifter
 
