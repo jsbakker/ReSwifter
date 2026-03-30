@@ -1,6 +1,6 @@
 //
 //  XCodeTextualTheme.swift
-//  Emulate XCode colour scheme for Light and Dark
+//  Emulate Xcode colour scheme for Light and Dark
 
 import SwiftUI
 import Textual

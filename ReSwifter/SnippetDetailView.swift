@@ -22,7 +22,7 @@ struct SnippetDetailView: View {
                 HStack {
                     Image(systemName: "exclamationmark.triangle")
                     Text("""
-                        The XCode extension is requesting to modify its current file or selection.
+                        The Xcode extension is requesting to modify its current file or selection.
                         """)
 
                     Spacer()
@@ -32,7 +32,7 @@ struct SnippetDetailView: View {
                     }
                     .buttonStyle(.borderedProminent)
 
-                    Button("Send Selected Snippet to XCode") {
+                    Button("Send Selected Snippet to Xcode") {
                         let fullText = selectedSnippet?.fullText ?? ""
                         extensionService.sendResponse(viewModel.extractCode(from: fullText))
                     }
