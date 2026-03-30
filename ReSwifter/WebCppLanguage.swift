@@ -113,7 +113,7 @@ enum WebCppLanguage: String, CaseIterable, Identifiable {
         case .vhdl:          return "VHDL"
         case .xml:           return "XML"
         case .zig:           return "Zig"
-        case .text:          return "Plain Text"
+        case .text:          return "Text"
         }
     }
 

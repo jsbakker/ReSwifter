@@ -29,7 +29,10 @@ struct SnippetRowView: View {
 
             VStack(alignment: .leading) {
                 Text(item.summary).font(.subheadline).bold()
-                Text(viewModel.dateFormatter.string(from: item.date)).font(.caption)
+                HStack {
+                    Text(viewModel.dateFormatter.string(from: item.date)).font(.caption)
+                    Text(WebCppLanguage.from(rawValue: item.language).displayName).font(.caption)
+                }
             }
 
             if isPending {
