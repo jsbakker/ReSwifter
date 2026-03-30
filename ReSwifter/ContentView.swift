@@ -36,26 +36,11 @@ struct ContentView: View {
                     .padding(4)
                 }
                 HStack(spacing: 16) {
-                    // Left side — snippet list
                     if items.isEmpty {
-                        VStack(alignment: .center, spacing: 8) {
-                            Image(systemName: "doc.on.clipboard")
-                                .font(.largeTitle)
-                            Text("Press Command + Shift + V to add a\nnew snippet from the clipboard.")
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                            Text("or")
-                                .font(.largeTitle)
-                                .multilineTextAlignment(.center)
-                            Text("Send selections through the\nReSwifter Editor Extension for XCode.")
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                            Text("(XCode Menu ⮕ Editor ⮕ ReSwifter)")
-                                .font(.headline)
-                                .multilineTextAlignment(.center)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        EmptyListView()
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    // Left side — snippet list
                     else {
                         ZStack {
                             List(viewModel.displayedItems(from: items), selection: $selection) { item in
