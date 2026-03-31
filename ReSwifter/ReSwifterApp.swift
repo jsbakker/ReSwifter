@@ -78,6 +78,10 @@ struct ReSwifterApp: App {
                     )
                 }
             }
+
+            CommandGroup(replacing: .help) {
+                Link("ReSwifter Help", destination: URL(string: "https://github.com/jsbakker/ReSwifter/wiki/ReSwifter-Help")!)
+            }
         }
     }
 }
