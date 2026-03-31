@@ -19,6 +19,4 @@ class HtmlWriter {
                                    const std::string &name);
     static void writeDocumentEnd(std::shared_ptr<CFfile> io,
                                  const EngineOptions &options);
-    static void writeMargin(std::shared_ptr<CFfile> io, int lineCount);
-    static void writeAnchor(std::shared_ptr<CFfile> io, int lineCount);
 };

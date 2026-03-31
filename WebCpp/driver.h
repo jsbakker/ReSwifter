@@ -21,7 +21,6 @@ class Driver {
   public:
     Driver();
     ~Driver();
-    static void help(char mode);
     bool switch_parser(const std::string &arg);
     uint8_t getExt(const std::string &filename) const;
     std::string checkExt(const std::string &filename);

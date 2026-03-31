@@ -29,8 +29,6 @@ void webcpp_driver_destroy(WebCppDriverRef driver) {
     delete static_cast<Driver *>(driver);
 }
 
-void webcpp_driver_help(char mode) { Driver::help(mode); }
-
 bool webcpp_driver_switch_parser(WebCppDriverRef driver, const char *arg) {
     return static_cast<Driver *>(driver)->switch_parser(string(arg));
 }

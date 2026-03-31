@@ -272,10 +272,6 @@ void Engine::parsePreProc() {
         return;
     }
 
-    if (options.hypinc) {
-        hyperIncludeMe();
-    }
-
     buffer += " ";
     buffer.insert(static_cast<size_t>(indent), "<font CLASS=preproc>");
     // Opening tag is 20 chars starting at indent; start search at indent+8
@@ -1725,13 +1721,6 @@ void Engine::parseCharZeroComment(char zchar) {
 // here is where the parsing rules apply --------------------------------------
 void Engine::doParsing() {
 
-    if (options.anchor) {
-        HtmlWriter::writeAnchor(IO, lncount);
-    }
-    if (options.number) {
-        HtmlWriter::writeMargin(IO, lncount);
-    }
-
     IO->rline(buffer);
     if (!IO->isInputGood()) {
         return;
@@ -1955,76 +1944,6 @@ void Engine::hyperNameMe() {
     buffer.insert(0, "<a name=\"" + name + "\">");
     buffer += "</a>";
 }
-// automatically hyperlink included C/C++ files -------------------------------
-void Engine::hyperIncludeMe() {
-
-    int incl, insr;
-
-    incl = static_cast<int>(buffer.find("#include", 0));
-    if (incl == -1) {
-        return;
-    }
-
-    insr = static_cast<int>(buffer.find("\"", incl + 1));
-    if (insr == -1) {
-        return;
-    }
-
-    string cmd;
-    string link;
-    link = buffer.substr(insr);
-    link = link.substr(0, link.find("\"</font>"));
-
-    if (options.follow) {
-        // follow and process the include file
-
-        string path;
-
-        int dir_idx = static_cast<int>(IO->getStrIf().rfind(DIRECTORY_SLASH));
-
-        if (dir_idx != -1) {
-
-            path = IO->getStrIf().substr(0, dir_idx + 1);
-            path = path + link.substr(1);
-        } else {
-            path = link.substr(1);
-        }
-
-        cmd = "webcpp " + path + " -A:f -H";
-        // retain switches from the current file
-        if (options.bigtab) {
-            cmd += " -t";
-            if (options.tabwidth != 8) {
-                cmd += "=";
-                cmd += options.tw;
-            }
-        }
-        if (options.webcpp)
-            cmd += " -m";
-        if (options.number)
-            cmd += " -l";
-        if (options.anchor)
-            cmd += " -a";
-        if (options.htsnip)
-            cmd += " -s";
-        if (options.extcss)
-            cmd += " -X";
-
-        if (Scs2.getThemeName() != "typical") {
-            cmd += " -c=" + Scs2.getThemeName();
-        }
-        if (Scs2.getImageFile() != "") {
-            cmd += " -i=" + Scs2.getImageFile();
-        }
-        cerr << "\nSuperInclude found " + path + "\n";
-        cerr << cmd << "\n";
-        system(cmd.data());
-    }
-    // make the hyperlink
-    link = "<a href=" + link + ".html\">";
-    buffer.insert(insr, link);
-    buffer.insert(buffer.size(), "</a>");
-}
 //-----------------------------------------------------------------------------
 // parse for inline languages -------------------------------------------------
 void Engine::parseChildLang() {
@@ -2078,8 +1997,6 @@ void Engine::colourChildLang(const string &beg, const string &end) {
         childEngine->setupIO(IO);
         childEngine->setChildLang(true);
         childEngine->setLineCount(lncount + 1);
-        childEngine->options.anchor = options.anchor;
-        childEngine->options.number = options.number;
 
         if (langext == lang::HTM_FILE && state.inComment) {
             *IO << "</font>";

@@ -13,35 +13,6 @@
 
 using std::string;
 
-void HtmlWriter::writeAnchor(std::shared_ptr<CFfile> io, int lineCount) {
-
-    *io << "<a name=\"line" << lineCount << "\"/>";
-}
-
-void HtmlWriter::writeMargin(std::shared_ptr<CFfile> io, int lineCount) {
-
-    string space = "";
-
-    // setting margin alignment
-    if (lineCount < 100000) {
-        space += " ";
-    }
-    if (lineCount < 10000) {
-        space += " ";
-    }
-    if (lineCount < 1000) {
-        space += " ";
-    }
-    if (lineCount < 100) {
-        space += " ";
-    }
-    if (lineCount < 10) {
-        space += " ";
-    }
-
-    *io << space << "<font CLASS=comment>" << lineCount << ":</font> ";
-}
-
 void HtmlWriter::writeDocumentStart(std::shared_ptr<CFfile> io, Theme &theme,
                                     const EngineOptions &options,
                                     const string &name) {
@@ -85,26 +56,8 @@ Get webcpp at http://webcpp.sf.net
     }
 
     // external or embedded stylesheet
-    if (options.extcss) {
-
-        CssFile = theme.getThemeName() + ".css";
-
-        dir_idx = static_cast<int>(io->getStrOf().rfind(DIRECTORY_SLASH));
-
-        if (dir_idx != -1) {
-
-            Path = io->getStrOf().substr(0, dir_idx + 1);
-            CssFile = Path + CssFile;
-        }
-
-        theme.writeCSS(CssFile);
-
-        style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" +
-                theme.getThemeName() + ".css\"/>\n";
-    } else {
-        style =
-            "<style type=\"text/css\">\n\n" + theme.getCSSdata() + "</style>\n";
-    }
+    style =
+        "<style type=\"text/css\">\n\n" + theme.getCSSdata() + "</style>\n";
 
     // html snippet or complete html tags
     if (options.htsnip) {
@@ -126,29 +79,6 @@ void HtmlWriter::writeDocumentEnd(std::shared_ptr<CFfile> io,
                                   const EngineOptions &options) {
 
     *io << "\n\n</pre>\n";
-    if (options.webcpp) {
-
-        string made;
-        made = R"(<center>
-<hr size=4 width=95%>
-<br>
-syntax highlighting by<br><br>
-<table cellpadding=3 cellspacing=3 bgcolor=#000000><tr>
-<td bgcolor=#ff0000><tt><font size=+2 color=#000000>w</font></tt></td>
-<td bgcolor=#ffbb00><tt><font size=+2 color=#000000>e</font></tt></td>
-<td bgcolor=#ffff00><tt><font size=+2 color=#000000>b</font></tt></td>
-<td bgcolor=#00ff00><tt><font size=+2 color=#000000>c</font></tt></td>
-<td bgcolor=#0000ff><tt><font size=+2 color=#000000>p</font></tt></td>
-<td bgcolor=#bb00ff><tt><font size=+2 color=#000000>p</font></tt></td>
-</tr><tr><td colspan=6>
-<a href="http://webcpp.sf.net"><center><b><font color=#ffffff>web c plus plus</font></b></center>
-</a></td></tr>
-</table>
-<br>
-</center>)";
-
-        *io << made;
-    }
     *io << "\n</div>\n";
     if (!options.htsnip) {
         *io << "\n\n</body>\n</html>\n";

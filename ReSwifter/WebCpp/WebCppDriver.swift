@@ -23,12 +23,6 @@ final class WebCppDriver {
 
     // MARK: - Static
 
-    /// Prints help text to stderr.
-    /// - Parameter mode: `.languages` to list supported languages, `.default` for usage info.
-    static func printHelp(mode: HelpMode = .default) {
-        webcpp_driver_help(mode.rawValue)
-    }
-
     /// Generates an index HTML file from a webcppbatch.txt listing.
     static func makeIndex(prefix: String = "") {
         webcpp_driver_make_index(prefix)

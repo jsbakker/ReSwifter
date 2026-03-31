@@ -42,139 +42,17 @@ bool Driver::switch_parser(const string &arg) {
         prep_files(iFile, oFile, 0x66);
     } else if (arg.starts_with("-c=")) {
         lang->Scs2.setFile(arg.substr(3));
-    } else if (arg.starts_with("-C=")) {
-        lang->options.toggleExtcss();
-        lang->Scs2.setFile(arg.substr(3));
-    } else if (arg.starts_with("-i=")) {
-        lang->Scs2.setPicture(arg.substr(3));
     } else if (arg.starts_with("-t=")) {
         lang->options.toggleBigtab();
         lang->options.setTabWidth(arg.substr(3));
-    } else if (arg.starts_with("-w=")) {
-        lang->options.toggleNumber();
-        lang->options.toggleAnchor();
-        lang->options.toggleHypinc();
-        lang->options.toggleWebcpp();
-        lang->Scs2.setFile(arg.substr(3));
-    } else if (arg.starts_with("-W=")) {
-        lang->options.toggleNumber();
-        lang->options.toggleAnchor();
-        lang->options.toggleHypinc();
-        lang->options.toggleWebcpp();
-        lang->options.toggleExtcss();
-        lang->Scs2.setFile(arg.substr(3));
-    } else if (arg == "--external-css" || arg == "-X") {
-        lang->options.toggleExtcss();
-    } else if (arg == "--superinclude" || arg == "-H") {
-        lang->options.toggleHypinc();
-        lang->options.toggleFollow();
-    } else if (arg == "--hyperinclude" || arg == "-h") {
-        lang->options.toggleHypinc();
-    } else if (arg == "--anchor-lines" || arg == "-a") {
-        lang->options.toggleAnchor();
-    } else if (arg == "--line-numbers" || arg == "-l") {
-        lang->options.toggleNumber();
     } else if (arg == "--tabs-spaces" || arg == "-t") {
         lang->options.toggleBigtab();
-    } else if (arg == "--made-with" || arg == "-m") {
-        lang->options.toggleWebcpp();
     } else if (arg == "--snippet-only" || arg == "-s") {
         lang->options.toggleHtSnip();
         lang->Scs2.toggleSnippet();
-    } else if (arg == "--the-works" || arg == "-w") {
-        lang->options.toggleNumber();
-        lang->options.toggleAnchor();
-        lang->options.toggleHypinc();
-        lang->options.toggleWebcpp();
-    } else {
-        help(HELP_DEFAULT);
-        return false;
     }
 
     return true;
-}
-// print help ----------------------------------------------------------------
-void Driver::help(char mode) {
-
-    string Usage;
-
-    Usage = "\
-Usage: $ webcpp <infile> <outfile> [options...]\n\
-\n\
-Options:\n\
-  -c=<scheme>        Use a webcpp colour scheme.\n\
-  -w=<scheme>        The works, same as -m -l -a -h -c=<scheme>.\n\
-  -i=<filename>      Use an image for the background.\n\
-  -t=<width>         Convert tabs to spaces using the specified width.\n\
-  -x=<extension>     Force the filetype for syntax highlighting.\n\
-  -X,--external-css  Generate an external stylesheet.\n\
-  -s,--snippet-only  Don't generate HTML and BODY tags.\n\
-  -l,--line-numbers  Print the line numbers in the left margin.\n\
-  -a,--anchor-lines  Create anchors to line numbers.\n\
-  -h,--hyperinclude  Create hyperlinks to #include statements.\n\
-  -H,--superinclude  Hyperinclude that recursively genera.tes files.\n\
-  -t,--tabs-spaces   Convert tabs to spaces, default width is 8.\n\
-  -m,--made-with     Show made with webcpp footer.\n\
-  -A,--auto          Automatic naming in place of the output file.\n\
-  - ,--pipe          Use STDIN or STDOUT in place of the filename.\n\
-\n\
- Type `webcpp --languages` to see supported languages and filetypes.\n";
-
-    string Langs = "\
-Ada\t\t*.adb,*.ads,*.ali\n\
-Assembly\t*.asm,*.s\n\
-Asp\t\t*.asp,*.asa\n\
-Basic\t\t*.bas\n\
-C#\t\t*.cs\n\
-C Source\t*.c,*.rc\n\
-C++ Source\t*.cc,*.cpp,*.cxx\n\
-C/C++ Header\t*.h,*.hh,*.hpp,*.hxx\n\
-CSS\t\t*.css\n\
-DOS Batch\t*.bat,*.cmd\n\
-EMF\t\t*.emf\n\
-Euphoria\t*.e,*.eu,*.ex\n\
-F#\t\t*.fs,*.fsi,*.fsx\n\
-Fortran\t\t*.f,*.f77,*.f90,*.for,*.ftn\n\
-Gherkin\t\t*.feature\n\
-GLSL\t\t*.glsl,*.vert,*.frag,*.geom,*.tesc,*.tese,*.comp\n\
-Go\t\t*.go\n\
-Haskell\t\t*.hs,*.lhs\n\
-HLSL\t\t*.hlsl,*.hlsli\n\
-Java\t\t*.java\n\
-JavaScript\t*.js\n\
-Kotlin\t\t*.kt,*.kts\n\
-Markup\t\t*.htm,*.html,*.shtml,*.sgml\n\
-Modula2\t\t*.def,*.mod\n\
-Nasa CLIPS\t*.clp\n\
-NVidia Cg\t*.cg\n\
-Objective-C\t*.m\n\
-Objective-C++\t*.mm\n\
-OCaml\t\t*.ml,*.mli\n\
-Pascal\t\t*.pas\n\
-Perl\t\t*.cgi,*.pl,*.plx,*.plex,*.pm\n\
-PHP\t\t*.inc,*.php,*.php3,*.php4\n\
-Power Builder\t*.pbl,*.pbr\n\
-Python\t\t*.py,*.pyw\n\
-R\t\t*.r\n\
-RenderMan\t*.rib,*.sl\n\
-Ruby\t\t*.rb\n\
-Rust\t\t*.rs\n\
-Scala\t\t*.scala,*.sc\n\
-SQL\t\t*.sql\n\
-Swift\t\t*.swift\n\
-Tcl\t\t*.tcl,*.tk\n\
-TypeScript\t*.ts,*.tsx\n\
-Unix shell\t*.sh\n\
-UnrealScript\t*.uc\n\
-Vala\t\t*.vala,*.vapi\n\
-VHDL\t\t*.v,*.vhd,*.vhdl\n\
-XML\t\t*.xml\n\
-Zig\t\t*.zig\n";
-
-    cerr << "Web C Plus Plus v0.9.0  "
-         << "Copyright (C)2001-2026 Jeffrey Bakker\n"
-         << "Compiled " << __DATE__ << " at " << __TIME__ << "\n\n"
-         << ((mode == HELP_LANGUAGES) ? Langs : Usage);
 }
 // determines the filetype for syntax highlighting ----------------------------
 uint8_t Driver::getExt(const string &filename) const {

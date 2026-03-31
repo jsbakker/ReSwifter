@@ -22,10 +22,6 @@ WebCppDriverRef webcpp_driver_create(void);
 /// Destroys a Driver instance.
 void webcpp_driver_destroy(WebCppDriverRef driver);
 
-/// Prints help text to stderr. mode is 'L' for languages or 'D' for default
-/// usage.
-void webcpp_driver_help(char mode);
-
 /// Parses a command-line-style option string (e.g. "-l", "--line-numbers",
 /// "-c=scheme"). Returns true if the option was valid.
 bool webcpp_driver_switch_parser(WebCppDriverRef driver, const char *arg);
