@@ -28,11 +28,13 @@ class Driver {
     bool prep_files(const std::string &ifile, const std::string &ofile, char over);
     std::string getTitle() const;
     void drive();
-    void clean();
-    void endio();
     std::string highlight_from_string(const std::string &source,
                                       const std::string &filename,
                                       const std::vector<std::string> &options = {});
+
+  private:
+    void clean();
+    void endio();
 
   protected:
     std::shared_ptr<CFfile> ObjIO;

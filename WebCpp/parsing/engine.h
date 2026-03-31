@@ -38,6 +38,16 @@ class Engine {
     explicit Engine(std::unique_ptr<LanguageRules> rules);
     virtual ~Engine();
 
+    void doParsing();
+
+    inline void setLangExt(int e) { langext = e; }
+    inline void setupIO(std::shared_ptr<CFfile> p) { IO = p; }
+
+    EngineOptions options;
+    std::shared_ptr<CFfile> IO;
+    Theme Scs2;
+
+  private:
     void init_switches();
 
     void pre_parse();
@@ -89,8 +99,6 @@ class Engine {
     void colourComment(int index);
     void parseCharZeroComment(char zchar);
 
-    void doParsing();
-
     void hyperTagMe();
     void hyperLinkMe();
     void hyperNameMe();
@@ -99,11 +107,8 @@ class Engine {
     int getLineCount() const { return lncount; }
     std::string getBuffer() const { return buffer; }
 
-    // option setting
-    inline void setLangExt(int e) { langext = e; }
     inline void setLineCount(int c) { lncount = c; }
     inline void setChildLang(bool b) { childLang = b; }
-    inline void setupIO(std::shared_ptr<CFfile> p) { IO = p; }
 
     void setLanguageRules(std::unique_ptr<LanguageRules> rules) {
         this->rules = std::move(rules);
@@ -183,22 +188,11 @@ class Engine {
     }
     inline void colourChildLangCSS() { colourChildLang("&lt;style", "/style"); }
 
-  public:
-    EngineOptions options;
-
   protected:
     std::unique_ptr<LanguageRules> rules = nullptr;
-
-  public:
-    std::shared_ptr<CFfile> IO;
-    Theme Scs2;
-
-    // internal data
-  protected:
     int langext;
     int lncount;
     std::string buffer;
-
     bool childLang;
     ParseState state;
 };
