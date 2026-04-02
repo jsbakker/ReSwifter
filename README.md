@@ -22,9 +22,14 @@ ReSwifter is a both a Snippet Manager app and an XCode Editor Extension. It is l
 
 \**Note: Accuracy, consistency or reliability of AI-assisted tasks are to be considered with discretion. The language, length, complexity and nature of a snippet, and the AI task can all be combined factors in the quality of the result. Always double-check AI output before accepting it.*
 
+![Snippet Actions](https://github.com/user-attachments/assets/1ee32875-99a1-4b5d-ab62-b1c643b7344b)
+![Snippet Explained](https://github.com/user-attachments/assets/fb829944-91fd-419e-98fa-c816afb318c1)
+
 ### XCode Extension
 - Selected text in XCode can be sent directly to ReSwifter via the Editor menu, and any snippet can be sent back to replace it
 - Invoking ReSwifter from XCode with no selection will send the entire contents of the currently opened file, which can be replaced by an augmented version
+
+![From Xcode](https://github.com/user-attachments/assets/3390d6d5-71a3-431f-88d2-86a5e6529ae6)
 
 ## Requirements
 Apple M1 or later hardware runing macOS Tahoe 26 or later is required. For the AI-assisted capabilities to work, you will need Apple Intelligence enabled (and downloaded) in your System Settings. You may have to restart ReSwifter after the model is downloaded.
