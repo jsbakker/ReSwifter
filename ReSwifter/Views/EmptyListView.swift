@@ -15,6 +15,7 @@ struct EmptyListView: View {
             Text("Press Command + Shift + V to add a\nnew snippet from the clipboard.")
                 .font(.title)
                 .multilineTextAlignment(.center)
+                .accessibilityIdentifier("emptyListMessage") // For automation
             Text("or")
                 .font(.largeTitle)
                 .multilineTextAlignment(.center)

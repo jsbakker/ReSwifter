@@ -13,9 +13,28 @@ struct ReSwifterApp: App {
     @StateObject private var extensionService = ExtensionIPCService()
     @StateObject private var viewModel = SnippetViewModel()
 
-    let modelContainer: ModelContainer = {
-        try! ModelContainer(for: SnippetItem.self, FolderItem.self)
-    }()
+    let modelContainer: ModelContainer
+
+    init() {
+        if ProcessInfo.processInfo.arguments.contains("-useInMemoryStore") {
+            // Configure an in-memory store for UI testing
+            let inMemorySchema = Schema([SnippetItem.self, FolderItem.self])
+            let inMemoryModelConfiguration = ModelConfiguration(schema: inMemorySchema, isStoredInMemoryOnly: true)
+            do {
+                modelContainer = try ModelContainer(for: inMemorySchema, configurations: [inMemoryModelConfiguration])
+                print("Using in-memory SwiftData store for UI testing.")
+            } catch {
+                fatalError("Failed to create in-memory model container for UI tests: \(error.localizedDescription)")
+            }
+        } else {
+            // Standard persistent store for regular app launch
+            do {
+                modelContainer = try ModelContainer(for: SnippetItem.self, FolderItem.self)
+            } catch {
+                fatalError("Failed to create model container for app: \(error.localizedDescription)")
+            }
+        }
+    }
 
     var body: some Scene {
         Window("ReSwifter", id: "main") {
