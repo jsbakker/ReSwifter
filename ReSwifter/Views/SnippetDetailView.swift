@@ -82,9 +82,14 @@ struct SnippetDetailView: View {
                                 .tag(lang)
                         }
                     }
+                    .accessibilityIdentifier("languagePicker")
                 }
                 .padding(8)
             }
+        }
+        .onAppear {
+            let raw = selectedSnippet?.language ?? "swift"
+            language = WebCppLanguage.from(rawValue: raw)
         }
         .onChange(of: selectedSnippet) {
             let raw = selectedSnippet?.language ?? "swift"

@@ -81,6 +81,9 @@ struct ContentView: View {
                     SnippetToolbar(viewModel: viewModel)
                 }  // HStack
             }  // VStack
+            .onAppear {
+                viewModel.validateFolderSelection(folders: folders)
+            }
         }  // Navigation Stack
         .sheet(isPresented: Binding(
             get: { viewModel.editSummaryItemId != nil },

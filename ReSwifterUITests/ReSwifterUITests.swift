@@ -20,6 +20,20 @@ final class ReSwifterUITests: XCTestCase {
     }
     """
 
+    let sampleObjCText = """
+    #import <Foundation/Foundation.h>
+
+    @interface Greeter : NSObject
+    - (void)greet:(NSString *)name;
+    @end
+
+    @implementation Greeter
+    - (void)greet:(NSString *)name {
+        NSLog(@"Hello, %@!", name);
+    }
+    @end
+    """
+
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
@@ -94,5 +108,104 @@ final class ReSwifterUITests: XCTestCase {
         expectation(for: NSPredicate(format: "label != 'Generating summary...'"), evaluatedWith: rowSummary)
         waitForExpectations(timeout: 30)
         XCTAssertNotEqual(rowSummary.label, "Generating summary...", "Summary text should have updated once generation finished.")
+
+        // 7. Verify the Language picker defaults to "Swift"
+        let languagePicker = mainWindow.popUpButtons["languagePicker"]
+        XCTAssertTrue(languagePicker.waitForExistence(timeout: 5), "Language picker should be visible in the detail pane.")
+        XCTAssertEqual(languagePicker.value as? String, "Swift", "Language picker should default to Swift.")
+
+        // 8. Verify the editor contains the pasted text
+        let editor = mainWindow.textViews.firstMatch
+        XCTAssertTrue(editor.waitForExistence(timeout: 5), "Highlighted editor should be visible.")
+        XCTAssertEqual(editor.value as? String, sampleMultilineText, "Editor should contain the pasted snippet text.")
+    }
+
+    func test2_ObjCFolderSetsLanguagePicker() throws {
+        // Given: App launched with an empty store
+        // When:  An "Objective-C" folder is created and selected, then an ObjC snippet is pasted
+        // Then:  The language picker shows "Objective-C" because the folder name matches the language
+
+        XCTAssertTrue(mainWindow.waitForExistence(timeout: 5), "Main window should appear.")
+
+        // 1. Open the File menu and invoke "New Snippets Folder..."
+        app.menuBarItems["File"].click()
+        app.menuItems["New Snippets Folder..."].click()
+
+        // 2. Type the folder name and confirm.
+        //    SwiftUI .alert() on macOS presents as a sheet attached to the window.
+        //    Click the text field first to ensure it is focused before typing.
+        let sheet = mainWindow.sheets.firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 5), "New Folder sheet should appear.")
+        let folderNameField = sheet.textFields.firstMatch
+        folderNameField.click()
+        folderNameField.typeText("Objective-C")
+        sheet.buttons["Create"].click()
+
+        // 3. Confirm the folder selection has propagated before pasting.
+        //    createFolder() sets selectedFolderId synchronously, but the @Query arrays in
+        //    SnippetCommandMenu refresh asynchronously. Opening the folder toolbar menu and
+        //    verifying "Objective-C" is listed there ensures all @Query observations have
+        //    refreshed before addFromClipboard runs — otherwise the folders array is stale
+        //    and the snippet gets no folder, defaulting to Swift.
+        let folderMenuButton = element(id: "folderMenuButton")
+        XCTAssertTrue(folderMenuButton.waitForExistence(timeout: 5), "Folder menu button should be visible in the toolbar.")
+        folderMenuButton.click()
+        let objcMenuItem = app.menuItems["Objective-C"]
+        XCTAssertTrue(objcMenuItem.waitForExistence(timeout: 3), "Objective-C folder should appear as selected in the folder menu.")
+        app.typeKey(.escape, modifierFlags: [])
+
+        // 4. Put Objective-C code on the clipboard
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(sampleObjCText, forType: .string)
+
+        // 5. Trigger "Add Snippet From Clipboard" via the toolbar button.
+        //    The toolbar button uses the same ModelContext as ContentView and
+        //    SnippetDetailView (the window's context). The Snippets menu and keyboard
+        //    shortcut route through SnippetCommandMenu which has a separate ModelContext
+        //    — the snippet's language change may not propagate to the window context
+        //    before SnippetDetailView reads it.
+        let addFromClipboardButton = element(id: "addFromClipboardButton")
+        addFromClipboardButton.click()
+
+        // 6. Wait for the new snippet row to appear
+        let rowSummary = element(id: "snippetRowSummaryText")
+        XCTAssertTrue(rowSummary.waitForExistence(timeout: 10), "Snippet row should appear in the list after paste.")
+
+        // 7. Wait for any in-flight AI summary work to finish
+        let spinner = element(id: "snippetRowSpinner")
+        if spinner.waitForExistence(timeout: 2) {
+            expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: spinner)
+            waitForExpectations(timeout: 30)
+        }
+
+        // 8. Verify the language picker shows "Objective-C"
+        //    The app matches the selected folder name against WebCppLanguage.displayName values,
+        //    so a folder named "Objective-C" causes new snippets to default to that language.
+        let languagePicker = mainWindow.popUpButtons["languagePicker"]
+        XCTAssertTrue(languagePicker.waitForExistence(timeout: 5), "Language picker should be visible in the detail pane.")
+        XCTAssertEqual(languagePicker.value as? String, "Objective-C", "Language picker should show Objective-C for snippets pasted into the Objective-C folder.")
+    }
+
+    func test3_StaleFolderSelectionFallsBackToAll() throws {
+        // Given: App launched with an empty in-memory store right after test2
+        //        persisted a selectedFolderId for a folder that only existed
+        //        in test2's in-memory store
+        // Then:  The app should default to "All" (no folder selected) and
+        //        show the empty list message
+
+        XCTAssertTrue(mainWindow.waitForExistence(timeout: 5), "Main window should appear.")
+
+        // 1. Verify the empty list message is visible (no stale filter hiding items)
+        let emptyListMessage = element(id: "emptyListMessage")
+        XCTAssertTrue(emptyListMessage.waitForExistence(timeout: 5), "Empty list message should be displayed — a stale folder selection must not hide the empty state.")
+
+        // 2. Verify the folder menu button shows "All"
+        let folderMenuButton = element(id: "folderMenuButton")
+        XCTAssertTrue(folderMenuButton.waitForExistence(timeout: 5), "Folder menu button should be visible.")
+        folderMenuButton.click()
+        let allMenuItem = app.menuItems["All"]
+        XCTAssertTrue(allMenuItem.waitForExistence(timeout: 3), "'All' should appear in the folder menu.")
+        app.typeKey(.escape, modifierFlags: [])
     }
 }

@@ -33,6 +33,7 @@ struct SnippetToolbar: ToolbarContent {
                 Label(name, systemImage: "folder")
             }
             .help("Snippets In Folder...")
+            .accessibilityIdentifier("folderMenuButton")
         }
 
         ToolbarItem(placement: .primaryAction) {
@@ -51,6 +52,7 @@ struct SnippetToolbar: ToolbarContent {
                 Label("Add From Clipboard", systemImage: "doc.on.clipboard")
             }
             .help("Add From Clipboard")
+            .accessibilityIdentifier("addFromClipboardButton")
         }
 
         ToolbarItem(placement: .primaryAction) {

@@ -45,21 +45,36 @@ class SnippetViewModel: ObservableObject {
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         aiAvailable = snippetUtility.isAvailable
 
-        // Restore persisted folder selection
-        if let stored = UserDefaults.standard.string(forKey: Self.selectedFolderKey),
+        // Skip UserDefaults for folder selection during UI tests — the in-memory
+        // store won't have folders from previous runs, so a stale UUID would cause
+        // the list to appear filtered with no visible items.
+        let isTestStore = ProcessInfo.processInfo.arguments.contains("-useInMemoryStore")
+
+        if !isTestStore,
+           let stored = UserDefaults.standard.string(forKey: Self.selectedFolderKey),
            let uuid = UUID(uuidString: stored) {
             selectedFolderId = uuid
         }
 
-        // Persist folder selection on change
-        $selectedFolderId
-            .sink { newValue in
-                UserDefaults.standard.set(newValue?.uuidString, forKey: Self.selectedFolderKey)
-            }
-            .store(in: &cancellables)
+        if !isTestStore {
+            $selectedFolderId
+                .sink { newValue in
+                    UserDefaults.standard.set(newValue?.uuidString, forKey: Self.selectedFolderKey)
+                }
+                .store(in: &cancellables)
+        }
     }
 
     // MARK: - Computed
+
+    /// Resets `selectedFolderId` to nil ("All") if it points to a folder
+    /// that no longer exists — e.g. after a folder was deleted or the store
+    /// was replaced.
+    func validateFolderSelection(folders: [FolderItem]) {
+        if let id = selectedFolderId, !folders.contains(where: { $0.id == id }) {
+            selectedFolderId = nil
+        }
+    }
 
     func selectedFolderItem(from folders: [FolderItem]) -> FolderItem? {
         guard let id = selectedFolderId else { return nil }
