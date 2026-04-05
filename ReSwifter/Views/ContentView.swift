@@ -36,7 +36,7 @@ struct ContentView: View {
                     .padding(4)
                 }
                 HStack(spacing: 16) {
-                    if items.isEmpty {
+                    if viewModel.displayedItems(from: items).isEmpty {
                         EmptyListView()
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
@@ -62,7 +62,7 @@ struct ContentView: View {
                     }
 
                     // Right side — code editor + extension bar
-                    if !items.isEmpty {
+                    if !viewModel.displayedItems(from: items).isEmpty {
                         SnippetDetailView(
                             viewModel: viewModel,
                             selectedSnippet: viewModel.selectedSnippet(from: items)

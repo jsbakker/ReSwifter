@@ -20,7 +20,9 @@
       }
     },
     {
-      "enabled" : false,
+      "skippedTests" : [
+        "ReSwifterUITestsLaunchTests"
+      ],
       "target" : {
         "containerPath" : "container:ReSwifter.xcodeproj",
         "identifier" : "007A946C2F52A18200730E7F",

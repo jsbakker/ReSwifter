@@ -34,6 +34,14 @@ final class ReSwifterUITests: XCTestCase {
     @end
     """
 
+    let samplePythonText = """
+    def greet(name: str) -> str:
+        return f"Hello, {name}!"
+
+    if __name__ == "__main__":
+        print(greet("World"))
+    """
+
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
@@ -207,5 +215,109 @@ final class ReSwifterUITests: XCTestCase {
         let allMenuItem = app.menuItems["All"]
         XCTAssertTrue(allMenuItem.waitForExistence(timeout: 3), "'All' should appear in the folder menu.")
         app.typeKey(.escape, modifierFlags: [])
+    }
+
+    func test4_FolderSwitchingAndMultiSnippetCount() throws {
+        // Given: App launched with an empty store
+        // When:  "Objective-C" folder created → ObjC snippet pasted,
+        //        then "Python" folder created → Python snippet pasted
+        // Then:  Each folder shows 1 snippet; "All" shows 2 snippets
+
+        XCTAssertTrue(mainWindow.waitForExistence(timeout: 5), "Main window should appear.")
+
+        // --- Objective-C folder ---
+
+        // 1. Create the "Objective-C" folder
+        app.menuBarItems["File"].click()
+        app.menuItems["New Snippets Folder..."].click()
+        let sheet1 = mainWindow.sheets.firstMatch
+        XCTAssertTrue(sheet1.waitForExistence(timeout: 5), "New Folder sheet should appear.")
+        let folderField1 = sheet1.textFields.firstMatch
+        folderField1.click()
+        folderField1.typeText("Objective-C")
+        sheet1.buttons["Create"].click()
+
+        // 2. Confirm "Objective-C" folder is selected (ensures @Query has refreshed)
+        let folderMenuButton = element(id: "folderMenuButton")
+        XCTAssertTrue(folderMenuButton.waitForExistence(timeout: 5))
+        folderMenuButton.click()
+        XCTAssertTrue(app.menuItems["Objective-C"].waitForExistence(timeout: 3), "Objective-C folder should be selected.")
+        app.typeKey(.escape, modifierFlags: [])
+
+        // 3. Paste the Objective-C snippet via the toolbar button
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(sampleObjCText, forType: .string)
+        element(id: "addFromClipboardButton").click()
+
+        // 4. Wait for the snippet row, then let any AI summary work finish
+        let rowSummary = element(id: "snippetRowSummaryText")
+        XCTAssertTrue(rowSummary.waitForExistence(timeout: 10), "Snippet row should appear after pasting ObjC code.")
+        let spinner = element(id: "snippetRowSpinner")
+        if spinner.waitForExistence(timeout: 2) {
+            expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: spinner)
+            waitForExpectations(timeout: 30)
+        }
+
+        // 5. Verify exactly 1 snippet is shown in the Objective-C folder
+        let objcRows = mainWindow.descendants(matching: .any).matching(identifier: "snippetRowSummaryText")
+        XCTAssertEqual(objcRows.count, 1, "Objective-C folder should show exactly 1 snippet.")
+
+        // --- Python folder ---
+
+        // 6. Create the "Python" folder
+        app.menuBarItems["File"].click()
+        app.menuItems["New Snippets Folder..."].click()
+        let sheet2 = mainWindow.sheets.firstMatch
+        XCTAssertTrue(sheet2.waitForExistence(timeout: 5), "New Folder sheet should appear.")
+        let folderField2 = sheet2.textFields.firstMatch
+        folderField2.click()
+        folderField2.typeText("Python")
+        sheet2.buttons["Create"].click()
+
+        // 7. Confirm "Python" folder is selected
+        folderMenuButton.click()
+        XCTAssertTrue(app.menuItems["Python"].waitForExistence(timeout: 3), "Python folder should be selected.")
+        app.typeKey(.escape, modifierFlags: [])
+
+        // 8. Verify the list is empty (the ObjC snippet belongs to a different folder)
+        let emptyListMessage = element(id: "emptyListMessage")
+        XCTAssertTrue(emptyListMessage.waitForExistence(timeout: 5), "Python folder should be empty before pasting.")
+
+        // 9. Paste the Python snippet via the toolbar button
+        pasteboard.clearContents()
+        pasteboard.setString(samplePythonText, forType: .string)
+        element(id: "addFromClipboardButton").click()
+
+        // 10. Wait for the snippet row, then let any AI summary work finish
+        XCTAssertTrue(rowSummary.waitForExistence(timeout: 10), "Snippet row should appear after pasting Python code.")
+        let spinner2 = element(id: "snippetRowSpinner")
+        if spinner2.waitForExistence(timeout: 2) {
+            expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: spinner2)
+            waitForExpectations(timeout: 30)
+        }
+
+        // 11. Verify the language picker shows "Python"
+        let languagePicker = mainWindow.popUpButtons["languagePicker"]
+        XCTAssertTrue(languagePicker.waitForExistence(timeout: 5), "Language picker should be visible.")
+        XCTAssertEqual(languagePicker.value as? String, "Python", "Language picker should show Python for snippets pasted into the Python folder.")
+
+        // 12. Verify exactly 1 snippet is shown in the Python folder
+        let pythonRows = mainWindow.descendants(matching: .any).matching(identifier: "snippetRowSummaryText")
+        XCTAssertEqual(pythonRows.count, 1, "Python folder should show exactly 1 snippet.")
+
+        // --- All folder ---
+
+        // 13. Navigate to "All"
+        //     "All" appears in both the folder toolbar menu and the "Move to" command menu,
+        //     so scope the query to the folder menu button's descendants to avoid ambiguity.
+        folderMenuButton.click()
+        let allMenuItem = folderMenuButton.menuItems["All"]
+        XCTAssertTrue(allMenuItem.waitForExistence(timeout: 3), "'All' should appear in the folder menu.")
+        allMenuItem.click()
+
+        // 14. Verify both snippets are now visible
+        let allRows = mainWindow.descendants(matching: .any).matching(identifier: "snippetRowSummaryText")
+        XCTAssertEqual(allRows.count, 2, "'All' folder should show all 2 snippets.")
     }
 }
