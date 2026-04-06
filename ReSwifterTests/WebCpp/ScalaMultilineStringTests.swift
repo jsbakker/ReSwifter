@@ -107,6 +107,19 @@ struct ScalaMultilineStringTests {
         #expect(!html.contains("<font CLASS=symbols>"))
     }
 
+    // MARK: Code before multiline string delimiter is highlighted
+
+    @Test func keywordBeforeMultilineStringIsHighlighted() {
+        let source = """
+        val x = \"\"\"
+        content
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>val</font>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

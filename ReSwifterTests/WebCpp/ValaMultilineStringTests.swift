@@ -93,7 +93,10 @@ struct ValaMultilineStringTests {
         """
         let html = highlight(source)
 
-        #expect(!html.contains("<font CLASS=keytype>"))
+        #expect(!html.contains("<font CLASS=keytype>bool</font>"))
+        #expect(!html.contains("<font CLASS=keytype>int</font>"))
+        #expect(!html.contains("<font CLASS=keytype>double</font>"))
+        #expect(!html.contains("<font CLASS=keytype>float</font>"))
     }
 
     @Test func symbolsInsideMultilineStringAreNotHighlighted() {
@@ -118,6 +121,19 @@ struct ValaMultilineStringTests {
         let html = highlight(source)
 
         #expect(!html.contains("<font CLASS=preproc>"))
+    }
+
+    // MARK: Code before multiline string delimiter is highlighted
+
+    @Test func typeBeforeMultilineStringIsHighlighted() {
+        let source = """
+        string x = \"\"\"
+        content
+        \"\"\";
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keytype>string</font>"))
     }
 
     // MARK: Multiline string opens and closes correctly

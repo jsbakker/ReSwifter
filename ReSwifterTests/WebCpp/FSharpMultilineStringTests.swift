@@ -107,6 +107,19 @@ struct FSharpMultilineStringTests {
         #expect(!html.contains("<font CLASS=symbols>"))
     }
 
+    // MARK: Code before multiline string delimiter is highlighted
+
+    @Test func keywordBeforeMultilineStringIsHighlighted() {
+        let source = """
+        let x = \"\"\"
+        content
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>let</font>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

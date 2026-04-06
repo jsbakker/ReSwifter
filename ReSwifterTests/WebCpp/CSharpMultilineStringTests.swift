@@ -120,6 +120,19 @@ struct CSharpMultilineStringTests {
         #expect(!html.contains("<font CLASS=preproc>"))
     }
 
+    // MARK: Tokens before multiline string delimiter are highlighted
+
+    @Test func keywordBeforeMultilineStringIsHighlighted() {
+        let source = """
+        var x = \"\"\"
+        content
+        \"\"\";
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>var</font>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

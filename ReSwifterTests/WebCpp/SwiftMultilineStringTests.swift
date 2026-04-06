@@ -126,6 +126,42 @@ struct SwiftMultilineStringTests {
         #expect(!html.contains("<font CLASS=symbols>"))
     }
 
+    // MARK: Tokens before multiline string delimiter are highlighted
+
+    @Test func keywordBeforeMultilineStringIsHighlighted() {
+        let source = """
+        let x = \"\"\"
+        content
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>let</font>"))
+    }
+
+    @Test func multipleKeywordsBeforeMultilineStringAreHighlighted() {
+        let source = """
+        let user = "Alice"
+        let behavior = "wonderland"
+
+        // Multiline string example
+        let story = \"\"\"
+        \\(user) went down the rabbit hole.
+        She entered a "mystical" world
+        known as \\(behavior).
+        "Oh dear," she said, "I'm late!"
+        \"\"\"
+
+        print(story)
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>let</font> user"))
+        #expect(html.contains("<font CLASS=keyword>let</font> story"))
+        #expect(html.contains("<font CLASS=keyword>let</font> behavior"))
+        #expect(html.contains("<font CLASS=dblquot>\"\"\""))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

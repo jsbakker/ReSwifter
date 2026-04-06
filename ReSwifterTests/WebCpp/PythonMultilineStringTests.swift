@@ -82,6 +82,22 @@ struct PythonMultilineStringTests {
         #expect(!html.contains("<font CLASS=symbols>"))
     }
 
+    // MARK: Tokens before multiline string delimiter are highlighted
+
+    @Test func keywordBeforeMultilineStringIsHighlighted() {
+        let source = """
+        def f():
+            x = \"\"\"
+            content
+            \"\"\"
+            return x
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>def</font>"))
+        #expect(html.contains("<font CLASS=keyword>return</font>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

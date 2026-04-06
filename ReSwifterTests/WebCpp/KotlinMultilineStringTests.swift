@@ -107,6 +107,19 @@ struct KotlinMultilineStringTests {
         #expect(!html.contains("<font CLASS=symbols>"))
     }
 
+    // MARK: Tokens before multiline string delimiter are highlighted
+
+    @Test func keywordBeforeMultilineStringIsHighlighted() {
+        let source = """
+        val x = \"\"\"
+        content
+        \"\"\"
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keyword>val</font>"))
+    }
+
     // MARK: Multiline string opens and closes correctly
 
     @Test func multilineStringProducesOpenAndCloseTag() {

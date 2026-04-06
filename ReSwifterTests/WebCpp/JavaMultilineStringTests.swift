@@ -93,7 +93,8 @@ struct JavaMultilineStringTests {
         """
         let html = highlight(source)
 
-        #expect(!html.contains("<font CLASS=keytype>"))
+        #expect(!html.contains("<font CLASS=keytype>Boolean</font>"))
+        #expect(!html.contains("<font CLASS=keytype>Integer</font>"))
     }
 
     @Test func symbolsInsideMultilineStringAreNotHighlighted() {
@@ -105,6 +106,19 @@ struct JavaMultilineStringTests {
         let html = highlight(source)
 
         #expect(!html.contains("<font CLASS=symbols>"))
+    }
+
+    // MARK: Tokens before multiline string delimiter are highlighted
+
+    @Test func typeBeforeMultilineStringIsHighlighted() {
+        let source = """
+        String x = \"\"\"
+        content
+        \"\"\";
+        """
+        let html = highlight(source)
+
+        #expect(html.contains("<font CLASS=keytype>String</font>"))
     }
 
     // MARK: Multiline string opens and closes correctly
