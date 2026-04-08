@@ -31,17 +31,3 @@ import SwiftData
     }
 }
 
-let sampleMultilineText = """
-    func registerAppWait(reply: @escaping (String) -> Void) {
-        queue.async {
-            if let text = self.pendingText {
-                // Work is already queued — deliver immediately
-                self.pendingText = nil
-                reply(text)
-            } else {
-                // No work yet — hold the reply until extension submits
-                self.appWaitReply = reply
-            }
-        }
-    }
-    """
