@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML with Internal CSS and JS</title>
+    <!-- Internal CSS is defined within the <style> tag in the head section -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        .styled-paragraph {
+            color: blue;
+            font-size: 18px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            cursor: pointer; /* Makes it obvious the paragraph is clickable */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Internal CSS and JavaScript Example</h1>
+
+    <!-- The paragraph has an ID so JavaScript can easily access it -->
+    <p id="demo-paragraph" class="styled-paragraph">
+        Click this paragraph to change its text and style using JavaScript!
+    </p>
+
+    <!-- Internal JavaScript is defined within the <script> tag -->
+    <script>
+        // Function to be called when the paragraph is clicked
+        function changeContentAndStyle() {
+            // Get the element by its ID
+            var paragraphElement = document.getElementById("demo-paragraph");
+
+            // Change the content of the element
+            paragraphElement.innerHTML = "Text changed! Style also updated via JS.";
+
+            // Change the style using JavaScript
+            paragraphElement.style.color = "red";
+            paragraphElement.style.backgroundColor = "#e0e0e0";
+            paragraphElement.style.fontWeight = "bold";
+        }
+
+        // Add an event listener to the paragraph element
+        document.getElementById("demo-paragraph").onclick = changeContentAndStyle;
+    </script>
+
+</body>
+</html>
