@@ -7,25 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00070F1A2F8ADD0600EB33EA /* HighlightedEditorView in Frameworks */ = {isa = PBXBuildFile; productRef = 00070F192F8ADD0600EB33EA /* HighlightedEditorView */; };
 		00312DD02F653E7C0099824D /* PRIVACY_POLICY.md in Resources */ = {isa = PBXBuildFile; fileRef = 00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */; };
-		00312DDC2F66400F0099824D /* WebCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; };
-		00312DDD2F66400F0099824D /* WebCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
-		00AABB012F6E000000000001 /* WebCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00312DD62F66400F0099824D /* WebCpp.framework */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00DE443E2F6C89B000188043 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 00DE443D2F6C89B000188043 /* Textual */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		00312DDA2F66400F0099824D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 00312DD52F66400F0099824D;
-			remoteInfo = WebCpp;
-		};
 		007A94642F52A18200730E7F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 007A944C2F52A18000730E7F /* Project object */;
@@ -56,7 +47,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				00312DDD2F66400F0099824D /* WebCpp.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,7 +77,6 @@
 
 /* Begin PBXFileReference section */
 		00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PRIVACY_POLICY.md; sourceTree = "<group>"; };
-		00312DD62F66400F0099824D /* WebCpp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebCpp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A94542F52A18000730E7F /* ReSwifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReSwifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A94632F52A18200730E7F /* ReSwifterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReSwifterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A946D2F52A18200730E7F /* ReSwifterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReSwifterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,14 +87,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		00312DDE2F66400F0099824D /* Exceptions for "WebCpp" folder in "WebCpp" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				interop/WebCpp.h,
-				interop/WebCppBridge.h,
-			);
-			target = 00312DD52F66400F0099824D /* WebCpp */;
-		};
 		007A94932F52A2ED00730E7F /* Exceptions for "ReSwifterXCode" folder in "ReSwifterXCode" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -116,14 +97,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		00312DD72F66400F0099824D /* WebCpp */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				00312DDE2F66400F0099824D /* Exceptions for "WebCpp" folder in "WebCpp" target */,
-			);
-			path = WebCpp;
-			sourceTree = "<group>";
-		};
 		007A94562F52A18000730E7F /* ReSwifter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ReSwifter;
@@ -150,19 +123,12 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		00312DD32F66400F0099824D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		007A94512F52A18000730E7F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00070F1A2F8ADD0600EB33EA /* HighlightedEditorView in Frameworks */,
 				00DE443E2F6C89B000188043 /* Textual in Frameworks */,
-				00312DDC2F66400F0099824D /* WebCpp.framework in Frameworks */,
 				009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,7 +137,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00AABB012F6E000000000001 /* WebCpp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,7 +165,6 @@
 				007A94662F52A18200730E7F /* ReSwifterTests */,
 				007A94702F52A18200730E7F /* ReSwifterUITests */,
 				007A948A2F52A2ED00730E7F /* ReSwifterXCode */,
-				00312DD72F66400F0099824D /* WebCpp */,
 				007A94852F52A2ED00730E7F /* Frameworks */,
 				007A94552F52A18000730E7F /* Products */,
 				00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */,
@@ -214,7 +178,6 @@
 				007A94632F52A18200730E7F /* ReSwifterTests.xctest */,
 				007A946D2F52A18200730E7F /* ReSwifterUITests.xctest */,
 				007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */,
-				00312DD62F66400F0099824D /* WebCpp.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -231,40 +194,7 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		00312DD12F66400F0099824D /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		00312DD52F66400F0099824D /* WebCpp */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00312DDF2F66400F0099824D /* Build configuration list for PBXNativeTarget "WebCpp" */;
-			buildPhases = (
-				00312DD12F66400F0099824D /* Headers */,
-				00312DD22F66400F0099824D /* Sources */,
-				00312DD32F66400F0099824D /* Frameworks */,
-				00312DD42F66400F0099824D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				00312DD72F66400F0099824D /* WebCpp */,
-			);
-			name = WebCpp;
-			packageProductDependencies = (
-			);
-			productName = WebCpp;
-			productReference = 00312DD62F66400F0099824D /* WebCpp.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		007A94532F52A18000730E7F /* ReSwifter */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 007A94772F52A18200730E7F /* Build configuration list for PBXNativeTarget "ReSwifter" */;
@@ -279,7 +209,6 @@
 			);
 			dependencies = (
 				007A94912F52A2ED00730E7F /* PBXTargetDependency */,
-				00312DDB2F66400F0099824D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				007A94562F52A18000730E7F /* ReSwifter */,
@@ -287,6 +216,7 @@
 			name = ReSwifter;
 			packageProductDependencies = (
 				00DE443D2F6C89B000188043 /* Textual */,
+				00070F192F8ADD0600EB33EA /* HighlightedEditorView */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -371,9 +301,6 @@
 				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
-					00312DD52F66400F0099824D = {
-						CreatedOnToolsVersion = 26.3;
-					};
 					007A94532F52A18000730E7F = {
 						CreatedOnToolsVersion = 26.3;
 					};
@@ -401,6 +328,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */,
+				00070F182F8ADD0600EB33EA /* XCRemoteSwiftPackageReference "HighlightedEditorView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 007A94552F52A18000730E7F /* Products */;
@@ -411,19 +339,11 @@
 				007A94622F52A18200730E7F /* ReSwifterTests */,
 				007A946C2F52A18200730E7F /* ReSwifterUITests */,
 				007A94832F52A2ED00730E7F /* ReSwifterXCode */,
-				00312DD52F66400F0099824D /* WebCpp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		00312DD42F66400F0099824D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		007A94522F52A18000730E7F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -456,13 +376,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00312DD22F66400F0099824D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		007A94502F52A18000730E7F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -494,11 +407,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		00312DDB2F66400F0099824D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 00312DD52F66400F0099824D /* WebCpp */;
-			targetProxy = 00312DDA2F66400F0099824D /* PBXContainerItemProxy */;
-		};
 		007A94652F52A18200730E7F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 007A94532F52A18000730E7F /* ReSwifter */;
@@ -517,72 +425,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		00312DE02F66400F0099824D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 6XKLFA63LP;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.WebCpp;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		00312DE12F66400F0099824D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 6XKLFA63LP;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.WebCpp;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		007A94752F52A18200730E7F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -721,7 +563,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifter/ReSwifter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -746,7 +588,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 26.03;
+				MARKETING_VERSION = 26.04;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -775,7 +617,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifter/ReSwifter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -800,7 +642,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 26.03;
+				MARKETING_VERSION = 26.04;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1010,15 +852,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00312DDF2F66400F0099824D /* Build configuration list for PBXNativeTarget "WebCpp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00312DE02F66400F0099824D /* Debug */,
-				00312DE12F66400F0099824D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		007A944F2F52A18000730E7F /* Build configuration list for PBXProject "ReSwifter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1067,6 +900,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		00070F182F8ADD0600EB33EA /* XCRemoteSwiftPackageReference "HighlightedEditorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jsbakker/HighlightedEditorView";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/textual";
@@ -1078,6 +919,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		00070F192F8ADD0600EB33EA /* HighlightedEditorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00070F182F8ADD0600EB33EA /* XCRemoteSwiftPackageReference "HighlightedEditorView" */;
+			productName = HighlightedEditorView;
+		};
 		00DE443D2F6C89B000188043 /* Textual */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */;

@@ -1,6 +1,15 @@
 {
-  "originHash" : "496aeba323398df389b43149d07945189ddafa226e8dd186832a40a0c5082615",
+  "originHash" : "a77a84613aa194d02ecb42e02b5bcd4d484fdf040fb7ac8a9025ec0e0e2f5855",
   "pins" : [
+    {
+      "identity" : "highlightededitorview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jsbakker/HighlightedEditorView",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6e3787751abf3fb1eed83a499cb4b7b520a733ae"
+      }
+    },
     {
       "identity" : "swift-concurrency-extras",
       "kind" : "remoteSourceControl",

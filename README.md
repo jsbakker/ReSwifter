@@ -1,4 +1,3 @@
-![C++](https://img.shields.io/badge/c++-23-blue.svg)
 ![Swift6](https://img.shields.io/badge/swift-6-blue.svg)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
@@ -39,5 +38,5 @@ Apple M1 or later hardware runing macOS Tahoe 26 or later is required. For the A
 ReSwifter (C) 2026 Jeffrey Bakker
 
 ### Credits
-- Live snippet editing with syntax highlighting uses [Web C Plus Plus (webcpp)](https://github.com/jsbakker/WebCPlusPlus), by Jeffrey Bakker.
+- Live snippet editing with syntax highlighting uses [HighlightedEditorView](https://github.com/jsbakker/HighlightedEditorView), by Jeffrey Bakker.
 - Markdown and code blocks for AI Responses are rendered with [Textual](https://github.com/gonzalezreal/textual), by [Guille Gonzalez](https://github.com/gonzalezreal).

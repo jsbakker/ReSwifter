@@ -62,7 +62,7 @@ struct ReSwifterApp: App {
                                 string: """
                                 ReSwifter Copyright (c) 2026 Jeffrey Bakker
 
-                                Syntax highlighted live editor aided by WebCpp, Copyright (c) 2001-2026 Jeffrey Bakker under the MIT License
+                                Syntax highlighted live editor aided by HighlightedEditorView and WebCpp, Copyright (c) 2001-2026 Jeffrey Bakker under the MIT License
 
                                 Markdown with syntax highlighted blocks by Textual, Copyright (c) 2024 Guille Gonzalez under the MIT License
 
@@ -92,7 +92,6 @@ struct ReSwifterApp: App {
                                 ]
                             ),
                             .applicationName: "ReSwifter",
-                            .applicationVersion: "26.03",
                         ]
                     )
                 }
