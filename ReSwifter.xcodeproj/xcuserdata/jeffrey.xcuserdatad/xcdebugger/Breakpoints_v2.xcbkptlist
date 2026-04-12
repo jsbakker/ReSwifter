@@ -14,8 +14,8 @@
             filePath = "ReSwifterXCode/ReSwifterCommand.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "replaceSelection(in:selection:with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "ReSwifterXCode/ReSwifterCommand.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "replaceSelection(in:selection:with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -161,6 +161,38 @@
             startingLineNumber = "39"
             endingLineNumber = "39"
             landmarkName = "Driver::switch_parser(arg)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "94D6E7E6-4E42-4321-B88F-098463187CD3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReSwifterXCode/ReSwifterCommand.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "extractSelectedText(from:selection:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B624027F-F8D1-48D6-B9B3-F95DE6FBB05D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReSwifterXCode/ReSwifterCommand.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "extractSelectedText(from:selection:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

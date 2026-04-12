@@ -5,6 +5,7 @@
 //  Created by Jeffrey Bakker on 2026-03-09.
 //
 
+import HighlightedEditorView
 import SwiftUI
 import SwiftData
 

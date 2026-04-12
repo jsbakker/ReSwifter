@@ -5,6 +5,7 @@
 //  Created by Jeffrey Bakker on 2026-03-09.
 //
 
+import HighlightedEditorView
 import SwiftUI
 import Textual
 
@@ -65,7 +66,7 @@ struct SnippetDetailView: View {
                 .cornerRadius(8)
             }
             else {
-                HighlightedEditorView(
+                HighlightedEditor(
                     text: Binding(
                         get: { selectedSnippet?.fullText ?? "" },
                         set: { selectedSnippet?.fullText = $0 }

@@ -8,6 +8,7 @@
 import AppKit
 import Combine
 import Foundation
+import HighlightedEditorView
 import SwiftData
 
 @MainActor
