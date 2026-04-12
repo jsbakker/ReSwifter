@@ -14,6 +14,7 @@
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00DE443E2F6C89B000188043 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 00DE443D2F6C89B000188043 /* Textual */; };
+		FDBFA451F5D44BBC03B10539 /* ReSwifterXCode/TextBufferEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C4A23F89A48DC374BE9DA /* ReSwifterXCode/TextBufferEditor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,7 @@
 		007A94862F52A2ED00730E7F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		007A94882F52A2ED00730E7F /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
 		009C675A2F5C05F7000FB801 /* FoundationModels.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoundationModels.framework; path = System/Library/Frameworks/FoundationModels.framework; sourceTree = SDKROOT; };
+		E03C4A23F89A48DC374BE9DA /* ReSwifterXCode/TextBufferEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReSwifterXCode/TextBufferEditor.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -168,6 +170,7 @@
 				007A94852F52A2ED00730E7F /* Frameworks */,
 				007A94552F52A18000730E7F /* Products */,
 				00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */,
+				00C1DD9F2F8C258B009AD585 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,6 +193,14 @@
 				007A94882F52A2ED00730E7F /* XcodeKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		00C1DD9F2F8C258B009AD585 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				E03C4A23F89A48DC374BE9DA /* ReSwifterXCode/TextBufferEditor.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -387,6 +398,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDBFA451F5D44BBC03B10539 /* ReSwifterXCode/TextBufferEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
