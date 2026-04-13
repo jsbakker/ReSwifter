@@ -770,7 +770,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifterXCode/ReSwifterXCode.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -794,7 +794,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 26.03;
+				MARKETING_VERSION = 26.04;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
@@ -819,7 +819,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifterXCode/ReSwifterXCode.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -843,7 +843,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 26.03;
+				MARKETING_VERSION = 26.04;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
