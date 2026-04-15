@@ -6,8 +6,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jsbakker/HighlightedEditorView",
       "state" : {
-        "branch" : "main",
-        "revision" : "6e3787751abf3fb1eed83a499cb4b7b520a733ae"
+        "revision" : "5ac7ff6802cf5c59ffbcacd18bcf40e7ce777aab"
       }
     },
     {
