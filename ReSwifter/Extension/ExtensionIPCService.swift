@@ -51,13 +51,16 @@ class ExtensionIPCService: ObservableObject {
     /// Whether a request is pending and waiting for the user to act.
     @Published var hasPendingRequest: Bool = false
 
-    init() {
+    init(userDefaults: UserDefaults? = nil) {
+        self.sharedDefaults = userDefaults
         startListening()
     }
 
     /// Starts listening for distributed notifications from the extension.
     func startListening() {
-        sharedDefaults = UserDefaults(suiteName: ExtensionIPCService.appGroupID)
+        if sharedDefaults == nil {
+            sharedDefaults = UserDefaults(suiteName: ExtensionIPCService.appGroupID)
+        }
 
         if sharedDefaults == nil {
             os_log("Failed to open shared UserDefaults for suite: %{public}@",
