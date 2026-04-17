@@ -34,6 +34,9 @@ ReSwifter is a both a Snippet Manager app and an XCode Editor Extension. It is l
 Apple M1 or later hardware runing macOS Tahoe 26 or later is required. For the AI-assisted capabilities to work, you will need Apple Intelligence enabled (and downloaded) in your System Settings. You may have to restart ReSwifter after the model is downloaded.
 ![Apple Intelligence](Docs/Images/Apple-Intelligence.png)
 
+## Download and Install
+The easiest way would be to visit [the ReSwifter page in the macOS App Store](https://apps.apple.com/us/app/reswifter-for-xcode/id6760387439).
+
 ## Help and How To
 [Visit the ReSwifter Help in the wiki, here](https://github.com/jsbakker/ReSwifter/wiki/ReSwifter-Help).
 
