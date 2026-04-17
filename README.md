@@ -10,7 +10,7 @@ ReSwifter is a both a Snippet Manager app and an XCode Editor Extension. It is l
 - New snippets from clipboard are briefly summarized and named automatically
 - One-click copy to clipboard, or use keyboard shortcuts
 - Live code editing of snippets with syntax highlighting
-- Syntax highlighting supports 48 programming languages, which can be overridden
+- Syntax highlighting supports 58 programming languages, which can be overridden
 - Adaptive syntax highlighting for Dark and Light modes set by the system
 - Folder management, favourites, and search filter assist in finding your snippets
 - Folders named after programming languages automatically applies the language's highlighting to new snippets in that folder
@@ -33,6 +33,9 @@ ReSwifter is a both a Snippet Manager app and an XCode Editor Extension. It is l
 ## Requirements
 Apple M1 or later hardware runing macOS Tahoe 26 or later is required. For the AI-assisted capabilities to work, you will need Apple Intelligence enabled (and downloaded) in your System Settings. You may have to restart ReSwifter after the model is downloaded.
 ![Apple Intelligence](Docs/Images/Apple-Intelligence.png)
+
+## Help and How To
+[Visit the ReSwifter Help in the wiki, here]([url](https://github.com/jsbakker/ReSwifter/wiki/ReSwifter-Help)).
 
 ## Author
 ReSwifter (C) 2026 Jeffrey Bakker
