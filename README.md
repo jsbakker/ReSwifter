@@ -35,7 +35,7 @@ Apple M1 or later hardware runing macOS Tahoe 26 or later is required. For the A
 ![Apple Intelligence](Docs/Images/Apple-Intelligence.png)
 
 ## Help and How To
-[Visit the ReSwifter Help in the wiki, here]([url](https://github.com/jsbakker/ReSwifter/wiki/ReSwifter-Help)).
+[Visit the ReSwifter Help in the wiki, here](https://github.com/jsbakker/ReSwifter/wiki/ReSwifter-Help).
 
 ## Author
 ReSwifter (C) 2026 Jeffrey Bakker
