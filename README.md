@@ -1,4 +1,4 @@
-![Swift6](https://img.shields.io/badge/swift-6-blue.svg)
+![Swift5](https://img.shields.io/badge/swift-5-blue.svg)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
