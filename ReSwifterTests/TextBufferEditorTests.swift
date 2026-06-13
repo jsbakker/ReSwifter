@@ -139,6 +139,29 @@ final class TextBufferEditorTests: XCTestCase {
         XCTAssertEqual(updated.endColumn, "Hello, there!".count)
     }
 
+    func test_replaceSelection_singleWord_inLineWithTrailingNewline() {
+        let lines = ["let foo = bar\n", "next line\n"]
+        let sel = TextSelection(startLine: 0, startColumn: 4, endLine: 0, endColumn: 7)
+        let (newLines, updated) = TextBufferEditor.replaceSelection(in: lines, selection: sel, with: "baz")
+        XCTAssertEqual(newLines, ["let baz = bar\n", "next line\n"])
+        XCTAssertEqual(updated.startLine, 0)
+        XCTAssertEqual(updated.startColumn, 4)
+        XCTAssertEqual(updated.endLine, 0)
+        XCTAssertEqual(updated.endColumn, "let baz = bar\n".count)
+    }
+
+    func test_replaceSelection_multiLineReplacement_inLinesWithTrailingNewlines() {
+        // endColumn: 4 points to the \n of "beta\n", leaving "\n" as suffix — so TWO inherits the newline
+        let lines = ["alpha\n", "beta\n", "gamma\n"]
+        let sel = TextSelection(startLine: 0, startColumn: 0, endLine: 1, endColumn: 4)
+        let (newLines, updated) = TextBufferEditor.replaceSelection(in: lines, selection: sel, with: "ONE\nTWO")
+        XCTAssertEqual(newLines, ["ONE\n", "TWO\n", "gamma\n"])
+        XCTAssertEqual(updated.startLine, 0)
+        XCTAssertEqual(updated.startColumn, 0)
+        XCTAssertEqual(updated.endLine, 1)
+        XCTAssertEqual(updated.endColumn, "TWO\n".count)
+    }
+
     func test_replaceSelection_columnBeyondLineLengthClamped() {
         let lines = ["Hi"]
         let sel = TextSelection(startLine: 0, startColumn: 1, endLine: 0, endColumn: 100)

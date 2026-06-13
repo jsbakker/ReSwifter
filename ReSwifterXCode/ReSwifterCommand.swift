@@ -78,9 +78,28 @@ class ReSwifterCommand: NSObject, XCSourceEditorCommand, @unchecked Sendable {
                 endColumn: sel.end.column
             )
             let result = TextBufferEditor.replaceSelection(in: lines, selection: textSel, with: reply)
-            writeLines(result.lines, to: buffer)
-            sel.start = XCSourceTextPosition(line: result.updatedSelection.startLine, column: result.updatedSelection.startColumn)
-            sel.end = XCSourceTextPosition(line: result.updatedSelection.endLine, column: result.updatedSelection.endColumn)
+            let oldLineCount = textSel.endLine - textSel.startLine + 1
+            buffer.lines.removeObjects(at: IndexSet(integersIn: textSel.startLine...textSel.endLine))
+            let insertedCount = result.updatedSelection.endLine - textSel.startLine + 1
+            for i in 0..<insertedCount {
+                buffer.lines.insert(result.lines[textSel.startLine + i], at: textSel.startLine + i)
+            }
+            if insertedCount == oldLineCount {
+                // Same line count: direct mutation preserves the scroll position.
+                sel.start = XCSourceTextPosition(line: result.updatedSelection.startLine, column: result.updatedSelection.startColumn)
+                sel.end = XCSourceTextPosition(line: result.updatedSelection.endLine, column: result.updatedSelection.endColumn)
+            } else {
+                // Line count changed: Xcode resets scroll; replacing the selection object
+                // sends an array-level KVO notification that triggers scroll-to-selection.
+                let newRange = XCSourceTextRange()
+                newRange.start = XCSourceTextPosition(line: result.updatedSelection.startLine, column: result.updatedSelection.startColumn)
+                newRange.end = XCSourceTextPosition(line: result.updatedSelection.endLine, column: result.updatedSelection.endColumn)
+                if buffer.selections.count > 0 {
+                    buffer.selections.replaceObject(at: 0, with: newRange)
+                } else {
+                    buffer.selections.add(newRange)
+                }
+            }
         } else {
             let result = TextBufferEditor.replaceEntireBuffer(with: reply)
             writeLines(result, to: buffer)
