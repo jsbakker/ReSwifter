@@ -8,7 +8,6 @@
 import Foundation
 @testable import ReSwifter
 
-@MainActor
 func makeSnippet(
     summary: String = "Test snippet",
     fullText: String = "let x = 1",
@@ -19,7 +18,6 @@ func makeSnippet(
     return item
 }
 
-@MainActor
 func makeFolder(name: String) -> FolderItem {
     FolderItem(name: name)
 }

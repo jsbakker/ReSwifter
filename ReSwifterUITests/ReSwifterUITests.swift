@@ -1,6 +1,7 @@
 import XCTest
 import AppKit
 
+@MainActor
 final class ReSwifterUITests: XCTestCase {
 
     var app: XCUIApplication!
