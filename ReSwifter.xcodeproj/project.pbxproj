@@ -10,10 +10,10 @@
 		00312DD02F653E7C0099824D /* PRIVACY_POLICY.md in Resources */ = {isa = PBXBuildFile; fileRef = 00312DCF2F653E7C0099824D /* PRIVACY_POLICY.md */; };
 		007A94922F52A2ED00730E7F /* ReSwifterXCode.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 007A94842F52A2ED00730E7F /* ReSwifterXCode.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009C675A2F5C05F7000FB801 /* FoundationModels.framework */; };
+		00AA5EDE2FDD23C200717377 /* HighlightedEditorView in Frameworks */ = {isa = PBXBuildFile; productRef = 00AA5EDD2FDD23C200717377 /* HighlightedEditorView */; };
 		00B4194F2F52C4AC008129F9 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; };
 		00B419502F52C4AC008129F9 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007A94882F52A2ED00730E7F /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00DE443E2F6C89B000188043 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 00DE443D2F6C89B000188043 /* Textual */; };
-		00F025722F949718008865FA /* HighlightedEditorView in Frameworks */ = {isa = PBXBuildFile; productRef = 00F025712F949718008865FA /* HighlightedEditorView */; };
 		FDBFA451F5D44BBC03B10539 /* ReSwifterXCode/TextBufferEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C4A23F89A48DC374BE9DA /* ReSwifterXCode/TextBufferEditor.swift */; };
 /* End PBXBuildFile section */
 
@@ -130,7 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00DE443E2F6C89B000188043 /* Textual in Frameworks */,
-				00F025722F949718008865FA /* HighlightedEditorView in Frameworks */,
+				00AA5EDE2FDD23C200717377 /* HighlightedEditorView in Frameworks */,
 				009C677B2F5CF3A1000FB801 /* FoundationModels.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,7 +227,7 @@
 			name = ReSwifter;
 			packageProductDependencies = (
 				00DE443D2F6C89B000188043 /* Textual */,
-				00F025712F949718008865FA /* HighlightedEditorView */,
+				00AA5EDD2FDD23C200717377 /* HighlightedEditorView */,
 			);
 			productName = ReSwifter;
 			productReference = 007A94542F52A18000730E7F /* ReSwifter.app */;
@@ -339,7 +339,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */,
-				00F025702F949718008865FA /* XCRemoteSwiftPackageReference "HighlightedEditorView" */,
+				00AA5EDC2FDD23C200717377 /* XCRemoteSwiftPackageReference "HighlightedEditorView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 007A94552F52A18000730E7F /* Products */;
@@ -928,6 +928,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		00AA5EDC2FDD23C200717377 /* XCRemoteSwiftPackageReference "HighlightedEditorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jsbakker/HighlightedEditorView";
+			requirement = {
+				kind = revision;
+				revision = f1d20312bbaad8e8428aa62e8360088cda4c1835;
+			};
+		};
 		00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/textual";
@@ -936,26 +944,18 @@
 				minimumVersion = 0.3.1;
 			};
 		};
-		00F025702F949718008865FA /* XCRemoteSwiftPackageReference "HighlightedEditorView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jsbakker/HighlightedEditorView";
-			requirement = {
-				kind = revision;
-				revision = 791e5e0a04a5dc12ba2f236ada1bbddd3ef01ada;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		00AA5EDD2FDD23C200717377 /* HighlightedEditorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00AA5EDC2FDD23C200717377 /* XCRemoteSwiftPackageReference "HighlightedEditorView" */;
+			productName = HighlightedEditorView;
+		};
 		00DE443D2F6C89B000188043 /* Textual */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 00DE443C2F6C89B000188043 /* XCRemoteSwiftPackageReference "textual" */;
 			productName = Textual;
-		};
-		00F025712F949718008865FA /* HighlightedEditorView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 00F025702F949718008865FA /* XCRemoteSwiftPackageReference "HighlightedEditorView" */;
-			productName = HighlightedEditorView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

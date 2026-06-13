@@ -73,6 +73,7 @@ struct SnippetDetailView: View {
                     ),
                     language: language
                 )
+                .showLineNumbers()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .cornerRadius(8)
 
