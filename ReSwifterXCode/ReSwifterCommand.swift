@@ -6,42 +6,50 @@
 //
 
 import Foundation
-import XcodeKit
+@preconcurrency import XcodeKit
 import os.log
 
-class ReSwifterCommand: NSObject, XCSourceEditorCommand {
+class ReSwifterCommand: NSObject, XCSourceEditorCommand, @unchecked Sendable {
 
     private let launcher = AppLauncherIPCService()
 
-    func perform(with invocation: XCSourceEditorCommandInvocation, completionHandler: @escaping (Error?) -> Void ) -> Void {
+    func perform(with invocation: XCSourceEditorCommandInvocation, completionHandler: @escaping @Sendable (Error?) -> Void ) -> Void {
         let buffer = invocation.buffer
         let lines = bufferLines(from: buffer)
 
-        guard let xcSelection = buffer.selections.firstObject as? XCSourceTextRange else {
-            // No selection info — send entire buffer
-            launcher.launchAndProcess(buffer.completeBuffer) { reply, err in
-                self.handleReply(reply, error: err, selection: nil, buffer: buffer, completionHandler: completionHandler)
+        let effectiveSelection: XCSourceTextRange?
+        let textToSend: String
+
+        if let xcSel = buffer.selections.firstObject as? XCSourceTextRange {
+            let sel = TextSelection(
+                startLine: xcSel.start.line,
+                startColumn: xcSel.start.column,
+                endLine: xcSel.end.line,
+                endColumn: xcSel.end.column
+            )
+            if TextBufferEditor.isNonTrivialSelection(sel, lineCount: lines.count) {
+                textToSend = TextBufferEditor.extractSelectedText(from: lines, selection: sel)
+                effectiveSelection = xcSel
+            } else {
+                textToSend = buffer.completeBuffer
+                effectiveSelection = nil
             }
-            return
+        } else {
+            textToSend = buffer.completeBuffer
+            effectiveSelection = nil
         }
 
-        let sel = TextSelection(
-            startLine: xcSelection.start.line,
-            startColumn: xcSelection.start.column,
-            endLine: xcSelection.end.line,
-            endColumn: xcSelection.end.column
-        )
-
-        let hasSelection = TextBufferEditor.isNonTrivialSelection(sel, lineCount: lines.count)
-        let textToSend = hasSelection
-            ? TextBufferEditor.extractSelectedText(from: lines, selection: sel)
-            : buffer.completeBuffer
-
-        launcher.launchAndProcess(textToSend) { reply, err in
-            self.handleReply(reply, error: err, selection: hasSelection ? xcSelection : nil, buffer: buffer, completionHandler: completionHandler)
+        Task { @MainActor in
+            do {
+                let reply = try await self.launcher.launchAndProcess(textToSend)
+                self.handleReply(reply, error: nil, selection: effectiveSelection, buffer: buffer, completionHandler: completionHandler)
+            } catch {
+                completionHandler(error)
+            }
         }
     }
 
+    @MainActor
     private func handleReply(
         _ reply: String?,
         error: Error?,

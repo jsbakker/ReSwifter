@@ -20,34 +20,37 @@ import Foundation
 import AppKit
 import os.log
 
-/// Mutable state shared between the response observer and timeout closures.
-private class ResponseState {
+/// Tracks in-flight response state for a single sendRequest call.
+/// Marked @unchecked Sendable because all access is serialized on the main actor.
+private final class ResponseTracker: @unchecked Sendable {
+    var didResume = false
     var observer: NSObjectProtocol?
-    var didReceive = false
+    var timeoutTask: Task<Void, Never>?
 
     func removeObserver() {
-        if let observer = observer {
-            DistributedNotificationCenter.default().removeObserver(observer)
-            self.observer = nil
+        if let obs = observer {
+            DistributedNotificationCenter.default().removeObserver(obs)
+            observer = nil
         }
     }
 }
 
+@MainActor
 class AppLauncherIPCService {
 
-    private let appGroupID = "group.com.JeffreyBakker.ReSwifter"
-    private let requestNotificationName = Notification.Name("com.JeffreyBakker.ReSwifter.processRequest")
-    private let responseNotificationName = Notification.Name("com.JeffreyBakker.ReSwifter.processResponse")
+    nonisolated private let appGroupID = "group.com.JeffreyBakker.ReSwifter"
+    nonisolated private let requestNotificationName = Notification.Name("com.JeffreyBakker.ReSwifter.processRequest")
+    nonisolated private let responseNotificationName = Notification.Name("com.JeffreyBakker.ReSwifter.processResponse")
 
-    private let requestTextKey = "ReSwifter_RequestText"
-    private let requestIDKey = "ReSwifter_RequestID"
-    private let responseTextKey = "ReSwifter_ResponseText"
-    private let responseErrorKey = "ReSwifter_ResponseError"
-    private let responseIDKey = "ReSwifter_ResponseID"
+    nonisolated private let requestTextKey = "ReSwifter_RequestText"
+    nonisolated private let requestIDKey = "ReSwifter_RequestID"
+    nonisolated private let responseTextKey = "ReSwifter_ResponseText"
+    nonisolated private let responseErrorKey = "ReSwifter_ResponseError"
+    nonisolated private let responseIDKey = "ReSwifter_ResponseID"
 
-    private let hostAppBundleID = "com.JeffreyBakker.ReSwifter"
+    nonisolated private let hostAppBundleID = "com.JeffreyBakker.ReSwifter"
 
-    private let log = OSLog(subsystem: "com.JeffreyBakker.ReSwifterXCode", category: "IPCService")
+    nonisolated private let log = OSLog(subsystem: "com.JeffreyBakker.ReSwifterXCode", category: "IPCService")
 
     /// Timeout for waiting for a response from the host app.
     /// Set high to allow time for user interaction in the host app UI.
@@ -57,40 +60,36 @@ class AppLauncherIPCService {
 
     /// Launches the host app if it is not already running.
     /// Always brings the host app to the foreground.
-    func launchHostApp(completion: @escaping (Bool, Error?) -> Void) {
-        let running = NSRunningApplication.runningApplications(
-            withBundleIdentifier: hostAppBundleID
-        )
+    func launchHostApp() async throws {
+        let running = NSRunningApplication.runningApplications(withBundleIdentifier: hostAppBundleID)
         if let app = running.first {
             os_log("Host app already running, activating", log: log, type: .debug)
             app.activate(options: .activateAllWindows)
-            completion(true, nil)
             return
         }
 
-        guard let appURL = NSWorkspace.shared.urlForApplication(
-            withBundleIdentifier: hostAppBundleID
-        ) else {
-            let error = NSError(
+        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: hostAppBundleID) else {
+            os_log("Host app not found: %{public}@", log: log, type: .error, hostAppBundleID)
+            throw NSError(
                 domain: "ReSwifterIPCService",
                 code: 1,
                 userInfo: [NSLocalizedDescriptionKey: "Could not find host app with bundle ID: \(hostAppBundleID)"]
             )
-            os_log("Host app not found: %{public}@", log: log, type: .error, hostAppBundleID)
-            completion(false, error)
-            return
         }
 
         let config = NSWorkspace.OpenConfiguration()
         config.activates = true
 
-        NSWorkspace.shared.openApplication(at: appURL, configuration: config) { app, error in
-            if let error = error {
-                os_log("Failed to launch host app: %{public}@", log: self.log, type: .error, error.localizedDescription)
-                completion(false, error)
-            } else {
-                os_log("Host app launched: %{public}@", log: self.log, type: .info, app?.bundleIdentifier ?? "unknown")
-                completion(true, nil)
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            NSWorkspace.shared.openApplication(at: appURL, configuration: config) { [weak self] app, error in
+                guard let self else { return }
+                if let error {
+                    os_log("Failed to launch host app: %{public}@", log: self.log, type: .error, error.localizedDescription)
+                    continuation.resume(throwing: error)
+                } else {
+                    os_log("Host app launched: %{public}@", log: self.log, type: .info, app?.bundleIdentifier ?? "unknown")
+                    continuation.resume()
+                }
             }
         }
     }
@@ -98,91 +97,43 @@ class AppLauncherIPCService {
     // MARK: - Process Text
 
     /// Launches the host app, then sends text for processing.
-    /// The reply is called when the host app delivers its result
-    /// (or on timeout).
-    func launchAndProcess(_ text: String, reply: @escaping (String?, Error?) -> Void) {
+    /// Returns when the host app delivers its result (or throws on timeout/error).
+    func launchAndProcess(_ text: String) async throws -> String? {
         let wasAlreadyRunning = !NSRunningApplication.runningApplications(
             withBundleIdentifier: hostAppBundleID
         ).isEmpty
 
-        launchHostApp { [weak self] success, error in
-            guard let self = self, success else {
-                reply(nil, error)
-                return
-            }
+        try await launchHostApp()
 
-            // If the app was just launched, give it time to start its listener
-            let delay: TimeInterval = wasAlreadyRunning ? 0.0 : 2.0
-
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + delay) {
-                self.sendRequest(text, reply: reply)
-            }
+        // If the app was just launched, give it time to start its listener
+        if !wasAlreadyRunning {
+            try await Task.sleep(for: .seconds(2))
         }
+
+        return try await sendRequest(text)
     }
 
     // MARK: - Private
 
-    private func sendRequest(_ text: String, reply: @escaping (String?, Error?) -> Void) {
+    private func sendRequest(_ text: String) async throws -> String? {
         guard let defaults = UserDefaults(suiteName: appGroupID) else {
-            let error = NSError(
+            os_log("Failed to open shared UserDefaults", log: log, type: .error)
+            throw NSError(
                 domain: "ReSwifterIPCService",
                 code: 2,
                 userInfo: [NSLocalizedDescriptionKey: "Failed to open shared UserDefaults for suite: \(appGroupID)"]
             )
-            os_log("Failed to open shared UserDefaults", log: log, type: .error)
-            reply(nil, error)
-            return
         }
 
         let requestID = UUID().uuidString
-
-        // Write request data
         defaults.set(text, forKey: requestTextKey)
         defaults.set(requestID, forKey: requestIDKey)
-        defaults.synchronize()
 
         os_log("Sending request %{public}@ (%{public}d chars)", log: log, type: .info, requestID, text.count)
 
         // Yield activation so the host app can come to the foreground
         NSApplication.shared.yieldActivation(toApplicationWithBundleIdentifier: hostAppBundleID)
 
-        // Mutable state shared between closures
-        let state = ResponseState()
-
-        state.observer = DistributedNotificationCenter.default().addObserver(
-            forName: responseNotificationName,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            guard let self = self, !state.didReceive else { return }
-
-            // Re-read from disk
-            defaults.synchronize()
-
-            guard let responseID = defaults.string(forKey: self.responseIDKey),
-                  responseID == requestID else {
-                return // Not our response
-            }
-
-            state.didReceive = true
-            state.removeObserver()
-
-            if let errorMessage = defaults.string(forKey: self.responseErrorKey) {
-                let error = NSError(
-                    domain: "ReSwifterIPCService",
-                    code: 3,
-                    userInfo: [NSLocalizedDescriptionKey: errorMessage]
-                )
-                os_log("Received error: %{public}@", log: self.log, type: .error, errorMessage)
-                reply(nil, error)
-            } else {
-                let result = defaults.string(forKey: self.responseTextKey)
-                os_log("Received response for %{public}@", log: self.log, type: .info, requestID)
-                reply(result, nil)
-            }
-        }
-
-        // Post the request notification
         DistributedNotificationCenter.default().postNotificationName(
             requestNotificationName,
             object: nil,
@@ -190,19 +141,52 @@ class AppLauncherIPCService {
             deliverImmediately: true
         )
 
-        // Timeout
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + responseTimeout) {
-            guard !state.didReceive else { return }
-            state.didReceive = true
-            state.removeObserver()
+        return try await withCheckedThrowingContinuation { continuation in
+            let tracker = ResponseTracker()
 
-            let error = NSError(
-                domain: "ReSwifterIPCService",
-                code: 4,
-                userInfo: [NSLocalizedDescriptionKey: "Timed out waiting for response from host app"]
-            )
-            os_log("Request %{public}@ timed out", log: self.log, type: .error, requestID)
-            reply(nil, error)
+            tracker.timeoutTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(self.responseTimeout))
+                guard !tracker.didResume else { return }
+                tracker.didResume = true
+                tracker.removeObserver()
+                os_log("Request %{public}@ timed out", log: self.log, type: .error, requestID)
+                continuation.resume(throwing: NSError(
+                    domain: "ReSwifterIPCService",
+                    code: 4,
+                    userInfo: [NSLocalizedDescriptionKey: "Timed out waiting for response from host app"]
+                ))
+            }
+
+            tracker.observer = DistributedNotificationCenter.default().addObserver(
+                forName: responseNotificationName,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self, !tracker.didResume else { return }
+                guard let defaults = UserDefaults(suiteName: self.appGroupID) else { return }
+
+                guard let responseID = defaults.string(forKey: self.responseIDKey),
+                      responseID == requestID else {
+                    return // Not our response
+                }
+
+                tracker.didResume = true
+                tracker.timeoutTask?.cancel()
+                tracker.removeObserver()
+
+                if let errorMessage = defaults.string(forKey: self.responseErrorKey) {
+                    os_log("Received error: %{public}@", log: self.log, type: .error, errorMessage)
+                    continuation.resume(throwing: NSError(
+                        domain: "ReSwifterIPCService",
+                        code: 3,
+                        userInfo: [NSLocalizedDescriptionKey: errorMessage]
+                    ))
+                } else {
+                    let result = defaults.string(forKey: self.responseTextKey)
+                    os_log("Received response for %{public}@", log: self.log, type: .info, requestID)
+                    continuation.resume(returning: result)
+                }
+            }
         }
     }
 }
