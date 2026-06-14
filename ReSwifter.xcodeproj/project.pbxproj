@@ -581,7 +581,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifter/ReSwifter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
@@ -607,7 +607,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 26.04;
+				MARKETING_VERSION = 26.06;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -636,7 +636,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifter/ReSwifter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
@@ -662,7 +662,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 26.04;
+				MARKETING_VERSION = 26.06;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -782,7 +782,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifterXCode/ReSwifterXCode.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
@@ -807,7 +807,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 26.04;
+				MARKETING_VERSION = 26.06;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -833,7 +833,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReSwifterXCode/ReSwifterXCode.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6XKLFA63LP;
 				ENABLE_APP_SANDBOX = YES;
@@ -858,7 +858,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 26.04;
+				MARKETING_VERSION = 26.06;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JeffreyBakker.ReSwifter.ReSwifterXCode;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
