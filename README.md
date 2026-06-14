@@ -6,6 +6,8 @@
 
 ReSwifter is a both a Snippet Manager app and an XCode Editor Extension. It is lightweight, but feature-rich. In addition to typical features found in a Snippet Manager, ReSwifter also offers several local-AI-assisted tasks on your code snippets.
 
+**Note:** This project has no build automation workflows because the GitHub Actions macOS Runner machines' installed SDKs are too old to compile against the FoundationModels framework. See issue: https://github.com/jsbakker/ReSwifter/issues/7
+
 ## Features and Behaviour
 - New snippets from clipboard are briefly summarized and named automatically
 - One-click copy to clipboard, or use keyboard shortcuts
